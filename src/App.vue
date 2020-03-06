@@ -1,10 +1,13 @@
 <template>
-  <div id="app">
+  <div id="app" v-cloak>
     <router-view/>
   </div>
 </template>
 
 <style>
+  [v-cloak]{
+    display: none;
+  }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -25,4 +28,5 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
 </style>

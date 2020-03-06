@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="design_left_container">
         <h3>模块列表</h3>
         <el-input
                 v-model="value"
@@ -24,14 +24,29 @@
                 </el-option>
             </el-select>
         </div>
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate"
+                     v-model="checkAll"
+                     @change="handleCheckAllChange">全选</el-checkbox>
         <!--模块列表-->
         <div class="module_container">
-            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="city in cities" :label="city" :key="city">
-                    <div class="module_img">
-                        我是第几个module
+            <el-checkbox-group v-model="checkedCities"
+                               @change="handleCheckedCitiesChange">
+                <el-checkbox v-for="(item,index) in cities"
+                             :label="item"
+                             :key="index">
+                    <div class="module_img"
+                         @mouseenter="showModuleDetails('enter',index)"
+                         @mouseleave="showModuleDetails('leave',index)"
+                    >
+                        <div class="module_img_mark"
+                             v-show="module_details === index"
+                             >
+                            <el-button type="primary" @click="showModuleDetailsPopout(item)">查看详情</el-button>
+                        </div>
+                        {{item.name}}
                     </div>
+
+
                 </el-checkbox>
             </el-checkbox-group>
         </div>
@@ -42,11 +57,12 @@
 </template>
 
 <script>
-    const cityOptions = ['上海', '北京', '广州', '深圳','重庆','成都'];
+    // const cityOptions = ['上海', '北京', '广州', '深圳','重庆','成都'];
     export default {
         name: "left",
         data() {
             return {
+                module_details :"", //列表蒙版是否显示
                 options:
                     [{
                         value: '选项1',
@@ -66,26 +82,53 @@
                     }],
                 value: '',
                 checkAll: false,
-                checkedCities: ['上海', '北京'],
-                cities: cityOptions,
+                checkedCities: [],
+                cities: this.modulelist,
                 isIndeterminate: true,
             }
         },
+        props:["modulelist"],
         methods: {
+            //单选多选
             handleCheckAllChange(val) {
-                this.checkedCities = val ? cityOptions : [];
+                this.checkedCities = val ? this.cities : [];
+                console.log(this.checkedCities);
                 this.isIndeterminate = false;
             },
             handleCheckedCitiesChange(value) {
                 let checkedCount = value.length;
                 this.checkAll = checkedCount === this.cities.length;
                 this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+            },
+            // 显示详情
+            showModuleDetails(type,index){
+                if(type === "enter") this.module_details = index;
+                else  this.module_details = null;
+            },
+            showModuleDetailsPopout(item){
+                //加入多选中
+                for(let i =0 ; i < this.checkedCities.length; i++){
+                    if(this.checkedCities[i].name === item.name ){
+                        //弹出弹框
+                        this.$emit('showModuleDetails',item);
+                        return
+                    }
+                }
+                this.checkedCities.push(item);
+                this.handleCheckedCitiesChange(this.checkedCities);
+                //弹出弹框
+                this.$emit('showModuleDetails',item);
             }
         }
     }
 </script>
 
 <style scoped>
+    #design_left_container{
+        height: 100%;
+        background: #EFEFEF;
+        position: relative;
+    }
     /*左侧部分*/
     h3{
         width: 100%;
@@ -105,9 +148,8 @@
     }
 
     .module_container{
-        height: 6.2rem;
+        height:calc(100% - 2.5rem);
         overflow-y: auto;
-        background: #f4f4f4;
     }
     .el-checkbox-group{
         display: flex;
@@ -119,20 +161,36 @@
         width:100px;
         height: 100px;
         border: 1px solid red;
+        position: relative;
     }
     .module_bttom_btn{
         background:#ffffff;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
     .el-checkbox{
         width: 100%;
         padding: 10px 0;
-        background: #f4f4f4;
+        background: #EFEFEF;
     }
     .el-checkbox:last-of-type{
         margin-right: 30px;
     }
     .main>div:first-child{
         position: relative;
+    }
+
+    .module_img_mark{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #C3C3C3;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
     }
 
 

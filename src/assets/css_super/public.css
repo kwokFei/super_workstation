@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-size: 0.16rem;
+    font-family: MicrosoftYaHei;
+}
+ul{
+    list-style: none;
+}
+
+[v-cloak]{
+    display: none;
+}
+
+
+/*走马灯*/
+/*.el-carousel__container{*/
+    /*height: 3.82rem !important;*/
+/*}*/
