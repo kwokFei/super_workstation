@@ -1,4 +1,5 @@
 <template>
+  <!--个人中心-->
   <div id="recode-container">
     个人中心
   </div>

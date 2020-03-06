@@ -1,4 +1,5 @@
 <template>
+  <!--发布中心-->
   <div id="publish-center-container">
     publish_center
   </div>

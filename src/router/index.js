@@ -9,6 +9,7 @@ const Workstaion_center = () => import('@/views/workstaion_center/Index');
 const Workstaion_center_apcos_workstation = () => import('@/views/workstaion_center/apcos_workstation/apcos_workstation');
 const Workstaion_center_pubilish_center = ()=> import('@/views/workstaion_center/publish_center/publish_center');
 const Workstaion_center_record_center = ()=> import('@/views/workstaion_center/record_center/record_center');
+const Design_center = ()=>import('@/views/design_center/index')
 
 const routes = [
   {
@@ -51,6 +52,19 @@ const routes = [
         name:"record_center",
         component: Workstaion_center_record_center,
       }
+    ]
+  },
+  {
+    path: '/design_center',
+    name: 'Design_center',
+    component: Design_center,
+    children:[
+      {
+        path:"apcos_workstation",
+        name:"apcos_workstation",
+        component: Workstaion_center_apcos_workstation,
+      },
+
     ]
   },
 ]
