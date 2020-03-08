@@ -3,11 +3,11 @@
         <!-- 左边导航栏-->
         <div class="navLeft">
             <p>
-                这里是login
+                <img :src="$store.state.logoUrl" alt="">
                 <!--<img :src="logoUrl" alt="">-->
             </p>
             <ul>
-                <li v-for="(item,index) in centerList" :key="index" class="liClick" @click="cutUrl(index)">
+                <li v-for="(item,index) in $store.state.allCheckedModuleList" :key="index" class="liClick" @click="cutUrl(index)">
                     <span>
                         <img :src="item.icon" alt="">
                     </span>
@@ -16,7 +16,7 @@
             </ul>
         </div>
         <div class="rnBox" style="width:82.5%;height: 100%;position: absolute;top:0;left: 17.5%">
-            <iframe :src="src"  frameborder="0"></iframe>
+            <iframe :src="mysrc"  frameborder="0"></iframe>
         </div>
     </div>
 </template>
@@ -24,68 +24,48 @@
 <script>
     export default {
         name: "center",
+        computed: {
+            mysrc: {
+                get(){
+                    return this.$store.state.indexSrc
+                },
+                set(val){
+                    this.$store.commit('changeIndexSrc',val)
+                },
+            }
+        },
         data(){
             return{
-                src : "", //中间切换的页面url
-                centerList : [
-                    {
-                        code:"101",
-                        parentsName:"智慧办公",
-                        icon:"img/allIcon/shouye_1.png",
-                        name:"首页",
-                        isCheck:true,
-                        isReadonly:true,
-                        iframeUrl:"static/htmls/ggHome.html"
-                    },
-                    {
-                        code:"109",
-                        icon:"img/allIcon/xitongguanli_1.png",
-                        name:"系统管理",
-                        isCheck:true,
-                        isReadonly:true,
-                        iframeUrl:"static/htmls/xitongguanli/header.html"
-                    },
-                    {
-                        code:"110",
-                        icon:"img/allIcon/shijianguanli_1.png",
-                        name:"事件管理",
-                        isCheck:true,
-                        isReadonly:true,
-                        iframeUrl:"static/htmls/shebeishijian/header.html"
-                    },
-                    {
-                        code:"111",
-                        icon:"img/allIcon/pingtaiguanli_1.png",
-                        name:"平台管理",
-                        isCheck:true,
-                        isReadonly:true,
-                        iframeUrl:"static/htmls/pingtaiguanli/header.html"
-                    },
-                    {
-                        code:"119",
-                        icon:"img/allIcon/3dguanli_1.png",
-                        name:" 管理3D",
-                        isCheck:true,
-                        isReadonly:true,
-                        iframeUrl:"static/htmls/guanli3D/header.html"
-                    },
-                    {
-                        code:"103",
-                        icon:"img/allIcon/shebeiguanli_1.png",
-                        name:" 设备管理",
-                        isCheck:true,
-                        isReadonly:true,
-                        iframeUrl:"static/htmls/shebeiguanli/header.html"
-                    },],
             }
+        },
+        created(){
+            let allCheckedModuleList =JSON.parse(window.localStorage.getItem("allCheckedModuleList"));
+            if( !allCheckedModuleList ){
+                return
+            }
+            // console.log(allCheckedModuleList);
+            //菜单数组
+            this.$store.commit('changeAllCheckedModuleList',allCheckedModuleList)
+
+            //第一次导航页面src
+            let indexSrc =JSON.parse(window.localStorage.getItem("indexSrc"));
+            this.$store.commit('changeIndexSrc',indexSrc)
+
+            //logo
+            let logoUrl =JSON.parse(window.localStorage.getItem("logoUrl"));
+            this.$store.commit('changelogoUrl',logoUrl)
+
+
+            window.localStorage.removeItem('allCheckedModuleList')
+            window.localStorage.removeItem('indexSrc')
+            window.localStorage.removeItem('logoUrl')
         },
         methods:{
             cutUrl(index) {
-                this.src = this.centerList[index].iframeUrl;
+                // this.mysrc = this.moduleList[index].iframeUrl;
+                this.mysrc = this.$store.state.allCheckedModuleList[index].iframeUrl;
             }
         },
-
-
     }
 </script>
 
@@ -94,7 +74,7 @@
         width:100%;;
         height: 100%;
         background: white;
-        min-width: 1200px;
+        /*min-width: 1200px;*/
 
     }
     .rnBox{
@@ -176,7 +156,7 @@
     }
 
     .navLeft > ul>li >span:nth-child(2){
-        font-size: 0.24rem;
+        /*font-size: 0.24rem;*/
         color: #868daa;
     }
 
@@ -191,6 +171,4 @@
         height: 100%;
         border: none;
     }
-
-
 </style>

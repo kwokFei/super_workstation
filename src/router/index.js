@@ -10,6 +10,9 @@ const Workstaion_center_apcos_workstation = () => import('@/views/workstaion_cen
 const Workstaion_center_pubilish_center = ()=> import('@/views/workstaion_center/publish_center/publish_center');
 const Workstaion_center_record_center = ()=> import('@/views/workstaion_center/record_center/record_center');
 const Design_center = ()=>import('@/views/design_center/index')
+const View_center = ()=>import('@/views/design_center/module/centerHtml')
+const My_app_system = ()=>import('@/views/my_app_system/index')
+
 
 const routes = [
   {
@@ -66,6 +69,16 @@ const routes = [
       },
 
     ]
+  },
+  {
+    path: '/view_center',
+    name: 'view_center',
+    component:View_center,
+  },
+  {
+    path: '/my_app_system',
+    name: 'my_app_system',
+    component:My_app_system,
   },
 ]
 

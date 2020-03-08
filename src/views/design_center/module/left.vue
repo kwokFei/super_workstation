@@ -51,7 +51,9 @@
             </el-checkbox-group>
         </div>
         <div class="module_bttom_btn">
-            <el-button type="primary" icon="el-icon-s-claim">添加模块</el-button>
+            <el-button type="primary"
+                       icon="el-icon-s-claim"
+                        @click="addModulesInRight">添加模块</el-button>
         </div>
     </div>
 </template>
@@ -92,13 +94,18 @@
             //单选多选
             handleCheckAllChange(val) {
                 this.checkedCities = val ? this.cities : [];
-                console.log(this.checkedCities);
+                // console.log(this.checkedCities);
                 this.isIndeterminate = false;
+                let cloneData = JSON.parse(JSON.stringify(this.checkedCities))
+                this.$emit("addOrcelModuleList",cloneData)
             },
             handleCheckedCitiesChange(value) {
+                // console.log(value);
                 let checkedCount = value.length;
                 this.checkAll = checkedCount === this.cities.length;
                 this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+                let cloneData = JSON.parse(JSON.stringify(this.checkedCities))
+                this.$emit("addOrcelModuleList",cloneData)
             },
             // 显示详情
             showModuleDetails(type,index){
@@ -118,6 +125,10 @@
                 this.handleCheckedCitiesChange(this.checkedCities);
                 //弹出弹框
                 this.$emit('showModuleDetails',item);
+            },
+            //添加模块按钮将模块列表添加到右侧
+            addModulesInRight(){
+                this.$emit("addModulesInRight")
             }
         }
     }

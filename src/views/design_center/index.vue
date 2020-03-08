@@ -4,17 +4,21 @@
         <design-nav></design-nav>
         <!--主体部分-->
         <el-row class="main">
-            <el-col :span="4"
+            <el-col :span="3"
                     :xs ="12">
                 <design-left :modulelist = "allList"
-                             @showModuleDetails = showModuleDetailsPop></design-left>
+                             @showModuleDetails = showModuleDetailsPop
+                             @addOrcelModuleList = addOrcelModuleList
+                             @addModulesInRight = addModulesInRight></design-left>
 
             </el-col>
-            <el-col :span="16" :xs ="24" id="centerContainer">
+            <el-col :span="17" :xs ="24" id="centerContainer">
                 <designCenter></designCenter>
             </el-col>
             <el-col :span="4" :xs ="24">
-                <design-right></design-right>
+                <design-right
+                    :modulesListRight = "allCheckedModuleList"
+                    @rightResetModuleList = rightResetModuleList></design-right>
             </el-col>
         </el-row>
         <!--分类列表-->
@@ -25,43 +29,15 @@
             <li>其他</li>
             <li>我的库</li>
         </ul>
+        <!--弹框-->
         <el-dialog :visible.sync="isShowModuleDetailsPop"
                    width="60%"
                    title="查看详情">
-            <div class="details-pop-container">
-                <div >
-                    <el-carousel trigger="click"
-                                 :autoplay = false
-                                 height="3.82rem">
-                        <el-carousel-item v-for="item in 4" :key="item">
-                            <h3 class="small">{{ item }}</h3>
-                        </el-carousel-item>
-                    </el-carousel>
-                </div>
-                <div>
-                    <div>
-                        <h2>模块信息描述</h2>
-                        <div>
-                            <span>名称 : 模块一</span>
-                            <span>页面：10页</span>
-                            <span>模块：30个 </span>
-                            <span>组件：30个</span>
 
-                        </div>
-
-                    </div>
-                    <div>
-                        <h3>模块选择</h3>
-                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                        <div style="margin: 15px 0;"></div>
-                        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                            <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
-                </div>
-            </div>
-
+            <pop-details :modules="moduleDtails"
+                         @handlepop =handlePopDtails></pop-details>
         </el-dialog>
+
     </div>
 </template>
 
@@ -70,72 +46,184 @@
     import designLeft from  './module/left'
     import designRight from  './module/right'
     import designCenter from  './module/centerHtml'
-    const cityOptions = ['上海', '北京', '广州', '深圳'];
+    import popDetails from  './module/popDetails'
     export default {
         name: "Design_center",
         components:{
             designNav,
             designLeft,
             designRight,
-            designCenter
+            designCenter,
+            popDetails
         },
         data(){
             return{
-                checkAll: false,
-                checkedCities: ['上海', '北京'],
-                cities: cityOptions,
-                isIndeterminate: true,
-
+                indexSrc : "",   //首次添加时中间的src
+                isShowModuleDetailsPop : null,//弹窗是否打开
                 //全部模块列表
                 allList:[
                     {
-                        code:"102",
+                        code:"3",
                         icon:"img/allIcon/huiyiguanli.png",
                         name:"会议室管理",
                         isCheck:false,
-                        iframeUrl:"static/office-ui/html/officeRoom.html"
+                        iframeUrl:"static/office-ui/html/officeRoom.html",
+                        childModule:[
+                            {
+                                code:"3_1",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"系统日志管理",
+                                isCheck:true,
+                                isReadonly:true,
+                            }
+                        ],
                     },
                     {
-                        code:"104",
+                        code:"4",
                         icon:"img/allIcon/kaoqinmokuai.png",
                         name:"考勤管理",
                         isCheck:false,
-                        iframeUrl:"static/office-ui/html/attInfo.html"
-                    },
-                    {
-                        code:"109",
-                        icon:"img/allIcon/baojingxitong.png",
-                        name:"报警系统",
-                        isCheck:false,
-                        iframeUrl:"static/htmls/warningstystem/header.html"
-                    },
-                    {
-                        code:"110",
-                        icon:"img/allIcon/xinfengkongzhi.png",
-                        name:"新风系统",
-                        isCheck:false,
-                        iframeUrl:"static/htmls/lfHome.html"
-                    },
+                        iframeUrl:"static/office-ui/html/attInfo.html",
+                        childModule:[
+                            {
+                                code:"4_1",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"系统日志管理",
+                                isCheck:true,
+                                isReadonly:true,
+                            },
+                            {
+                                code:"4_2",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"用户管理",
+                                isCheck:true,
+                                isReadonly:true,
+                            }
+                        ]
+                    }
 
                 ],
-                isShowModuleDetailsPop : false, //模块详情谈款
+                // 基础模块(必选)
+                baseModuleList : [
+                    {
+                    code:"1",
+                    parentsName:"智慧办公",
+                    icon:"img/allIcon/shouye_1.png",
+                    name:"首页",
+                    isCheck:true,
+                    isReadonly:true,
+                    iframeUrl:"static/htmls/ggHome.html",
+                    childModule:[],
+                },
+                    {
+                        code:"2",
+                        icon:"img/allIcon/xitongguanli_1.png",
+                        name:"系统管理",
+                        isCheck:true,
+                        isReadonly:true,
+                        iframeUrl:"static/htmls/xitongguanli/header.html",
+                        childModule:[
+                            {
+                                code:"2_1",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"系统日志管理",
+                                isCheck:true,
+                                isReadonly:true,
+                                iframeUrl:"static/office-ui/html/systemLog.html",
+                            },
+                            {
+                                code:"2_2",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"用户管理",
+                                isCheck:true,
+                                isReadonly:true,
+                                iframeUrl:"static/office-ui/html/user.html",
+                            },
+                            {
+                                code:"2_3",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"展厅企业管理",
+                                isCheck:true,
+                                isReadonly:true,
+                                iframeUrl:"static/office-ui/html/role.html",
+                            },
+                            {
+                                code:"2_4",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"菜单权限管理",
+                                isCheck:true,
+                                iframeUrl:"static/office-ui/html/menu.html",
+                            },
+                            {
+                                code:"2_5",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"登录日志管理",
+                                isCheck:true,
+                                isReadonly:true,
+                                iframeUrl:"static/office-ui/html/loginLog.html",
+                            },
+                            {
+                                code:"2_6",
+                                icon:"img/allIcon/xitongguanli_1.png",
+                                name:"操作日志管理",
+                                isCheck:true,
+                                isReadonly:true,
+                                iframeUrl:"static/office-ui/html/controlLog.html",
+                            },
+                        ],
+                    },],
+                //选中的模块(由左侧添加后加入 传给右侧，除去基础模块)
+                moduleList : [],
+                // 所有选中的模块列表
+                allCheckedModuleList : [],
+                //login的URl
+                logoUrl:"",
+                moduleDtails : "" //左侧当前查看详情的模块信息
             }
         },
         methods:{
             //查看详情弹框
             showModuleDetailsPop(item){
+                // console.log(item);
+                this.moduleDtails = item
                 this.isShowModuleDetailsPop = true;
-                console.log(item);
             },
-            handleCheckAllChange(val) {
-                this.checkedCities = val ? cityOptions : [];
-                this.isIndeterminate = false;
-            },
-            handleCheckedCitiesChange(value) {
-                let checkedCount = value.length;
-                this.checkAll = checkedCount === this.cities.length;
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+            //弹框传送回来选择的模块及子模块
+            handlePopDtails(type,data){
+                // console.log(this.moduleList);
+                if(type === "add"){
+                    for(let i = 0 ; i < this.moduleList.length ; i++){
+                        if(this.moduleList[i].name === data.name){
+                            this.moduleList[i] = data;
+                            console.log(this.moduleList);
+                            this.isShowModuleDetailsPop = false;
+                            return
+                        }
+                    }
+                    this.moduleList.push(data);
+                    console.log(this.moduleList);
 
+                }
+                this.isShowModuleDetailsPop = false;
+            },
+            //左侧选中的模块值
+            addOrcelModuleList(data){
+                this.moduleList = data;
+            },
+            //添加模块按钮将模块列表添加到右侧
+            addModulesInRight(){
+                this.allCheckedModuleList = this.baseModuleList.concat(this.moduleList)
+                // // // console.log(this.allCheckedModuleList);
+                this.indexSrc = this.allCheckedModuleList[0].iframeUrl
+                this.$store.commit('changeAllCheckedModuleList',this.allCheckedModuleList)
+                this.$store.commit('changeIndexSrc',this.indexSrc)
+            },
+            //右侧修选中的模块列表
+            rightResetModuleList(data){
+                this.allCheckedModuleList = data;
+                this.indexSrc = this.allCheckedModuleList[0].iframeUrl
+                this.$store.commit('changeAllCheckedModuleList',this.allCheckedModuleList)
+                this.$store.commit('changeIndexSrc',this.indexSrc)
             }
         }
     };
@@ -156,6 +244,7 @@
     .main>div:nth-child(3){
         overflow-x: auto;
         padding-left: 10px !important;
+        position: relative;
     }
     #design-container > ul{
         position: absolute;
@@ -175,42 +264,4 @@
         /*margin:0 2%;*/
     }
 
-    /*查看详情弹框*/
-    .el-dialog__header{
-        background-color: #0066FF;
-        display: flex;
-        /* width: 12rem; */
-        height: 0.6rem;
-    }
-    .el-carousel__item h3 {
-        color: #475669;
-        font-size: 14px;
-        opacity: 0.75;
-        line-height: 150px;
-        margin: 0;
-    }
-    /*走马灯*/
-    .el-carousel__item:nth-child(2n) {
-        background-color: #99a9bf;
-    }
-
-    .el-carousel__item:nth-child(2n+1) {
-        background-color: #d3dce6;
-    }
-    .details-pop-container{
-        display: flex;
-        justify-content: space-around;
-    }
-    .details-pop-container>div:first-child{
-        width: 60%;
-        height: 3.82rem;
-        opacity: 0.6;
-    }
-    .details-pop-container>div:nth-child(){
-        width: 40%;
-        height: 3.82rem;
-        opacity: 0.6;
-    }
-
-    
 </style>

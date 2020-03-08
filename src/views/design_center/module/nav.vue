@@ -11,7 +11,7 @@
                 <el-col :span="6" :xs="12">
                     <div class="nav_span">
                         <span>发布</span>
-                        <span>预览</span>
+                        <span @click="seeShare">预览</span>
                         <span>保存</span>
                         <span>下一步</span>
                     </div>
@@ -23,7 +23,17 @@
 
 <script>
     export default {
-        name: "design-nav"
+        name: "design-nav",
+        methods:{
+            seeShare(){
+                window.localStorage.setItem('allCheckedModuleList',JSON.stringify(this.$store.state.allCheckedModuleList));
+                window.localStorage.setItem('indexSrc',JSON.stringify(this.$store.state.indexSrc));
+                let routeUrl = this.$router.resolve({
+                    path: "/view_center",
+                });
+                window.open(routeUrl.href, '_blank');
+            }
+        }
     }
 </script>
 
