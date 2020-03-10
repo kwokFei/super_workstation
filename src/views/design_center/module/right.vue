@@ -7,7 +7,6 @@
                     draggable
                     :data="data"
                     :props="{ children: 'childModule', label: 'name'}"
-                    :expand-on-click-node="false"
                     @node-drag-end="handleDragEnd"
                     :render-content="renderContent">
             </el-tree>
@@ -32,6 +31,7 @@
                 </el-button>
                 </span>
                 <el-tree
+                        class="loginTree"
                         :props="{ children: 'childModule', label: 'name'}"
                         :expand-on-click-node="false"
                         :data="data"
@@ -161,10 +161,10 @@
                 return (
                     <span class="custom-tree-node">
                     <span>{node.label}</span>
-                    <span>
+                    <span class="tree-btns">
 
-                    <el-button type="primary"type="text" circle on-click={ () => this.resetName(node, data) }>编辑</el-button>
-                    <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>删除</el-button>
+                    <el-button type="primary" icon="el-icon-edit" size="mini"  circle on-click={ () => this.resetName(node, data) }></el-button>
+                    <el-button type="danger" icon="el-icon-delete"size="mini" circle on-click={ () => this.remove(node, data) }></el-button>
                 </span>
                 </span>);
             }
@@ -173,6 +173,9 @@
 </script>
 
 <style scoped>
+    .loginTree{
+        max-height: 500px !important;
+    }
     .el-tree {
         max-height: calc(100% - 32px);
         overflow: auto;
@@ -215,5 +218,6 @@
         bottom: 0;
         height: 32px;
     }
+
 
 </style>

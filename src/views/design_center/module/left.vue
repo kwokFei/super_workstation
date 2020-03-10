@@ -198,6 +198,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        background: #EFEFEF;
     }
 
     .module_container{

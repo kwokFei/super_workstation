@@ -3,18 +3,22 @@
         <div>
             <el-carousel trigger="click"
                          :autoplay = false
-                         height="3.82rem">
-                <el-carousel-item v-for="(item,index) in imgList" :key="index">
+                         height="3.82rem"
+                         @change="handleChildrenName">
+                <el-carousel-item v-for="(item,index) in imgList" :key="index"
+                                  >
                     <!--<h3 class="small">{{ item }}</h3>-->
                     <img :src="item" alt="">
                 </el-carousel-item>
+
             </el-carousel>
+            <div class="childName">{{childrenName}}</div>
         </div>
         <div>
             <div>
                 <h3>模块信息描述</h3>
-                <div>
-                    <span>名称 : 模块一</span>
+                <div class="childrenInfo">
+                    <span>名称 : {{modules.name}}</span>
                     <span>页面：{{imgList.length}}页</span>
                     <span>模块：{{imgList.length}}个 </span>
                     <span>组件：{{imgList.length}}个</span>
@@ -33,8 +37,8 @@
             </div>
             <div>
                 <h3>风格选择</h3>
-                <el-radio v-model="radio" label="1">风格一</el-radio>
-                <el-radio v-model="radio" label="2">风格二</el-radio>
+                <el-radio v-model="radio" label="1">极简白</el-radio>
+                <el-radio v-model="radio" label="2">科技蓝</el-radio>
             </div>
             <div>
                 <el-button type="primary" @click="handlepop('add')">添加</el-button>
@@ -53,11 +57,16 @@
                 // console.log(this.modules);
                 this.cities = this.modules.childModule;
                 this.checkedCities= this.modules.childModule || [];
+                this.getchildrenName(0);
             }
 
         },
+        created(){
+            this.getchildrenName(0)
+        },
         data(){
             return{
+                childrenName : "", //当前模块的名字
                 cities: this.modules.childModule, //当前模块的子模块信息
                 checkAll: false,
                 checkedCities: this.modules.childModule || [],
@@ -68,6 +77,18 @@
             }
         },
         methods:{
+            getchildrenName(index){
+                if(this.modules.childModule.length === 0){
+                    this.childrenName = this.modules.name
+                }else {
+                    this.childrenName = this.modules.childModule[index].name
+                }
+            },
+            //走马灯当前模块的名字
+            handleChildrenName(index){
+                // this.childrenName = this.modules.childModule[index].name
+                this.getchildrenName(index)
+            },
             //多选按钮
             handleCheckAllChange(val) {
 
@@ -165,5 +186,14 @@
     .el-checkbox {
         flex: 1;
         text-align: left;
+    }
+    .childName{
+        color: #66B1FF;
+        position: absolute;
+        bottom: 0.05rem;
+        font-size: 0.2rem;
+    }
+    .childrenInfo>span{
+        margin-right: 0.1rem;
     }
 </style>

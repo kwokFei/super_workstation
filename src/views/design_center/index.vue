@@ -168,6 +168,7 @@
         overflow-y: auto;
     }
     .main>div:nth-child(3){
+        overflow-y: hidden;
         overflow-x: auto;
         position: relative;
     }

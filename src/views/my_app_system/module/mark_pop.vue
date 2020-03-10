@@ -21,7 +21,7 @@
 
             <el-form-item label="项目图片：">
                 <span>
-                    <el-button size="small" type="primary"  @click="dialogVisible = true">
+                    <el-button size="small" type="primary"  class="uplode_btn" @click="dialogVisible = true">
                         <input type="text" v-model="form.projectImg">
                         <input type="file" id="project-img" name="upload" @change="getfileName">
                         图片上传
@@ -138,5 +138,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    .uplode_btn{
+        width: 100%;
     }
 </style>

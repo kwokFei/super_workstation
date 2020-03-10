@@ -3,7 +3,7 @@
         <el-header>
             <el-row :gutter="24">
                 <el-col :span="4" :xs="24">
-                    <div><img src="" alt=""></div>
+                    <div><img src="@/assets/img/publich_nav/logo.png" alt="" class="logo"></div>
                 </el-col>
                 <el-col :span="14" :xs="12"><div>
                     <h2>应用系统设计</h2>
@@ -84,6 +84,11 @@
         width: 0.19rem;
         vertical-align: text-bottom;
         margin-right: 0.02rem;
+    }
+    .logo{
+        width: 1.11rem;
+        height: 0.34rem;
+        vertical-align: middle;
     }
 
 </style>

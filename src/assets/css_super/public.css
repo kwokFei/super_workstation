@@ -81,3 +81,20 @@ a {
 .el-dialog__header{
     display: flex;
 }
+
+/*右侧树形结构*/
+.el-tree-node__content{
+    position: relative;
+}
+.el-tree-node{
+    overflow: hidden;
+    margin: 6px 0;
+}
+.tree-btns{
+    position: absolute;
+    right: 0;
+    top:0
+}
+.el-cascader{
+    width: 100%;
+}

@@ -354,7 +354,7 @@
     }
     .conten-title>.el-col:nth-child(2)>div>span:first-child>span:first-child{
         display: inline-block;
-        min-width: 59px;
+        min-width: 75px;
     }
     .conten-title>div:nth-child(2)>div{
         display: flex;
