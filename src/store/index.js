@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {baseModuleList} from "@/utils/public_const"
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    allCheckedModuleList : [],
-    indexSrc : "",
+    allCheckedModuleList :  baseModuleList,
+    indexSrc : "static/htmls/ggHome.html",
     logoUrl :"",
   },
   mutations: {

@@ -5,8 +5,8 @@
 </template>
 
 <style>
-  [v-cloak]{
-    display: none;
+  [v-cloak] {
+    display: none !important;
   }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

@@ -1,22 +1,23 @@
 <template>
     <div class="details-pop-container">
-        <div >
+        <div>
             <el-carousel trigger="click"
                          :autoplay = false
                          height="3.82rem">
-                <el-carousel-item v-for="item in 4" :key="item">
-                    <h3 class="small">{{ item }}</h3>
+                <el-carousel-item v-for="(item,index) in imgList" :key="index">
+                    <!--<h3 class="small">{{ item }}</h3>-->
+                    <img :src="item" alt="">
                 </el-carousel-item>
             </el-carousel>
         </div>
         <div>
             <div>
-                <h2>模块信息描述</h2>
+                <h3>模块信息描述</h3>
                 <div>
                     <span>名称 : 模块一</span>
-                    <span>页面：10页</span>
-                    <span>模块：30个 </span>
-                    <span>组件：30个</span>
+                    <span>页面：{{imgList.length}}页</span>
+                    <span>模块：{{imgList.length}}个 </span>
+                    <span>组件：{{imgList.length}}个</span>
 
                 </div>
 
@@ -24,7 +25,6 @@
             <div>
                 <h3>模块选择</h3>
                 <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                <div style="margin: 15px 0;"></div>
                 <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
                     <el-checkbox v-for="item in modules.childModule"
                                  :label="item"
@@ -47,9 +47,10 @@
 <script>
     export default {
         name: "popDetails",
-        props:["modules"],
+        props:["modules","imgList"],
         watch:{
             modules(){
+                // console.log(this.modules);
                 this.cities = this.modules.childModule;
                 this.checkedCities= this.modules.childModule || [];
             }
@@ -97,6 +98,17 @@
 </script>
 
 <style scoped>
+    .details-pop-container h3{
+        text-align: left;
+        margin-bottom: 0.15rem;
+        font-size: 0.16rem;
+        color: #666666;
+        padding-left: 0.37rem;
+    }
+    img{
+        width: 100%;
+        height: 100%;
+    }
     /*查看详情弹框*/
     .el-dialog__header{
         background-color: #0066FF;
@@ -126,12 +138,32 @@
     .details-pop-container>div:first-child{
         width: 60%;
         height: 3.82rem;
-        opacity: 0.6;
+        /*opacity: 0.6;*/
     }
     .details-pop-container>div:nth-child(2){
         width: 40%;
         height: 3.82rem;
-        opacity: 0.6;
+        /* opacity: 0.6; */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .details-pop-container>div:nth-child(2)>div{
+        width: 100%;
+        margin-bottom: 0.15rem;
     }
 
+    .el-checkbox-group {
+        font-size: 0;
+        display: flex;
+        flex-wrap: wrap;
+        padding-left: 0.37rem;
+        max-height: 1.2rem;
+        overflow: auto;
+    }
+    .el-checkbox {
+        flex: 1;
+        text-align: left;
+    }
 </style>

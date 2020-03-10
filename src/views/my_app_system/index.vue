@@ -4,7 +4,7 @@
         <public-nav>
             <div slot="header">
                 <span class="header-item">
-                    <img src="" alt="">
+                    <img src="@/assets/img/publich_nav/logo.png" alt="">
                 </span>
                 <span class="header-item"
                         v-for="(item,index) in headerList"
@@ -57,7 +57,10 @@
     .ischeck{
         color: #0068ff;
     }
-
+    img{
+        width: 100%;
+        height: 100%;
+    }
 
 
 </style>

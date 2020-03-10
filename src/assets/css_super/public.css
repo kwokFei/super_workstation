@@ -4,12 +4,15 @@
     font-size: 0.16rem;
     font-family: MicrosoftYaHei;
 }
+html,body,#app{
+    height: 100%;
+}
 ul{
     list-style: none;
 }
 
 [v-cloak]{
-    display: none;
+    display: none !important;
 }
 a {
     text-decoration: none;
@@ -18,8 +21,63 @@ a {
     color: rgb(77, 85, 93);
 }
 
+/*下拉条*/
+*::-webkit-scrollbar-track { /* 定义滚动条轨道  内阴影+圆角*/
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 0.06rem;
+    background-color: #f5f5f5;
+}
+*::-webkit-scrollbar { /*滚动条整体样式*/
+    width: 0.06rem;
+    height: 0.15rem;
+    background-color: #f5f5f5;
+    border-radius: 0.06rem;
+}
 
+*::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+    border-radius: 0.06rem;
+    -webkit-box-shadow: inset 0 0 6px #80B3FF;
+    background-color: #CCCCCC;
+}
+
+/*左侧的搜索框*/
+.main .el-input{
+    background: #EFEFEF;
+}
+.main  .el-input--prefix .el-input__inner{
+    height: 0.33rem;
+    background: #EFEFEF;
+    border: none;
+    border-bottom: 1px solid #CFCFCF;
+    border-radius: 0;
+    width: 90%;
+    margin-bottom: 0.05rem;
+}
+.main .el-input__icon{
+    line-height: 0.33rem;
+}
+/*选择框*/
+.main .el-cascader .el-input .el-input__inner{
+    width: 90%;
+    height: 0.34rem;
+}
 /*走马灯*/
 /*.el-carousel__container{*/
     /*height: 3.82rem !important;*/
 /*}*/
+
+/*弹框头部*/
+.el-dialog__header{
+    background:#0066FF
+}
+.el-dialog__title{
+    color: #ffffff;
+}
+.el-dialog__headerbtn .el-dialog__close{
+    color: #ffffff;
+    width: 0.22rem;
+    height: 0.22rem;
+}
+.el-dialog__header{
+    display: flex;
+}

@@ -5,13 +5,13 @@
         </slot>
         <div class="nav-right">
             <span>
-                <img src="" alt="">
+                <img src="@/assets/img/publich_nav/shop.png" alt="">
             </span>
             <span>
-                <img src="" alt="">
+                <img src="@/assets/img/publich_nav/message.png" alt="">
             </span>
             <span>
-                <img src="" alt="">
+                <img src="@/assets/img/publich_nav/set.png" alt="">
             </span>
             <span>BeoneAPCOS</span>
         </div>
@@ -27,6 +27,9 @@
 </script>
 
 <style scoped>
+    img{
+        height: 100%;
+    }
     a{
         margin: 0.3rem;
     }
@@ -56,7 +59,7 @@
     #nav-right-nav>div:first-child >.header-item:first-child{
         width: 1.11rem;
         height: 0.34rem;
-        border: 1px solid red;
+
     }
     .nav-right{
         display: flex;
@@ -68,7 +71,6 @@
         display: block;
         width: 0.73rem;
         height: 0.35rem;
-        border: 1px solid red;
         line-height: 0.35rem;
         text-align: center;
         cursor: pointer;

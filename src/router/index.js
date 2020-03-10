@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    redirect: "/index"
+    redirect: "/my_app_system"
     },
   {
     path: '/index',

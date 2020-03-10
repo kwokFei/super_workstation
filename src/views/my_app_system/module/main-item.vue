@@ -1,28 +1,54 @@
 <template>
     <div>
         <div class="img-box">
-            <img src="" alt="">
+            <img src="@/assets/img/publich_nav/background.png" alt="">
             <slot></slot>
         </div>
         <div class="footer">
             <div class="name-time">
-                <p>应用系统1</p>
+                <p @click="changName(item)">{{item.projectName}}</p>
                 <span>2020-1-11    11:11</span>
             </div>
             <div>
-                <el-checkbox></el-checkbox>
+                <el-checkbox v-model="item.ischecked" @change="handleCheck(item.ischecked)"></el-checkbox>
             </div>
         </div>
     </div>
 </template>
-
 <script>
     export default {
-        name: "main-item"
+        name: "main-item",
+        props:["item"],
+        methods:{
+            handleCheck(status){
+                this.$emit('changeChecked',this.item.appId,status)
+            },
+            changName(item){
+                this.$prompt('请输入修改后的应用名称', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    // console.log(item);
+                    this.$emit("changeName",this.item.appId,value)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });
+                });
+
+            }
+        }
+
     }
 </script>
 
 <style scoped>
+    img{
+        width: 100%;
+        height: 100%;
+        border-radius: 0.08rem 0.08rem 0rem 0rem;
+    }
     .img-box{
         width: 2.8rem;
         height: 1.4rem;

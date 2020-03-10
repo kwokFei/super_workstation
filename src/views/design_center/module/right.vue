@@ -1,13 +1,12 @@
 <template>
     <div>
         <div class="block">
-            <p>应用模块</p>
+            <p class="el-icon-menu">应用模块</p>
             <el-tree
                     accordion
                     draggable
                     :data="data"
                     :props="{ children: 'childModule', label: 'name'}"
-                    default-expand-all
                     :expand-on-click-node="false"
                     @node-drag-end="handleDragEnd"
                     :render-content="renderContent">
@@ -34,7 +33,6 @@
                 </span>
                 <el-tree
                         :props="{ children: 'childModule', label: 'name'}"
-                        default-expand-all
                         :expand-on-click-node="false"
                         :data="data"
                         show-checkbox
@@ -65,6 +63,9 @@
                 data: [],
                 dialogVisible: false
             }
+        },
+        created(){
+          this.data = this.$store.state.allCheckedModuleList
         },
 
         methods: {
@@ -97,13 +98,22 @@
                     // console.log(children);
                     const index = children.findIndex((d) => d.code === data.code);
                     // console.log(index);
+                    // console.log(children[index].code);
+                    let code = children[index].code;
+                    let isReadonly =  children[index].isReadonly;
+                    //是基础模块
+                    if(isReadonly){
+                        this.$message.error('基础模块不能删除哦');
+                        return
+                    }
+                    // console.log(code);
                     children.splice(index, 1);
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
                     });
                     // console.log(this.data);
-                    this.resetModuleList();
+                    this.resetModuleList(code);
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -141,8 +151,8 @@
                 });
             },
             //修改父元素选中的模块列表
-            resetModuleList(){
-                this.$emit("rightResetModuleList",this.data)
+            resetModuleList(code){
+                this.$emit("rightResetModuleList",this.data,code)
             },
             handleDragEnd(){
                 this.resetModuleList()
@@ -163,6 +173,23 @@
 </script>
 
 <style scoped>
+    .el-tree {
+        max-height: calc(100% - 32px);
+        overflow: auto;
+    }
+    p{
+        width:100%;
+        height: 0.41rem;
+        line-height: 0.41rem;
+        color: #666666;
+        background: #ffffff;
+        border-bottom: 0.01rem solid #CCCCCC;
+    }
+    .block{
+        width: 97%;
+        float: right;
+        height: 100%;
+    }
     #upload{
         filter: alpha(opacity = 0);
         position: absolute;
@@ -186,6 +213,7 @@
         position: absolute;
         width: 100%;
         bottom: 0;
+        height: 32px;
     }
 
 </style>

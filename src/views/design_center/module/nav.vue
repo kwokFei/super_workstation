@@ -10,10 +10,22 @@
                 </div></el-col>
                 <el-col :span="6" :xs="12">
                     <div class="nav_span">
-                        <span>发布</span>
-                        <span @click="seeShare">预览</span>
-                        <span>保存</span>
-                        <span>下一步</span>
+                        <span>
+                            <img src="@/assets/img/design_center_nav/publish.png" alt="">
+                            <span>发布</span>
+                        </span>
+                        <span @click="toSeeShare">
+                            <img src="@/assets/img/design_center_nav/view.png" alt="">
+                            <span>预览</span>
+                        </span>
+                        <span>
+                            <img src="@/assets/img/design_center_nav/save.png" alt="">
+                            <span>保存</span>
+                        </span>
+                        <span @click="toNext">
+                            <img src="@/assets/img/design_center_nav/next.png" alt="">
+                            <span>下一步</span>
+                        </span>
                     </div>
                 </el-col>
             </el-row>
@@ -22,17 +34,20 @@
 </template>
 
 <script>
+    import {seeShare} from '@/utils/public_fun'
     export default {
         name: "design-nav",
         methods:{
-            seeShare(){
-                window.localStorage.setItem('allCheckedModuleList',JSON.stringify(this.$store.state.allCheckedModuleList));
-                window.localStorage.setItem('indexSrc',JSON.stringify(this.$store.state.indexSrc));
-                let routeUrl = this.$router.resolve({
-                    path: "/view_center",
-                });
-                window.open(routeUrl.href, '_blank');
-            }
+            toSeeShare(){
+                seeShare(this)
+            },
+            toNext(){
+                this.$confirm('是否进行驾驶舱设计？, 是否继续?', '下一步', {
+                    confirmButtonText: '开始设计',
+                    cancelButtonText: '直接发布',
+                    type: 'warning'
+                })
+            },
         }
     }
 </script>
@@ -50,18 +65,25 @@
         align-items: center;
         height: 0.48rem;
     }
-    .nav_span > span{
+    .nav_span > span {
         flex: 1;
         border-left: 1px solid black;
         height: 0.31rem;
-        display: inline-block;
         line-height: 0.31rem;
         cursor: pointer;
         font-size: 0.16rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     h2{
         font-size: 0.2rem;
         font-weight: 400;
+    }
+    img{
+        width: 0.19rem;
+        vertical-align: text-bottom;
+        margin-right: 0.02rem;
     }
 
 </style>

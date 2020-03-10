@@ -74,7 +74,7 @@
         width:100%;;
         height: 100%;
         background: white;
-        /*min-width: 1200px;*/
+        /*min-width: 1000px;*/
 
     }
     .rnBox{
@@ -93,7 +93,7 @@
 
     .contextBox{
         height: 95%;
-        margin-left: 0.5rem;
+        margin-left: 0.3rem;
     }
 
     .centerBox >.contextBox {
@@ -117,7 +117,7 @@
     }
     .navLeft>p{
         width: 100%;
-        height: 8%;
+        height:58px;
         text-align: center;
     }
     .navLeft>p img{
@@ -127,19 +127,20 @@
 
     .navLeft > ul{
         width: 100%;
-        height: 92%;
+        height: calc(100% - 58px);
         background: #FFFFFF;
         border-right: 0.01rem solid #E7F1F8;
         overflow-y: auto;
     }
 
     .navLeft > ul>li{
-        width: 100%;
+        /*width: 100%;*/
         height: 0.6rem;
         background: #FFFFFF;
         display: flex;
         /*justify-content: center;*/
         align-items: center;
+        padding-left: 0.2rem;
         border-bottom: 0.01rem solid #E1EEF6;
         cursor: pointer;
 
@@ -154,9 +155,19 @@
         /*height: 0.19rem;*/
         margin-right: 0.21rem;
     }
+    #centerContainer .navLeft > ul>li >span>img{
+        width: 0.3rem;
+        /*height: 0.19rem;*/
+        /*margin-right: 0.21rem;*/
+    }
 
     .navLeft > ul>li >span:nth-child(2){
-        /*font-size: 0.24rem;*/
+        font-size: 0.24rem;
+        color: #868daa;
+    }
+
+    #centerContainer .navLeft > ul>li >span:nth-child(2){
+        font-size: 0.18rem;
         color: #868daa;
     }
 
