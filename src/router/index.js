@@ -83,8 +83,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  mode: 'hash',
+  base: '/super_workstation/',
   routes
 })
 
