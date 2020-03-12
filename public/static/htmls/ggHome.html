@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body,html{
+            width: 100%;
+            height: 100%;
+            padding: 0.2rem;
+            font-font: "微软雅黑";
+            background-color: #E1EEF6;
+        }
+        html {
+            font-size: calc(100vw * 100 / 1920);
+        }
+        .oneBox{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+        .oneBox .oneItem{
+            background-color: white;
+            width: 6rem;
+            height: 2.6rem;
+            border-radius: 0.2rem;
+        }
+        .header{
+            height: 0.6rem;
+            line-height: 0.6rem;
+            width: 100%;
+            padding-left: 0.2rem;
+            display: flex;
+            align-items: center;
+        }
+        .header img{
+            width: 0.22rem;
+            height: 0.22rem;
+        }
+        .header span{
+            font-size: 0.2rem;
+            margin-left:0.078rem;
+        }
+        .contBox{
+            width: 100%;
+            height: 76%;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            font-size: 0.24rem;
+        }
+        .contBox .contItem{
+            margin: 0 0.2rem;
+        }
+        .contBox .contItem .number{
+            font-size: 0.5rem;
+            font-weight: bold;
+        }
+        .contBox .contItem span{
+            font-size: 0.16rem;
+            color: #ccc;
+        }
+
+        .twoBox{
+            margin-top: 0.2rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+        .twoBox .twoItem{
+            background-color: white;
+            width: 6rem;
+            height: 4.5rem;
+            border-radius: 0.2rem;
+        }
+        .listBox{
+            width: 100%;
+            height: 85%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 0 0.2rem;
+        }
+        .listBox .listItem{
+            width: 1.6rem;
+            height: 1.8rem;
+            border-radius: 0.1rem;
+            box-shadow: 0 0 2px 2px rgba(0,0,0,0.1);
+        }
+        .listBox .listItem p{
+            font-size: 0.2rem;
+            line-height: 0.4rem;
+            width: 100%;
+            text-align: center;
+        }
+        .listBox .listItem .imgBox{
+            margin-top: 0.1rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .listBox .listItem .imgBox img{
+            display: inline-block;
+            width: 0.77rem;
+            height: 0.77rem;
+        }
+        .listBox .listItem .kgBox{
+            margin-top: 0.1rem;
+            width: 100%;
+            font-size: 0.18rem;
+            text-align: center;
+        }
+        .listBox .listItem .kgBox .checkBox{
+            width: 1rem;
+            height: 0.32rem;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.15rem;
+            overflow: hidden;
+            color: white;
+        }
+        .listBox .listItem .kgBox .checkBox span{
+            text-align: center;
+            cursor: pointer;
+            width: 50%;
+            height: 100%;
+        }
+        .listBox .listItem .kgBox .checkBox span:nth-child(1){
+            background-color: rgb(128,136,166);
+        }
+        .listBox .listItem .kgBox .checkBox span:nth-child(2){
+            background-color: rgb(255,111,121);
+        }
+        .videoBox{
+            margin-top: 0.2rem;
+            width: 100%;
+            height: 80%;
+            padding: 0.2rem;
+            position: relative;
+        }
+        .videoBox img{
+            width: 100%;
+            height: 100%;
+        }
+        .videoBox .playImg{
+            position: absolute;
+            top:50%;
+            left: 50%;
+            width: 0.7rem;
+            height: 0.7rem;
+            cursor: pointer;
+            transform: translate(-50%,-50%);
+        }
+
+        .threeBox{
+            width: 100%;
+            margin-top: 0.2rem;
+            display: flex;
+            justify-content: space-between;
+            height: 5rem;
+        }
+        .threeBox .leftBox{
+            width: 55%;
+            height: 100%;
+            background-color: white;
+        }
+        .threeBox .rightBox{
+            width: 43%;
+            height: 100%;
+            background-color: white;
+        }
+        .manageBox{
+            width: 100%;
+            height: 88%;
+            padding: 0.2rem;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .manageBox::-webkit-scrollbar {
+            display: none;
+        }
+        .manageItem{
+            margin: 0.1rem 0;
+            height: 1.4rem;
+            line-height: 1.4rem;
+            width: 100%;
+            padding-left: 0.2rem;
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+        }
+        .manageItem img{
+            width: 0.8rem;
+            height: 0.8rem;
+            margin-right: 0.2rem;
+            border-radius: 0.8rem;
+        }
+        .infoBox{
+            width: 90%;
+            height: 1rem;
+            font-size: 0.14rem;
+            line-height: 0.3rem;
+            background-color: rgba(0,0,0,0.1);
+            color: black;
+            border-radius: 0.1rem;
+            padding-left: 0.05rem;
+        }
+        .infoBox .timer{
+            line-height: 0.4rem;
+            display: block;
+        }
+        .infoBox .text{
+            width: 100%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="oneBox">
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/icon/icon001.png" alt="">
+            <span>设备统计</span>
+        </div>
+        <div class="contBox">
+            <div class="contItem">
+                <span class="number" style="color: #4e5983;">180</span>
+                <br>
+                <span class="name">总设备</span>
+            </div>
+            <div class="contItem">
+                <span class="number" style="color: #00c3b3;">105</span>
+                <br>
+                <span class="name">运行设备</span>
+            </div>
+            <div class="contItem">
+                <span class="number" style="color: #ff6f79;">75</span>
+                <br>
+                <span class="name">设备报警</span>
+            </div>
+        </div>
+    </div>
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/icon/icon002.png" alt="">
+            <span>事件统计</span>
+        </div>
+        <div class="contBox">
+            <div class="contItem">
+                <span class="number" style="color: #4e5983;">150</span>
+                <br>
+                <span class="name">事件处理</span>
+            </div>
+            <div class="contItem">
+                <span class="number" style="color: #00c3b3;">125</span>
+                <br>
+                <span class="name">已处理</span>
+            </div>
+            <div class="contItem">
+                <span class="number" style="color: #ff6f79;">50</span>
+                <br>
+                <span class="name">未处理</span>
+            </div>
+        </div>
+    </div>
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/icon/icon003.png" alt="">
+            <span>空气质量</span>
+        </div>
+        <div class="contBox">
+            <div class="contItem">
+                <span class="number" style="color: #4e5983;">优</span>
+                <br>
+                <span class="name" style="font-size: 0.3rem">空气质量等级</span>
+            </div>
+            <div class="contItem">
+                <span class="number" style="color: #00c3b3;">8</span><span>μg/m3</span>
+                <br>
+                <span class="name">PM2.5</span>
+            </div>
+            <div class="contItem">
+                <span class="number" style="color: #ff6f79;">11</span><span>μg/m3</span>
+                <br>
+                <span class="name">PM10</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="twoBox">
+    <div class="twoItem">
+        <div class="header">
+            <img src="../img/icon/icon004.png" alt="">
+            <span>能源统计</span>
+        </div>
+        <div id="main01" style="width: 100%;height: 230px;"></div>
+    </div>
+    <div class="twoItem">
+        <div class="header">
+            <img src="../img/icon/icon005.png" alt="">
+            <span>常用模块</span>
+        </div>
+        <div class="listBox">
+            <div class="listItem">
+                <p>公共照明</p>
+                <div class="imgBox">
+                    <img src="../img/mm/mm001.png" alt="">
+                </div>
+                <div class="kgBox">
+                    <span class="checkBox">
+                        <span style="background-color: rgb(0,195,175)">on</span>
+                        <span>off</span>
+                    </span>
+                </div>
+            </div>
+            <div class="listItem">
+                <p>午休模式</p>
+                <div class="imgBox">
+                    <img src="../img/mm/mm002.png" alt="">
+                </div>
+                <div class="kgBox">
+                    <span class="checkBox">
+                        <span>on</span>
+                        <span>off</span>
+                    </span>
+                </div>
+            </div>
+            <div class="listItem">
+                <p>一键断电</p>
+                <div class="imgBox">
+                    <img src="../img/mm/mm003.png" alt="">
+                </div>
+                <div class="kgBox">
+                    <span class="checkBox">
+                        <span>on</span>
+                        <span>off</span>
+                    </span>
+                </div>
+            </div>
+            <div class="listItem">
+                <p>上班模式</p>
+                <div class="imgBox">
+                    <img src="../img/mm/mm004.png" alt="">
+                </div>
+                <div class="kgBox">
+                    <span class="checkBox">
+                        <span>on</span>
+                        <span>off</span>
+                    </span>
+                </div>
+            </div>
+            <div class="listItem">
+                <p>下班模式</p>
+                <div class="imgBox">
+                    <img src="../img/mm/mm005.png" alt="">
+                </div>
+                <div class="kgBox">
+                    <span class="checkBox">
+                        <span>on</span>
+                        <span>off</span>
+                    </span>
+                </div>
+            </div>
+            <div class="listItem">
+                <p>音乐播放</p>
+                <div class="imgBox">
+                    <img src="../img/mm/mm006.png" alt="">
+                </div>
+                <div class="kgBox">
+                    <span class="checkBox">
+                        <span>on</span>
+                        <span>off</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="twoItem">
+        <div class="header">
+            <img src="../img/icon/icon006.png" alt="">
+            <span>视频监控</span>
+        </div>
+        <div class="videoBox">
+            <img src="../img/video01.png" alt="">
+            <img class="playImg" src="../img/play.png" alt="">
+        </div>
+    </div>
+</div>
+<div class="threeBox">
+    <div class="leftBox">
+        <div class="header">
+            <img src="../img/icon/icon007.png" alt="">
+            <span>运行统计</span>
+        </div>
+        <div id="main02" style="width: 100%;height: 88%"></div>
+    </div>
+    <div class="rightBox">
+        <div class="header">
+            <img src="../img/icon/icon008.png" alt="">
+            <span>事物流消息</span>
+        </div>
+        <div class="manageBox">
+            <div class="manageItem">
+                <img src="../img/user.png" alt="">
+                <span class="infoBox">
+                    <span class="timer">2018-06-05  08:24:22</span>
+                    <span class="text">您好！智慧社区1栋2单元[匿名]住户有新的报修申请，请及时处理</span>
+                </span>
+            </div>
+            <div class="manageItem">
+                <img src="../img/user.png" alt="">
+                <span class="infoBox">
+                    <span class="timer">2018-06-05  08:24:22</span>
+                    <span class="text">您好！智慧社区5栋6单元[匿名]住户有新的报修申请，请及时处理</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/echarts-en.min.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById('main01'));
+
+    let ydata = [{
+        name: '用电量',
+        value: 50
+        },
+        {
+            name: '用水量',
+            value: 22
+        },
+        {
+            name: '用气量',
+            value: 28
+        }
+    ];
+    let color = ["#00c3b3", "#ff6f79","#00a0f8"]
+    let xdata = ['用电量', "用水量", "用气量",];
+
+
+    option = {
+        backgroundColor: "rgba(255,255,255,1)",
+        color:color,
+        legend: {
+            orient: "vartical",
+            x: "left",
+            top: "center",
+            left: "60%",
+            bottom: "0%",
+            data: xdata,
+            itemWidth: 8,
+            itemHeight: 8,
+            itemGap :16,
+            formatter :function(name){
+                return ''+name
+            }
+        },
+        series: [{
+            type: 'pie',
+            clockwise: false, //饼图的扇区是否是顺时针排布
+            minAngle: 2, //最小的扇区角度（0 ~ 360）
+            radius: ["40%", "70%"],
+            center: ["30%", "50%"],
+            avoidLabelOverlap: false,
+            itemStyle: { //图形样式
+                normal: {
+                    borderColor: '#ffffff',
+                    borderWidth: 6,
+                },
+            },
+            label: {
+                normal: {
+                    show: false,
+                    position: 'center',
+                    formatter: '{text|{b}}\n{c} ({d}%)',
+                    rich: {
+                        text: {
+                            color: "#666",
+                            fontSize: 14,
+                            align: 'center',
+                            verticalAlign: 'middle',
+                            padding: 8
+                        },
+                        value: {
+                            color: "#8693F3",
+                            fontSize: 16,
+                            align: 'center',
+                            verticalAlign: 'middle',
+                        },
+                    }
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontSize: 20,
+                    }
+                }
+            },
+            data: ydata
+        }]
+    };
+    myChart.setOption(option);
+
+    setTimeout(function() {
+        myChart.on('mouseover', function(params) {
+            if (params.name == ydata[0].name) {
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    seriesIndex: 0,
+                    dataIndex: 0
+                });
+            } else {
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    seriesIndex: 0,
+                    dataIndex: 0
+                });
+            }
+        });
+
+        myChart.on('mouseout', function(params) {
+            myChart.dispatchAction({
+                type: 'highlight',
+                seriesIndex: 0,
+                dataIndex: 0
+            });
+        });
+        myChart.dispatchAction({
+            type: 'highlight',
+            seriesIndex: 0,
+            dataIndex: 0
+        });
+    }, 1000);
+    myChart.setOption(option);
+</script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    var myChart02 = echarts.init(document.getElementById('main02'));
+
+    // 指定图表的配置项和数据
+    option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            color: [ "#00c3b3", "#ff6f79", "#00a0f8"],
+            data: ['运行', '故障','报警'],
+            left: 'center',
+            top: 'top'
+        },
+        grid: {
+            top: 'middle',
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            height: '80%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+            axisLine: {
+                lineStyle: {
+                    color: "#999"
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: '#DDD'
+                }
+            },
+            axisLine: {
+                show: false,
+                lineStyle: {
+                    color: "#333"
+                },
+            },
+            nameTextStyle: {
+                color: "#999"
+            },
+            splitArea: {
+                show: false
+            }
+        },
+        series: [{
+            name: '运行',
+            type: 'line',
+            data: [123,568,111,222,123,56,123,568,111,222,123,56],
+            lineStyle: {
+                normal: {
+                    width: 5,
+                    color: {
+                        type: 'linear',
+
+                        colorStops: [{
+                            offset: 0,
+                            color: '#AAF487' // 0% 处的颜色
+                        },
+                            {
+                                offset: 0.4,
+                                color: '#47D8BE' // 100% 处的颜色
+                            }, {
+                                offset: 1,
+                                color: '#47D8BE' // 100% 处的颜色
+                            }
+                        ],
+                        globalCoord: false // 缺省为 false
+                    },
+                    shadowColor: 'rgba(71,216,190, 0.5)',
+                    shadowBlur: 10,
+                    shadowOffsetY: 7
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#AAF487',
+                    borderWidth: 10,
+                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+                     shadowBlur: 100,*/
+                    borderColor: "#AAF487"
+                }
+            },
+            smooth: true
+        },
+            {
+                name: '故障',
+                type: 'line',
+                data: [125,568,25,36,784,56,125,568,25,36,784,56],
+                lineStyle: {
+                    normal: {
+                        width: 5,
+                        color: {
+                            type: 'linear',
+
+                            colorStops: [{
+                                offset: 0,
+                                color: '#F6D06F' // 0% 处的颜色
+                            },
+                                {
+                                    offset: 0.4,
+                                    color: '#F9A589' // 100% 处的颜色
+                                }, {
+                                    offset: 1,
+                                    color: '#F9A589' // 100% 处的颜色
+                                }
+                            ],
+                            globalCoord: false // 缺省为 false
+                        },
+                        shadowColor: 'rgba(249,165,137, 0.5)',
+                        shadowBlur: 10,
+                        shadowOffsetY: 7
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#F6D06F',
+                        borderWidth: 10,
+                        /*shadowColor: 'rgba(72,216,191, 0.3)',
+                         shadowBlur: 100,*/
+                        borderColor: "#F6D06F"
+                    }
+                },
+                smooth: true
+            },
+            {
+                name: '报警',
+                type: 'line',
+                data: [120,508,250,306,164,530,105,530,205,360,384,506],
+                lineStyle: {
+                    normal: {
+                        width: 5,
+                        color: {
+                            type: 'linear',
+                            colorStops: [{
+                                offset: 0,
+                                color: '#00a0f8' // 0% 处的颜色
+                            },
+                                {
+                                    offset: 0.4,
+                                    color: '#00a0f8' // 100% 处的颜色
+                                }, {
+                                    offset: 1,
+                                    color: '#00a0f8' // 100% 处的颜色
+                                }
+                            ],
+                            globalCoord: false // 缺省为 false
+                        },
+                        shadowColor: 'rgba(0,160,248, 0.5)',
+                        shadowBlur: 10,
+                        shadowOffsetY: 7
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#00a0f8',
+                        borderWidth: 10,
+                        /*shadowColor: 'rgba(72,216,191, 0.3)',
+                         shadowBlur: 100,*/
+                        borderColor: "#00a0f8"
+                    }
+                },
+                smooth: true
+            }
+        ]
+    };
+
+    myChart02.setOption(option);
+</script>
+</body>
+</html>

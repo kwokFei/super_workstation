@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="../images/title_icon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>公司管理</title>
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/header2.css">
+		<link rel="stylesheet" href="css/enterpriseManagement.css">
+		<script src="js/jquery.min.js"></script>
+		<script src="../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/base.js"></script>
+		<script type="text/javascript" src='http://api.map.baidu.com/api?v=2.0&ak=1pSTowk3vMReXCQA08ypPGfGoOaZI0qk'></script>
+		<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+		<!--引入Echarts.js-->
+		<script src="js/enterpriseManagement.js"></script>
+		<script src="../js/httpUtils.js"></script>
+
+	</head>
+
+	<body>
+		<!--公用头部-->
+		<div id="header">
+			<script type="text/javascript">
+				$("#header").load("header2.html");
+				if($.getCookie("orgLv") == "0") {
+
+				} else {
+					window.location.href = "./../html/Login/login.html";
+				}
+			</script>
+
+		</div>
+		<!--主体内容-->
+		<div class="contentBox">
+			<!-- 左边大盒子 -->
+			<div class="leftBox">
+				<div class="leftOneBox">
+					<div class="titleBox">
+						<img src="img/public/icon.png" alt="">
+						<span>公司统计</span>
+					</div>
+					<div class="contAll">
+						<span class="name">总公司<span id="cnum" class="number" style="color: rgb(0,255,255)"></span></span>
+						<span class="name">已完成<span id="ynum" class="number" style="color: rgb(51,204,0)"></span></span>
+						<span class="name">建造中<span id="nnum" class="number" style="color: rgb(255,153,0)"></span></span>
+					</div>
+					<div id="enterpriseEcharts" style="width: 3.79rem;height: 3rem;"></div>
+				</div>
+				<div class="leftTwoBox">
+					<div class="titleBox">
+						<img src="img/public/icon.png" alt="">
+						<span>公司分布</span>
+					</div>
+					<div class="enterpriseFB">
+
+					</div>
+				</div>
+			</div>
+			<!--中间盒子-->
+			<div class="centerContent">
+				<!--                顶部选择按钮-->
+				<div>
+					<div class="changeDot" show="all">全部</div>
+					<div class="changeDot" show="project" style="width: 1.4rem">
+						<img src="./img/public/finshroom.png" alt="">
+						<span>已完成的公司</span>
+						<span style="width: 1.4rem;display: none;"></span>
+					</div>
+					<div class="changeDot" show="room" style="width: 1.4rem">
+						<img src="./img/public/buildroom.png" alt="">
+						<span>建设中的公司</span>
+						<span style="width: 1.4rem;display: none;"></span>
+					</div>
+				</div>
+				<!--                地图-->
+				<div class="map">
+					<div id="ec_map" style="width: 9.72rem;height: 6.61rem;"></div>
+				</div>
+				<!--                项目管理 测试中心管理 公司管理-->
+				<ul class="nav-box">
+					<li onclick="window.location.href='projectManagement.html'">项目管理</li>
+					<li onclick="window.location.href='exhibitionIndex.html'">测试中心</li>
+					<li class="active" onclick="window.location.href='enterpriseIndex.html'">公司管理</li>
+				</ul>
+			</div>
+			<!-- 右边大盒子 -->
+			<div class="rightBox">
+				<div class="rightOne">
+					<div class="titleBox">
+						<img src="img/public/icon.png" alt="">
+						<span>接入产品</span>
+					</div>
+					<div class="iconLine" style="display:flex; margin-top: 0.2rem;margin-left: 0.3rem;">
+						<div style="width: 0.61rem;height: 0.61rem;">
+							<img src="./img/index_left/u.png" alt="" style="width: 100%;">
+						</div>
+						<div style="display: flex;flex-direction: column;justify-content: space-between;height: 100%;margin-left: 0.1rem;">
+							<span>接入产品（个）</span>
+							<span class="iconValue numberTetxt" style="color: #ff9900;font-size: 0.36rem;font-family: LED;margin-top: 0.08rem;" id="sendsp"></span>
+						</div>
+					</div>
+				</div>
+				<div class="rightTwo">
+					<div class="titleBox" style="margin-left: 0.2rem">
+						<img src="img/public/icon.png" alt="">
+						<span>互联赋能</span>
+					</div>
+					<div class="minBox">
+						<div class="minOne">
+							<div class="minTitle">提质</div>
+							<div class="xxBox type0">
+							</div>
+						</div>
+						<div class="minOne">
+							<div class="minTitle">增效</div>
+							<div class="xxBox type1">
+							</div>
+						</div>
+						<div class="minOne">
+							<div class="minTitle">降本</div>
+							<div class="xxBox type2">
+							</div>
+						</div>
+						<div class="minTwo">
+							<div class="minTitle">减存</div>
+							<div class="xxBox type3">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		$(function() {
+			let monthArr = [];
+			let cnumArr = [];
+			let ynumArr = [];
+			let nnumArr = [];
+			$.ajax({
+				cache: true,
+				type: "get",
+				url: userServiceUrl + "/companyInfo/getStatisticsData",
+				async: false,
+				success: function(data) {
+					let original = data.data.list[0];
+					let list = original.dataList;
+					document.getElementById("cnum").innerText = original.cnum;
+					document.getElementById("nnum").innerText = original.nnum;
+					document.getElementById("ynum").innerText = original.ynum;
+					for(let i = 0; i < list.length; i++) {
+						monthArr.push(list[i].month);
+						cnumArr.push(list[i].cnum);
+						ynumArr.push(list[i].ynum);
+						nnumArr.push(list[i].nnum);
+					}
+				},
+				error: function(errorMsg) {
+					console.info("公司统计数据加载失败啦!");
+				}
+			});
+
+			$.ajax({
+				cache: true,
+				type: "get",
+				url: userServiceUrl + "/companyInfo/getTypeCountList",
+				async: false,
+				success: function(data) {
+					let list = data.data.list;
+					for(let i = 1; i <= list.length; i++) {
+						let content = "<p id=" + list[i - 1].name + ">" +
+							"<span>TOP" + i + "</span>" +
+							"<span>" + list[i - 1].name + "</span>" +
+							"<span>" + list[i - 1].num + "家</span>" +
+							"</p>";
+						$(".enterpriseFB").append(content);
+					}
+				},
+				error: function(errorMsg) {
+					console.info("公司分布数据加载失败啦!");
+				}
+			});
+
+			/* //获取当前日期
+			let date = new Date();
+			let nowDate = date.getDate();
+			let numberArr = [];
+			for(let i = 1; i <= nowDate; i++ ){
+			    numberArr.push(i);
+			} */
+			//公司统计Echarts
+			// 基于准备好的dom，初始化echarts实例
+			var enterprise = echarts.init(document.getElementById('enterpriseEcharts'));
+
+			// 指定图表的配置项和数据
+			option = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						label: {
+							backgroundColor: '#6a7985'
+						}
+					}
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					boundaryGap: false,
+					data: monthArr,
+					//设置轴线的属性
+					axisLine: {
+						lineStyle: {
+							color: '#FFFFFF',
+						}
+					}
+				}],
+				yAxis: [{
+					type: 'value',
+					//设置轴线的属性
+					axisLine: {
+						lineStyle: {
+							color: '#FFFFFF',
+						}
+					}
+				}],
+				series: [{
+						name: '总公司',
+						type: 'line',
+						color: "rgb(0,255,255)",
+						smooth: true,
+						stack: '总量',
+						areaStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									// 0% 处的颜色   
+									offset: 0,
+									color: "rgba(0,255,255,1)" 
+								},
+								{
+									// 100% 处的颜色
+									offset: 1,
+									color: 'rgba(255,255,255,0)'
+								}
+							], false)
+						},
+						data: cnumArr
+					},
+					{
+						name: '已完成',
+						type: 'line',
+						color: "rgb(51,204,0)",
+						smooth: true,
+						stack: '总量',
+						areaStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									// 0% 处的颜色   
+									offset: 0,
+									color: "rgba(0,255,255,1)" 
+								},
+								{
+									// 100% 处的颜色
+									offset: 1,
+									color: 'rgba(255,255,255,0)'
+								}
+							], false)
+						},
+						data: ynumArr
+					},
+					{
+						name: '建设中',
+						type: 'line',
+						color: "rgb(255,153,0)",
+						smooth: true,
+						stack: '总量',
+						areaStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									// 0% 处的颜色   
+									offset: 0,
+									color: "rgba(0,255,255,1)" 
+								},
+								{
+									// 100% 处的颜色
+									offset: 1,
+									color: 'rgba(255,255,255,0)'
+								}
+							], false)
+						},
+						data: nnumArr
+					},
+				]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			enterprise.setOption(option);
+
+			$("#enterpriseEcharts").css({
+				"width": "3.79rem",
+				"height": "3rem"
+			});
+		});
+	</script>
+	<script>
+		$(function() {
+			//动态添加背景颜色
+			$(".enterpriseFB> p").each(function(index, el) {
+				if(index % 2 === 0) {
+					$(this).css({
+						"backgroundColor": "#214271"
+					});
+				}
+			});
+			//动态添加盒子
+			$(".enterpriseFB p").on("click", function() {
+
+				$(this).siblings('.joker').hide(500);
+
+				let mm = $(this).next().hasClass("joker");
+				if(mm) {
+					$(this).next().toggle();
+				} else {
+					var requestData = new Object();
+					requestData.type = $(this)[0].id;
+					//请求数据
+					let str = "<div class='joker appendDiv'>" +
+						"<div><span class='qyLogo'>公司logo</span><span class='qyName'>公司名称</span><span class='qyNumber'>设备数量</span></div>" +
+						"<ul>";
+					$.ajax({
+						cache: true,
+						type: "get",
+						url: userServiceUrl + "/companyInfo/getClassifyInfoList",
+						data: requestData,
+						async: false,
+						success: function(data) {
+							let list = data.data.list;
+							// console.info("**********");
+							// console.info(list);
+							for(let i = 0; i < list.length; i++) {
+								str += "<li data='" + list[i].id + "' class='empTypeList'><img src='" + list[i].logo + "' alt=''><span class='qyName' title='" + list[i].name + "'>" + list[i].name + "</span><span class='qyNumber'>" + list[i].num + "个</span></li>";
+							}
+						},
+						error: function(errorMsg) {
+							console.info("公司分类信息数据加载失败啦!");
+						}
+					});
+
+					str += "</ul>" + "</div>";
+					$(this).after(str);
+					$('.empTypeList').css("cursor", "pointer");
+					//					$('.empTypeList').click(function() {
+					//						window.location.href = "enterpriseManagement.html?z_orgId=" + $(this).attr("data");
+					//					});
+				}
+			});
+		});
+	</script>
+	<script>
+		function getUrlParam(paramname) {
+			var reg = new RegExp("(^|&)" + paramname + "=([^&]*)(&|$)");
+			// 查询匹配 substr(1)删除? match()匹配
+			var s = window.location.search.substr(1).match(reg);
+			if(s != null) {
+				return unescape(s[2]); // unescape() 函数可对通过 escape() 编码的字符串进行解码。
+			}
+			return null;
+		}
+		//设备状态
+		let z_orgId = getUrlParam("z_orgId")
+
+		const url = userServiceUrl + "/companyInfo/getProductNumber?token=" + $.getToken();
+		$.ajax({
+			type: "GET", //提交方式
+			url: encodeURI(url), //路径
+			datatype: 'json',
+			contentType: "application/json",
+			success: function(data) { //返回数据根据结果进行相应的处理
+				if(data.code === 0) {
+					document.getElementById("sendsp").innerText = data.data.list[0] + "K";
+				} else {
+					console.log('请求错误')
+				}
+			},
+			error: function() {
+				console.log('请求错误')
+			}
+		});
+	</script>
+
+</html>

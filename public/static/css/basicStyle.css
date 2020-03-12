@@ -1,0 +1,121 @@
+/*公共样式*/
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    font-size: 0.14rem;
+    font-family: "MicrosoftYaHei";
+    text-decoration: none;
+    font-max-size: 20px;
+}
+html{
+    font-size: calc(100vw * 100 / 1920);
+}
+body,html{
+    height: 100%;
+}
+#app{
+    height: 100%;
+    /*min-width: 1000px;*/
+    /*overflow: auto;*/
+}
+#app>div:nth-child(2){
+    width: 100%;
+    min-height: calc(100% - 60px);
+    background: #F1F1F1;
+    overflow: auto;
+
+}
+ul {
+    list-style: none;
+}
+button{
+    text-decoration: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+/*更改element样式 选择框*/
+.el-radio__label{
+    padding-left: 0;
+    display: none;
+}
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: #333399;
+    background: #333399;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #333399;
+    color: #FFF;
+}
+
+#warningMessage .el-date-editor .el-range-separator,
+#logManagement .el-date-editor .el-range-separator{
+    line-height : 18px;
+    color: #bfbfbf;
+}
+
+#warningMessage .el-date-editor .el-range__icon,
+#warningMessage .el-date-editor .el-range__close-icon,
+#logManagement .el-date-editor .el-range__icon,
+#logManagement .el-date-editor .el-range__close-icon{
+    line-height : 18px;
+}
+
+
+.el-date-table td.today span,
+.el-button--text,
+.el-time-panel__btn.confirm,
+.el-button--text:focus, .el-button--text:hover,
+.el-button.is-plain:focus, .el-button.is-plain:hover,
+.el-date-table td.available:hover{
+    color: #333399 ;
+}
+.el-button.is-plain:focus, .el-button.is-plain:hover{
+    border: #333399;
+}
+.el-date-table td.end-date span, .el-date-table td.start-date span{
+    background: #333399 ;
+}
+.el-input.is-active .el-input__inner, .el-input__inner:focus{
+    border-color :#333399;
+}
+.el-range-editor.is-active, .el-range-editor.is-active:hover{
+    border-color :#333399;
+}
+
+#alarmEvent .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    height: 24px;
+}
+
+#alarmEvent .el-input__icon{
+    height: 24px;
+    line-height: 24px;
+}
+
+#alarmEvent .el-date-editor .el-range-separator{
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    padding: 0;
+    color: #bfbfbf;
+}
+.maskBox .line> ul:nth-child(2) >li:hover span,
+.table>ul>li:hover span{
+    background: #EAEAF5;
+}
+
+.table li{
+    display: flex;
+}
+
+.contentBox,
+.general{
+    /*height: calc(100% - 64px);*/
+    overflow-y: auto;
+}
+
+#app>#xxxx{
+    height: 100%;
+}

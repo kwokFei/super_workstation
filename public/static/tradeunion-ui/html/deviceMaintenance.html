@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+	<title>中国工业互联网研究院测试中心</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="../css/style.min.css" rel="stylesheet">
+	<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+	<link href="../css/commonStyle.css" rel="stylesheet">
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../plus/layer/layer.js"></script>
+	<script src="../js/template-web.js"></script>
+	<script src="../plus/validate/jquery.validate.min.js"></script>
+	<script src="../plus/validate/messages_zh.min.js"></script>
+	<script src="../js/bootstrap-treeview.js"></script>
+
+	<script src="../js/httpUtils.js"></script>
+	<script src="../js/Md5.js"></script>
+	<script src="../js/laydate/laydate.js"></script>
+	<style>
+		.MarginPx {
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+	<div class="lyear-layout-container">
+
+		<!--加载头部和菜单栏-->
+		<div id="hander">
+			<script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+			</script>
+		</div>
+
+		<!--页面主要内容-->
+		<main class="lyear-layout-content" style="display: none">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>设备房间管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<!--<div class="col-lg-3">-->
+										<!--<div class="form-group">-->
+											<!--<label class="form-label">设备名称：</label>-->
+											<!--<select class="form-control selectpickers" style="max-height: 500px;" name="s_deviceId" id="s_deviceId" data-live-search="true">-->
+												<!--<option value="">请选择设备</option>-->
+											<!--</select>-->
+										<!--</div>-->
+									<!--</div>-->
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="l_deviceAlias">设备名称：</label>
+											<input class="form-control" name="l_deviceAlias" id="l_deviceAlias" placeholder="设备名称" type="text">
+										</div>
+									</div>
+
+									<div class="col-lg-3">
+										<div class="form-group">
+											<div style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+												<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="ibox-content">
+									<!--页面内容部分-->
+									<!-- 这里写内容 -->
+									<div id="buttons">
+										<button type="button" class="btn btn-info" id="pi_time"><i
+												class="fa fa-plus"></i> 检修提醒配置
+										</button>
+										<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 批量处理
+										</button>
+										<!--<button type="button" class="btn btn-success" id="recover"><i class="fa fa-reply"></i> 启用</button>-->
+										<!--<button type="button" class="btn btn-warning" id="lock"><i class="fa fa-warning"></i> 禁用</button>-->
+										<button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 批量删除</button>
+									</div>
+
+									<table id="myTable">
+
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<!--End 页面主要内容-->
+	</div>
+</div>
+<!--加载底部-->
+<div id="footer" class="Pos_footer">
+	<script type="text/javascript">
+        $(function(){
+            $("#footer").load("footer.html");
+        });
+	</script>
+</div>
+<div id="loadDiv"></div>
+</body>
+
+<script>
+    var RmId = "";
+    var html;
+    var rdata = {};
+    var DeviceTestList = "";
+    var UserName = $.getCookie("userName");
+    $("#loadDiv").html(loadHtml);
+    $(function () {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: deviceServiceUrl + "/RmController/listAll", //请求后台的URL（*）
+            method: 'get',                         //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '',                            //工具按钮用哪个容器
+            striped: true,                          //是否显示行间隔色
+            cache: false,                           //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                       //是否显示分页（*）
+            sortable: false,                        //是否启用排序
+            sidePagination: "server",               //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                          //初始化加载第一页，默认第一页
+            pageSize: 10,                           //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],            //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams,               //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                         //每一行的唯一标识，一般为主键列
+            cardView: false,                        //是否显示详细视图
+            detailView: false,                      //是否显示父子表
+            clickToSelect: true,                    //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [
+                {
+                    checkbox: true
+                }, {
+                    width: 50,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                }, {
+                    field: 'deviceAlias',
+                    title: '设备名称',
+                    width: 250
+                }, {
+                    title: '开始时间',
+                    width: 220,
+                    formatter: function (value, row, index) {
+                        return row.startTime + " " + row.remindTime;
+                    }
+                }, {
+                    title: '结束时间',
+                    width: 230,
+                    formatter: function (value, row, index) {
+                        return row.endTime + " " + row.remindTime;
+                    }
+                }, {
+                    field: 'isProcess',
+                    title: '处理情况',
+                    width: 150,
+                    formatter: function (value, row, index) {
+                        var state = "";
+                        if (value == 0) {
+                            state = '<span style="color:#3ABDDE">未处理</span>'
+                        } else if (value == 1) {
+                            state = '<span style="color:#FFBBFF">已处理</span>'
+                        }
+                        return state;
+                    }
+                }, {
+                    field: 'remindType',
+                    title: '提醒类型',
+                    width: 150,
+                    formatter: function (value, row, index) {
+                        var state = "";
+                        if (value == 1) {
+                            state = '<span style="color:#3ABDDE">每月一次</span>'
+                        } else if (value == 2) {
+                            state = '<span style="color:#FFBBFF">每周一次</span>'
+                        } else if (value == 3) {
+                            state = '<span style="color:#FFBBFF">每天一次</span>'
+                        }
+                        return state;
+                    }
+                }
+            ]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                deviceAlias: $("#l_deviceAlias").val(),
+            };
+        }
+
+        $("#search").click(function() {
+            $.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function() {
+            $("#l_deviceAlias").val("");
+            $("#search").trigger("click");
+        });
+
+        /*配置检修提醒时间配置*/
+		$("#pi_time").on("click",function () {
+            var authlayer = layer.open({
+                skin: 'card',
+                type: 1,
+                title: '设备列表',
+                closeBtn: 1,
+                shade: 0.5,
+                moveType: 0, //拖拽模式，0或者1
+                maxWidth: 500,
+                content: template("modelDevice", {
+                    title: "123"
+                }),
+                area: ['900px', '600px'],
+                offset: 'auto',
+                btn: ['关闭'],
+                yes: function(index, layero) {
+                    layer.close(authlayer);
+                },
+                success: function(layero) {
+                    getDeviceTable();
+                    s_init_o_Tree();
+                }
+            });
+		})
+        /*批量删除*/
+        $("#remove").on("click", function () {
+            var data = $("#myTable").bootstrapTable('getSelections');
+            var ids = [];
+            for (var i = 0; i < data.length; i++) {
+                var one = data[i];
+                ids.push(one.id);
+            }
+            if (ids.length == 0) {
+                layer.msg('请选择需删除的检修信息', {icon: 5});
+                return;
+            }
+            var conlayer = layer.confirm("确定删除选中数据？", {
+                btn: ['确定', '取消']
+            }, function () {
+                $.show_overall_loding();
+                $.deleteJSON(deviceServiceUrl + "/RmController?rmIds=" + ids, {}, function (data) {
+                    if (data.code == 0) {
+                        layer.close(conlayer);
+                        layer.msg("成功", {
+                            icon: 1
+                        });
+                        $.show_overall_loding();
+                        $('#myTable').bootstrapTable('refresh');
+                        return true;
+                    } else {
+                        $('#myTable').bootstrapTable('refresh');
+                        if (data.code == 401000) {
+                            parent.layer.msg(data.message, {
+                                icon: 5
+                            });
+                        } else if (data.messages != null) {
+                            parent.layer.msg(data.messages[0].error, {
+                                icon: 5
+                            });
+                        } else {
+                            parent.layer.msg(data.message, {
+                                icon: 5
+                            });
+                        }
+                    }
+                })
+            }, function () {
+                layer.close(conlayer);
+            });
+        });
+        $("#edit").click(function () {
+            var list = $("#myTable").bootstrapTable('getSelections');
+            if (list.length < 1) {
+                layer.msg("请先选择要编辑检修信息", {
+                    icon: 2
+                });
+                return;
+            }
+            var myLayer = layer.open({
+                type: 1,
+                skin: 'card', //自定义样式winning-class
+                title: "编辑检修",
+                area: ['500px', '300px'],
+                resize: true, //是否拉升
+                offset: 'auto', //居中
+                content: template("modelWindWin", {
+                    title: "123"
+                }),
+                btn: ['提交', '取消'],
+                yes: function (index, layero) {
+                    var ids = [];
+                    for (var i = 0; i < list.length; i++) {
+                        var one = list[i];
+                        ids.push(one.id);
+                    }
+                    var isProcess = $('#isProcess  option:selected').val();
+                    var remindType = $('#remindType  option:selected').val();
+                    var test = "";
+                    if(isProcess == 1){
+                        test = "确认选中设备" + " "+ "首页" + " " + "不再推送消息吗？"
+					} else {
+                        if (remindType == 1) {
+                            test = "确认选中设备" + " " + "首页" + " " + "每月推送一次消息吗?"
+						} else if(remindType == 2){
+                            test = "确认选中设备" + " " + "首页" + " " + "每周推送一次消息吗?"
+						} else {
+                            test = "确认选中设备" + " " + "首页" + " " + "每天推送一次消息吗?"
+						}
+					}
+                    var conlayer = layer.confirm(test, {
+                        btn: ['确定', '取消']
+                    }, function () {
+                        $.putJSON(deviceServiceUrl + "/RmController/batchUpRm", {
+                            'isProcess': isProcess,
+                            'remindType': remindType,
+                            'rmIds': ids
+                        }, function (data) {
+                            $.hide_overall_loding();
+                            if (data.code == 0) {
+                                parent.layer.msg("操作成功", {
+                                    icon: 6
+                                });
+                                layer.close(myLayer);
+                                $('#myTable').bootstrapTable('refresh');
+                                return true;
+                            } else {
+                                $('#myTable').bootstrapTable('refresh');
+                                if (data.code == 401000) {
+                                    parent.layer.msg(data.message, {
+                                        icon: 5
+                                    });
+                                } else if (data.messages != null) {
+                                    parent.layer.msg(data.messages[0].error, {
+                                        icon: 5
+                                    });
+                                } else {
+                                    parent.layer.msg(data.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        });
+                    }, function () {
+                        layer.close(conlayer);
+                    });
+                },
+                success: function (layero) {
+                }
+            })
+        });
+    });
+
+    function getDeviceTable() {
+        $.show_overall_loding();
+        $('#deviceTable').bootstrapTable({
+            url: deviceServiceUrl + "/devicemanger/list", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function(data) {
+                var result = data.data;
+                rdata = result.list;
+                var res = [];
+                res.push({
+                    total: result.total,
+                    rows: result.list
+                });
+                return res[0];
+            },
+            onDblClickRow: function(row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function(value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'deviceAlias',
+                title: '设备名称',
+                width: 300
+            }, {
+                field: 'deviceMac',
+                title: '序列MAC',
+                width: 300
+            }, {
+                field: 'deviceSubscriberNumber',
+                title: '所属订阅账号',
+                width: 300
+            }, {
+                field: 'organizationName',
+                title: '所属机构',
+                width: 300
+            }]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                isScreenOrganization: 1,
+                deviceAlias: $("#s_deviceAlias").val(),
+                serialNum: $("#s_serialNum").val(),
+                sorganizationId: $("#s_organizationId").val(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber
+            };
+        }
+
+        var serchaData = {};
+        $("#search2").click(function() {
+            $.show_overall_loding();
+            $('#deviceTable').bootstrapTable('refresh');
+        });
+
+        $("#clean2").click(function() {
+            $("#s_deviceAlias").val("");
+            $("#s_serialNum").val("");
+            $("#s_organizationId").val("");
+            $("#s_organization").val("");
+            $("#search2").trigger("click");
+        });
+
+        /*检修提醒配置*/
+        $("#pi_time1").on("click", function () {
+            var data = $("#deviceTable").bootstrapTable('getSelections');
+            if (data.length == 1) {
+                console.log(data[0]);
+                if(data[0].organizationId == '' || data[0].organizationId == null){
+                    layer.msg("请先配置组织机构", {
+                        icon: 5
+                    });
+                    return;
+                }
+                setTimeModel(data[0].id,data[0].organizationId);
+            } else {
+                layer.msg("请选择一条数据", {
+                    icon: 5
+                });
+            }
+        });
+    }
+
+    /*设置设备检修提醒时间*/
+    function setTimeModel(deviceId,organizationId) {
+        deviceRmNode(deviceId);
+        var html = template("modelTimeWin", {title: "123"});
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: '配置提醒时间',
+            area: ['810px', '420px'],	//宽高
+            resize: true,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                $("#TimeForm").submit();
+            },
+            success: function (layero) {
+                $('#startTime').mouseenter(function() {
+                    laydate.render({
+                        elem: '#startTime',
+                        calendar: true,
+                        min: minDate()
+                    });
+                });
+
+                $('#endTime').mouseenter(function() {
+                    laydate.render({
+                        elem: '#endTime',
+                        calendar: true,
+                        min: minDate()
+                    });
+                });
+
+                $('#remindTime').mouseenter(function() {
+                    laydate.render({
+                        elem: '#remindTime',
+                        type: 'time'
+                    });
+                });
+            }
+
+        });
+        var validate = $("#TimeForm").validate({
+            rules: {
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
+                },
+                remindTime: {
+                    required: true
+                },
+                remindType: {
+                    required: true
+                }
+            },
+            messages: {
+                startTime: {
+                    required: "请输入开始时间"
+                },
+                endTime: {
+                    required: "请输入结束时间"
+                },
+                remindTime: {
+                    required: "请输入提醒时间"
+                },
+                remindType: {
+                    required: "请选择提醒类型"
+                }
+            },
+            submitHandler: function (form) {
+                var dataDevice = $("#deviceTable").bootstrapTable('getSelections')[0];
+                var deviceTestId = dataDevice.id;
+                var remindTypeValue = $('#remindType  option:selected').val();
+
+                var startTime = $("#startTime").val();
+                var endTime = $("#endTime").val();
+
+                var remindTime = $("#remindTime").val();
+                var continDay = $("#continDay").val();
+                if (startTime > endTime) {
+                    layer.msg("请选择合适时间段", {
+                        icon: 5
+                    });
+                    return;
+                }
+                if(remindTypeValue == "0") {
+                    layer.msg('请选择提醒类型', {
+                        icon: 5
+                    });
+                    $.hide_overall_loding();
+                    return;
+                }
+                var testDate = "";
+                if(remindTypeValue == 1 ){
+                    testDate = startTime + "至" + endTime  + " " + "首页" + " " + "每月推送一次消息吗?"
+                } else if (remindTypeValue == 2) {
+                    testDate = startTime + "至" + endTime  + " " + "首页" + " " + "每周推送一次消息吗?"
+                } else {
+                    testDate = startTime + "至" + endTime  + " " + "首页" + " " + "每天推送一次消息吗?"
+                }
+                var conlayer = layer.confirm(testDate, {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.show_overall_loding();
+                    $.putJSON(deviceServiceUrl + "/RmController/", {
+                        "id": RmId,
+                        "deviceId": deviceTestId,
+                        "startTime": startTime,
+                        "endTime": endTime,
+                        "remindTime": remindTime,
+                        "remindType": remindTypeValue,
+                        "rmOrganizationId": organizationId
+                    }, function (data) {
+                        var testDate = startTime + "至" + endTime ;
+                        $.hide_overall_loding();
+                        if (data.code == 0) {
+                            parent.layer.msg("操作成功", {
+                                icon: 6
+                            });
+                            layer.close(myLayer);
+                            $('#myTable').bootstrapTable('refresh');
+                            return true;
+                        } else {
+                            if (data.code == 401000) {
+                                $('#myTable').bootstrapTable('refresh');
+                                parent.layer.msg(data.message, {
+                                    icon: 5
+                                });
+                            } else if (data.messages != null) {
+                                parent.layer.msg(data.messages[0].error, {
+                                    icon: 5
+                                });
+                            } else {
+                                parent.layer.msg(data.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+
+                    })
+                }, function () {
+                    layer.close(conlayer);
+                });
+            }
+        });
+    }
+    /*查询对应的节点位置信息*/
+    function deviceRmNode(deviceTestId) {
+        $.sanjiGetJSON(deviceServiceUrl + "/RmController/list", {
+            "deviceId": deviceTestId
+        }, function (data) {
+            $.hide_overall_loding();
+            if (data.code == 0) {
+                if (data.data.length > 0) {
+                    var deviceId = data.data[0].deviceId;
+                    var startTime = data.data[0].startTime;
+                    var endTime = data.data[0].endTime;
+                    var remindTime = data.data[0].remindTime;
+                    var remindType = data.data[0].remindType;
+                    RmId = data.data[0].id;
+                    $('#startTime').val(startTime);
+                    $('#endTime').val(endTime);
+                    $('#remindTime').val(remindTime);
+                    $('#remindType').val(remindType);
+                }
+                return true;
+            } else {
+                if (data.code == 401000) {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                } else if (data.messages != null) {
+                    parent.layer.msg(data.messages[0].error, {
+                        icon: 5
+                    });
+                } else {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                }
+            }
+
+        })
+    }
+    /*查询对应的节点位置信息*/
+    function deviceRmNode(deviceTestId) {
+        $.sanjiGetJSON(deviceServiceUrl + "/RmController/list", {
+            "deviceId": deviceTestId
+        }, function (data) {
+            $.hide_overall_loding();
+            if (data.code == 0) {
+                if (data.data.length > 0) {
+                    var deviceId = data.data[0].deviceId;
+                    var startTime = data.data[0].startTime;
+                    var endTime = data.data[0].endTime;
+                    var remindTime = data.data[0].remindTime;
+                    var remindType = data.data[0].remindType;
+                    RmId = data.data[0].id;
+                    $('#startTime').val(startTime);
+                    $('#endTime').val(endTime);
+                    $('#remindTime').val(remindTime);
+                    $('#remindType').val(remindType);
+                }
+                return true;
+            } else {
+                if (data.code == 401000) {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                } else if (data.messages != null) {
+                    parent.layer.msg(data.messages[0].error, {
+                        icon: 5
+                    });
+                } else {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                }
+            }
+
+        })
+    }
+    /*设置最小时间为当前时间*/
+    function minDate() {
+        var now = new Date();
+        return now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+    }
+
+    var organizationData = "";
+
+    function get_o_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.organizationName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_o_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+    function s_init_o_Tree() {
+        if(organizationData == "") {
+            $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+                organizationData = get_o_TreeData(data.data);
+                s_initTreeData();
+            });
+            return;
+        }
+        s_initTreeData();
+    }
+    function s_initTreeData() {
+        var options = {
+            checkedIcon: "glyphicon glyphicon-check",
+            nodeIcon: "none", //所有节点的默认图标
+            levels: 1,
+            data: organizationData,
+            // onhoverColor: "rgba(255,255,255,0.9)",
+            onhoverColor: "rgba(0,0,0,0.1)",
+            onNodeSelected: function(event, data) {
+                $("#s_organization").val(data.text);
+                $("#s_organizationId").val(data.id);
+                $("#s_organizationTree").hide();
+            }
+        };
+        $('#s_organizationTree').treeview(options);
+    }
+
+
+
+</script>
+
+<!-- 设备列表 -->
+<script type="text/html" id="modelDevice">
+	<section class="openDetail" style="width: 100%;height:100%">
+		<div>
+			<div class="panel-body">
+				<div class="ibox-content row">
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">设备名称：</label>
+							<input class="form-control" name="s_deviceAlias" id="s_deviceAlias" placeholder="设备名称" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">序列编号：</label>
+							<input class="form-control" name="s_serialNum" id="s_serialNum" placeholder="序列编号" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">所属机构：</label>
+							<input class="form-control organizationInput position-box" id="s_organization" name="s_organization" type="text" onclick="$('#s_organizationTree').show();" placeholder="所属机构" readonly="readonly" style="cursor: pointer">
+							<input type="hidden" id="s_organizationId" name="s_organizationId" value="">
+							<div id="s_organizationTree" style="display: none; width: 250px;position: absolute;z-index: 999;background-color: #FFF;"></div>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div style="margin-top: 24px;">
+								<button type="button" class="btn btn-purple" id="clean2"><i class="fa fa-eraser"></i> 清空</button>
+								<button type="button" class="btn btn-success" id="search2" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="buttons">
+						<button type="button" class="btn btn-info" id="pi_time1"><i
+							class="fa fa-plus"></i> 检修提醒配置
+					</button>
+				</div>
+				<div id="deviceTable" class="selected"></div>
+			</div>
+		</div>
+	</section>
+</script>
+
+<script type="text/html" id="modelWindWin">
+	<section class="openDetail" style="width: 95%; margin-top: 20px;">
+		<div class="panel-body">
+			<div class="layui-row layui-col-space10 layui-form-item">
+				<div class="col-lg-12">
+					<label class="layui-form-label">提醒类型：</label>
+					<div class="layui-input-block">
+						<select class="form-control" id="remindType" name="remindType">
+							<option value="1">每月一次</option>
+							<option value="2">每周一次</option>
+							<option value="3">每天一次</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<label class="layui-form-label">处理清理：</label>
+					<div class="layui-input-block">
+						<select class="form-control" id="isProcess" name="isProcess">
+							<option value="0">未处理</option>
+							<option value="1">已处理</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</script>
+
+<!--配置时间提醒模板-->
+<script type="text/html" id="modelTimeWin">
+	<section class="openDetail" style="width: 95%; margin-top: 20px;">
+		<div class="panel-body">
+			<div class="layui-row layui-col-space10 layui-form-item">
+				<form id="TimeForm">
+					<div class="col-lg-12 ">
+						<label class="layui-form-label">开始时间:</label>
+						<div class="layui-input-block">
+							<input class="form-control" id="startTime" name="startTime" type="text">
+						</div>
+					</div>
+					<div class="col-lg-12 MarginPx">
+						<label class="layui-form-label">结束时间:</label>
+						<div class="layui-input-block">
+							<input class="form-control" id="endTime" name="endTime" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6 MarginPx">
+						<label class="layui-form-label">提醒时间:</label>
+						<div class="layui-input-block">
+							<input class="form-control" id="remindTime" name="remindTime" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label">提醒类型：</label>
+						<div class="layui-input-block">
+							<select class="form-control" id="remindType" name="remindType">
+								<option value="0">--请选择提醒类型--</option>
+								<option value="1">每月一次</option>
+								<option value="2">每周一次</option>
+								<option value="3">每天一次</option>
+							</select>
+						</div>
+					</div>
+					<input type="hidden" name="id" id="id"/>
+				</form>
+			</div>
+
+		</div>
+	</section>
+</script>
+
+<script>
+    $(document).bind("click", function (e) {
+        var con_one = $(".position-box");// 设置目标区域
+        // console.info(con_one);
+        var f = 'expand-icon';	//点击treeView的加号图标不隐藏
+        if (!con_one.is(e.target) && con_one.has(e.target).length === 0 && !e.target.classList.contains(f)) {
+            $("#s_organizationTree").hide();//需要隐藏的元素
+        }
+    });
+</script>
+
+</html>

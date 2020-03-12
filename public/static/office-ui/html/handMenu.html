@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<!--<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>台迪智慧办公系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<style type="text/css">
+			.updateBox {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				z-index: 9999;
+				transform: translate(-50%, -50%);
+				padding: 20px;
+				/*border: 1px solid red;*/
+				background-color: white;
+				box-sizing: border-box;
+				border-radius: 5px;
+				box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+			}
+			
+			.title {
+				height: 40px;
+				line-height: 40px;
+				border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+				margin-bottom: 10px;
+			}
+			
+			.title p {
+				font-size: 16px;
+				font-weight: 600;
+			}
+			
+			.layui-form-label {
+				padding: 10px 2px !important;
+			}
+			.sidebar-header a,
+			.nav-drawer li a {
+				cursor: pointer;
+			}
+			.lyear-layout-content{
+				width: auto;
+			    position: fixed;
+			    left: 240px;
+			    top: 70px;
+			    right: 0;
+			    bottom: 5px;
+			    padding: 0;
+			    height: auto;
+			}
+		</style>
+	</head>
+	<div class="lyear-layout-web" id="menuApp">
+		<div class="lyear-layout-container">
+			<!--左侧导航-->
+			<aside class="lyear-layout-sidebar">
+
+				<!-- logo -->
+				<div id="logo" class="sidebar-header">
+					<a href="handMenu.html">台迪智慧办公</a>
+				</div>
+
+				<div class="lyear-layout-sidebar-scroll">
+					<nav class="sidebar-main">
+						<!--动态菜单-->
+						<ul class="nav nav-drawer">
+							<li class="nav-item" :class="{'nav-active':currentIndex==-1&&currentIndex1==-1}">
+								<a v-on:click="changeIframe(homeName)"><span class="icon-nav icon-home"></span><span>首页</span></a>
+							</li>
+							<li class="nav-item nav-item-has-subnav" v-for="(value, key, idnex) in list" :class="{'active open':idnex===currentIndex}">
+								<a href="javascript:void(0)"><span :class="value[0]"></span><span>{{key}}</span></a>
+								<ul class="nav nav-subnav" v-if="value[1] != null">
+									<li v-for="(value1, key1, idnex1) in value[1]" :class="{'active open':idnex1===currentIndex1 && idnex===currentIndex,'nav-active':idnex1===currentIndex1}">
+										<a v-on:click="changeIframe(value1[0],idnex1,idnex)">{{key1}}</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</nav>
+				</div>
+
+			</aside>
+			<!--End 左侧导航-->
+
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<!--<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span>
+								<span class="lyear-toggler-bar"></span>
+								<span class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 海克斯后台管理系统 </span>
+						</div>-->
+
+						<ul class="topbar-right">
+							<!--切换主题配色-->
+							<!--<li class="dropdown dropdown-skin">
+								<span data-toggle="dropdown" class="icon-palette"><i class="mdi mdi-palette"></i></span>
+								<ul class="dropdown-menu dropdown-menu-right" data-stopPropagation="true">
+									<li class="drop-title">
+										<p>主题</p>
+									</li>
+									<li class="drop-skin-li clearfix">
+										<span class="inverse">
+                                <input type="radio" name="site_theme" value="default" id="site_theme_1" checked>
+                                <label for="site_theme_1"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="site_theme" value="dark" id="site_theme_2">
+                                <label for="site_theme_2"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="site_theme" value="translucent" id="site_theme_3">
+                                <label for="site_theme_3"></label>
+                            </span>
+									</li>
+									<li class="drop-title">
+										<p>LOGO</p>
+									</li>
+									<li class="drop-skin-li clearfix">
+										<span class="inverse">
+                                <input type="radio" name="logo_bg" value="default" id="logo_bg_1" checked>
+                                <label for="logo_bg_1"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="logo_bg" value="color_2" id="logo_bg_2">
+                                <label for="logo_bg_2"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="logo_bg" value="color_3" id="logo_bg_3">
+                                <label for="logo_bg_3"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="logo_bg" value="color_4" id="logo_bg_4">
+                                <label for="logo_bg_4"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="logo_bg" value="color_5" id="logo_bg_5">
+                                <label for="logo_bg_5"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="logo_bg" value="color_6" id="logo_bg_6">
+                                <label for="logo_bg_6"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="logo_bg" value="color_7" id="logo_bg_7">
+                                <label for="logo_bg_7"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="logo_bg" value="color_8" id="logo_bg_8">
+                                <label for="logo_bg_8"></label>
+                            </span>
+									</li>
+									<li class="drop-title">
+										<p>头部</p>
+									</li>
+									<li class="drop-skin-li clearfix">
+										<span class="inverse">
+                                <input type="radio" name="header_bg" value="default" id="header_bg_1" checked>
+                                <label for="header_bg_1"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="header_bg" value="color_2" id="header_bg_2">
+                                <label for="header_bg_2"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="header_bg" value="color_3" id="header_bg_3">
+                                <label for="header_bg_3"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="header_bg" value="color_4" id="header_bg_4">
+                                <label for="header_bg_4"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="header_bg" value="color_5" id="header_bg_5">
+                                <label for="header_bg_5"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="header_bg" value="color_6" id="header_bg_6">
+                                <label for="header_bg_6"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="header_bg" value="color_7" id="header_bg_7">
+                                <label for="header_bg_7"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="header_bg" value="color_8" id="header_bg_8">
+                                <label for="header_bg_8"></label>
+                            </span>
+									</li>
+									<li class="drop-title">
+										<p>侧边栏</p>
+									</li>
+									<li class="drop-skin-li clearfix">
+										<span class="inverse">
+                                <input type="radio" name="sidebar_bg" value="default" id="sidebar_bg_1" checked>
+                                <label for="sidebar_bg_1"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="sidebar_bg" value="color_2" id="sidebar_bg_2">
+                                <label for="sidebar_bg_2"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="sidebar_bg" value="color_3" id="sidebar_bg_3">
+                                <label for="sidebar_bg_3"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="sidebar_bg" value="color_4" id="sidebar_bg_4">
+                                <label for="sidebar_bg_4"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="sidebar_bg" value="color_5" id="sidebar_bg_5">
+                                <label for="sidebar_bg_5"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="sidebar_bg" value="color_6" id="sidebar_bg_6">
+                                <label for="sidebar_bg_6"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="sidebar_bg" value="color_7" id="sidebar_bg_7">
+                                <label for="sidebar_bg_7"></label>
+                            </span>
+										<span>
+                                <input type="radio" name="sidebar_bg" value="color_8" id="sidebar_bg_8">
+                                <label for="sidebar_bg_8"></label>
+                            </span>
+									</li>
+								</ul>
+							</li>-->
+							<!--切换主题配色-->
+
+							<!--退出登录-->
+							<li>
+								<span class="icon-palette">
+									<i class="icon-index-sprite loginOut"></i>
+	             		<!--<i class="mdi mdi-login-variant loginOut"></i>-->
+	             	</span>
+							</li>
+							
+							<!--登录账号信息-->
+							<li class="dropdown dropdown-profile">
+								<a href="javascript:void(0)" data-toggle="dropdown">
+									<img class="img-avatar img-avatar-48 m-r-10" src="../images/img-hand.jpg" alt="海克斯" />
+									<span class="userName">海克斯</span>
+								</a>
+							</li>
+							
+							<!--修改密码-->
+							<!--<li>
+								<span class="icon-palette">
+	             		<i class="mdi mdi-textbox-password updatePWD" id="Update"></i>
+	             	</span>
+							</li>-->
+						</ul>
+					</div>
+				</nav>
+
+			</header>
+
+			<!--页面主要内容-->
+			<div class="lyear-layout-content">
+				<iframe id="pubIframe" :src="iframeSrc" frameborder="0" width="100%" style="height: 100%;"></iframe>
+			</div>
+			<!--End 页面主要内容-->
+		</div>
+	</div>
+	<div id="footer" class="Pos_footer">
+		<script type="text/javascript">
+			$(function() {
+				$("#footer").load("footer.html");
+			});
+		</script>
+	</div>
+	</body>
+	<!--End 头部信息-->
+
+	<!--<script type="text/javascript" src="../js/bootstrap.min.js"></script>-->
+	<script src="../plus/iview/vue.min.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript" src="../js/perfect-scrollbar.min.js"></script>
+	<script type="text/javascript" src="../js/main.min.js"></script>
+
+	<script>
+//		var atariHandle = function(jA) {
+//			jA.parents('li').addClass('active open');
+//		};
+//
+//		$('.nav li a').each(function() {
+//			var source = this;
+//			var jSource = jQuery(source);
+//			let attr = jSource.attr('href'); //index.html
+//			//判断是否是选中的a
+//			if(path.indexOf(attr) > -1) {
+//				atariHandle(jSource);
+//			}
+//		});
+
+		$('.lyear-layout-content').show();
+
+		//退出登录
+		$('.loginOut').on('click', function() {
+			var conlayer = layer.confirm("确定退出？", {
+				btn: ['确定', '取消']
+			}, function() {
+                $.delCookie("userId");
+				$.delCookie("userName");
+				$.delCookie("token");
+				$.delCookie("menuList");
+				window.location.href = '../html/Login/login.html'
+			}, function() {
+				layer.close(conlayer);
+			});
+
+		});
+		//修改密码
+		function showUpdatePwd(title, flag) {
+			html = template("updatePwd", {
+				title: "123"
+			});
+
+			flag = 1;
+			var myLayer = layer.open({
+				skin: 'card',
+				type: 1,
+				title: [title, ''],
+				area: ['450px', 'auto'],
+				resize: true,
+				offset: 'auto',
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+
+					//旧密码
+					var oldPwd = $('#oldPwd').val();
+					//新密码
+					var newPwd = $('#newPwd').val();
+					var truePwd = $('#truePwd').val();
+					console.log(oldPwd, newPwd, truePwd);
+					if(newPwd != truePwd) {
+						layer.msg("两次密码不一样,请重新输入", {
+							icon: 5
+						});
+						return;
+					}
+					$.ajax({
+						url: userServiceUrl + "/user/updatePassword",
+						type: 'put',
+						data: {
+							oldUserPassword: oldPwd,
+							userPassword: truePwd
+						},
+						dataType: 'json',
+						success: function(data) {
+							console.log(data);
+						}
+					})
+				},
+				success: function(layero) {
+					$(".layui-layer-title").addClass("card-header");
+					var data = null;
+					if(data != null) {
+						$("#oldPwd").val(data.oldPwd);
+						$("#newPwd").val(data.newPwd);
+						$("#truePwd").val(data.truePwd);
+						$("#updatePwdForm").setForm(data);
+					}
+				}
+			});
+		}
+
+		//添加事件
+		$("#Update").on("click", function() {
+			url = "";
+			showUpdatePwd("修改密码", 1);
+
+		});
+
+		$(".userName").html($.getCookie("userName"));
+	</script>
+
+	<!--修改密码-->
+	<script type="text/html" id="updatePwd">
+		<section class="openDetail" style="width: 100%;">
+			<div class="panel-body">
+				<form id="updatePwdForm">
+					<div class="row">
+						<div class="col-lg-12" style="margin: 20px 0">
+							<label class="layui-form-label">原密码：</label>
+							<div class="layui-form-label">
+								<input class="form-control" id="oldPwd" name="oldPwd" type="password" style="width:300px;margin-top: -10px">
+							</div>
+						</div>
+						<div class="col-lg-12" style="margin: 20px 0">
+							<label class="layui-form-label">新密码：</label>
+							<div class="layui-form-label">
+								<input class="form-control" id="newPwd" name="newPwd" type="password" style="width:300px;margin-top: -10px">
+							</div>
+						</div>
+						<div class="col-lg-12" style="margin: 20px 0">
+							<label class="layui-form-label">确认密码：</label>
+							<div class="layui-form-label">
+								<input class="form-control" id="truePwd" name="truePwd" type="password" style="width:300px;margin-top: -10px">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+
+	</script>
+
+</html>

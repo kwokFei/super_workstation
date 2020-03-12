@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body,html{
+            height: 100%;
+            width: 100%;
+            ;
+            padding: 0.2rem;
+            font-font: "微软雅黑";
+        }
+        html {
+            font-size: calc(100vw * 100 / 1920);
+        }
+        .oneBox{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.16rem;
+            font-weight: bold;
+            color: whitesmoke;
+        }
+        .oneBox .oneItem{
+            width: 5.8rem;
+            height: 2.5rem;
+            border-radius: 0.06rem;
+            overflow: hidden;
+        }
+        .oneBox .oneItem:nth-child(1){
+            background-color: #c12d3b;
+        }
+        .oneBox .oneItem:nth-child(2){
+            background-color: #333399;
+        }
+        .oneBox .oneItem:nth-child(3){
+            background-color: #f09f1c;
+        }
+        .header{
+            height: 0.6rem;
+            line-height: 0.6rem;
+            width: 100%;
+            padding-left: 0.2rem;
+            display: flex;
+            align-items: center;
+        }
+        .header img{
+            width: 0.22rem;
+            height: 0.22rem;
+        }
+        .header span{
+            font-size: 0.3rem;
+            margin-left:0.05rem;
+
+        }
+        .numberBox{
+            width: 100%;
+            height: 70%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.26rem;
+        }
+        .numberBoxItem{
+            width: 50%;
+            text-align: center;
+        }
+        .twoText{
+            width: 100%;
+            height: 0.6rem;
+            line-height: 0.6rem;
+            text-align: center;
+            font-size: 0.32rem;
+            margin: 0.2rem 0;
+        }
+        .twoText span:nth-child(1){
+            width: 2rem;
+            display: inline-block;
+            text-align: right;
+            margin-right: 1.8rem;
+        }
+        .twoText span:nth-child(2){
+            margin-right: 1rem;
+        }
+        .twoBox{
+            margin-top: 0.2rem;
+            padding: 0.2rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .leftBox{
+            width: 6rem;
+            height: 9.5rem;
+            background-color: #ffffff;
+            border-radius: 0.06rem;
+        }
+        .rightBox{
+            width: 12rem;
+            height: 9.5rem;
+            background-color: #ffffff;
+            border-radius: 0.06rem;
+        }
+        .ktBox{
+            width: 94%;
+            margin: auto;
+            margin-top: 0.2rem;
+            border-top: 1px solid rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            padding: 0.1rem 0.01rem;
+        }
+        .title{
+            font-size: 0.18rem;
+            font-weight: bold;
+            line-height: 0.3rem;
+            color: #333333;
+        }
+        .ktItem{
+            width: 100%;
+            height: 0.3rem;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            font-size: 0.24rem;
+            margin: 0.05rem 0;
+            padding-left: 0.1rem;
+        }
+        .ktItem i{
+            width: 0.2rem;
+            height: 0.2rem;
+            border-radius: 0.2rem;
+        }
+        .jdBox{
+            width: 3.5rem;
+            height: 0.2rem;
+            border-radius: 0.2rem;
+            background-color: #dcdcdc;
+            margin-right: 0.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .jdBox .jdMinBox{
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 0.2rem;
+        }
+        .addressBox{
+            display: flex;
+            margin-top: 0.25rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.3rem;
+            font-weight: bold;
+        }
+        .addressBox span{
+            margin: 0 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="oneBox">
+        <div class="oneItem">
+            <div class="header">
+                <img src="../img/icon/icon01.png" alt="">
+                <span>设备数量</span>
+            </div>
+            <div class="numberBox">
+                <div class="numberBoxItem">
+                    <span style="font-size: 0.4rem;margin-right: 0.1rem">3000</span>个
+                    <br>
+                    <span style="letter-spacing: 0.02rem">空调外机</span>
+                </div>
+                <div class="numberBoxItem">
+                    <span style="font-size: 0.4rem;margin-right: 0.1rem">3000</span>个
+                    <br>
+                    <span style="letter-spacing: 0.02rem">空调内机</span>
+                </div>
+            </div>
+        </div>
+        <div class="oneItem">
+            <div class="header">
+                <img src="../img/icon/icon02.png" alt="">
+                <span>设备报警信息</span>
+            </div>
+            <div>
+                <p class="twoText">
+                    <span>今日离线</span>
+                    <span>2次</span>
+                </p>
+                <p class="twoText">
+                    <span>近7日离线</span>
+                    <span>2次</span>
+                </p>
+            </div>
+        </div>
+        <div class="oneItem">
+            <div class="header">
+                <img src="../img/icon/icon03.png" alt="">
+                <span>设备功率</span>
+            </div>
+            <div style="padding-left: 0.5rem;margin-top: 0.3rem;font-size: 0.3rem">
+               <span style="font-size: 0.6rem;margin-right: 0.2rem">500</span>KW/H
+                <br>
+                <span style="font-size: 0.32rem">总功率</span>
+            </div>
+        </div>
+    </div>
+    <div class="twoBox">
+        <div class="leftBox">
+            <div class="header">
+                <img src="../img/icon/icon04.png" alt="">
+                <span style="color: black;">设备状态</span>
+            </div>
+            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+            <div id="main" style="width: 100%;height:280px;"></div>
+            <div class="ktBox">
+                <p class="title">空调数量</p>
+                <p class="ktItem">
+                    <i style="background-color:#6666ff"></i>
+                    <span style="font-size: 0.2rem;margin: 0 0.2rem">在线台数</span>
+                    <span class="jdBox">
+                        <span class="jdMinBox" style="width: 75%;background-color:#6666ff"></span>
+                    </span>
+                    <span>75</span>
+                </p>
+                <p class="ktItem">
+                    <i style="background-color:#ffcc00"></i>
+                    <span style="font-size: 0.2rem;margin: 0 0.2rem">离线台数</span>
+                    <span class="jdBox">
+                        <span class="jdMinBox" style="width: 20%;background-color:#ffcc00"></span>
+                    </span>
+                    <span>20</span>
+                </p>
+                <p class="ktItem">
+                    <i style="background-color:#ff3366"></i>
+                    <span style="font-size: 0.2rem;margin: 0 0.2rem">故障台数</span>
+                    <span class="jdBox">
+                        <span class="jdMinBox" style="width: 5%;background-color:#ff3366"></span>
+                    </span>
+                    <span>5</span>
+                </p>
+            </div>
+            <div style="margin-top: 0.2rem;font-size: 0.24rem">
+                <p class="title" style="padding-left: 0.2rem">当前时间</p>
+                <div style="display: flex;align-items: center;justify-content: center;margin-top: 0.25rem">
+                    <span id="sfm" style="color: black;display: inline-block;width: 2rem;font-size: 0.5rem;font-weight: bold"></span>
+                    <span style="text-align: left;margin-left: 0.2rem">
+                        <span id="week" style="font-weight: bold"></span>
+                        <br>
+                        <span id="nyr" style="font-weight: bold"></span>
+                    </span>
+                </div>
+                <div class="addressBox">
+                    <span>中国-北京</span>
+                    <span>夏令时</span>
+                </div>
+            </div>
+        </div>
+        <div class="rightBox">
+            <div class="header">
+                <img src="../img/icon/icon05.png" alt="">
+                <span style="color: black;font-weight: bold">能耗数据</span>
+            </div>
+            <div id="mian02" style="width: 100%;height:500px;"></div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+    <script src="../js/echarts-liquidfill.min.js"></script>
+    <script>
+        $(function () {
+            //获取当前时间
+            let timer = setInterval(function () {
+                let now = new Date();
+                let year = now.getFullYear(); //得到年份
+                let month = now.getMonth() + 1;//得到月份
+                let date = now.getDate();//得到日期
+                let day = now.getDay();//得到周几
+                let hour = now.getHours();//得到小时
+                let minu = now.getMinutes();//得到分钟
+                let sec = now.getSeconds();//得到秒
+                if (month < 10) {
+                    month = "0" + month;
+                }
+                if (date < 10) {
+                    date = "0" + date;
+                }
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                if (minu < 10) {
+                    minu = "0" + minu;
+                }
+                if (sec < 10) {
+                    sec = "0" + sec;
+                }
+                let arr_week = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+                let week = arr_week[day];
+                let nyr = year + "年" + month + "月" + date + "日";
+                let sfm =  hour + ":" + minu + ":" + sec;
+                $("#week").text(week);
+                $("#sfm").text(sfm);
+                $("#nyr").text(nyr);
+            },1000);
+        });
+    </script>
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var data = [{
+            value: 0.75,
+            name: '在线台数',
+        },
+            {
+                value: 0.2,
+                name: '离线台数',
+            },
+            {
+                value: 0.05,
+                name: '故障台数',
+            }
+        ];
+
+        var arr = ['middleLost', 0.7, data, '今日监控'];
+
+        option = {
+            title: {
+                top: '45%',
+                left: 'center',
+                text: arr[3],
+                textStyle: {
+                    color: '#fff',
+                    fontStyle: 'normal',
+                    fontWeight: 'normal',
+                    fontSize: 14
+                },
+                subtext: '(外机负荷' + (arr[1] * 10000 / 100).toFixed(2) + '%)',
+                subtextStyle: {
+                    color: '#fff',
+                    fontSize: 12
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: function(res) {
+                    if (res.componentSubType === 'liquidFill') {
+                        return res.seriesName + ': ' + (res.value * 10000 / 100).toFixed(2) + '%';
+                    } else {
+                        return '<span class="ii" style="background:' + res.color + ' "></span>' + res.name + ':<br/> ' + res.data.value;
+                    }
+                }
+            },
+            series: [{
+                type: 'liquidFill',
+                itemStyle: {
+                    normal: {
+                        opacity: 0.4,
+                        shadowBlur: 0,
+                        shadowColor: 'blue'
+                    }
+                },
+                name: arr[3],
+                data: [{
+                    value: 0.7,
+                    itemStyle: {
+                        normal: {
+                            color: '#53d5ff',
+                            opacity: 0.6
+                        }
+                    }
+                }],
+                //  background: '#fff',
+                color: ['#53d5ff'],
+                center: ['50%', '50%'],
+                /*  backgroundStyle: {
+                      color: '#fff'
+                  },*/
+                label: {
+                    normal: {
+                        formatter: '',
+                        textStyle: {
+                            fontSize: 12
+                        }
+                    }
+                },
+                outline: {
+                    itemStyle: {
+                        borderColor: '#86c5ff',
+                        borderWidth: 0
+                    },
+                    borderDistance: 0
+                }
+            },
+                {
+                    type: 'pie',
+                    radius: ['42%', '50%'],
+                    color: ['#6666ff', '#ffcc00','#ff3366'],
+                    hoverAnimation: false, ////设置饼图默认的展开样式
+                    label: {
+                        show: true,
+
+                        normal: {
+                            formatter: '{b}\n{d}%',
+                            show: true,
+                            position: ''
+                        },
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+
+                    itemStyle: { // 此配置
+                        normal: {
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                        },
+                        emphasis: {
+                            borderWidth: 0,
+                            shadowBlur: 2,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    data: arr[2]
+                }
+            ]
+        }
+        myChart.setOption(option);
+    </script>
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart02 = echarts.init(document.getElementById('mian02'));
+
+        // 指定图表的配置项和数据
+        option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                color: [ "#47D8BE", "#F9A589"],
+                data: ['预计能耗', '实际能耗'],
+                left: 'center',
+                bottom: 'bottom'
+            },
+            grid: {
+                top: 'middle',
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                height: '80%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+                axisLine: {
+                    lineStyle: {
+                        color: "#999"
+                    }
+                }
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed',
+                        color: '#DDD'
+                    }
+                },
+                axisLine: {
+                    show: false,
+                    lineStyle: {
+                        color: "#333"
+                    },
+                },
+                nameTextStyle: {
+                    color: "#999"
+                },
+                splitArea: {
+                    show: false
+                }
+            },
+            series: [{
+                    name: '流失',
+                    type: 'line',
+                    data: [123,568,111,222,123,56,123,568,111,222,123,56],
+                    lineStyle: {
+                        normal: {
+                            width: 5,
+                            color: {
+                                type: 'linear',
+
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#AAF487' // 0% 处的颜色
+                                },
+                                    {
+                                        offset: 0.4,
+                                        color: '#47D8BE' // 100% 处的颜色
+                                    }, {
+                                        offset: 1,
+                                        color: '#47D8BE' // 100% 处的颜色
+                                    }
+                                ],
+                                globalCoord: false // 缺省为 false
+                            },
+                            shadowColor: 'rgba(71,216,190, 0.5)',
+                            shadowBlur: 10,
+                            shadowOffsetY: 7
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#AAF487',
+                            borderWidth: 10,
+                            /*shadowColor: 'rgba(72,216,191, 0.3)',
+                             shadowBlur: 100,*/
+                            borderColor: "#AAF487"
+                        }
+                    },
+                    smooth: true
+                },
+                {
+                    name: '续费',
+                    type: 'line',
+                    data: [125,568,25,36,784,56,125,568,25,36,784,56],
+                    lineStyle: {
+                        normal: {
+                            width: 5,
+                            color: {
+                                type: 'linear',
+
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#F6D06F' // 0% 处的颜色
+                                },
+                                    {
+                                        offset: 0.4,
+                                        color: '#F9A589' // 100% 处的颜色
+                                    }, {
+                                        offset: 1,
+                                        color: '#F9A589' // 100% 处的颜色
+                                    }
+                                ],
+                                globalCoord: false // 缺省为 false
+                            },
+                            shadowColor: 'rgba(249,165,137, 0.5)',
+                            shadowBlur: 10,
+                            shadowOffsetY: 7
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#F6D06F',
+                            borderWidth: 10,
+                            /*shadowColor: 'rgba(72,216,191, 0.3)',
+                             shadowBlur: 100,*/
+                            borderColor: "#F6D06F"
+                        }
+                    },
+                    smooth: true
+                }
+            ]
+        };
+
+        myChart02.setOption(option);
+    </script>
+
+</body>
+</html>

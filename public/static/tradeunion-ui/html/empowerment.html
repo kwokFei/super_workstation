@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>中国工业互联网研究院测试中心</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<script src="../js/httpUtils.js"></script>
+		<script src="../js/Md5.js"></script>
+		<style>
+			.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
+				display: none;
+			}
+
+			.userFooter {
+				position: absolute;
+				width: 100%;
+				bottom: 0;
+				left: 0;
+				/*z-index: 9999;*/
+			}
+
+			#modelWin {
+				width: 60%;
+			}
+
+			.MarginPx {
+				margin: 15px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="lyear-layout-web">
+			<div class="lyear-layout-container">
+
+				<!--加载头部和菜单栏-->
+				<div id="hander">
+					<script>
+						$(function() {
+							$("#hander").load("handMenu.html");
+						})
+					;
+					</script>
+				</div>
+
+				<!--页面主要内容-->
+				<main class="lyear-layout-content" style="display: none">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card">
+									<div class="card-header">
+										<h4></h4>
+									</div>
+									<div class="card-body">
+
+										<div class="ibox float-e-margins">
+											<div class="ibox-content row">
+												<div class="col-lg-3">
+													<div class="form-group">
+														<label class="form-label" for="s_typeConnegy">类型名：</label>
+														<select class="form-control " style="max-height: 50px;" name="s_typeConnegy" id="s_typeConnegy" data-live-search="true">
+			                                                <option value="">请选择类型</option>
+			                                                <option value="0">质提</option>
+			                                                <option value="1">增效</option>
+			                                                <option value="2">降本</option>
+			                                                <option value="3">减存</option>
+			                                            </select>
+													</div>
+												</div>
+
+												<div class="col-lg-1">
+													<div class="form-group">
+														<div id="buttons1" style="margin-top: 24px;">
+															<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-1">
+													<div class="form-group">
+														<div id="buttons2" style="margin-top: 24px;">
+															<button type="button" class="btn btn-success" id="search"><i class="fa fa-search"></i> 查询</button>
+														</div>
+													</div>
+												</div>
+
+											</div>
+											<div class="ibox-content">
+												<!--页面内容部分-->
+												<!-- 这里写内容 -->
+												<div id="buttons">
+													<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i> 新增配置</button>
+													<!--<button type="button" class="btn btn-success" id="search" style="float: right;margin-left: 10px"><i class="fa fa-search"></i> 查询</button>-->
+													<!--<button type="button" class="btn btn-purple" id="clean" style="float: right;"><i class="fa fa-eraser"></i> 清空</button>-->
+												</div>
+
+												<div id="myTable">
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+				<!--End 页面主要内容-->
+			</div>
+		</div>
+		<!--加载底部-->
+		<div id="footer" class="userFooter">
+			<script type="text/javascript">
+				$(function() {
+					$("#footer").load("footer.html");
+				});
+			</script>
+		</div>
+		<div id="loadDiv"></div>
+
+
+	</body>
+
+
+	<script>
+		var html;
+		var rdata = {};
+		$("#loadDiv").html(loadHtml);
+		$(function() {
+			
+			$.show_overall_loding();
+			$('#myTable').bootstrapTable({
+				url: userServiceUrl + "/connegy/list", //请求后台的URL（*）
+				//data: data1, //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				//          data-side-pagination="server"
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				//          height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					// console.log(data);
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					width: 100,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'typeConnegy',
+					title: '类型名',
+					width: 200,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 0) {
+							state = '<span>质提</span>'
+						} else if(value == 1) {
+							state = '<span>增效</span>'
+						} else if(value == 2) {
+							state = '<span>降本</span>'
+						} else if(value == 3) {
+							state = '<span>减存</span>'
+						}
+						return state;
+					}
+				}, {
+					field: 'connegyName',
+					title: '指标名',
+					width: 300
+				}, {
+					field: 'value',
+					title: '指标（百分比）',
+					width: 300
+				},  {
+					title: "操作",
+					width: 300,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="编辑" type="button" onclick="tabEidt(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>'
+//							+'<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>'
+							+'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+			function queryParams(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					isScreenOrganization: 1,
+					typeConnegy: $("#s_typeConnegy").val()
+				};
+			}
+			$("#addSlibings").on("click", function() {
+				url = "";
+				showModel("添加配置", 1);
+			});
+
+			var serchaData = {};
+			$("#search").click(function() {
+				$.show_overall_loding();
+				$('#myTable').bootstrapTable('refresh');
+			});
+
+            $("#clean").click(function() {
+                $("#s_typeConnegy").val("");
+                $("#search").trigger("click");
+            });
+
+
+		});
+
+		function tabEidt(obj) {
+			url = "";
+			showModel("修改配置", 3, obj);
+		}
+
+
+		function tabRemove(obj) {
+			var data = $("#myTable").bootstrapTable('getData');
+			var id = data[obj].id;
+			var conlayer = layer.confirm("确定删除？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.sanjiGetJSON(userServiceUrl + "/connegy/delete?id=" + id, {}, function(data) {
+					$.show_overall_loding();
+					if(data.code == 0) {
+						layer.close(conlayer);
+						layer.msg("成功", {
+							icon: 1
+						});
+						$.show_overall_loding();
+						$('#myTable').bootstrapTable('refresh');
+						return true;
+					}
+					layer.msg("操作失败", {
+						icon: 2
+					});
+				})
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+
+		var isAdd = true;
+
+		function showModel(title, flag, index) {
+			html = template("modelWin", {
+				title: "123"
+			});
+			if(flag == 1) {
+				isAdd = true;
+			} else {
+				isAdd = false;
+			}
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['650px'], //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					$("#connegyForm").submit();
+				},
+				success: function(layero) {
+					$(".layui-layer-title").addClass("card-header");
+					var data = null;
+					if(flag == 2) {
+						data = $("#myTable").bootstrapTable('getSelections')[0];
+					} else if(flag == 3) {
+						data = $("#myTable").bootstrapTable('getData')[index];
+					}
+					if(data != null) {
+						$("#connegyForm").setForm(data);
+					}
+				}
+			});
+			var validate = $("#connegyForm").validate({
+				rules: {
+					typeConnegy: {
+						required: true
+					},
+					connegyName: {
+						required: true
+					},
+					temperature: {
+						number: true
+					}
+				},
+				messages: {
+					typeConnegy: {
+						required: "该项为必填项"
+					},
+					connegyName: {
+						required: "该项为必填项"
+					},
+					temperature: {
+						number: "该项必须填写数字"
+					}
+				},
+				submitHandler: function(form) {
+					var data = $("#connegyForm").serializeJson();
+					$.show_overall_loding();
+					if(isAdd) {
+						$.postJSON(userServiceUrl + "/connegy/create", data, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$.show_overall_loding();
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败"+data.message, {
+								icon: 2
+							});
+						});
+					} else {
+						$.putJSON(userServiceUrl + "/connegy/update", data, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$.show_overall_loding();
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					}
+				}
+			});
+		}
+
+
+
+
+	</script>
+	
+		
+	<!--新增修改模板-->
+	<script type="text/html" id="modelWin">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="connegyForm">
+					<input type="hidden" name="id" id="connegyId" />
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-12 MarginPx">
+							<label class="layui-form-label" >分类名称:</label>
+							<div class="layui-input-block">
+								<select class="form-control" id="typeConnegy" name="typeConnegy">
+									<option value="0">质提</option>
+									<option value="1">增效</option>
+									<option value="2">降本</option>
+									<option value="3">减存</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-12 MarginPx" id="organizationDiv">
+							<label class="layui-form-label" >指标名:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="connegyName" name="connegyName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-12 MarginPx">
+							<label class="layui-form-label" style="width: 110px;" >指标（百分比）:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="value" name="value" type="text">
+							</div>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</section>
+	</script>
+
+	
+
+</html>

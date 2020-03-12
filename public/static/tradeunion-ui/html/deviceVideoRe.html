@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <style>
+        .MarginPx {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content" style="display: none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>设备资源信息</h4>
+                            </div>
+                            <div class="card-body">
+								 <div class="ibox-content row">
+                                     <div class="col-lg-3">
+                                         <div class="form-group">
+                                             <label class="form-label" for="s_deviceName">设备名称：</label>
+                                             <input class="form-control" name="s_deviceName" id="s_deviceName" placeholder="设备名称" type="text">
+                                         </div>
+                                     </div>
+                                     <div class="col-lg-3">
+                                         <div class="form-group">
+                                             <div style="margin-top: 24px;">
+                                                 <button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+                                                 <button type="button" class="btn btn-success"id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+
+
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+
+                                    <div id="myTable">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<!--加载底部-->
+		<div id="footer" class="Pos_footer">
+			<script type="text/javascript">
+				$(function(){
+					$("#footer").load("footer.html");
+				});
+			</script>
+		</div>
+        <div id="loadDiv"></div>
+</body>
+
+<script>
+    var html;
+    var UserName = $.getCookie("userName");
+    $("#loadDiv").html(loadHtml);
+    $.show_overall_loding();
+    $('#myTable').bootstrapTable({
+        url: deviceServiceUrl + "/vdVtr/staticDevlist", //请求后台的URL（*）
+        //data: data1, //本地数据
+        method: 'get', //请求方式（*）
+        contentType: "application/x-www-form-urlencoded",
+        toolbar: '', //工具按钮用哪个容器
+        striped: true, //是否显示行间隔色
+        cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true, //是否显示分页（*）
+        sortable: false, //是否启用排序
+        //          data-side-pagination="server"
+        sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+        pageNumber: 1, //初始化加载第一页，默认第一页
+        pageSize: 10, //每页的记录行数（*）
+        pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+        queryParamsType: '',
+        queryParams: queryParams, //传递参数（*）
+        strictSearch: true,
+        //          height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        uniqueId: "id", //每一行的唯一标识，一般为主键列
+        cardView: false, //是否显示详细视图
+        detailView: false, //是否显示父子表
+        clickToSelect: true, //点击行是否选中
+        responseHandler: function(data) {
+            var result = data.data;
+            rdata = result.list;
+            var res = [];
+            res.push({
+                total: result.total,
+                rows: result.list
+            });
+            return res[0];
+        },
+        onDblClickRow: function(row) {
+            console.info(row);
+        },
+        onLoadSuccess: function() {
+            $.hide_overall_loding();
+        },
+        columns: [{
+            checkbox: true
+        }, {
+            width: 100,
+            title: '序号',
+            formatter: function(value, row, index) {
+                return index + 1;
+            }
+        }, {
+            field: 'deviceAlias',
+            title: '设备名称',
+            width: 300
+        }, {
+            field: 'deviceMac',
+            title: '设备Mac',
+            width: 200
+        }, {
+            field: 'deviceState',
+            title: '设备状态',
+            width: 300,
+            formatter: function(value, row, index) {
+                var state = "";
+                if(value == 1) {
+                    state = '<span style="color:green">正常</span>'
+                } else if(value == 2) {
+                    state = '<span style="color:aquamarine">离线</span>'
+                } else if(value == 3) {
+                    state = '<span style="color:red">报警</span>'
+                } else if(value == 4) {
+                    state = '<span style="color:red">故障</span>'
+                } else if(value == 5) {
+                    state = '<span style="color:red">过流</span>'
+                } else if(value == 6) {
+                    state = '<span style="color:red">过压</span>'
+                }
+                return state;
+            }
+        }, {
+            field: 'organizationName',
+            title: '所属机构',
+            width: 300
+        }, {
+            title: "操作",
+            width: 300,
+            clickToSelect: false,
+            formatter: function(i1, i2, i3) {
+                var str =
+                    '<button data-toggle="tooltip" title="资源详情" type="button" onclick="tabDetail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-pencil-square"></i></button>'
+                return str;
+            },
+            cellStyle: function() {
+                return {
+                    classes: "",
+                    css: {
+                        "text-align": "center"
+                    }
+                }
+            }
+        }]
+
+    });
+    function queryParams(params) {
+        $.show_overall_loding();
+        return {
+            token: $.getToken(),
+            pageSize: params.pageSize,
+            pageNum: params.pageNumber,
+            deviceAlias: $("#s_deviceName").val()
+        };
+    }
+    var serchaData = {};
+    $("#search").click(function() {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable('refresh');
+    });
+
+    $("#clean").click(function() {
+        $("#s_deviceName").val("");
+        $("#search").trigger("click");
+    });
+
+
+    function tabDetail(index) {
+        var data = $("#myTable").bootstrapTable('getData')[index];
+        console.log(data);
+        var myLayer = layer.open({
+            type: 1,
+            skin: 'card', //自定义样式winning-class
+            title: "视频资源详情",
+            area: ['900px', '550px'],
+            resize: true, //是否拉升
+            offset: 'auto', //居中
+            content: template("modelVideoResource", {
+                title: "123"
+            }),
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                getVideoResource(data.id);
+            }
+        });
+    }
+
+    function getVideoResource(deviceId) {
+        $.show_overall_loding();
+        $('#deviceVideoResource').bootstrapTable({
+            url: deviceServiceUrl + "/vdVtr/byDevIdlist", //请求后台的URL（*）
+            method: 'get',                         //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '',                            //工具按钮用哪个容器
+            striped: true,                          //是否显示行间隔色
+            cache: false,                           //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                       //是否显示分页（*）
+            sortable: false,                        //是否启用排序
+            sidePagination: "server",               //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                          //初始化加载第一页，默认第一页
+            pageSize: 10,                           //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],            //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams,               //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                         //每一行的唯一标识，一般为主键列
+            cardView: false,                        //是否显示详细视图
+            detailView: false,                      //是否显示父子表
+            clickToSelect: true,                    //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [
+                {
+                    field: 'checked',
+                    checkbox: true
+                }, {
+                    width: 50,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                }, {
+                    field: 'vireName',
+                    title: '资源名称',
+                    width: 100
+                }, {
+                    field: 'vireDepict',
+                    title: '资源描述',
+                    width: 200
+                }, {
+                    field: 'vdNum',
+                    title: '资源序号',
+                    width: 100
+                }, {
+                    field: 'virePath',
+                    title: '资源路径',
+                    width: 600
+                }/*, {
+                    title: "操作",
+                    width: 100,
+                    clickToSelect: false,
+                    formatter: function (i1, i2, i3) {
+                        var str =
+                            '<button data-toggle="tooltip" title="编辑" type="button" onclick="tabEidtVideo(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-edit"></i></button>'
+                        return str;
+                    },
+                    cellStyle: function () {
+                        return {
+                            classes: "",
+                            css: {
+                                "text-align": "center"
+                            }
+                        }
+                    }
+                }*/
+            ]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                deviceId: deviceId,
+                userName: $("#ss_userName").val(),
+                vireName: $("#ss_vireName").val(),
+                vireType: $("#ss_vireType").val(),
+            };
+        }
+
+
+        var serchaData = {};
+        $("#search2").click(function() {
+            $.show_overall_loding();
+            $('#deviceVideoResource').bootstrapTable('refresh');
+        });
+
+        $("#clean2").click(function() {
+            $("#ss_userName").val("");
+            $("#ss_vireName").val("");
+            $("#ss_vireType").val("");
+            $("#search2").trigger("click");
+        });
+        $("#updateVideoResource").click(function () {
+            var data = $("#deviceVideoResource").bootstrapTable('getSelections');
+            console.log(data);
+            if(data.length == 1) {
+                var myEditLayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: "编辑设备资源",
+                    area: ['600px', '425px'],	//宽高
+                    resize: true,				//是否拉升
+                    offset: 'auto',				//居中
+                    content: template("modelEdit", {
+                        title: "123"
+                    }),
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        var vireType = $("#vireType").val();
+                        var vdNum = $("#vdNum").val();
+                        $.show_overall_loding();
+                        $.putJSON(deviceServiceUrl + "/vdVtr", {
+                            "id": data[0].id,
+                            'vireType': vireType,
+                            'deviceId': data[0].deviceId,
+                            'vdNum': vdNum
+                        }, function(data) {
+                            $.hide_overall_loding();
+                            if(data.code == 0) {
+                                layer.close(myEditLayer);
+                                layer.msg("成功", {
+                                    icon: 1
+                                });
+                                $('#deviceVideoResource').bootstrapTable('refresh');
+                                return true;
+                            } else {
+                                $('#deviceVideoResource').bootstrapTable('refresh');
+                                if (data.code == 401000) {
+                                    parent.layer.msg(data.message, {
+                                        icon: 5
+                                    });
+                                } else if (data.messages != null) {
+                                    parent.layer.msg(data.messages[0].error, {
+                                        icon: 5
+                                    });
+                                } else {
+                                    parent.layer.msg(data.message, {
+                                        icon: 5
+                                    });
+                                }
+                            }
+                        });
+                    },
+                    success: function (layero) {
+                        $(".deviceDisabled").attr("disabled", "disabled");
+                        if(data != null) {
+                            $("#vireType").val(data[0].vireType);
+                            $("#vdNum").val(data[0].vdNum);
+                        }
+                    }
+                });
+            } else {
+                layer.msg("请选择一条数据", {
+                    icon: 5
+                });
+            }
+        });
+
+        /*批量删除*/
+        $("#removeVideoResource").on("click", function () {
+            var data = $("#deviceVideoResource").bootstrapTable('getSelections');
+            var ids = [];
+            for (var i = 0; i < data.length; i++) {
+                var one = data[i];
+                ids.push(one.id);
+            }
+            if (ids.length == 0) {
+                layer.msg('请选择需删除的视频资源', {icon: 5});
+                return;
+            }
+            var conlayer = layer.confirm("确定删除选中数据？", {
+                btn: ['确定', '取消']
+            }, function () {
+                $.show_overall_loding();
+                $.deleteJSON(deviceServiceUrl + "/vdVtr?videoDevIds=" + ids, {}, function (data) {
+                    $.hide_overall_loding();
+                    if (data.code == 0) {
+                        layer.close(conlayer);
+                        layer.msg("成功", {
+                            icon: 1
+                        });
+                        $('#deviceVideoResource').bootstrapTable('refresh');
+                        return true;
+                    } else {
+                        $('#deviceVideoResource').bootstrapTable('refresh');
+                        if (data.code == 401000) {
+                            parent.layer.msg(data.message, {
+                                icon: 5
+                            });
+                        } else if (data.messages != null) {
+                            parent.layer.msg(data.messages[0].error, {
+                                icon: 5
+                            });
+                        } else {
+                            parent.layer.msg(data.message, {
+                                icon: 5
+                            });
+                        }
+                    }
+                })
+            }, function () {
+                layer.close(conlayer);
+            });
+        });
+
+
+    }
+</script>
+<!--视频资源详情-->
+<script type="text/html" id="modelVideoResource">
+    <section class="openDetail" style="width: 100%;height:100%">
+        <div>
+            <div class="panel-body">
+                <div class="ibox-content row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label" for="ss_vireName">资源名称：</label>
+                            <input class="form-control" name="ss_vireName" id="ss_vireName" placeholder="资源名称" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label" for="ss_userName">用户名称：</label>
+                            <input class="form-control" name="ss_userName" id="ss_userName" placeholder="用户名称" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">资源类型：</label>
+                            <select class="form-control" name="ss_vireType" id="ss_vireType">
+                                <option value="">全部</option>
+                                <option value="1">图片</option>
+                                <option value="2">视频</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <div style="margin-top: 24px;">
+                                <button type="button" class="btn btn-purple" id="clean2"><i class="fa fa-eraser"></i> 清空</button>
+                                <button type="button" class="btn btn-success"id="search2" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="buttons">
+                    <button type="button" class="btn btn-info tableButton" id="updateVideoResource"><i class="fa fa-trash-o"></i> 编辑
+                    </button>
+                    <button type="button" class="btn btn-danger" id="removeVideoResource"><i class="fa fa-trash-o"></i> 批量删除
+                    </button>
+                </div>
+
+                <div id="deviceVideoResource" class="selected"></div>
+            </div>
+        </div>
+    </section>
+</script>
+
+<!--编辑设备视频-->
+<script type="text/html" id="modelEdit">
+    <section class="openDetail" style="width: 100%;">
+        <div class="panel-body">
+            <form id="modelEditForm">
+                <div class="row">
+                    <div class="col-lg-12" style="margin: 10px 0">
+                        <label class="layui-form-label">资源序号：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="vdNum" name="vdNum" placeholder="设备资源序号(只可输入数字)" type="text" maxlength="4" value="0"
+                                   onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                   onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
+                        </div>
+                    </div>
+                    <div class="col-lg-12" style="margin: 20px 0;">
+                        <label class="layui-form-label">资源类型：</label>
+                        <div class="layui-input-block">
+                            <select class="form-control deviceDisabled"  id="vireType" name="vireType">
+                                <option value="0">--请选择资源--</option>
+                                <option value="1">图片</option>
+                                <option value="2">视频</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="id" name="id" />
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <script src="../plus/iview/vue.min.js"></script>
+    <style type="text/css">
+        .simButton {
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>行业管理</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ibox-content row">
+									<div class="col-lg-2">
+									    <div class="form-group">
+									        <label class="form-label" for="searchCode">行业编码：</label>
+									        <input class="form-control" name="search_code" id="search_code" placeholder="请输入行业编码" type="text">
+									    </div>
+									</div>
+									<div class="col-lg-2">
+									    <div class="form-group">
+									        <label class="form-label" for="searchName">行业名称：</label>
+									        <input class="form-control" name="search_name" id="search_name" placeholder="请输入行业名称" type="text">
+									    </div>
+									</div>
+									<div class="col-lg-3">
+									    <div class="form-group">
+									        <label class="form-label" for="searchStates">行业类型：</label>
+									        <select class="form-control " style="max-height: 50px;" name="search_type" id="search_type" data-live-search="true">
+									            <option value="">请选择状态</option>
+									            <option value="0">企业行业</option>
+									            <option value="1">项目行业</option>
+									        </select>
+									    </div>
+									</div>
+									<div class="col-lg-3">
+									    <div class="form-group">
+									        <div style="margin-top: 24px;">
+									            <button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+									            <button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+									        </div>
+									    </div>
+									</div>
+                                </div>
+                                <!--Start-->
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                        <button type="button" class="btn btn-primary" id="addSlibings" onclick="newIndustry()"><i class="fa fa-plus"></i>
+                                            新增
+                                        </button>
+                                    </div>
+
+                                    <div id="myTable">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+
+    </div>
+</div>
+<!--加载底部-->
+<div id="footer" class="classifyFooter">
+    <script type="text/javascript">
+        $(function () {
+            $("#footer").load("footer.html");
+        });
+    </script>
+</div>
+<div id="loadDiv"></div>
+</body>
+<script type="text/javascript">
+    $("#loadDiv").html(loadHtml);
+    let html;
+    $(function () {
+        $('#myTable').bootstrapTable({
+            url: userServiceUrl + "/industry/list", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if (data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: []
+                    });
+                    return res[0];
+                }
+            },
+            onLoadSuccess: function () {
+                $.hide_overall_loding();
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            columns: [
+            {
+                width: 50,
+                title: '序号',
+                formatter: function (value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'code',
+                title: '行业编码',
+                width: 200
+            },{
+                field: 'name',
+                title: '行业名称',
+                width: 400
+            },
+			{
+			    field: 'type',
+			    title: '行业类型',
+			    width: 200,
+				formatter: function(value, row, index) {
+					var state = "";
+					if(value == 0) {
+						state = '<span>企业行业</span>'
+					} else if(value == 1) {
+						state = '<span>项目行业</span>'
+					}
+					return state;
+				}
+			},{
+                field: 'createDate',
+                title: '创建时间',
+                width: 200
+            },{
+                title: "操作",
+                width: 200,
+                clickToSelect: false,
+                formatter: function (i1, i2, i3) {
+                    var str = '' +
+                        '<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 +
+                        ');" class="btn btn-primary tableButton"><i class="fa fa-info-circle"> </i></button>' +
+                        '<button data-toggle="tooltip" title="编辑" type="button" onclick="edit(' + i3 +
+                        ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"> </i></button>' +
+                        '<button data-toggle="tooltip" title="删除" type="button" onclick="del(' + i3 +
+                        ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"> </i></button>';
+                    return str;
+                },
+                cellStyle: function () {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                code: $("#search_code").val(),
+				name: $("#search_name").val(),
+				type: $("#search_type").val()
+            };
+        }
+
+        $("#search").on("click", function () {
+			$.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function () {
+			$("#search_code").val("");
+			$("#search_name").val("");
+			$("#search_type").val("");
+            $("#search").trigger("click");
+        });
+    });
+
+    //获取事件详情
+    function detail(index){
+        html = template("detailWindow",{title:"行业详情 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "行业详情",
+            area: ['500px','350px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+				var data = $("#myTable").bootstrapTable('getData')[index];
+				$("#code").val(data.code);
+				$("#name").val(data.name);
+				$("#type").find("option:selected").prop("selected", false);
+				$("#type option[value='" + data.type + "']").prop("selected", true);
+            }
+        });
+    }
+    //获取事件详情结束
+
+    //修改事件开始
+    function edit(index){
+        var data = $("#myTable").bootstrapTable('getData')[index];
+        html = template("editWindow",{title:"行业编辑 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "行业编辑",
+            area: ['500px','350px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交','取消'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+				$.show_overall_loding();
+                $.putJSON(userServiceUrl + "/industry",{id:data.id,code:$("#edit_code").val(),name:$("#edit_name").val(),type:$("#edit_type").val()},function (org) {
+                    $.hide_overall_loding();
+					if(org.code == 0){
+                        layer.close(myLayer);
+						layer.msg("操作成功", {icon: 1});
+                        $('#myTable').bootstrapTable('refresh');
+                    }else{
+                        layer.msg(org.message, {
+                            icon: 2
+                        });
+                    }
+                });
+            },
+            success: function (layero) {
+                $("#edit_code").val(data.code);
+                $("#edit_name").val(data.name);
+				$("#edit_type").find("option:selected").prop("selected", false);
+				$("#edit_type option[value='" + data.type + "']").prop("selected", true);
+            }
+        });
+    }
+    //修改事件结束
+
+    //删除信息
+    function del(index){
+		var data = $("#myTable").bootstrapTable('getData')[index];
+        var conlayer = layer.confirm("确定删除？", {
+			btn: ['确定', '取消']
+		}, function() {
+			$.show_overall_loding();
+	        $.deleteJSON(addToUrlToken(userServiceUrl + "/industry")+"&id="+data.id,{},function (org) {
+	            $.hide_overall_loding();
+				if(org.code == 0) {
+					layer.close(conlayer);
+					layer.msg("操作成功", {icon: 1});
+					$('#myTable').bootstrapTable('refresh');
+					return true;
+				}
+				layer.msg(org.message, {
+					icon: 2
+				});
+	        });
+        }, function() {
+			layer.close(conlayer);
+		});
+    }
+
+    //新增事件开始
+    function newIndustry(){
+        html = template("addWindow",{title:"新增行业 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "新增行业",
+            area: ['500px','350px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定','取消'],
+            yes: function (index, layero) {
+                $("#addForm").submit();
+            },
+            success: function (layero) {
+            }
+        });
+        //validata开始
+        var validate = $("#addForm").validate({
+            rules: {
+            	add_code: {
+					required: true
+				},
+				add_name: {
+					required: true
+				}
+            },
+            messages: {
+            	add_code: {
+					required: "请输入内容"
+				},
+				add_name: {
+					required: "请输入内容"
+				}
+            },
+            submitHandler:function (form) {
+				$.show_overall_loding();
+                $.postJSON(userServiceUrl+"/industry",
+                    {code:$("#add_code").val(),name:$("#add_name").val(),type:$("#add_type").val()},
+                    function (org) {
+                        $.hide_overall_loding();
+                        if(org.code == 0){
+                            layer.close(myLayer);
+                            $("#myTable").bootstrapTable("refresh");
+							return true;
+                        }else{
+                            layer.msg(org.message,{icon:2});
+                        }
+                    }
+                );
+            }
+        });
+        //validata结束
+    }
+    //新增事件结束
+
+</script>
+
+<!--详情弹框-->
+<script type="text/html" id="detailWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="detailForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">行业编码:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="code" name="code" type="text" readonly>
+                        </div>
+                    </div>
+    				<div class="col-lg-12 MarginPx">
+    				    <label class="layui-form-label">行业名称:</label>
+    				    <div class="layui-input-block">
+    				        <input class="form-control" id="name" name="name" type="text" readonly>
+    				    </div>
+    				</div>
+					<div class="col-lg-12 MarginPx">
+					    <label class="layui-form-label">行业类型:</label>
+					    <div class="layui-input-block">
+					        <select class="form-control" id="type" name="type" disabled="disabled">
+					            <option value="0">企业行业</option>
+					            <option value="1">项目行业</option>
+					        </select>
+					    </div>
+					</div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--详情弹框结束-->
+<!--编辑弹框-->
+<script type="text/html" id="editWindow">
+	<section class="openDetail" style="width: 95%; margin-top: 20px;">
+	    <div class="panel-body">
+	        <form id="editForm">
+	            <div class="layui-row layui-col-space10 layui-form-item">
+	                <div class="col-lg-12 MarginPx">
+	                    <label class="layui-form-label">行业编码:</label>
+	                    <div class="layui-input-block">
+	                        <input class="form-control" id="edit_code" name="edit_code" type="text" required="required">
+	                    </div>
+	                </div>
+					<div class="col-lg-12 MarginPx">
+					    <label class="layui-form-label">行业名称:</label>
+					    <div class="layui-input-block">
+					        <input class="form-control" id="edit_name" name="edit_name" type="text" required="required">
+					    </div>
+					</div>
+					<div class="col-lg-12 MarginPx">
+					    <label class="layui-form-label">行业类型:</label>
+					    <div class="layui-input-block">
+					        <select class="form-control" id="edit_type" name="edit_type">
+					            <option value="0">企业行业</option>
+					            <option value="1">项目行业</option>
+					        </select>
+					    </div>
+					</div>
+	            </div>
+	        </form>
+	    </div>
+	</section>
+</script>
+<!--编辑弹框结束-->
+<!--添加弹框-->
+<script type="text/html" id="addWindow">
+	<section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="addForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">行业编码:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="add_code" name="add_code" type="text" required="required">
+                        </div>
+                    </div>
+					<div class="col-lg-12 MarginPx">
+					    <label class="layui-form-label">行业名称:</label>
+					    <div class="layui-input-block">
+					        <input class="form-control" id="add_name" name="add_name" type="text" required="required">
+					    </div>
+					</div>
+					<div class="col-lg-12 MarginPx">
+					    <label class="layui-form-label">行业类型:</label>
+					    <div class="layui-input-block">
+					        <select class="form-control" id="add_type" name="add_type">
+					            <option value="0">企业行业</option>
+					            <option value="1">项目行业</option>
+					        </select>
+					    </div>
+					</div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--添加弹框结束-->
+</html>

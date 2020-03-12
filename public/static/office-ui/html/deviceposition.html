@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<style>
+			.dovFooter {
+				width: 100%;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				z-index: 999;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>位置信息管理</h4>
+							</div>
+							<div class="card-body">
+
+								<div class="ibox-content">
+									<!--页面内容部分-->
+									<!-- 这里写内容 -->
+									<div id="buttons">
+										<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i>
+                                            录入同级
+                                        </button>
+										<button type="button" class="btn btn-primary" id="addSlibingsDown"><i
+                                                class="fa fa-plus"></i> 录入下级
+                                        </button>
+										<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 编辑
+                                        </button>
+										<!--<button type="button" class="btn btn-success" id="recover"><i class="fa fa-reply"></i> 启用</button>-->
+										<!--<button type="button" class="btn btn-warning" id="lock"><i class="fa fa-warning"></i> 禁用</button>-->
+										<button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 删除
+                                        </button>
+									</div>
+
+									<div id="myTree" style="margin-top: 20px">
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+	</body>
+
+	<script>
+		var html;
+
+		var rdata = {};
+		$("#loadDiv").html(loadHtml);
+
+		var menu_option = function() {
+			return {
+				node: $("#myTree"), //渲染节点
+				data: "", //机构数据
+				init: function() { //初始化数据
+					var options = {
+						checkedIcon: "glyphicon glyphicon-check",
+						nodeIcon: "none", //所有节点的默认图标
+						levels: 5,
+						data: this.data,
+						onhoverColor: "rgba(0,0,0,0.1)",
+						onNodeSelected: function(event, data) {
+							//$('#myTable').bootstrapTable('refresh');
+						}
+					};
+					this.node.treeview(options);
+				},
+				initData: function() {
+					var _this = this;
+					//if(this.data == "") {
+					$.show_overall_loding();
+					$.sanjiGetJSON(deviceServiceUrl + "/devicess/treeList", {}, function(data) {
+						$.hide_overall_loding();
+						_this.data = _this.getTreeData(data.data);
+						_this.init();
+					});
+					//return;
+					//}
+					//_this.init();
+				},
+				getTreeData: function(data) {
+					var rdata = [];
+					for(var i = 0; i < data.length; i++) {
+						var node = data[i];
+						var one = {};
+						one.text = node.devicePositionName;
+						one.parentIds = node.parentId;
+						one.devicePositionName = node.devicePositionName;
+						one.devicePositionDescription = node.devicePositionDescription;
+						one.id = node.id;
+						if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+							one.nodes = this.getTreeData(node.childrens);
+						}
+						rdata.push(one);
+					}
+					return rdata;
+				},
+
+				bindCreate: function() {
+					var that = this;
+					$("#addSlibings").on("click", function() {
+						/*返回所有被选择节点的数组*/
+						var data = $("#myTree").treeview('getSelected');
+						/*返回所有没有选择节点的数组*/
+						var data1 = $("#myTree").treeview('getUnselected');
+						if(data.length == 0 && data1.length == 0) {
+							that.showMenuModel("添加同级位置", 4);
+
+						} else if(data.length == 1) {
+							that.showMenuModel("添加同级位置", 1);
+
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+
+					$("#addSlibingsDown").on("click", function() {
+						var data = $("#myTree").treeview('getSelected');
+						if(data.length == 1) {
+							that.showMenuModel("添加下级位置", 3);
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+
+					$("#edit").on("click", function() {
+						var data = $("#myTree").treeview('getSelected');
+
+						if(data.length == 1) {
+							that.showMenuModel("编辑位置信息", 2);
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+					$("#remove").on("click", function() {
+						var data = $("#myTree").treeview('getSelected');
+						if(data.length == 1) {
+							var conlayer = layer.confirm("确定" + " " + data[0].devicePositionName + " " + "删除？", {
+								btn: ['确定', '取消']
+							}, function() {
+								$.show_overall_loding();
+								$.deleteJSON(deviceServiceUrl + "/devicess?id=" + data[0].id, {}, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(conlayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.initData();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								})
+							}, function() {
+								layer.close(conlayer);
+							});
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+				},
+
+				/* 打开模态框 */
+				showMenuModel: function(title, flag, index) {
+					var that = this;
+					var isAdd = true;
+					var isDown = false;
+					if(flag == 2) {
+						isAdd = false;
+					}
+					if(flag == 3) {
+						isDown = true;
+					}
+					html = template("modelDevice", {
+						title: "123"
+					});
+					var myLayer = layer.open({
+						skin: 'card',
+						type: 1,
+						title: title,
+						area: ['800px', '220px'], //宽高
+						resize: true, //是否拉升
+						offset: 'auto', //居中
+						content: html,
+						btn: ['提交', '取消'],
+						yes: function(index, layero) {
+							$("#deviceForm").submit();
+						},
+						success: function(layero) {
+							if(flag == 2) {
+								var data = that.node.treeview('getSelected');
+								$("#deviceForm").setForm(data[0]);
+							}
+						}
+					});
+					var validate = $("#deviceForm").validate({
+						rules: {
+							devicePositionName: {
+								required: true
+							},
+							devicePositionDescription: {
+								required: true
+							}
+						},
+						messages: {
+							devicePositionName: {
+								required: "请输入位置名称"
+							},
+							devicePositionDescription: {
+								required: "请输入位置描述"
+							}
+						},
+						submitHandler: function(form) {
+							/* 当前选择id */
+							var oldData = that.node.treeview('getSelected');
+							var data = $("#deviceForm").serializeJson();
+							/*返回所有被选择节点的数组*/
+							var dataJudge = $("#myTree").treeview('getSelected');
+							/*返回所有没有选择节点的数组*/
+							var dataJudge1 = $("#myTree").treeview('getUnselected');
+							if(isDown) {
+								$.extend(data, {
+									"parentId": oldData[0].id
+								});
+							} else {
+								if(dataJudge.length == 0 && dataJudge1.length == 0) {
+									$.extend(data, {
+										"parentId": 0
+									});
+								} else {
+									$.extend(data, {
+										"parentId": oldData[0].parentIds,
+									});
+								}
+
+							}
+
+							/*/!*是否传入组织机构*!/
+							$.extend(data, {
+							    "isScreenOrganization": 1
+							});*/
+
+							$.show_overall_loding();
+							if(isAdd) {
+								$.postJSON(deviceServiceUrl + "/devicess", data, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(myLayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.initData();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								});
+							} else {
+								$.putJSON(deviceServiceUrl + "/devicess", data, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(myLayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.initData();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								});
+							}
+						},
+					});
+				}
+			}
+		}
+		var menu = new menu_option();
+		menu.initData();
+		menu.bindCreate();
+	</script>
+
+	<!--新增修改模板-->
+	<script type="text/html" id="modelDevice">
+		<section class="openDetail" style="width: 100%;">
+			<div class="panel-body">
+				<form id="deviceForm">
+					<div class="row">
+						<div class="col-lg-6" style="margin: 20px 0">
+							<label class="layui-form-label">位置名称：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="devicePositionName" name="devicePositionName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6" style="margin: 20px 0">
+							<label class="layui-form-label">位置描述：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="devicePositionDescription" name="devicePositionDescription" type="text">
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="id" name="id" />
+				</form>
+			</div>
+		</section>
+	</script>
+
+</html>

@@ -1,0 +1,59 @@
+{
+    "code": 0,
+    "message": "成功",
+    "currentTimeMillis": 1575272228191,
+    "messages": null,
+    "data": {
+        "total": 3,
+        "list": [
+            {
+                "id": "9c0dadb6720b4a5193ed5c6e59609984",
+                "cameraName": "摄像头1",
+                "orangeId": "57d81ffce1b94a2f8d87fd7ea9d55c37",
+                "orangeName": "台迪智慧办公",
+                "positionId": "",
+                "positionName": null,
+                "cameraJt": "1",
+                "cameraVideo": "http://222.182.202.118:7086/live/cameraid/1000144$0/substream/1.m3u8"
+            },
+            {
+                "id": "043f1883bc97460dbbbf160efb37548f",
+                "cameraName": "摄像头2",
+                "orangeId": "75a05bf094c946318657ed77d92a3906",
+                "orangeName": "测试部门",
+                "positionId": "",
+                "positionName": null,
+                "cameraJt": "1",
+                "cameraVideo": "http://222.182.202.118:7086/live/cameraid/1000144$0/substream/1.m3u8"
+            },
+            {
+                "id": "1",
+                "cameraName": "xx",
+                "orangeId": "57d81ffce1b94a2f8d87fd7ea9d55c37",
+                "orangeName": "台迪智慧办公",
+                "positionId": null,
+                "positionName": null,
+                "cameraJt": "1",
+                "cameraVideo": "https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_CinematicTrailer.mp4"
+            }
+        ],
+        "pageNum": 1,
+        "pageSize": 10,
+        "size": 3,
+        "startRow": 1,
+        "endRow": 3,
+        "pages": 1,
+        "prePage": 0,
+        "nextPage": 0,
+        "isFirstPage": true,
+        "isLastPage": true,
+        "hasPreviousPage": false,
+        "hasNextPage": false,
+        "navigatePages": 8,
+        "navigatepageNums": [
+            1
+        ],
+        "navigateFirstPage": 1,
+        "navigateLastPage": 1
+    }
+}

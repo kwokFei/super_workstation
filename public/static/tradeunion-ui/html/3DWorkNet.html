@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link href="../css/layui.css" rel="stylesheet"/>
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../plus/iview/iview.css"/>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+<!--    <script src="../js/httpUtils.js"></script>-->
+    <script src="../plus/iview/vue.min.js"></script>
+    <script src="../plus/iview/iview.min.js"></script>
+</head>
+
+<body style="background: #f5f6fa;">
+
+    <iframe src="" id="ifr" width="100%" frameborder="0" scrolling="no"></iframe>
+
+<script>
+
+    // 3D执行计划相关
+    // var plan_3D_url = "http://192.168.5.2:8088";
+    var plan_3D_url = "http://113.204.9.70:9080/3dwebgl";
+    var user_id = "551b62dcf931496288573a46c9df4440";
+    var service_id = "Nlr7kTDM4dOXQnaXw9h";   // 平台参数配置BCCA参数的serviceId
+    var service_key = "3be8052d90f24b94afa383028a0254ba";   // 平台参数配置BCCA参数的serviceKey
+    var call_back_url = "http://222.182.202.100:7777/device/api/platformparam/callback_operation";   // 平台参数配置BCCA参数的serviceKey
+
+
+    // 获取用户token（3D相关的东西）
+    function getToken() {
+        var token = "";
+        var getTokenData = {service_id: service_id, user_id: user_id};
+        $.ajax({
+            url: "http://113.204.9.70:9080/3dwebgl/otheAPI/getUserToken",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(getTokenData),
+            async: false,
+            success: function (res) {
+                console.info(res.data.userToken);
+                if (res.status == 200) {
+                    token = res.data.userToken;
+                }
+                else if (res.status == 401) {    // 未注册的账户
+                    var _data = {
+                        service_id: service_id,
+                        dept_id: $.getCookie("userOrg"),
+                        user_id: $.getCookie("userId"),
+                        user_name: $.getCookie("userName")
+                    };
+                    $.ajax({
+                        url: plan_3D_url + "/otheAPI/registerUser",
+                        type: "post",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: JSON.stringify(_data),
+                        async: false,
+                        success: function (res1) {
+                            if (res1.status == 200) {
+                                token = res.data.userToken;
+                            }
+                        },
+                    });
+                    window.location.reload();
+                }
+            }
+        });
+        return token;
+    }
+
+    var token = getToken();
+    var url = plan_3D_url + "/otheAPI/openWorkstation";
+    url += "?user_token=" + token;
+    $("#ifr").attr("src", url);
+
+    function changeFrameHeight() {
+        var ifm = document.getElementById("ifr");
+        ifm.height = document.documentElement.clientHeight - 0;
+    }
+
+    window.onresize = function () {
+        changeFrameHeight();
+    };
+
+    $(function () {
+        changeFrameHeight();
+    });
+
+</script>
+</body>
+</html>

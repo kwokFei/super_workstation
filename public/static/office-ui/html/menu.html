@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<style>
+			.menuFooter {
+				position: absolute;
+				width: 100%;
+				bottom: 0;
+				left: 0;
+			}
+			
+			.ico-list .fa {
+				margin: 5px;
+				padding: 5px;
+				cursor: pointer;
+				font-size: 18px;
+				width: 28px;
+				border-radius: 3px;
+			}
+			
+			.ico-list .fa:hover {
+				background-color: #1d9d74;
+				color: #ffffff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>菜单权限管理</h4>
+							</div>
+							<div class="card-body">
+
+								<div class="ibox-content">
+									<!--页面内容部分-->
+									<!-- 这里写内容 -->
+									<div id="buttons">
+										<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i>
+                                            录入同级
+                                        </button>
+										<button type="button" class="btn btn-primary" id="addSlibingsDown"><i
+                                                class="fa fa-plus"></i> 录入下级
+                                        </button>
+										<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 编辑
+                                        </button>
+										<!--<button type="button" class="btn btn-success" id="recover"><i class="fa fa-reply"></i> 启用</button>-->
+										<!--<button type="button" class="btn btn-warning" id="lock"><i class="fa fa-warning"></i> 禁用</button>-->
+										<button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 删除
+                                        </button>
+										<button type="button" class="btn btn-warning" id="getAuthor"><i class="fa fa-warning"></i>资源配置
+                                        </button>
+									</div>
+
+									<div id="myTree" style="margin-top: 20px">
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+	</body>
+
+	<script>
+		$.sanjiGetJSON = function (url, data, callback) {
+			$.ajax({
+				url: url,
+				//      url: url,
+				type: "get",
+				contentType: "application/json",
+				dataType: "json",
+				timeout: 10000,
+				data: data,
+				success: function (data) {
+					callback(data);
+				}
+			});
+		};
+
+		// var html;
+
+		var rdata = {};
+		// $("#loadDiv").html(loadHtml);
+
+		var typeHide;
+
+		var authorityTypeValue = $('#authorityType  option:selected').val();
+
+		function getTable() {
+			// $.show_overall_loding();
+			var oldResourceIds = "";
+			var oldResourceIds1 = [];
+			var data = $("#myTree").treeview('getSelected');
+			$('#menuResourceTable').bootstrapTable({
+				url: userServiceUrl + "/resource/list?menuAuthorityId=" + data[0].id, //请求后台的URL（*）
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: true, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var result = data.data;
+					rdata = result.list;
+					var res = [];
+					res.push({
+						total: result.total,
+						rows: result.list
+					});
+					return res[0];
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+
+					$.hide_overall_loding();
+				},
+				columns: [{
+					field: 'checked',
+					checkbox: true,
+					formatter: stateFormatter
+				}, {
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'resourcesName',
+					title: '资源名称',
+					width: 300
+				}, {
+					field: 'resourcesUrl',
+					title: '资源URL',
+					width: 400
+				}, {
+					field: 'resourcesDescription',
+					title: '资源描述',
+					width: 200
+				}]
+			});
+
+			function queryParams(params) {
+				return {
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					resourcesName: $("#s_resourcesName").val(),
+					resourcesUrl: $("#s_resourcesUrl").val(),
+				};
+			}
+
+			function stateFormatter(value, row, index) {
+				if(row.authorityFlag == 1) {
+					return {
+						disabled: false,
+						checked: true,
+
+					}
+				}
+				return value;
+			}
+
+			var serchaData = {};
+			$("#search").click(function() {
+				// $.show_overall_loding();
+				$('#menuResourceTable').bootstrapTable('refresh');
+			});
+
+		}
+
+		var menu_option = function() {
+			return {
+				node: $("#myTree"), //渲染节点
+				data: "", //机构数据
+				init: function() { //初始化数据
+					var options = {
+						checkedIcon: "glyphicon glyphicon-check",
+						nodeIcon: "none", //所有节点的默认图标
+						levels: 5,
+						data: this.data,
+						onhoverColor: "rgba(0,0,0,0.1)",
+						onNodeSelected: function(event, data) {
+							//$('#myTable').bootstrapTable('refresh');
+						}
+					};
+					this.node.treeview(options);
+				},
+				initData: function() {
+					var _this = this;
+					// $.show_overall_loding();
+					$.sanjiGetJSON("../../json/menu.json", {}, function(data) {
+						// $.hide_overall_loding();
+						_this.data = _this.getTreeData(data.data);
+						_this.init();
+					});
+					//return;
+					//}
+					//_this.init();
+				},
+				getTreeData: function(data) {
+					var rdata = [];
+					for(var i = 0; i < data.length; i++) {
+						var node = data[i];
+						var one = {};
+						one.text = node.authorityName;
+						one.parentIds = node.parentId;
+						one.authoritySign = node.authoritySign;
+						one.authorityType = node.authorityType;
+						one.menuUrl = node.menuUrl;
+                        one.menuSort = node.menuSort;
+						one.authorityName = node.authorityName;
+						one.authorityDescription = node.authorityDescription;
+						one.authorityIcon = node.authorityIcon;
+						one.id = node.id;
+						if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+							one.nodes = this.getTreeData(node.childrens);
+						}
+						rdata.push(one);
+					}
+					return rdata;
+				},
+
+				bindCreate: function() {
+					var that = this;
+					/* 添加同级菜单 */
+					$("#addSlibings").on("click", function() {
+						/*返回所有被选择节点的数组*/
+						var data = $("#myTree").treeview('getSelected');
+						/*返回所有没有选择节点的数组*/
+						var data1 = $("#myTree").treeview('getUnselected');
+						if(data.length == 0 && data1.length == 0) {
+							that.showMenuModel("添加同级菜单", 4);
+						} else if(data.length == 1) {
+							that.showMenuModel("添加同级菜单", 1);
+
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+					/* 配置资源 */
+					$("#getAuthor").on("click", function() {
+						var data = $("#myTree").treeview('getSelected');
+						if(data.length == 1) {
+							if(data[0].authorityType == "1") {
+								layer.msg("请选择菜单按钮分配资源", {
+									icon: 5
+								});
+							} else {
+								that.showAuthorModel(data[0].id);
+							}
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+
+					/* 添加下级菜单 */
+					$("#addSlibingsDown").on("click", function() {
+						var data = $("#myTree").treeview('getSelected');
+						if(data.length == 1) {
+							that.showMenuModel("添加下级菜单", 3);
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+					/* 编辑菜单信息 */
+					$("#edit").on("click", function() {
+						var data = $("#myTree").treeview('getSelected');
+
+						if(data.length == 1) {
+							that.showMenuModel("编辑菜单信息", 2);
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+					$("#remove").on("click", function() {
+						var data = $("#myTree").treeview('getSelected');
+						if(data.length == 1) {
+							var conlayer = layer.confirm("确定" + " " + data[0].authorityName + " " + "删除？", {
+								btn: ['确定', '取消']
+							}, function() {
+								$.show_overall_loding();
+								$.deleteJSON(userServiceUrl + "/menu?id=" + data[0].id, {}, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(conlayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.initData();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								})
+							}, function() {
+								layer.close(conlayer);
+							});
+						} else {
+							layer.msg("请选择一条数据", {
+								icon: 5
+							});
+						}
+					});
+				},
+
+				showAuthorModel: function() {
+					var html = template("modelMenuResource", {
+						title: "123"
+					});
+
+					var authlayer = layer.open({
+						skin: 'card',
+						type: 1,
+						title: '配置资源',
+						closeBtn: 1,
+						shade: 0.5,
+						moveType: 0, //拖拽模式，0或者1
+						maxWidth: 500,
+						content: html,
+						area: ['800px', '600px'],
+						offset: 'auto',
+						btn: ['提交', '取消'],
+						yes: function(index, layero) {
+							var resourceArr = $("#menuResourceTable").bootstrapTable('getSelections');
+							var data = $("#myTree").treeview('getSelected');
+							var menuAuthorityId = data[0].id;
+							var resourceIds = "";
+							var oldResourceIds = "";
+							for(var i in resourceArr) {
+								resourceIds += resourceArr[i].id + ",";
+							}
+							resourceIds = resourceIds.substring(0, resourceIds.length - 1);
+							var resourceIds1 = resourceIds.split(",");
+							oldResourceIds = '';
+							console.log(rdata);
+							for(var i in rdata) {
+								if(rdata[i].authorityFlag == 1) {
+									oldResourceIds += rdata[i].id + ",";
+								}
+							}
+							oldResourceIds = oldResourceIds.substring(0, oldResourceIds.length - 1);
+							var oldResourceIds1 = oldResourceIds.split(",");
+							/*if (resourceIds.length == 0) {
+							    layer.msg('请选择资源', {icon: 5});
+							    return;
+							}*/
+							$.ajax({
+								url: userServiceUrl + "/menu/addResource",
+								type: "post",
+								contentType: "application/json",
+								dataType: "json",
+								async: false,
+								data: JSON.stringify({
+									"menuAuthorityId": menuAuthorityId,
+									"resourceIds": resourceIds1,
+									// "oldResourceIds":['97cc57c9b1f44c5aa800d979cf743cef','672faeccfa9442b9adb05ed6bebe61a5','94ac6cd4defd49bd98f4c94b34ce4222']
+									// "oldResourceIds":['d4436c50b826427d96cfa56316e7d908','31395002b1834f4f90960e87c7f5ffcf']
+									"oldResourceIds": oldResourceIds1
+								}),
+								success: function(res) {
+									if(res.success) {
+										layer.open({
+											content: res.message,
+											yes: function(index, layero) {
+												window.location.reload();
+											}
+										});
+									} else {
+										layer.msg(res.message, {
+											icon: 6
+										});
+									}
+								}
+							});
+						},
+						success: function(layero) {
+							getTable();
+						}
+					});
+				},
+
+				/* 打开模态框 */
+				showMenuModel: function(title, flag, index) {
+					var that = this;
+					var isAdd = true;
+					var isDown = false;
+					// var isNull = false;
+					if(flag == 2) {
+						isAdd = false;
+					}
+					if(flag == 3) {
+						isDown = true;
+					}
+					html = template("modelMenu", {
+						title: "123"
+					});
+					var myLayer = layer.open({
+						skin: 'card',
+						type: 1,
+						title: title,
+						area: ['800px', '550px'], //宽高
+						resize: true, //是否拉升
+						offset: 'auto', //居中
+						content: html,
+						btn: ['提交', '取消'],
+						yes: function(index, layero) {
+							$("#menuForm").submit();
+						},
+						success: function(layero) {
+							if(flag == 2) {
+								var data = that.node.treeview('getSelected');
+								var authorityIconValue = data[0].authorityIcon;
+								var authorityTypeValue = data[0].authorityType;
+								if(authorityTypeValue == "1") {
+									$("#menuUrlHide").show();
+									$("#authoritySignHide").show();
+									$("#authorityIconHide").show();
+                                    $("#menuSortHide").show();
+								}
+								if(authorityTypeValue == "2") {
+									$("#menuUrlHide").hide();
+									$("#authoritySignHide").hide();
+									$("#authorityIconHide").hide();
+                                    $("#menuSortHide").hide();
+								}
+								$("#authorityType").attr("disabled", "disabled");
+								$("#authorityIconClass").addClass("fa-2x" + " " + authorityIconValue);
+								$("#menuForm").setForm(data[0]);
+							}
+						}
+					});
+
+					$("#authorityType").change(function() {
+						var authorityTypeValue = $('#authorityType  option:selected').val();
+						if(authorityTypeValue == "0" || authorityTypeValue == "2") {
+							(function() {
+								$("#authoritySign").val("");
+								$("#menuUrl").val("");
+                                $("#menuSort").val("");
+								$("#authorityIcon").val("");
+								$("#authorityIconClass").removeClass();
+							})();
+							$("#menuUrlHide").hide();
+							$("#authoritySignHide").hide();
+							$("#authorityIconHide").hide();
+                            $("#menuSortHide").hide();
+						}
+						if(authorityTypeValue == "1") {
+							$("#menuUrlHide").show();
+							$("#authoritySignHide").show();
+							$("#authorityIconHide").show();
+                            $("#menuSortHide").show();
+						}
+					});
+
+					$("#authorityIcon").click(function() {
+						$("#tcontent").load("icons.html", function() {
+							$(".ico-list i").click(function() {
+								var authorityIconValue = $(" #authorityIcon ").val()
+								$("#authorityIconClass").removeClass(authorityIconValue);
+								var num = $(this).attr("class");
+								$("#authorityIcon").val(num);
+								$("#authorityIconClass").addClass("fa-2x" + " " + num);
+								$(".icon-drop").hide();
+							});
+						});
+						$(".icon-drop").show();
+
+					});
+
+					var validate = $("#menuForm").validate({
+						rules: {
+							authorityName: {
+								required: true
+							},
+							authorityType: {
+								required: true
+							},
+							authorityDescription: {
+								required: true
+							},
+							authorityIcon: {
+								required: true
+							},
+							authoritySign: {
+								required: true
+							},
+							menuUrl: {
+								required: true
+							},
+                            menuSort: {
+                                required: true
+                            }
+						},
+						messages: {
+							authorityName: {
+								required: "请输入菜单名称"
+							},
+							authorityType: {
+								required: "请选择菜单类型"
+							},
+							authorityDescription: {
+								required: "请输入菜单描述"
+							},
+							authorityIcon: {
+								required: "请选择图标"
+							},
+							authoritySign: {
+								required: "请输入唯一标识"
+							},
+							menuUrl: {
+								required: "请输入菜单URL"
+							},
+                            menuSort: {
+                                required: "请输入菜单排序码"
+                            }
+						},
+						submitHandler: function(form) {
+							/* 当前选择id */
+							var oldData = that.node.treeview('getSelected');
+							var data = $("#menuForm").serializeJson();
+
+							/*返回所有被选择节点的数组*/
+							var dataJudge = $("#myTree").treeview('getSelected');
+							/*返回所有没有选择节点的数组*/
+							var dataJudge1 = $("#myTree").treeview('getUnselected');
+
+							var authorityName = $("#authorityName").val();
+							var authorityTypeValue = $('#authorityType  option:selected').val();
+							if(authorityTypeValue == "0") {
+								layer.msg('请选择资菜单类型', {
+									icon: 5
+								});
+								return;
+							}
+							if(dataJudge.length != 0 || dataJudge1.length != 0) {
+								if(oldData[0].parentIds == 0 && authorityTypeValue == "2" && isDown == false) {
+									layer.msg('顶级菜单不可有按钮', {
+										icon: 5
+									});
+									return;
+								}
+							}
+							if(dataJudge.length == 0 || dataJudge1.length == 0) {
+								if(authorityTypeValue == "2" && isDown == false) {
+									layer.msg('顶级菜单不可有按钮', {
+										icon: 5
+									});
+									return;
+								}
+							}
+							if(isAdd == false) {
+								$("#authorityType").attr("disabled", "disabled");
+							}
+							// console.log(oldData[0]);
+
+							if(isDown) {
+								$.extend(data, {
+									"parentId": oldData[0].id
+								});
+							} else {
+								if(dataJudge.length == 0 && dataJudge1.length == 0) {
+									$.extend(data, {
+										"parentId": 0
+									});
+								} else {
+									$.extend(data, {
+										"parentId": oldData[0].parentIds
+									});
+								}
+							}
+							// console.log(data);
+							$.show_overall_loding();
+							if(isAdd) {
+								$.postJSON(userServiceUrl + "/menu", data, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(myLayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.initData();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								});
+							} else {
+								$.putJSON(userServiceUrl + "/menu", data, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(myLayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.initData();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								});
+							}
+						},
+					});
+				}
+			}
+		}
+		var menu = new menu_option();
+		menu.initData();
+		menu.bindCreate();
+	</script>
+
+	<!--新增修改模板-->
+	<script type="text/html" id="modelMenu">
+		<section class="openDetail" style="width: 100%;">
+			<div class="panel-body">
+				<form id="menuForm">
+					<div class="row">
+						<div class="col-lg-6" style="margin: 20px 0;">
+							<label class="layui-form-label">菜单名称：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="authorityName" name="authorityName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6" style="margin: 20px 0;">
+							<label class="layui-form-label">菜单类型：</label>
+							<div class="layui-input-block">
+								<select class="form-control" id="authorityType" name="authorityType">
+									<option value="0">--请选择菜单类型--</option>
+									<option value="1">权限菜单</option>
+									<option value="2">权限按钮</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6" style="margin: 20px 0;">
+							<label class="layui-form-label">菜单描述：</label>
+							<div class="layui-input-block">
+								<input class="form-control" name="authorityDescription" type="text">
+							</div>
+						</div>
+						<div class="col-lg-5" style="margin: 20px 0;" id="authorityIconHide">
+							<label class="layui-form-label">菜单图标：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="authorityIcon" name="authorityIcon" type="text">
+							</div>
+						</div>
+						<div class="col-lg-1" style="margin: 20px 0;padding-top: 5px">
+							<i id="authorityIconClass" class="" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-12" style="margin: 0px 0;" id="iconSDiv">
+							<div class="ms-parent" style="width: 100%;">
+								<div class="icon-drop" style="display: none;max-height:146px;overflow-y:auto">
+									<div class="ico-list" id="tcontent">
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6" style="margin: 20px 0;" id="authoritySignHide">
+							<label class="layui-form-label" style="width: 110px;">菜单标识：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="authoritySign" name="authoritySign" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6" style="margin: 20px 0;" id="menuUrlHide">
+							<label class="layui-form-label">菜单URL：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="menuUrl" name="menuUrl" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6" style="margin: 20px 0;" id="menuSortHide">
+							<label class="layui-form-label">菜单排序：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="menuSort" name="menuSort" type="text">
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="id" name="id" />
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<!--资源配置模板-->
+	<script type="text/html" id="modelMenuResource">
+		<section class="openDetail" style="width: 100%;height:100%">
+			<div>
+				<div class="panel-body">
+					<div class="ibox-content row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label class="form-label" for="s_resourcesName">资源名称：</label>
+								<input class="form-control" name="s_resourcesName" id="s_resourcesName" placeholder="资源名称" type="text">
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label class="form-label" for="s_resourcesUrl">资源URl：</label>
+								<input class="form-control" name="s_resourcesUrl" id="s_resourcesUrl" placeholder="资源URl" type="text">
+							</div>
+						</div>
+						<div class="col-lg-2" style="padding-top: 25px">
+							<button type="button" class="btn btn-success" id="search" style="float: right;"><i class="fa fa-search"></i> 查询</button>
+						</div>
+					</div>
+
+					<div id="menuResourceTable" class="selected"></div>
+				</div>
+			</div>
+		</section>
+	</script>
+
+</html>

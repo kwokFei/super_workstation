@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="../images/title_icon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>工业互联网研究院展厅</title>
+		<link rel="stylesheet" type="text/css" href="../plus/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+			
+	    <link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/header2.css">
+		<script type="text/javascript"
+            src='http://api.map.baidu.com/api?v=2.0&ak=1pSTowk3vMReXCQA08ypPGfGoOaZI0qk'></script>
+		<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/exhibitionArea.css" />
+		<script src="../js/jquery.min.js"></script>
+		
+		<script src="js/base.js"></script>
+		<script src="../js/httpUtils.js"></script>
+	</head>
+
+	<body>
+		<div id="main">
+			<div id="header">
+				<script type="text/javascript">
+					$("#header").load("header2.html");
+                    if ($.getCookie("orgLv") == "0") {
+
+                    }else{
+                        window.location.href = "./../html/Login/login.html";
+                    }
+				</script>
+			</div>
+			<div class="section">
+				<div id="left">
+					<div class="left-one box-line">
+						<div class="title-box">
+							<span></span>
+							<p>设备统计</p>
+						</div>
+						<ul class="content-head" style="height: 1rem;">
+							<!--<li>
+								<span class="icon-R"></span>
+								<div>
+									<span>接入品牌(家)</span>
+									<span class="font-blue-light">20</span>
+								</div>
+							</li>-->
+							<li>
+								<span class="icon-P"></span>
+								<div>
+									<span>接入产品(个)</span>
+									<span class="font-yellow" id="sendsp1"></span>
+								</div>
+							</li>
+						</ul>
+						<div class="content-box">
+							<div class="Switch">
+								<form class="layui-form">
+									<input type="checkbox" id="deviceSwitch" name="deviceSwitch" lay-filter="deviceSwitch" lay-skin="switch" lay-text="月|天">
+								</form>
+							</div>
+							<div id="echarts1"></div>
+						</div>
+					</div>
+					<div class="left-two box-line">
+						<div class="title-box">
+							<span></span>
+							<p>访客数据</p>
+						</div>
+						<div class="content-box">
+							<ul class="content-head">
+								<li>
+									<div class="bac-yellow">
+										<span class="font-yellow" title="001号展厅">001号展厅</span>
+									</div>
+									<span>12489人</span>
+								</li>
+								<li>
+									<div class="bac-green">
+										<span class="font-green" title="002号展厅">002号展厅</span>
+									</div>
+									<span>13689人</span>
+								</li>
+								<li>
+									<div class="bac-blue-light">
+										<span class="font-blue-light" title="003号展厅">003号展厅</span>
+									</div>
+									<span>12879人</span>
+								</li>
+								<li>
+									<div class="bac-blue">
+										<span class="font-blue" title="004号展厅">004号展厅</span>
+									</div>
+									<span>22480人</span>
+								</li>
+							</ul>
+							<div class="content-body">
+								<div class="Switch">
+									<form class="layui-form">
+										<input type="checkbox" id="visitorSwitch" name="visitorSwitch" lay-filter="visitorSwitch" lay-skin="switch" lay-text="天|月">
+									</form>
+								</div>
+								<div id="echarts2"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="center">
+					<div class="mark-box">
+						<div class="active" show="all">全部</div>
+						<div class="active" show="complete">
+							<span class="icon-builded"></span>
+							<span>已完成测试中心</span>
+						</div>
+						<div class="active" show="ncomplete">
+							<span class="icon-building"></span>
+							<span>建设中测试中心</span>
+						</div>
+					</div>
+						 <div class="map">
+			                <div id="ec_map" style="width: 9.72rem;height: 7rem;"></div>
+		            </div>
+					<ul class="nav-box">
+						<li onclick="window.location.href='projectManagement.html'">项目管理</li>
+						<li class="active" onclick="window.location.href='exhibitionIndex.html'">测试中心</li>
+						<li onclick="window.location.href='enterpriseIndex.html'">公司管理</li>
+					</ul>
+				</div>
+				<div id="right">
+					<div class="right-one box-line">
+						<div class="title-box">
+							<span></span>
+							<p>展厅分布</p>
+						</div>
+						<div class="content-box">
+							<div id="distributionDiv" class="content-head">
+							</div>
+							<ul id="distributionUl" class="content-body">
+							</ul>
+						</div>
+					</div>
+					<div class="right-two box-line">
+						<div class="title-box">
+							<span></span>
+							<p>测试中心企业</p>
+						</div>
+						<ul class="company-list">
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--展厅信息-->
+		<script type="text/html" id="tip_box">
+			<a class="tip-content-body">
+				<p title="001号展厅">001号展厅</p>
+				<p title="20家展示企业，20个展示区域，1584台只能那个设备">20家展示企业，20个展示区域，1584台只能那个设备</p>
+				<div><span>2019年12月1日建立</span><span>接纳访客24000人</span></div>
+			</a>
+		</script>
+
+		<script src="../plus/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/template-web.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/exhibitionArea.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/httpUtils.js"></script>
+	</body>
+	<script>
+        function getUrlParam(paramname) {
+            var reg = new RegExp("(^|&)" + paramname + "=([^&]*)(&|$)");
+            // 查询匹配 substr(1)删除? match()匹配
+            var s = window.location.search.substr(1).match(reg);
+            if (s != null) {
+                return decodeURI(s[2]); // unescape() 函数可对通过 escape() 编码的字符串进行解码。
+            }
+            return null;
+        }
+        let area =getUrlParam("area")
+		console.log("shuliang"+area)
+        const url =deviceServiceUrl + "/devicemanger/getDeviceCountByCity?token=" + $.getToken()+'&province='+area;
+        $.ajax({
+            type: "GET", //提交方式
+            url: encodeURI(url), //路径
+            datatype: 'json',
+            contentType: "application/json",
+            success: function(data) { //返回数据根据结果进行相应的处理
+                console.log('列表11111111---tttttttttt', data)
+                if(data.code === 0) {
+                    console.log("countrrrrrrrrrrrrrrrrrrrrrrrrr"+data.data.count)
+                    document.getElementById("sendsp1").innerText=data.data.count/1000+"K";
+                } else {
+                    console.log('请求错误')
+                }
+            },
+            error: function() {
+                console.log('请求错误')
+            }
+        });
+	</script>
+</html>

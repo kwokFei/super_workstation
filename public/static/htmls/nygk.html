@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body,html{
+            height: 100%;
+            width: 100%;
+            ;
+            padding: 0.2rem;
+        }
+        html {
+            font-size: calc(100vw * 100 / 1920);
+        }
+        .oneBox{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .oneBox .oneItem{
+            width: 6rem;
+            height: 2.6rem;
+            border-radius: 0.1rem;
+            overflow: hidden;
+        }
+        .oneBox .oneItem:nth-child(1){
+            background-color: #c12d3b;
+        }
+        .oneBox .oneItem:nth-child(2){
+            background-color: #333399;
+        }
+        .oneBox .oneItem:nth-child(3){
+            background-color: #f09f1c;
+        }
+        .oneBox .oneItem .header{
+            height: 0.6rem;
+            line-height: 0.6rem;
+            width: 100%;
+            padding-left: 0.2rem;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .oneBox .oneItem .header img{
+            width: 0.22rem;
+            height: 0.22rem;
+        }
+        .oneBox .oneItem .header span{
+            font-size: 0.3rem;
+            margin-left:0.05rem;
+
+        }
+        .contBox{
+            width: 100%;
+            margin-top: 0.2rem;
+            height: 1.4rem;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.24rem;
+            font-weight: bold;
+        }
+        .twoBox{
+            margin: 0.3rem 0;
+            width:100%;
+            border-radius: 0.1rem;
+            height: 4.5rem;
+            background-color: white;
+        }
+        .threeBox{
+            margin-top: 0.3rem;
+            width: 100%;
+            height: 5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .threeBox .leftBox{
+            width: 48%;
+            height: 100%;
+            background-color: white;
+            border-radius: 0.1rem;
+        }
+        .title{
+            position: relative;
+            height: 0.6rem;
+            line-height: 0.6rem;
+            font-size: 0.36rem;
+            font-weight: bold;
+            color: #333399;
+            padding-left: 0.5rem;
+        }
+        .title:before{
+            content: "";
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 0.1rem;
+            height: 100%;
+            background-color: #333399;
+        }
+        .threeBox .rightBox{
+            width: 48%;
+            height: 100%;
+            background-color: white;
+            border-radius: 0.1rem;
+        }
+        .listBox{
+            width: 100%;
+            padding: 0.2rem 0;
+        }
+        .navP{
+            margin-top: 0.2rem;
+            width: 100%;
+            height: 0.7rem;
+            line-height: 0.7rem;
+            font-size: 0.4rem;
+            color: #333399;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+        }
+        .navP span{
+            display: inline-block;
+        }
+        .navP span:nth-child(1){
+            margin-left: 1.3rem;
+        }
+        .navP span:nth-child(2){
+            margin-left: 0.9rem;
+        }
+        .navP span:nth-child(3){
+            margin-left: 1rem;
+        }
+        .navP span:nth-child(4){
+            margin-left: 1rem;
+        }
+        .itemP{
+            width: 90%;
+            margin: auto;
+            height: 0.6rem;
+            line-height: 0.6rem;
+            font-size: 0.22rem;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+        }
+        .itemP span{
+            text-align: center;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .itemP span:nth-child(1){
+            width: 5%;
+        }
+        .itemP span:nth-child(2){
+            width: 20%;
+        }
+        .itemP span:nth-child(3){
+            width: 24%;
+        }
+        .itemP span:nth-child(4){
+            width: 24%;
+        }
+        .itemP span:nth-child(5){
+            width: 22%;
+        }
+    </style>
+</head>
+<body>
+<div class="oneBox">
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/ny/ny001.png" alt="">
+            <span>本月用电</span>
+        </div>
+        <div class="contBox">
+            <span style="font-size: 0.4rem;">5863.25<span style="font-size: 0.25rem;margin-left: 0.1rem">KW/H</span></span>
+            <span style="text-align: left;margin-left: 0.2rem;font-size: 0.3rem;">
+                <span>上月同期 <span>1.6%</span> <span style="font-size: 0.14rem;">↑</span></span>
+                <br>
+                <span>上月用电 <span>5319.45</span> <span style="font-size: 0.14rem;">KW/H</span></span>
+            </span>
+        </div>
+    </div>
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/ny/ny002.png" alt="">
+            <span>本月用水</span>
+        </div>
+        <div class="contBox">
+            <span style="font-size: 0.4rem;">941.27<span style="font-size: 0.25rem;margin-left: 0.1rem">T</span></span>
+            <span style="text-align: left;margin-left: 0.2rem;font-size: 0.3rem;">
+                <span>上月同期 <span>1.6%</span> <span style="font-size: 0.14rem;">↓</span></span>
+                <br>
+                <span>上月用水 <span>941.27</span> <span style="font-size: 0.14rem;">T</span></span>
+            </span>
+        </div>
+    </div>
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/ny/ny003.png" alt="">
+            <span>本月用气</span>
+        </div>
+        <div class="contBox">
+            <span style="font-size: 0.4rem;">354.52<span style="font-size: 0.25rem;margin-left: 0.1rem">㎡</span></span>
+            <span style="text-align: left;margin-left: 0.2rem;font-size: 0.3rem;">
+                <span>上月同期 <span>1.6%</span> <span style="font-size: 0.14rem;">↑</span></span>
+                <br>
+                <span>上月用气 <span>354.52</span> <span style="font-size: 0.14rem;">㎡</span></span>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="twoBox">
+    <div id="main" style="width: 100%;height: 250px"></div>
+</div>
+<div class="threeBox">
+    <div class="leftBox">
+        <p class="title">设备报警</p>
+        <div class="listBox">
+            <p class="navP">
+                <span>区域</span>
+                <span>设备</span>
+                <span>事件</span>
+                <span>时间</span>
+            </p>
+            <p class="itemP">
+                <span>1</span>
+                <span>动力站A区</span>
+                <span>深水泵3#</span>
+                <span>长期低功率运行</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+            <p class="itemP">
+                <span>2</span>
+                <span>配电室A区</span>
+                <span>变压器H1</span>
+                <span>三相电流不平衡</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+            <p class="itemP">
+                <span>3</span>
+                <span>动力站B区</span>
+                <span>水泵KT3</span>
+                <span>B相过流</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+            <p class="itemP">
+                <span>4</span>
+                <span>动力站A区</span>
+                <span>深水泵3#</span>
+                <span>长期低功率运行</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+        </div>
+    </div>
+    <div class="rightBox">
+        <p class="title">设备控制</p>
+        <div class="listBox">
+            <p class="navP">
+                <span>区域</span>
+                <span>设备</span>
+                <span>状态</span>
+                <span>时间</span>
+            </p>
+            <p class="itemP">
+                <span>1</span>
+                <span>动力站A区</span>
+                <span>空压机</span>
+                <span>停止</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+            <p class="itemP">
+                <span>2</span>
+                <span>动力站A区</span>
+                <span>水泵</span>
+                <span>运行中</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+            <p class="itemP">
+                <span>3</span>
+                <span>车间C区</span>
+                <span>中央空调</span>
+                <span>运行中</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+            <p class="itemP">
+                <span>4</span>
+                <span>动力站A区</span>
+                <span>深水泵3#</span>
+                <span>故障</span>
+                <span style="font-size: 0.2rem">2019.8.25 18:17:44</span>
+            </p>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '用电量'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['今天','昨天']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','24:00']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name:'邮件营销',
+                type:'line',
+                stack: '总量',
+                data:[12, 13, 10, 13, 9, 23, 21,12, 13, 10, 13, 9, 23, 21,10]
+            },
+            {
+                name:'联盟广告',
+                type:'line',
+                stack: '总量',
+                data:[22, 12, 11, 23, 29, 33, 30,22, 12, 11, 23, 29, 33, 30,10]
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!--头部-->
+<div class="headerBox">
+    <!--系统时间-->
+    <div id="systemTime"></div>
+    <!-- 名称-->
+    <div class="headerTitle">工业互联网研究院测试中心</div>
+    <!-- 图标-->
+    <div>
+        <ul class="navIcons">
+            <li name="return">
+                <img class="off" src="img/nav_1/return.png" title="返回上级" onclick="window.history.go(-1);">
+                <img class="on" src="img/nav_1/return1.png" title="返回上级" onclick="window.history.go(-1);">
+            </li>
+            <li name="set">
+                <img class="off" src="img/nav_1/set.png" title="后台管理" onclick="window.location.href='./../html/home.html'">
+                <img class="on" src="img/nav_1/set1.png" title="后台管理" onclick="window.location.href='./../html/home.html'">
+            </li>
+            <li name="center">
+                <img class="off returnIndex" src="img/nav_1/center.png" title="退出" onclick="__logout();">
+                <img class="on returnIndex" src="img/nav_1/center1.png" title="退出" onclick="__logout();">
+            </li>
+            <li name="brive">
+                <img class="off" src="img/nav_1/brive.png" title="返回首页" onclick="_retrunIndex()">
+                <img class="on" src="img/nav_1/brive1.png" title="返回首页" onclick="_retrunIndex()">
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function __logout() {
+        $.setCookie("userOrg", "");
+        $.setCookie("orgLv", "");
+        $.setCookie("userName", "");
+        $.setCookie("token", "");
+        $.setCookie("userId", "");
+        $.setCookie("menuList", "");
+        window.location.href = './../html/Login/login.html';
+    }
+
+	function _retrunIndex(){
+		var parm = window.location.search
+		if($.getCookie("orgLv") == "0"){
+			window.location.href='index_all.html'
+		}else if($.getCookie("orgLv") == "1"){
+			window.location.href='exhibitionManagement.html?z_orgId=' + $.getCookie("organizationId")
+		}else if($.getCookie("orgLv") == "2"){
+			window.location.href='enterpriseManagement.html' + parm
+		}
+		
+	}
+
+    $(function () {
+        // 图标样式切换
+//      $(".navIcons>li").mouseenter(function () {
+//          $(".navIcons>li").each(function (i, el) {
+//              let name = $(this).attr('name') + ".png";
+//              $(this).find('img').attr('src', "img/nav_1/" + name);
+//          });
+//          let activeName = $(this).attr('name') + "1.png";
+//          $(this).find('img').attr('src', "img/nav_1/" + activeName);
+//      });
+//      $(".navIcons>li").click(function () {
+//          let activeName = $(this).attr('name') + "1.png";
+//          $(this).find('img').attr('src', "img/nav_1/" + activeName);
+//      });
+
+        $(".navIcons>li").hover(function () {
+            $(this).find('.off').hide();
+            $(this).find('.on').show();
+        }, function () {
+            $(this).find('.off').show();
+            $(this).find('.on').hide();
+        });
+        $(".headerTitle").on("click", function () {
+            if($.getCookie("orgLv") == "0"){
+				window.location.href='index_all.html'
+			}else if($.getCookie("orgLv") == "1"){
+				window.location.href='exhibitionManagement.html?z_orgId=' + $.getCookie("organizationId")
+			}else if($.getCookie("orgLv") == "2"){
+				window.location.href='enterpriseManagement.html?z_orgId=' + $.getCookie("organizationId")
+			}
+        });
+        $(".returnIndex").on("click", function () {
+            window.location.href = "index_all.html";
+        });
+    });
+
+</script>

@@ -1,0 +1,263 @@
+/*
+    引入LED字体
+*/
+@font-face{
+    font-family: 'LED';
+    src:url('../fonts/UnidreamLED.ttf')
+}
+
+html,div {
+	/*隐藏滚动条*/
+	scrollbar-width: none;
+	/*火狐*/
+	overflow: -moz-scrollbars-none;
+	scrollbar-color: transparent transparent;
+	scrollbar-track-color: transparent;
+	-ms-scrollbar-track-color: transparent;
+	/*IE兼容*/
+	-ms-scroll-chaining: chained;
+	-ms-overflow-style: none;
+	-ms-content-zooming: zoom;
+	-ms-scroll-rails: none;
+	-ms-content-zoom-limit-min: 100%;
+	-ms-content-zoom-limit-max: 500%;
+	-ms-scroll-snap-type: proximity;
+	-ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+	-ms-overflow-style: none;
+	scrollbar-base-color: white;
+	scrollbar-3dlight-color: white;
+	scrollbar-highlight-color: white;
+	scrollbar-track-color: white;
+	scrollbar-arrow-color: white;
+	scrollbar-shadow-color: white;
+	scrollbar-dark-shadow-color: white;
+
+	-ms-scroll-chaining: chained;
+	-ms-overflow-style: none;
+	-ms-content-zooming: zoom;
+	-ms-scroll-rails: none;
+	-ms-content-zoom-limit-min: 100%;
+	-ms-content-zoom-limit-max: 500%;
+	-ms-scroll-snap-type: proximity;
+	-ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+	-ms-overflow-style: none;
+}
+
+html,
+body {
+	width: 100%;
+	font-size: calc(100vw * 100 / 1920);
+	color: rgba(255, 255, 255, 1);
+	box-sizing: border-box;
+	background-color: #000019;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+li {
+	margin: 0rem;
+	padding: 0rem;
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+}
+
+iframe {
+	border: none;
+}
+
+*{
+	box-sizing: border-box;
+}
+
+a:hover{
+	color: #FFFFFF;
+}
+
+/* scrollbar */
+
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+
+::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 0.05rem;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+/*layui swicth*/
+.layui-form-switch {
+	position: relative;
+	height: 0.16rem;
+	line-height: 0.14rem;
+	min-width: 0.24rem;
+	width: 0.39rem!important;	
+	border-radius: 0.2rem;
+	cursor: pointer;
+	background-color: #26537d;
+	border: 0.01rem solid #4da7fd;
+	-webkit-transition: .1s linear;
+	transition: .1s linear;
+	margin-top: -0.03rem;
+	padding: 0 0.05rem;
+}
+
+.layui-form-switch em {
+	margin-left: 0.13rem;
+	color: #4aa8ff!important;
+	width: 0.25rem;
+	font-size: 0.12rem;
+	top: 0;
+}
+
+.layui-form-onswitch {
+	background-color: #b06e00;
+	border: 0.01rem solid #fe9d01;
+}
+
+.layui-form-onswitch em {
+	margin-left: -0.01rem;
+	color: #FE9D01!important;
+}
+
+.layui-form-switch i {
+	position: absolute;
+	left: 0.01rem;
+	top: -0.01rem;
+	width: 0.16rem;
+	height: 0.16rem;
+	border-radius: 0.2rem;
+	background-color: #d2d2d2;
+	-webkit-transition: .1s linear;
+	transition: .1s linear;
+}
+
+.layui-form-onswitch i {
+	left: 0.48rem;
+	margin-left: -21px;
+	background-color: #fff;
+}
+
+
+/*自定义公用样式*/
+/*字体颜色*/
+
+.font-red{
+	color: #CA0821 !important;
+}
+
+.font-yellow{
+	color:#FD9D02 !important;
+}
+
+.font-blue{
+	color: #00A2FF !important;
+}
+
+.font-blue-light{
+	color: #00F8F9 !important;
+}
+
+.font-green{
+	color: #4AFEA3 !important;
+}
+
+.bac-red{
+	background-color: #CA0821 !important;
+}
+
+.bac-yellow{
+	background-color:#FD9D02 !important;
+}
+
+.bac-blue{
+	background-color: #00A2FF !important;
+}
+
+.bac-green{
+	background-color: #4AFEA3 !important;
+}
+
+.bac-green-light{
+	background-color: #4AFEA3;
+}
+
+.bac-blue-light{
+	background-color: #00FDF2;
+}
+
+.bac-blue-dark{
+	background-color: #0082FD;
+}
+
+.bac-green-linear{
+	background-image: linear-gradient(to right, rgba(108,254,130,1) 0%, rgba(247,236,64,1) 100%);
+}
+
+.bac-red{
+	background-color: red !important;
+}
+
+.bac-red-linear{
+	background-image: linear-gradient(to right, red 0%, red 100%) !important;
+}
+
+.none{
+	display: none !important;
+}
+
+.font-14{
+	font-size: 0.14rem;
+}
+
+.font-16{
+	font-size: 0.16rem;
+}
+
+.font-18{
+	font-size: 0.18rem;
+}
+
+.font-14-bold{
+	font-size: 0.14rem;
+	font-weight: bold;
+}
+
+.font-16-bold{
+	font-size: 0.16rem;
+	font-weight: bold;
+}
+
+.font-18-bold{
+	font-size: 0.18rem;
+	font-weight: bold;
+}
+
+#main {
+	width: 19.2rem;
+	height: 10.8rem;
+	font-size: 0.12rem;
+	overflow: hidden;
+}
+
+.layui-layer-dialog .layui-layer-content{
+	color: #161616;
+}

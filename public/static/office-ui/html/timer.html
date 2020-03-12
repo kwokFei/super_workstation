@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<!--时间选择插件-->
+		<link href="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<script src="../plus/bootstrap-datetimepicker/moment.min.js"></script>
+		<script src="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+		<script src="../plus/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+		<!--日期选择插件-->
+		<link href="../plus/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet">
+		<script src="../plus/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+		<script src="../plus/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<script src="../plus/iview/vue.min.js"></script>
+		<style type="text/css">
+			.btn {
+				padding: 8px;
+			}
+			
+			.layui-form-label {
+				width: 95px !important;
+			}
+			
+			.form-control {
+				width: 99% !important;
+			}
+			
+			.inlineBlock {
+				width: 40%;
+				display: inline-block;
+			}
+			.col-lg-3{
+				float: left;
+				width: 25%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>定时任务</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="s_typeName">定时任务名称：</label>
+											<input class="form-control" name="s_typeName" id="s_typeName" placeholder="分类名称" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<div style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+												<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--Start-->
+								<div>
+									<button type="button" class="btn btn-primary" id="addRole">
+                                        <i class="fa fa-plus"></i> 录入
+                                    </button>
+									<!--<button type="button" class="btn btn-info" id="editRole">
+                                        <i class="fa fa-edit"></i> 编辑
+                                    </button>
+                                    <button type="button" class="btn btn-danger" id="removeRole">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </button>
+                                    <button type="button" class="btn btn-warning" id="getAuthor">
+                                        <i class="fa fa-warning"></i> 权限配置
+                                    </button>-->
+								</div>
+								<div id="classifyList"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+	</body>
+	<script type="text/javascript">
+		$("#loadDiv").html(loadHtml);
+		var html;
+		var url = "";
+		var appp;
+		var isAdd = true;
+		var _diytTimerCycle = {
+			"MON": "周一",
+			"TUE": "周二",
+			"WED": "周三",
+			"THU": "周四",
+			"FRI": "周五",
+			"SAT": "周六",
+			"SUN": "周日",
+		}
+		$(function() {
+			$('#classifyList').bootstrapTable({
+				url: deviceServiceUrl + "/timerTask/list", //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					console.info(data);
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						rdata = result.list;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						$.hide_overall_loding();
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: []
+						});
+						layer.msg("获取数据失败！", {
+							icon: 2
+						});
+						$.hide_overall_loding();
+						return res[0];
+					}
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				columns: [{
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						var pageSize = $('#classifyList').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+						var pageNumber = $('#classifyList').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+						return pageSize * (pageNumber - 1) + index + 1;
+					}
+				}, {
+					field: 'timerName',
+					title: '定时任务名称',
+					width: 300
+				}, {
+					field: 'timerTime',
+					title: '定时任务时间',
+					width: 200
+				}, {
+					field: 'timerCycle',
+					title: '定时任务周期',
+					width: 400,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == "today") {
+							state = '<span style="color: #ff0300">今天</span>'
+						} else {
+							if(value.length == 3) {
+								state = '<span>' + _diytTimerCycle[value] + '</span>';
+							} else {
+								var arr = value.split(",");
+								for(let i = 0; i < arr.length; i++) {
+									state += '、<span>' + _diytTimerCycle[arr[i]] + '</span>';
+								}
+								state = state.substring(1, state.length);
+							}
+						}
+						return state;
+					}
+				}, {
+					field: 'timerReadme',
+					title: '定时任务说明',
+					width: 500
+				}, {
+					field: 'createDate',
+					title: '创建时间',
+					width: 200
+				}, {
+					field: 'enableTimer',
+					title: '是否激活',
+					width: 100,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 0) {
+							state = '<span style="color:red">未激活</span>'
+						} else if(value == 1) {
+							state = '<span style="color:green">已激活</span>'
+						}
+						return state;
+					}
+				}, {
+					title: "操作",
+					width: 100,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							// '<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>' +
+							'<button data-toggle="tooltip" title="编辑" type="button" onclick="updata(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>' +
+							// '<button data-toggle="tooltip" title="设置" type="button" onclick="set(' + i3 + ');" class="btn btn-success tableButton"><i class="fa fa-cog"> </i></button>' +
+							// '<button data-toggle="tooltip" title="控制" type="button" onclick="op(' + i3 + ');" class="btn btn-primary tableButton"><i class="fa fa-puzzle-piece"> </i></button>' +
+							'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNumber: params.pageNumber,
+					timerName: $("#s_typeName").val(),
+				};
+			}
+
+			$("#addRole").on("click", function() {
+				url = "";
+				showModel("添加定时任务", 1, 0);
+			});
+
+			$("#search").on("click", function() {
+				$('#classifyList').bootstrapTable('refresh');
+			});
+
+			$("#clean").click(function() {
+				$("#s_typeName").val("");
+				$("#search").trigger("click");
+			});
+		});
+
+		// 修改定时任务
+		function updata(val) {
+			showModel("修改定时任务", 2, val);
+		}
+
+		// 删除定时任务
+		function tabRemove(val) {
+			var data = $("#classifyList").bootstrapTable('getData');
+			console.info(data[val]);
+			var id = data[val].id;
+			layer.confirm('确定删除？', {
+				btn: ['确定', '取消'] //按钮
+			}, function() {
+				$.show_overall_loding();
+				$.deleteJSON(deviceServiceUrl + "/timerTask?id=" + id, {}, function(data) {
+					console.info(data);
+					$.hide_overall_loding();
+					if(data.code == 0) {
+						layer.msg('删除成功', {
+							icon: 1
+						});
+						$('#classifyList').bootstrapTable('refresh');
+					} else {
+						layer.msg('删除失败', {
+							icon: 2
+						});
+					}
+				});
+			});
+		}
+
+		function showModel(title, flag, index) {
+			html = template("timerModel", {
+				title: "123"
+			});
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['700px', '500px'], //宽高
+				maxHeight: '500px',
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					$("#modeForm").submit();
+				},
+				success: function(layero) {
+					initVue();
+					initDatepicker();
+					initModelTable();
+					if(flag == 2) {
+						isAdd = false;
+						var data = $("#classifyList").bootstrapTable('getData');
+						var obj = data[index];
+						console.info(obj);
+						$("#id").val(obj.id);
+						$("#timerName").val(obj.timerName);
+						$("#timerTime").val(obj.timerTime);
+						$("#platformTimerTask").val(obj.platformTimerTask);
+						if(obj.enableTimer) {
+							appp.layuiSwitch = true;
+						} else {
+							appp.layuiSwitch = false;
+						}
+						if(obj.timerCycle == "today") {
+							appp.select = 1;
+						} else {
+							appp.select = 2;
+							if(obj.timerCycle == 3) {
+								var v = obj.timerCycle;
+								for(let i = 0; i < appp.diyCycleList.length; i++) {
+									if(appp.diyCycleList[i].value == v) {
+										appp.diyCycleList[i].checked = true;
+									}
+								}
+							} else {
+								var arr = obj.timerCycle.split(",");
+								for(let i = 0; i < appp.diyCycleList.length; i++) {
+									if(arr.indexOf(appp.diyCycleList[i].value) > -1) {
+										appp.diyCycleList[i].checked = true;
+									}
+								}
+							}
+						}
+						$("#timerReadme").val(obj.timerReadme);
+						console.info(appp.diyCycleList);
+						// appp.modelList.push();
+
+						$.sanjiGetJSON(deviceServiceUrl + "/timerTask/modeList", {
+							timerTaskId: obj.id
+						}, function(data) {
+							console.info(data);
+							if(data.code == 0) {
+								if(data.data.list != null && data.data.list.length > 0) {
+									for(let i = 0; i < data.data.list.length; i++) {
+										let modeId = data.data.list[i].modeId;
+										appp.modelList.push(modeId);
+									}
+									console.info(appp.modelList);
+									$("#oldModelList").val(JSON.stringify(appp.modelList));
+								}
+							}
+						});
+
+					} else {
+						isAdd = true;
+					}
+				}
+			});
+			var validate = $("#modeForm").validate({
+				rules: {
+					timerName: {
+						required: true
+					},
+					timerTime: {
+						required: true
+					}
+				},
+				messages: {
+					timerName: {
+						required: "定时任务名称不能为空"
+					},
+					timerTime: {
+						required: "定时任务时间不能为空"
+					}
+				},
+				submitHandler: function(form) {
+					$.show_overall_loding();
+					var data = $("#modeForm").serializeJson();
+					if(data.timerCycle == 2) {
+						var cy = "";
+						var diyTimerCycleIsNull = true;
+						for(let i = 0; i < appp.diyCycleList.length; i++) {
+							if(appp.diyCycleList[i].checked) {
+								diyTimerCycleIsNull = false;
+								cy += "," + appp.diyCycleList[i].value;
+							}
+						}
+						if(diyTimerCycleIsNull) {
+							layer.msg("请选择自定义周期", {
+								icon: 2
+							});
+							return false;
+						}
+						data.timerCycle = cy.substring(1, cy.length);
+					} else {
+						data.timerCycle = "today";
+					}
+
+					if(appp.modelList.length < 1) {
+						layer.msg("请选择模式", {
+							icon: 2
+						});
+						$.hide_overall_loding();
+						return false;
+					}
+					$.extend(data, {
+						"modelList": appp.modelList
+					});
+					if(appp.layuiSwitch) {
+						$.extend(data, {
+							"enableTimer": 1
+						});
+					} else {
+						$.extend(data, {
+							"enableTimer": 2
+						});
+					}
+
+					if(isAdd) { //添加操作
+						$.postJSON(deviceServiceUrl + "/timerTask", data, function(data) {
+							console.info(data);
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#classifyList').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					} else {
+						var list = [];
+						let oldModelList = $("#oldModelList").val();
+						var json = JSON.parse(oldModelList);
+						console.info(json[0]);
+						for(let i = 0; i < json.length; i++) {
+							list.push(json[i]);
+						}
+						let platformTimerTask = $("#platformTimerTask").val();
+						$.extend(data, {
+							"oldModelList": list,
+							"platformTimerTask": platformTimerTask,
+						});
+						console.info(data);
+						data.newModelList = data.modelList;
+						$.putJSON(deviceServiceUrl + "/timerTask", data, function(data) {
+							console.info(data);
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#classifyList').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					}
+
+				}
+			});
+		}
+	</script>
+
+	<!--添加修改定时任务模板-->
+	<script type="text/html" id="timerModel">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="modeForm">
+					<div class="layui-row layui-col-space10 layui-form-item" id="modelApp">
+						<input type="hidden" name="id" id="id" />
+						<input type="hidden" name="newModelList" id="newModelList" />
+						<input type="hidden" name="oldModelList" id="oldModelList" />
+						<input type="hidden" name="platformTimerTask" id="platformTimerTask" />
+						<div class="form-group">
+							<label for="typeName" class="control-label">定时任务名称：</label>
+							<div>
+								<input type="text" class="form-control" id="timerName" name="timerName">
+							</div>
+						</div>
+						<div>
+							<div class="form-group inlineBlock">
+								<label for="timerTime" class="control-label">定时任务时间：</label>
+								<div>
+									<input class="form-control js-datetimepicker" type="text" id="timerTime" name="timerTime" placeholder="" value="" data-side-by-side="true" data-locale="zh-cn" data-format="HH:mm" />
+								</div>
+							</div>
+							<div class="form-group inlineBlock" style="margin-left: 50px;">
+								<label for="enableTimer" class="control-label">是否激活：</label>
+								<div>
+									<label class="lyear-switch switch-solid switch-success">
+                                    <input type="checkbox" :checked="layuiSwitch" @click="changeSwitch();">
+                                    <span></span>
+                                </label>
+								</div>
+								<input type="hidden" id="enableTimer" name="enableTimer" value="1" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="timerCycle" class="control-label">定时任务周期：</label>
+							<div>
+								<select v-model="select" class="form-control" name="timerCycle" id="timerCycle">
+									<option value="1">今天</option>
+									<option value="2">自定义</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group" v-if="select == 2">
+							<label for="diyCycle" class="control-label">自定义周期：</label>
+							<div>
+								<label class="lyear-checkbox checkbox-inline checkbox-primary" v-for="(va, k) in diyCycleList">
+                                <input type="checkbox" :value="va.value" :checked="va.checked" @click="checkboxOnclick(k)">
+                                <span v-text="va.name"></span>
+                            </label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="timerReadme" class="control-label">定时任务说明：</label>
+							<div>
+								<textarea class="card" rows="5" style="width: 99%;font-size: 16px;border: 1px solid rgba(179, 179, 179, 0.3)" id="timerReadme" name="timerReadme"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="modelTable" class="control-label">选择模式：</label>
+							<div>
+								<div id="modelTable"></div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix" style="margin-bottom: 15px;"></div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<script>
+		function initModelTable() {
+			$('#modelTable').bootstrapTable({
+				url: deviceServiceUrl + "/mode/list", //请求后台的URL（*）
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 5, //每页的记录行数（*）
+				pageList: [5, 10, 20, 50], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams1, //传递参数（*）
+				strictSearch: true,
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onLoadSuccess: function() {
+					//取消全选按钮
+					// $("input[name='btSelectAll']").css("display", "none");
+
+					$.hide_overall_loding();
+				},
+				//单击行选中的操作
+				onClickRow: function(row) {
+
+				},
+				//双击行选中的操作
+				onDblClickRow: function(row) {
+
+				},
+				//点击全选框时触发的操作
+				onCheckAll: function(rows) {
+					// console.log(rows);
+					for(let i = 0; i < rows.length; i++) {
+						var row = rows[i];
+						if(appp.modelList.indexOf(row.id) == -1) {
+							appp.modelList.push(row.id);
+						}
+					}
+				},
+				//点击取消全选框时触发的操作
+				onUncheckAll: function(rows) {
+					for(let i = 0; i < rows.length; i++) {
+						var row = rows[i];
+						if(appp.modelList.indexOf(row.id) != -1) {
+							appp.modelList.splice(appp.modelList.indexOf(row.id), 1);
+						}
+					}
+				},
+				//点击每一个单选框时触发的操作
+				onCheck: function(row) {
+					// console.log(row);
+					if(appp.modelList.indexOf(row.id) == -1) {
+						appp.modelList.push(row.id);
+					}
+				},
+				//取消每一个单选框时对应的操作；
+				onUncheck: function(row) {
+					// console.log(row);
+					if(appp.modelList.indexOf(row.id) != -1) {
+						appp.modelList.splice(appp.modelList.indexOf(row.id), 1);
+					}
+				},
+				columns: [{
+						checkbox: true,
+						formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+							if(appp.modelList.indexOf(row.id) > -1) { // 因为 判断数组里有没有这个 id
+								// 存在则选中
+								return {
+									checked: true
+								};
+							}
+						}
+					},
+					{
+						width: 50,
+						title: '序号',
+						formatter: function(value, row, index) {
+							var pageSize = $('#modelTable').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+							var pageNumber = $('#modelTable').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+							return pageSize * (pageNumber - 1) + index + 1;
+						}
+					}, {
+						field: 'modeName',
+						title: '模式名称',
+						width: 400
+					}, {
+						field: 'modeReadme',
+						title: '模式说明',
+						width: 400
+					}, {
+						field: 'enableMode',
+						title: '激活模式',
+						width: 400,
+						formatter: function(value, row, index) {
+							var state = "";
+							if(value == 0) {
+								state = '<span style="color:red">未激活</span>'
+							} else if(value == 1) {
+								state = '<span style="color:green">已激活</span>'
+							}
+							return state;
+						}
+					}
+				]
+			});
+
+			var overAllIds = new Array(); //全局数组
+			function getSelectCheck() {
+				return overAllIds;
+			}
+
+			function examine(type, datas) {
+				if(type.indexOf('uncheck') == -1) {
+					$.each(datas,
+						function(i, v) {
+							// 添加时，判断一行或多行的 id 是否已经在数组里 不存则添加　
+							overAllIds.indexOf(v.id) == -1 ? overAllIds
+								.push(v.id) : -1;
+						});
+				} else {
+					$.each(datas, function(i, v) {
+						overAllIds.splice(overAllIds.indexOf(v.id), 1); //删除取消选中行
+					});
+				}
+			}
+
+			$('#table').on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table', function(e, rows) {
+				var datas = $.isArray(rows) ? rows : [rows]; // 点击时获取选中的行或取消选中的行
+				examine(e.type, datas); // 保存到全局 Array() 里
+			});
+
+			function queryParams1(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					modeName: $("#s_modeName").val(),
+					modeReadme: $("#s_modeReadme").val(),
+					enableMode: $("#s_enableMode").val()
+				};
+			}
+		}
+
+		function initVue() {
+			appp = new Vue({
+				el: "#modelApp",
+				data: {
+					select: 1,
+					timerCycle: 1,
+					layuiSwitch: true,
+					diyCycleList: [{
+							"name": "周一",
+							"value": "MON",
+							"checked": false
+						},
+						{
+							"name": "周二",
+							"value": "TUE",
+							"checked": false
+						},
+						{
+							"name": "周三",
+							"value": "WED",
+							"checked": false
+						},
+						{
+							"name": "周四",
+							"value": "THU",
+							"checked": false
+						},
+						{
+							"name": "周五",
+							"value": "FRI",
+							"checked": false
+						},
+						{
+							"name": "周六",
+							"value": "SAT",
+							"checked": false
+						},
+						{
+							"name": "周日",
+							"value": "SUN",
+							"checked": false
+						}
+					],
+					modelList: []
+				},
+				methods: {
+					checkboxOnclick: function(index) {
+						if(this.diyCycleList[index].checked) {
+							this.diyCycleList[index].checked = false;
+						} else {
+							this.diyCycleList[index].checked = true;
+						}
+					},
+					changeSwitch: function(index) {
+						if(this.layuiSwitch) {
+							this.layuiSwitch = false;
+						} else {
+							this.layuiSwitch = true;
+						}
+					}
+				},
+				mounted: function() {
+
+				},
+			});
+		}
+
+		function initDatepicker() {
+			// 时间选择
+			jQuery('.js-datetimepicker').each(function() {
+				var $input = jQuery(this);
+				$input.datetimepicker({
+					format: $input.data('format') ? $input.data('format') : false,
+					useCurrent: $input.data('use-current') ? $input.data('use-current') : false,
+					locale: moment.locale('' + ($input.data('locale') ? $input.data('locale') : '') + ''),
+					showTodayButton: $input.data('show-today-button') ? $input.data('show-today-button') : false,
+					showClear: $input.data('show-clear') ? $input.data('show-clear') : false,
+					showClose: $input.data('show-close') ? $input.data('show-close') : false,
+					sideBySide: $input.data('side-by-side') ? $input.data('side-by-side') : false,
+					inline: $input.data('inline') ? $input.data('inline') : false,
+				});
+			});
+
+			// 日期选择
+			jQuery('.js-datepicker').each(function() {
+				var $input = jQuery(this);
+				$input.datepicker({
+					weekStart: 1,
+					autoclose: true,
+					todayHighlight: true,
+					language: 'zh-CN',
+				});
+			});
+		}
+
+		function layuiSwitch() {
+			if($("#enableTimer").val() == 0) {
+				$("#enableTimer").val(1);
+			} else {
+				$("#enableTimer").val(0);
+			}
+		}
+	</script>
+
+</html>

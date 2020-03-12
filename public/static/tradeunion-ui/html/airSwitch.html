@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="../css/style.min.css" rel="stylesheet">
+	<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+	<link href="../css/commonStyle.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/layui.css" />
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../plus/layer/layer.js"></script>
+	<script src="../js/template-web.js"></script>
+	<script src="../plus/validate/jquery.validate.min.js"></script>
+	<script src="../plus/validate/messages_zh.min.js"></script>
+	<script src="../js/bootstrap-treeview.js"></script>
+
+	<script src="../js/httpUtils.js"></script>
+	<script src="../js/Md5.js"></script>
+	<script src="../plus/iview/vue.min.js"></script>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>空开管理</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ibox-content row">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label" for="s_deviceAlias">设备名称：</label>
+                                            <input class="form-control" name="s_deviceAlias" id="s_deviceAlias" placeholder="设备名称" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label" for="s_deviceMac">设备mac：</label>
+                                            <input class="form-control" name="s_deviceMac" id="s_deviceMac" placeholder="设备mac" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div style="margin-top: 24px;">
+                                                <button type="button" class="btn btn-purple" id="clean"><i
+                                                        class="fa fa-eraser"></i> 清空
+                                                </button>
+                                                <button type="button" class="btn btn-success" id="search"
+                                                        style="margin-left: 10px"><i class="fa fa-search"></i> 查询
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Start-->
+                                <!-- <div class="ibox-content">
+                                     &lt;!&ndash;页面内容部分&ndash;&gt;
+                                     &lt;!&ndash; 这里写内容 &ndash;&gt;
+                                     <div id="buttons">
+                                         <button type="button" class="btn btn-primary" id="addSlibings" onclick="newEvent()"><i class="fa fa-plus"></i>
+                                             录入
+                                         </button>
+                                     </div>
+
+                                     <div id="myTable">
+
+                                     </div>
+                                 </div>-->
+                                <table id="deviceEventList"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+
+    </div>
+</div>
+<!--加载底部-->
+<div id="footer" class="classifyFooter">
+    <script type="text/javascript">
+        $(function () {
+            $("#footer").load("footer.html");
+        });
+    </script>
+</div>
+<div id="loadDiv"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script type="text/javascript">
+    $("#loadDiv").html(loadHtml);
+    let html;
+    let vm;
+    let consoleVm;
+    $(function () {
+        $('#deviceEventList').bootstrapTable({
+            url: deviceServiceUrl + "/devicemanger/getAirSwitchList", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if (data.code == 0) {
+                    var result = data.data;
+                    rdata = result.list;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    $.hide_overall_loding();
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: []
+                    });
+                    layer.msg("获取数据失败！", {icon: 2});
+                    $.hide_overall_loding();
+                    return res[0];
+                }
+            },
+            onLoadSuccess: function () {
+                $.hide_overall_loding();
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function (value, row, index) {
+                    let pageSize = $('#deviceEventList').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                    let pageNumber = $('#deviceEventList').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                    return pageSize * (pageNumber - 1) + index + 1;
+                }
+            }, {
+                field: 'organizationName',
+                title: '所属机构',
+                width: 100
+            },{
+                field: 'deviceAlias',
+                title: '设备名称',
+                width: 100
+            }, {
+                field: 'deviceMac',
+                title: '设备mac',
+                width: 100
+            },{
+                field: 'deviceSubscriberNumber',
+                title: '订阅账号',
+                width: 100
+            }, {
+                field: 'deviceState',
+                title: '设备状态',
+                width: 80,
+                formatter: function(value, row, index) {
+                    var state = "";
+                    if(value == 1) {
+                        state = '<span style="color:green">正常</span>'
+                    } else if(value == 2) {
+                        state = '<span style="color:aquamarine">离线</span>'
+                    } else if(value == 3) {
+                        state = '<span style="color:red">报警</span>'
+                    } else if(value == 4) {
+                        state = '<span style="color:red">故障</span>'
+                    } else if(value == 5) {
+                        state = '<span style="color:red">过流</span>'
+                    } else if(value == 6) {
+                        state = '<span style="color:red">过压</span>'
+                    }
+                    return state;
+                }
+            },{
+                field: 'createDate',
+                title: '创建时间',
+                width: 100
+            },{
+                title: "操作",
+                width: 150,
+                clickToSelect: false,
+                formatter: function (i1, i2, i3) {
+                    var str = '' +
+                        '<button data-toggle="tooltip" title="编辑设备" type="button" onclick="editEvent(' + i3 +
+                        ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"> </i></button>'+
+                        '<button data-toggle="tooltip" title="按键更新" type="button" onclick="updateMenu(' + i3 +
+                        ');" class="btn btn-danger tableButton"><i class="fa fa-refresh"> </i></button>';
+                    return str;
+                },
+                cellStyle: function () {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                productCode: "00000a01",
+                deviceAlias:$("#s_deviceAlias").val(),
+                deviceMac:$("#s_deviceMac").val()
+            };
+        }
+
+        $("#search").on("click", function () {
+            $('#deviceEventList').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function () {
+            $("#s_deviceAlias").val("");
+            $("#s_deviceMac").val("");
+            $("#search").trigger("click");
+        });
+    });
+
+    //控制设备开始
+    function consoleDevice(id){
+        $.show_overall_loding();
+        let dataList = $("#deviceEventList").bootstrapTable("getData");
+        let formData = {};
+        formData.deviceId = dataList[id].id;
+        $.postJSON(deviceServiceUrl +"/device/selectMenus",formData,function (selectRes) {
+            $.hide_overall_loding();
+            if(selectRes == null || selectRes == ""){
+                layer.msg("该设备没有可控按键",{icon:2});
+            }else {
+                if(selectRes.length == 0){
+                    layer.msg("该设备没有可控按键",{icon:2});
+                }else {
+                    openConsoleWindow(selectRes,dataList,id)
+                }
+            }
+        });
+    }
+    //控制设备结束
+    //打开控制弹框
+    function openConsoleWindow(selectRes,dataList,id) {
+        html = template("consoleWindow", {title: "控制设备 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "控制设备",
+            area: ['700px', '450px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['取消'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                consoleVueBegin();
+                consoleVm.r1 = selectRes.length;
+                consoleVm.selectRes = selectRes;
+                consoleVm.serial_num = dataList[id].serialNum;
+                consoleVm.account = dataList[id].deviceSubscriberNumber;
+                consoleVm.productId = dataList[id].productCode;
+                $("#c_deviceName").val(dataList[id].deviceName);
+                $("#c_deviceMac").val(dataList[id].deviceMac);
+            }
+        });
+    }
+    //打开控制弹框结束
+
+    function updateMenu(id){
+        let dangerConfirm = layer.confirm("更新按键会清空该设备所有按键的绑定关系,需要手动重新绑定",["确定","取消"],function () {
+            layer.close(dangerConfirm);
+            $.show_overall_loding();
+            let dataList = $("#deviceEventList").bootstrapTable("getData");
+            let formData = {};
+            formData.deviceSubscriberNumber = dataList[id].deviceSubscriberNumber;
+            formData.productCode = dataList[id].productCode;
+            formData.serialNum = dataList[id].serialNum;
+            formData.deviceId = dataList[id].id;
+            $.postJSON(deviceServiceUrl +"/device/getAirSwitchMenu",formData,function (conRes) {
+                $.hide_overall_loding();
+                if(conRes.code == 0){
+                    if(conRes.data.resultContent != null || conRes.data.resultContent != ""){//bcca平台返回结果
+                        let resContent = conRes.data.resultContent;
+                        if (resContent == null || resContent == ""){
+                            layer.msg("没有获取到该设备按键数",{icon:2});
+                            return;
+                        }
+                        if(resContent.code == 0){//bcca平台返回码
+                            layer.msg("更新成功",{icon:1});
+                        }else {
+                            layer.msg("没有获取到该设备按键数",{icon:2});
+                        }
+                    }else {
+                        layer.msg("没有获取到该设备按键数",{icon:2});
+                    }
+                }else{
+                    layer.msg("没有获取到该设备按键数",{icon:2});
+                }
+            });
+        })
+    }
+
+    function openEditWindow(selectRes,dataList,id) {
+        html = template("editWindow", {title: "编辑设备 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "编辑设备",
+            area: ['700px', '450px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                $.show_overall_loding();
+                let menuSelect = document.getElementsByName("s_menu");
+                let switchMenuNames = document.getElementsByName("switchMenuName");
+                let nameArr = ["未关联类型","空调","照明","招牌","插座","其它"];
+                let switchMap = {switchList:[]};
+                for(let i=0; i<menuSelect.length; i++){
+                    let menuData = {};
+                    menuData.relateType = menuSelect[i].value;
+                    menuData.relateTypeName = nameArr[menuData.relateType];
+                    menuData.id = selectRes[i].id;
+                    menuData.switchMenuName = switchMenuNames[i].value;
+                    switchMap.switchList.push(menuData);
+                }
+                $.postJSON(deviceServiceUrl +"/device/updateSwitchMenu",switchMap,function (updateRes) {
+                    $.hide_overall_loding();
+                    if(updateRes.code == 0){
+                        layer.msg("修改成功",{icon:1});
+                    }else {
+                        layer.msg("修改失败",{icon:2});
+                    }
+                });
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                vueBegin();
+                vm.r1 = selectRes.length;
+                vm.selectRes = selectRes;
+                $("#e_deviceName").val(dataList[id].deviceName);
+                $("#e_deviceMac").val(dataList[id].deviceMac);
+            }
+        });
+    }
+
+    //修改事件开始
+    function editEvent(id){
+        $.show_overall_loding();
+        let dataList = $("#deviceEventList").bootstrapTable("getData");
+        let formData = {};
+        formData.deviceId = dataList[id].id;
+        $.postJSON(deviceServiceUrl +"/device/selectMenus",formData,function (selectRes) {
+            $.hide_overall_loding();
+            if(selectRes == null || selectRes == ""){
+                layer.msg("该设备没有可控按键",{icon:2});
+            }else {
+                if(selectRes.length == 0){
+                    layer.msg("该设备没有可控按键",{icon:2});
+                }else {
+                    openEditWindow(selectRes,dataList,id)
+                }
+            }
+        });
+    }
+    //修改事件结束
+    //vue开始
+    function vueBegin() {
+        vm = new Vue({
+            el: "#eventEditForm",
+            data: {
+                r1:0,
+                selectRes:[]
+            },
+            methods: {
+            },
+            mounted: function() {
+            }
+        });
+    }
+    function consoleVueBegin() {
+        consoleVm = new Vue({
+            el: "#consoleForm",
+            data: {
+                r1:0,
+                selectRes:[],
+                serial_num:"",
+                productId:"",
+                menuAddress:"",
+                account:""
+            },
+            methods: {
+                openSwitch: function (deviceAddress) {
+                    $.show_overall_loding();
+                    let formData = {};
+                    formData.account = this.account;
+                    formData.controlParams = '{p1:"'+deviceAddress+'",p2:"00 00"}';
+                    formData.operation = "Writeswitchon/off";
+                    formData.productId = this.productId;
+                    formData.serial_num = this.serial_num;
+                    $.postJSON(deviceServiceUrl +"/device/controlDervice_s",formData,function (conRes) {
+                        $.hide_overall_loding();
+                        if(conRes.code == 0){
+                            let dataRes = conRes.data;
+                            if(dataRes == null || dataRes == ""){
+                                layer.msg("控制失败",{icon:2});
+                            }else {
+                                let contentRes = dataRes.resultContent;
+                                if(contentRes == null || contentRes == ""){
+                                    layer.msg("控制失败",{icon:2});
+                                }else {
+                                    if(contentRes.code == 0){
+                                        layer.msg("控制成功",{icon:1});
+                                    }else {
+                                        layer.msg("控制失败",{icon:2});
+                                    }
+                                }
+                            }
+                        }else {
+                            layer.msg("控制失败",{icon:2});
+                        }
+                    })
+                },
+                closeSwitch: function (deviceAddress) {
+                    $.show_overall_loding();
+                    let formData = {};
+                    formData.account = this.account;
+                    formData.controlParams = '{p1:"'+deviceAddress+'",p2:"FF 00"}';
+                    formData.operation = "Writeswitchon/off";
+                    formData.productId = this.productId;
+                    formData.serial_num = this.serial_num;
+                    $.postJSON(deviceServiceUrl +"/device/controlDervice_s",formData,function (conRes) {
+                        $.hide_overall_loding();
+                        if(conRes.code == 0){
+                            let dataRes = conRes.data;
+                            if(dataRes == null || dataRes == ""){
+                                layer.msg("控制失败",{icon:2});
+                            }else {
+                                let contentRes = dataRes.resultContent;
+                                if(contentRes == null || contentRes == ""){
+                                    layer.msg("控制失败",{icon:2});
+                                }else {
+                                    if(contentRes.code == 0){
+                                        layer.msg("控制成功",{icon:1});
+                                    }else {
+                                        layer.msg("控制失败",{icon:2});
+                                    }
+                                }
+                            }
+                        }else {
+                            layer.msg("控制失败",{icon:2});
+                        }
+                    })
+                }
+            },
+            mounted: function() {
+            }
+        });
+    }
+    //vue结束
+</script>
+
+<!--编辑弹框-->
+<script type="text/html" id="editWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventEditForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="e_deviceName" name="deviceName" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备MAC:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="e_deviceMac" name="deviceMac" type="text" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item" v-for="(item,index) in selectRes">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" v-text="'空开' + (index+1) + ':'"></label>
+                        <div class="layui-input-block">
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="s_menu" id="s_menu" data-live-search="true" :value="item.relateType">
+                                <option value="0">选择按键关联设备类型</option>
+                                <option value="1" data-amount="空调">空调</option>
+                                <option value="2" data-amount="照明">照明</option>
+                                <option value="3" data-amount="招牌">招牌</option>
+                                <option value="4" data-amount="插座">插座</option>
+                                <option value="5" data-amount="其它">其它</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" v-text="'空开' + (index+1) + '名称:'"></label>
+                        <div class="layui-input-block">
+                            <input class="form-control" type="text" id="e_switchMenuName" name="switchMenuName" :value="item.switchMenuName">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--编辑弹框结束-->
+
+<!--控制弹框-->
+<script type="text/html" id="consoleWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="consoleForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="c_deviceName" name="deviceName" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备mac:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="c_deviceMac" name="deviceMac" type="text" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item" v-for="(item,index) in selectRes">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" v-text="'空开' + (index + 1) + ':'"></label>
+                        <div class="layui-input-block">
+                            <input class="form-control" name="relateType" type="text" readonly value="空调" v-if="item.relateType == 1">
+                            <input class="form-control" name="relateType" type="text" readonly value="照明" v-if="item.relateType == 2">
+                            <input class="form-control" name="relateType" type="text" readonly value="招牌" v-if="item.relateType == 3">
+                            <input class="form-control" name="relateType" type="text" readonly value="插座" v-if="item.relateType == 4">
+                            <input class="form-control" name="relateType" type="text" readonly value="其它" v-if="item.relateType == 5">
+                            <input class="form-control" name="relateType" type="text" readonly placeholder="未绑定类型" v-if="item.relateType == 0 || item.relateType == '' || item.relateType == null">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 MarginPx">
+                        <input class="form-control" name="relateType" type="text" readonly :value="item.deviceAddress">
+                    </div>
+                    <div class="col-lg-2 MarginPx">
+                        <button style="width: 100%;" type="button" class="btn btn-cyan" @click="openSwitch(item.deviceAddress)">开闸</button>
+                    </div>
+                    <div class="col-lg-2 MarginPx">
+                        <button style="width: 100%;" type="button" class="btn btn-warning" @click="closeSwitch(item.deviceAddress)">合闸</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--控制弹框结束-->
+
+
+
+</html>

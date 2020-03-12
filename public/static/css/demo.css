@@ -1,0 +1,459 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #ffffff;
+    font-size: 0.14rem;
+    font-family: "MicrosoftYaHei";
+}
+
+html, body {
+    position: relative;
+    background-color: rgb(0, 0, 30);
+    font-family: "MicrosoftYaHei";
+}
+html {
+    font-size: calc(100vw * 100 / 1920);
+}
+button{
+    outline: none;
+    cursor: pointer;
+    border: none;
+}
+header {
+    width: 100%;
+    height: 0.5rem;
+    text-align: center;
+    line-height: 0.5rem;
+    background-color: rgb(23, 35, 77);
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 0.1rem;
+}
+header img{
+    height: 70%;
+    margin: 0.05rem;
+    padding-right: 0.1rem;
+    border-right: 3px solid white;
+}
+
+.title {
+    width: 100%;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    text-align: center;
+    font-size: 0.20rem;
+    letter-spacing: 2px;
+    background-color: rgb(23, 25, 77);
+}
+
+#pagName {
+    width: 100%;
+    height: 1.34rem;
+    text-align: center;
+    line-height: 1.34rem;
+    font-size: 0.36rem;
+    color: #ffffff;
+
+}
+#pagName span{
+    font-family: "MicrosoftYaHei";
+    display: inline-block;
+    padding: 0 0.3rem;
+    text-align: center;
+    line-height: 1.34rem;
+    font-size: 0.36rem;
+    color: #ffffff;
+}
+
+.leftBox {
+    overflow: hidden;
+    margin-top: 0.05rem;
+    width: 2.4rem;
+    height: 10.25rem;
+    background-color: rgb(19, 29, 64);
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+
+}
+.leftBox .tabs{
+    width: 100%;
+    height: 0.4rem;
+    line-height: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.leftBox .tabs span{
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+.leftBox .tabs span.active{
+    background:linear-gradient(90deg,#0D72FB 0%,#00A5FE 100%);
+}
+
+.leftBox .container{
+    position: relative;
+    width: 100%;
+    height: 96.5%;
+}
+.leftBox .container div{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.leftBox .all-ul{
+    width: 100%;
+    list-style: none;
+    height: 93%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.leftBox .all-ul::-webkit-scrollbar {
+    display: none;
+}
+
+.leftBox .all-ul > li{
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    height: 0.4rem;
+    line-height: 0.4rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 0.1rem;
+    cursor: pointer;
+}
+.leftBox .all-ul > li:hover{
+    background-color: #0f6bc7;
+}
+.leftBox .all-ul li .allImg{
+    width: 0.3rem;
+    /*height: 0.2rem;*/
+
+
+}
+.leftBox .all-ul li .allImg img{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    vertical-align: middle;
+}
+
+.leftBox .all-ul li p {
+    font-size: 0.18rem;
+    white-space: nowrap;
+    width:80%;
+    margin-left: 0.15rem;
+}
+
+.leftBox .yycxUl {
+    margin-top: 0.1rem;
+    width: 100%;
+    list-style: none;
+    height: 93%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.leftBox .yycxUl::-webkit-scrollbar {
+    display: none;
+}
+
+.leftBox .yycxUl li {
+    margin: 0.1rem 0;
+    width: 100%;
+    text-align: center;
+    padding: 0.05rem 0;
+}
+
+
+.leftBox .yycxUl li .boxImg {
+    cursor: pointer;
+    margin: auto;
+    width: 1.94rem;
+    height: 1.11rem;
+    position: relative;
+    border-radius: 0.05rem;
+    overflow: hidden;
+}
+.leftBox .yycxUl li .boxImg:after{
+    position: absolute;
+    top:0;
+    left: 0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    pointer-events:none;
+    background-color: rgba(0,104,255,0.3);
+}
+.leftBox .yycxUl li .boxImg img{
+    width: 100%;
+    height: 100%;
+}
+.leftBox .yycxUl li .imgName {
+    font-size: 0.18rem;
+}
+
+/*中间盒子*/
+.centerBox {
+    /*background: red;*/
+    padding: 0.05rem;
+    width: 14.09rem;
+    /*height: 10.25rem;*/
+    margin: 0.05rem auto 0;
+    /*padding-top: 1.34rem;*/
+}
+
+
+.rightBox {
+    overflow: hidden;
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    margin-top: 0.05rem;
+    width: 2.4rem;
+    height: 10.25rem;
+    background-color: rgb(19, 29, 64);
+}
+
+.rightBox ul {
+    width: 100%;
+    list-style: none;
+    height: 90%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.rightBox ul::-webkit-scrollbar {
+    display: none;
+}
+
+.rightBox ul li {
+    padding: 0 0.1rem;
+    width: 100%;
+    height: 0.41rem;
+    line-height: 0.41rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    position: relative;
+    background: rgb(17, 21, 48);
+    margin-bottom: 0.01rem;
+}
+
+.rightBox ul li .checkInput + label {
+    background-color: white;
+    /*border: 1px solid #d3d3d3;*/
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: bottom;
+    line-height: 20px;
+    border-radius: 0.03rem;
+}
+
+.rightBox ul li .checkInput {
+    display: none;
+}
+
+.rightBox ul li .checkInput:hover {
+    cursor: pointer;
+    border: 1px solid #2783FB;
+}
+
+.rightBox ul li .checkInput:checked + label {
+    background: #2783FB;
+}
+
+.rightBox ul li .checkInput:checked + label:after {
+    content: "\2714";
+    color: white;
+    border: none;
+}
+
+.rightBox ul li .saveBtn {
+    background-color: #2783FB;
+    border: none;
+    font-size: 0.14rem;
+    padding: 0.02rem 0.03rem;
+    border-radius: 0.03rem;
+    font-weight: bold;
+    display: none;
+    position: absolute;
+    top: 0.1rem;
+    right: 0.2rem;
+}
+
+.rightBox ul li .inputBox {
+    width: 1.2rem;
+    height: 0.24rem;
+    line-height: 0.24rem;
+    font-size: 0.16rem;
+    background: none;
+    margin-left: 0.1rem;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rightBox ul li img {
+    width: 0.13rem;
+    height: 0.17rem;
+    margin-left: 0.35rem;
+    cursor: pointer;
+}
+
+
+.rightBox .rightBottomBox {
+    position: absolute;
+    background-color: rgb(23, 25, 77);
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.53rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.rightBox .rightBottomBox .imgBox {
+    width: 0.7rem;
+    height: 0.25rem;
+    display: flex;
+    margin: 0 0.05rem;
+    background-color: #697195;
+    justify-content: center;
+    border-radius: 0.03rem;
+    align-items: center;
+    cursor: pointer;
+}
+
+.rightBox .rightBottomBox .imgBox img {
+    width: 0.12rem;
+    height: 0.13rem;
+}
+
+.rightBox .rightBottomBox .imgBox .imgTitle {
+    font-size: 0.12rem;
+    line-height: 0.27rem;
+    color: #dcdef4;
+    margin-left: 0.05rem;
+}
+.template{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,255,0.1);
+}
+.template .scMinBox{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: #131D40;
+    width: 9rem;
+    height: 4.8rem;
+}
+.headerBox{
+    width:100%;
+    height: 0.45rem;
+    line-height: 0.45rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.3rem;
+    letter-spacing: 2px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.headerBox span{
+    font-size: 0.24rem;
+}
+.headerBox img{
+    width: 0.24rem;
+    height: 0.24rem;
+    cursor: pointer;
+}
+.template .scContent{
+    top:0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 91%;
+}
+.template .scContent .scLeft{
+    width: 66%;
+    height: 100%;
+    padding: 0.5rem 0.1rem;
+}
+.template .scContent .scLeft img{
+    width: 100%;
+    height: 100%;
+}
+.template .scContent .scRight{
+    padding-left: 0.05rem;
+    padding-top: 0.4rem;
+    width: 34%;
+    height: 100%;
+}
+.template .scContent .scRight p{
+    height: 0.4rem;
+    line-height: 0.4rem;
+    width: 100%;
+    padding-left: 0.05rem;
+    font-size: 0.16rem;
+    font-weight: bold;
+    position: relative;
+    margin: 0.2rem 0;
+    /*font-weight: bold;*/
+}
+.template .scContent .scRight .bofore:before{
+    content: "";
+    position: absolute;
+    top:15%;
+    left: 0;
+    width: 0.02rem;
+    height: 70%;
+    background: #2783FB;
+}
+.template .scContent .scRight .smImg{
+    width: 0.87rem;
+    height: 0.87rem;
+    margin-left: 0.05rem;
+}
+.template .scContent .scRight input{
+    background:none;
+    border: 1px solid white;
+    width: 2rem;
+    height: 0.25rem;
+    line-height: 0.25rem;
+    padding-left: 0.05rem;
+    font-size: 0.16rem;
+}
+.template .scContent .scRight button{
+    width: 0.55rem;
+    height: 0.25rem;
+    background-color: #2783FB;
+    color: white;
+    border-radius: 0.05rem;
+    outline: none;
+    cursor: pointer;
+}

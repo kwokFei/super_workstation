@@ -1,0 +1,18 @@
+{
+  "code": 0,
+  "message": "成功",
+  "currentTimeMillis": 1577153590624,
+  "messages": null,
+  "data": [
+    {
+      "id": "333",
+      "serviceId": "1565000000001340",
+      "callBackUrl": "http://39.98.137.198:6671/device/api/exeutionPlan/",
+      "serviceKey": "工业互联网研究院1",
+      "apId": "360",
+      "platformType": "4",
+      "url_3d": "http://www.beone3d.com",
+      "url": "http://bj.1226.apcos.com:9527/api"
+    }
+  ]
+}

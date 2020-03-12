@@ -1,0 +1,471 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 25, 1);
+}
+
+
+/*
+    公用头部
+*/
+
+
+/*#header{
+    height: 0.82rem;
+}*/
+
+
+/*
+    主体盒子
+*/
+
+.contentBox {
+	width: 100%;
+	/*height: calc(100vh - 0.82rem);*/
+	height: 9.65rem;
+	display: flex;
+	justify-content: space-between;
+}
+
+
+/*
+    左边大盒子
+*/
+
+.contentBox .leftBox {
+	padding-top: 0.12rem;
+	width: 4.09rem;
+	height: 100%;
+	color: white;
+	padding-left: 0.26rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.contentBox .leftBox .leftOneBox {
+	position: relative;
+	width: 3.79rem;
+	height: 3.81rem;
+	border-top: 2px solid rgb(62, 62, 79);
+	border-bottom: 2px solid rgb(62, 62, 79);
+}
+
+.contentBox .leftBox .leftOneBox::after {
+	content: "";
+	width: 0.4rem;
+	height: 2px;
+	position: absolute;
+	background-color: rgb(0, 255, 255);
+	top: -2px;
+	right: 0;
+}
+
+
+/*
+    左边第二个大盒子
+*/
+
+.contentBox .leftBox .leftTwoBox {
+	margin-top: 0.3rem;
+	position: relative;
+	width: 3.8rem;
+	height: 5.33rem;
+	border-top: 2px solid rgb(62, 62, 79);
+	border-bottom: 2px solid rgb(62, 62, 79);
+}
+
+.contentBox .leftBox .leftTwoBox::after {
+	content: "";
+	width: 0.4rem;
+	height: 2px;
+	position: absolute;
+	background-color: rgb(0, 255, 255);
+	top: -2px;
+	right: 0;
+}
+
+
+/*
+    list盒子
+*/
+
+.contentBox .leftBox .leftTwoBox .enterpriseFB {
+	margin-top: 0.2rem;
+	width: 3.8rem;
+	height: 4rem;
+	padding: 0 0.05rem;
+	overflow: auto;
+}
+
+.contentBox .leftBox .leftTwoBox .enterpriseFB::-webkit-scrollbar {
+	display: none;
+	width: 0 !important
+}
+
+.contentBox .leftBox .leftTwoBox .enterpriseFB p {
+	height: 0.4rem;
+	line-height: 0.4rem;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.contentBox .leftBox .leftTwoBox .enterpriseFB p span {
+	font-size: 0.16rem;
+}
+
+.contentBox .leftBox .leftTwoBox .enterpriseFB p span:nth-child(1) {
+	margin-left: 5px;
+}
+
+.contentBox .leftBox .leftTwoBox .enterpriseFB p span:nth-child(2) {
+	width: 1.5rem;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.contentBox .leftBox .leftTwoBox .enterpriseFB p span:nth-child(3) {
+	margin-right: 5px;
+}
+
+
+/*中间盒子*/
+
+.contentBox>.centerContent {
+	width: 11.02rem;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 0.4rem;
+}
+
+.nav-box {
+	width: 5.26rem;
+	height: 0.31rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 0;
+}
+
+.nav-box>li {
+	width: 1.49rem;
+	height: 100%;
+	line-height: 0.31rem;
+	font-size: 0.16rem;
+	font-weight: bold;
+	background: url("../img/public/btn.png") no-repeat;
+	background-size: 1.49rem 0.31rem;
+	cursor: pointer;
+	padding-left: 0.31rem;
+}
+
+.nav-box>li.active,
+.nav-box>li:hover {
+	background: url("../img/public/btn1.png") no-repeat;
+	background-size: 1.49rem 0.31rem;
+	color: #00FFFF;
+}
+
+
+/*顶部*/
+
+.centerContent>div:first-child {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.centerContent>div:first-child>div,
+.centerContent>div:first-child>div>span {
+	font-size: 0.18rem;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+.centerContent>div:first-child>div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 0.14rem;
+	width: 0.77rem;
+	height: 0.3rem;
+	position: relative;
+}
+
+.centerContent>div:first-child>div>span:last-child {
+	width: 0.77rem;
+	height: 0.3rem;
+	position: absolute;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.centerContent>div:first-child>div>img {
+	width: 0.3rem;
+}
+
+.centerContent>.map {
+	width: 9.72rem;
+	height: 6.61rem;
+	margin: 0 auto;
+	position: relative;
+}
+
+.centerContent>div:nth-child(3) {
+	width: 9.72rem;
+	margin: 1.26rem auto 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.centerContent>div:nth-child(3)>div {
+	width: 1.49rem;
+	height: 0.31rem;
+	margin: 0 0.2rem;
+	background: url("../img/public/btn.png");
+	background-size: contain;
+	text-align: left;
+	line-height: 0.31rem;
+	padding-left: 0.31rem;
+	cursor: pointer;
+}
+
+.centerContent>div:nth-child(3)>div:last-child {
+	background: url("../img/public/btn1.png");
+	background-size: contain;
+}
+
+.centerContent>div:nth-child(3)>div:last-child>span>a {
+	color: #00FFFF !important;
+}
+
+.centerContent>div:nth-child(3)>div:hover {
+	background: url("../img/public/btn1.png");
+	background-size: contain;
+}
+
+.centerContent>div:nth-child(3)>div:hover span>a {
+	color: #00FFFF !important;
+}
+
+
+/*
+    右边大盒子样式
+*/
+
+.contentBox .rightBox {
+	padding-top: 0.12rem;
+	width: 3.8rem;
+	margin-right: 0.26rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.contentBox .rightBox .rightOne {
+	position: relative;
+	width: 3.79rem;
+	height: 1.82rem;
+	border-top: 2px solid rgb(62, 62, 79);
+	border-bottom: 2px solid rgb(62, 62, 79);
+}
+
+.contentBox .rightBox .rightOne::after {
+	content: "";
+	width: 0.4rem;
+	height: 2px;
+	position: absolute;
+	background-color: rgb(0, 255, 255);
+	top: -2px;
+	right: 0;
+}
+
+.contentBox .rightBox .rightOne .jrcpBox {
+	position: absolute;
+	top: 45%;
+	left: 7%;
+}
+
+.contentBox .rightBox .rightOne .jrcpBox img {
+	width: 100%;
+	height: 100%;
+}
+
+.contentBox .rightBox .rightOne .jrcpBox .num1 {
+	position: absolute;
+	top: 32%;
+	left: 23%;
+	font-family: LED;
+	font-size: 0.36rem;
+}
+
+.contentBox .rightBox .rightOne .jrcpBox .num2 {
+	position: absolute;
+	top: 32%;
+	left: 79%;
+	font-family: LED;
+	font-size: 0.36rem;
+}
+
+.contentBox .rightBox .rightTwo {
+	margin-top: 0.29rem;
+	position: relative;
+	width: 3.79rem;
+	height: 7.33rem;
+	border-top: 2px solid rgb(62, 62, 79);
+	border-bottom: 2px solid rgb(62, 62, 79);
+}
+
+.contentBox .rightBox .rightTwo::after {
+	content: "";
+	width: 0.4rem;
+	height: 2px;
+	position: absolute;
+	background-color: rgb(0, 255, 255);
+	top: -2px;
+	right: 0;
+}
+
+.contentBox .rightBox .rightTwo .minBox {
+	width: 3rem;
+	margin-left: 12%;
+}
+
+.contentBox .rightBox .rightTwo .minBox .minOne {
+	margin-top: 0.16rem;
+	background: url("../img/flfnBG.png") no-repeat;
+	background-size: 100% 100%;
+	width: 3rem;
+	height: 1.59rem;
+}
+
+.contentBox .rightBox .rightTwo .minBox .minTwo {
+	margin-top: 0.2rem;
+	background: url("../img/flfnBG1.png") no-repeat;
+	background-size: 100% 100%;
+	width: 3rem;
+	height: 0.95rem;
+}
+
+.minTitle {
+	height: 0.29rem;
+	line-height: 0.29rem;
+	width: 100%;
+	text-align: center;
+	font-size: 0.14rem;
+	letter-spacing: 2px;
+	color: white;
+}
+
+.xxBox {
+	padding-top: 0.02rem;
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	height: 1.3rem;
+	justify-content: flex-start;
+}
+
+.xxBox .xxItem {
+	padding-top: 0.03rem;
+	width: 0.9rem;
+	height: 0.6rem;
+	margin: 0 0.04rem;
+	text-align: center;
+}
+
+.xxBox .xxItem p {
+	width: 100%;
+	font-size: 0.12rem;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.xxBox .xxItem .sz {
+	font-family: LED;
+	font-size: 0.32rem;
+	color: #2792ff;
+	letter-spacing: 1px;
+	margin-right: 0.05rem;
+}
+
+.appendDiv {
+	color: white;
+	padding: 0.05rem 0;
+	background-color: rgba(0, 0, 25, 1);
+}
+
+.appendDiv>div {
+	display: flex;
+	align-items: center
+}
+
+.appendDiv .qyLogo {
+	display: inline-block;
+	width: 50%;
+	height: 0.4rem;
+	line-height: 0.4rem;
+	text-align: center;
+}
+
+.appendDiv .qyName {
+	display: inline-block;
+	width: 25%;
+	height: 0.4rem;
+	line-height: 0.4rem;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	margin-left: 2%;
+}
+
+.appendDiv .qyNumber {
+	display: inline-block;
+	width: 25%;
+	height: 0.4rem;
+	line-height: 0.4rem;
+	text-align: center;
+}
+
+.appendDiv ul {
+	list-style: none;
+}
+
+.appendDiv ul li {
+	height: 0.5rem;
+	line-height: 0.5rem;
+	border-bottom: 1px solid whitesmoke;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	margin-top: 0.05rem;
+}
+
+.appendDiv ul li img {
+	width: 48%;
+	margin-left: 1%;
+	height: 0.4rem;
+	align-items: center;
+}
+
+.appendDiv ul li .qyNumber {
+	font-weight: bold;
+}

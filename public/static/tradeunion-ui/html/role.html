@@ -1,0 +1,2623 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap-select.css"/>
+
+    <script src="../js/jquery.min.js"></script>
+
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-select.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <script class="resources library" src="../js/area.js" type="text/javascript"></script>
+    <!--时间选择插件-->
+    <link href="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datetimepicker/moment.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+    <!--日期选择插件-->
+    <link href="../plus/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="../plus/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=BLmvFHqpvs06ks32cjabm9ZldnvhFVBW"></script>
+    <style type="text/css">
+        .roleFooter {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+        }
+
+        #allmap {
+            width: 745px;
+            height: 455px;
+            left: 0;
+            top: 0;
+            position: absolute;
+            background-color: #FFFFFF;
+        }
+
+        /*百度地图搜索框的样式*/
+        .tangram-suggestion-main{
+            z-index: 2147483647;
+        }
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content" style="display: none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>机构管理</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <!--页面内容部分-->
+                                        <div id="buttons">
+                                            <button type="button" class="btn btn-primary" id="addOrg"><i
+                                                    class="fa fa-plus"></i>录入同级
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="addOrgDown"><i
+                                                    class="fa fa-plus"></i> 录入下级
+                                            </button>
+                                            <button type="button" class="btn btn-info" id="editOrg"><i
+                                                    class="fa fa-edit"></i> 编辑
+                                            </button>
+                                            <button type="button" class="btn btn-danger" id="removeOrg"><i
+                                                    class="fa fa-trash-o"></i> 删除
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="managerFloor"><i
+                                                    class="fa fa-cog"></i> 管理楼层
+                                            </button>
+
+                                        </div>
+
+                                        <div id="myTree" style="margin-top: 20px">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>角色管理</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-content">
+                                        <!--页面内容部分-->
+                                        <div class="buttons">
+                                            <button type="button" class="btn btn-primary" id="addRole"><i
+                                                    class="fa fa-plus"></i>
+                                                录入
+                                            </button>
+                                            <button type="button" class="btn btn-info" id="editRole"><i
+                                                    class="fa fa-edit"></i> 编辑
+                                            </button>
+                                            <button type="button" class="btn btn-danger" id="removeRole"><i
+                                                    class="fa fa-trash-o"></i> 删除
+                                            </button>
+                                            <button type="button" class="btn btn-warning" id="getAuthor"><i
+                                                    class="fa fa-warning"></i>
+                                                权限配置
+                                            </button>
+                                        </div>
+
+                                        <div id="myTable">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<!--加载底部-->
+<div id="footer" class="roleFooter">
+    <script type="text/javascript">
+        $(function () {
+            $("#footer").load("footer.html");
+        });
+    </script>
+</div>
+<div id="loadDiv"></div>
+
+<script>
+    var html;
+</script>
+<script>
+    $("#loadDiv").html(loadHtml);
+
+	function typeList() {
+		$.ajax({
+			cache: true,
+			type: "get",
+			url: userServiceUrl + "/industry/list?token=" + $.getToken()+"&type=0",
+			async: false,
+			success: function(data) {
+				if(data.code === 0) {
+					$("#type").empty();
+					let list = data.data.list;
+					for(let i = 0; i < list.length; i++) {
+						$("#type").append("<option value=" + list[i].name + ">" + list[i].name + "</option>");
+					}
+				}
+			},
+			error: function(errorMsg) {
+				console.info("行业类型数据加载失败啦!");
+			}
+		});
+	}
+
+    var organization_option = function () {
+        return {
+            node: $("#myTree"), //渲染节点
+            data: "", //机构数据
+            init: function () {
+                var that = this;
+                var options = {
+                    checkedIcon: "glyphicon glyphicon-check",
+                    nodeIcon: "none", //所有节点的默认图标
+                    levels: 5,
+                    data: this.data,
+                    onhoverColor: "rgba(0,0,0,0.1)",
+                    onNodeSelected: function (event, data) {
+                        var data = that.node.treeview('getSelected');
+                        roleTable.refresh();
+                        //todo 需要刷新角色页面
+                    }
+                };
+                this.node.treeview(options);
+            },
+
+            initData: function () {
+                var _this = this;
+                //if(this.data == "") {
+                $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {isScreenOrganization: 1}, function (data) {
+                    _this.data = _this.getTreeData(data.data);
+                    _this.init();
+                });
+                //return;
+                //}
+                //_this.init();
+            },
+            getSelectedVal: function () {
+                //console.log(111);
+                var data = this.node.treeview('getSelected');
+                //console.log(data.nodeType)
+                //todo 需要刷新角色页面
+                //console.log(data);
+                return data;
+            },
+            getTreeData: function (data) {
+                var rdata = [];
+                if (data == null) {
+                    return rdata;
+                }
+                for (var i = 0; i < data.length; i++) {
+                    var node = data[i];
+                    var one = {};
+                    one.text = node.organizationName;
+                    one.parentIds = node.parentId;
+                    one.organizationName = node.organizationName;
+                    one.organizationDescription = node.organizationDescription;
+                    one.personCharge = node.personCharge;
+                    one.personMobile = node.personMobile;
+                    one.personMail = node.personMail;
+                    one.organizetionLvl = node.organizetionLvl;
+                    one.longitude = node.longitude;
+                    one.latitude = node.latitude;
+                    one.completionTime = node.completionTime;
+                    one.states = node.states;
+                    one.constructionTime = node.constructionTime;
+                    one.type = node.type;
+                    one.province = node.province;
+                    one.city = node.city;
+                    one.logo = node.logo;
+                    one.country = node.country;
+                    one.id = node.id;
+                    if (node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                        one.nodes = this.getTreeData(node.childrens);
+                    }
+                    rdata.push(one);
+                }
+                return rdata;
+            },
+            bindCreate: function () {
+                var that = this;
+                $("#addOrg").on("click", function () {
+                    /*var data = that.node.treeview('getSelected');
+                    if(data.length == 1) {
+                        that.showOrgModel("添加组织机构", 1);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }*/
+
+
+                    /*返回所有被选择节点的数组*/
+                    var data = $("#myTree").treeview('getSelected');
+                    /*返回所有没有选择节点的数组*/
+                    var data1 = $("#myTree").treeview('getUnselected');
+                    if (data.length == 0 && data1.length == 0) {
+                        that.showOrgModel("添加同级组织机构", 4);
+
+                    } else if (data.length == 1) {
+                        console.info(data[0])
+                        if (data[0].organizetionLvl == 0) {
+                            layer.msg("该机构不能添加平级机构", {
+                                icon: 5
+                            });
+
+                        } else {
+                            that.showOrgModel("添加同级组织机构", 1);
+                        }
+
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+                $("#addOrgDown").on("click", function () {
+                    var data = that.node.treeview('getSelected');
+                    if (data.length == 1) {
+                        if (data[0].organizetionLvl == 2) {
+                            layer.msg("该机构不能添加下级机构", {
+                                icon: 5
+                            });
+
+                        } else {
+                            that.showOrgModel("添加组织机构", 3);
+                        }
+
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                $("#editOrg").on("click", function () {
+                    var data = that.node.treeview('getSelected');
+                    if (data.length == 1) {
+                        that.showOrgModel("修改组织机构", 2);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                $("#removeOrg").on("click", function () {
+                    var data = that.node.treeview('getSelected');
+                    if (data.length == 1) {
+                        var conlayer = layer.confirm("确定删除？", {
+                            btn: ['确定', '取消']
+                        }, function () {
+                            $.show_overall_loding();
+                            $.deleteJSON(userServiceUrl + "/organization?id=" + data[0].id, {}, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(conlayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.initData();
+                                    return true;
+                                }
+                                console.info(data.messages)
+                                layer.msg("操作失败! " + data.messages[0].error, {
+                                    icon: 2
+                                });
+                            })
+                        }, function () {
+                            layer.close(conlayer);
+                        });
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                $("#managerFloor").on("click", function () {
+                    var data = that.node.treeview('getSelected');
+                    if (data.length == 1) {
+                        if (data[0].organizetionLvl == 1) {
+                            that.showFloorModel("管理楼层", data[0].id);
+                        } else {
+                            layer.msg("只有展厅才能管理楼层", {
+                                icon: 5
+                            });
+                        }
+
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+
+            },
+            showOrgModel: function (title, flag, index) {
+                var that = this;
+                var isAdd = true;
+                var isDown = false;
+                if (flag == 2) {
+                    isAdd = false;
+                }
+                if (flag == 3) {
+                    isDown = true;
+                }
+                html = template("modelOrg", {
+                    title: "123"
+                });
+                var myLayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: title,
+                    area: ['900px', '500px'], //宽高
+                    resize: true, //是否拉升
+                    offset: 'auto', //居中
+                    content: html,
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+//								if($("#deviceFloorId").val() == "" ||$("#deviceFloorId").val() == null ){
+//									layer.msg("请选择楼层", {icon: 2});
+//									return;
+//								}
+//								if($("#exhibitionSiteId").val() == "" ||$("#exhibitionSiteId").val() == null ){
+//									layer.msg("请选择展区", {icon: 2});
+//									return;
+//								}
+                        $("#orgForm").submit();
+                    },
+                    success: function (layero) {
+//								_init_area();
+                        initDatepicker();
+						typeList();
+
+                        var data = that.node.treeview('getSelected');
+                        if (data[0].organizetionLvl == 1 && isDown) {
+                            $(".addRoom").css("display", "none");
+                            $(".orgShowName").html("企业名称：");
+                            $(".orgShowDesc").html("企业描述：");
+                            if (flag != 2) {
+                                getAllFloor(data[0].id, "");
+                            }
+                        } else if (data[0].organizetionLvl == 1 && !isDown) {
+                            $(".addEnt").css("display", "none");
+                            $(".orgShowName").html("展厅名称：");
+                            $(".orgShowDesc").html("展厅描述：");
+                            $("#boothImageAdd").val("111")
+                        } else if (data[0].organizetionLvl == 0 && isDown) {
+                            $(".addEnt").css("display", "none");
+                            $(".orgShowName").html("展厅名称：");
+                            $(".orgShowDesc").html("展厅描述：");
+                            $("#boothImageAdd").val("111")
+                        } else if (data[0].organizetionLvl == 2 && !isDown) {
+                            $(".addRoom").css("display", "none");
+                            $(".orgShowName").html("企业名称:");
+                            $(".orgShowDesc").html("企业描述:");
+                            if (flag != 2) {
+                                getAllFloor(data[0].parentIds, "");
+                            }
+                        }
+                        var boothIds = [];
+                        if (flag == 2) {
+                            $(".isShows").css("display", "none");
+                            $("#orgForm").setForm(data[0]);
+                            if (data[0].organizetionLvl == 0) {
+                                $(".addRE").css("display", "none");
+                                $("#boothImageAdd").val("111")
+                                $(".orgShowName").html("机构名称：");
+                                $(".orgShowDesc").html("机构描述：");
+                            } else if (data[0].organizetionLvl == 2) {
+                                $("#imgUrl").attr("src", data[0].logo)
+                                $("#imgSpan").css("display", "none");
+                                var deviceFloor;
+                                var boothName;
+                                $.ajax({
+                                    type: "get",
+                                    url: userServiceUrl + "/organizationFloorBooth/list",
+                                    async: false,
+                                    data: {
+                                        token: $.getToken(),
+                                        enterpriseId: data[0].id
+                                    },
+                                    success: function (resData) {
+                                        if (resData.code == 0) {
+                                        	console.info(resData.data.total)
+                                        	if(resData.data.total != 0){
+                                        		deviceFloor = resData.data.list[0].floorId
+	                                            boothName = resData.data.list[0].name
+	                                            boothIds.push(resData.data.list[0].id)
+                                        	}
+                                           
+                                            for (var i = 1; i < resData.data.list.length; i++) {
+                                                boothName = boothName + resData.data.list[i].name
+                                                boothIds.push(resData.data.list[i].id)
+                                            }
+                                        } else {
+                                            layer.msg("请求失败！", {icon: 2});
+                                        }
+                                    },
+                                    fail: function (resData) {
+
+                                    }
+                                })
+                                getAllFloor(data[0].parentIds, deviceFloor);
+                                $("#exhibitionSiteName").val(boothName);
+                            }
+                            if (data[0].organizetionLvl == 1) {
+                                $("#boothImageAdd").val("111")
+                            }
+
+//									console.info(data[0])
+//									$("#s_province").val(data[0].province);
+//									$("#s_city").html(data[0].city)
+//									$("#s_city").val(data[0].city);
+
+                        }
+
+                        $("#showMap").click(function () {
+                            showMap(data[0].longitude, data[0].latitude);
+                        });
+                        $("#selectEX").click(function () {
+                            if ($("#deviceFloorId").val() == "" || $("#deviceFloorId").val() == null) {
+                                layer.msg("请先选择楼层", {icon: 5});
+                                return;
+                            }
+                            selectEX($("#deviceFloorId").val(),boothIds);
+                        });
+                    }
+                });
+                var validate = $("#orgForm").validate({
+                    rules: {
+                        organizationName: {
+                            required: true
+                        },
+                        personCharge: {
+                            required: true
+                        },
+                        personMobile: {
+                            required: true
+                        },
+                        longitude: {
+                            required: true
+                        },
+                        country: {
+                            required: true
+                        },
+                        province: {
+                            required: true
+                        },
+                        city: {
+                            required: true
+                        },
+                        latitude: {
+                            required: true
+                        },
+                        exhibitionSiteName: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        organizationName: {
+                            required: "请输入组织机构名称"
+                        },
+                        personCharge: {
+                            required: "请输入负责人"
+                        },
+                        personMobile: {
+                            required: "请输入联系电话"
+                        },
+                        longitude: {
+                            required: "请输入经度"
+                        },
+                        country: {
+                            required: "请选择位置"
+                        },
+                        province: {
+                            required: "请选择地图位置"
+                        },
+                        city: {
+                            required: "请选择地图位置"
+                        },
+                        exhibitionSiteName: {
+                            required: "请选择展位"
+                        },
+                        latitude: {
+                            required: "请输入纬度"
+                        }
+                    },
+                    submitHandler: function (form) {
+                    	var resolution = "120 * 32"
+                        if ($("#boothImageAdd").val() == "") {
+                            layer.msg("请选择图标", {
+                                icon: 2
+                            });
+                            return;
+                        }else if(resolution != $("#picResolution").val()) {
+                        	console.info(resolution)
+                        	console.info($("#picResolution").val())
+							layer.msg("图标只能上传分辨率为："+ resolution +"的图片", {
+								icon: 2
+							});
+							return;
+						}
+                        
+						
+
+                        if ($("#constructionTime").val() != "") {
+                            var d1 = new Date($("#constructionTime").val());
+                            var d2 = new Date($("#completionTime").val());
+
+                            if (d2 <= d1) {
+                                layer.msg("完成时间不能小于建设时间！", {
+                                    icon: 2
+                                });
+                                return false;
+                            }
+                        }
+
+
+                        var oldData = that.node.treeview('getSelected');
+                        var data = $("#orgForm").serializeJson()
+                        var organizationName = $("#organizationName").val();
+                        /*返回所有被选择节点的数组*/
+                        var dataJudge = $("#myTree").treeview('getSelected');
+                        /*返回所有没有选择节点的数组*/
+                        var dataJudge1 = $("#myTree").treeview('getUnselected');
+                        if (isDown) {
+                            $.extend(data, {
+                                "parentId": oldData[0].id,
+                                "organizetionLvl": (parseInt(oldData[0].organizetionLvl) + 1)
+                            });
+                        } else {
+                            if (dataJudge.length == 0 && dataJudge1.length == 0) {
+                                $.extend(data, {
+                                    "parentId": 0,
+                                    "organizetionLvl": 0
+                                });
+                            } else {
+                                $.extend(data, {
+                                    "parentId": oldData[0].parentIds,
+                                    "organizetionLvl": oldData[0].organizetionLvl
+                                });
+                            }
+                        }
+                        $.show_overall_loding();
+                        if (isAdd) {
+                            $.postJSON(userServiceUrl + "/organization", data, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.initData();
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            });
+                        } else {
+                            $.putJSON(userServiceUrl + "/organization", data, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.initData();
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            });
+                        }
+                    }
+                });
+            },
+
+
+            showFloorModel: function (title, organizationId, index) {
+
+                html = template("floorModel", {title: "123"});
+
+                var myLayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: "管理楼层",
+                    area: ['700px', '600px'],	        //宽高
+                    resize: true,				//是否拉升
+                    offset: 'auto',				//居中
+                    content: html,
+                    success: function (layero) {
+                        var floorTable = new floorTable_option();
+                        floorTable.init();
+                        floorTable.bindCreate();
+
+                    }
+                });
+            }
+        }
+    }
+
+    var organization = new organization_option();
+    organization.initData();
+    organization.bindCreate();
+
+
+    function showMap(deviceLongitude, deviceLatitude) {
+        // 每次打开地图时将经纬度清空，避免重复操作出现混乱
+        var lat = "";
+        var lng = "";
+
+        var myLayer = layer.open({
+            skin: 'card', //自定义样式winning-class
+            title: "选择经纬度",
+            area: ['750px', '545px'],
+            resize: true, //是否拉升
+            offset: 'auto', //居中
+            content: template("modelMap", {title: "123"}),
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                $("#latitude").val(lat);
+                $("#longitude").val(lng);
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                var map;
+                map = new BMap.Map("allmap");
+                var geoc = new BMap.Geocoder();   //地址解析对象
+                // 开启地图缩放
+                map.enableScrollWheelZoom(true);
+                // 经纬度不为空的情况下
+                if (deviceLatitude && deviceLongitude) {
+                    map.centerAndZoom(new BMap.Point(deviceLongitude, deviceLatitude), 11);
+                    map.clearOverlays();
+                    // 创建标注
+                    var new_point = new BMap.Point(deviceLongitude, deviceLatitude);
+                    var marker = new BMap.Marker(new_point, 10);
+                    // 将标注添加到地图中
+                    map.addOverlay(marker);
+                    map.panTo(new_point);
+                }else{
+                    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
+                }
+
+                function showInfo(e) {
+                    map.clearOverlays();
+                    var new_point = new BMap.Point(e.point.lng, e.point.lat);
+                    var marker = new BMap.Marker(new_point, 50); // 创建标注
+                    map.addOverlay(marker); // 将标注添加到地图中
+                    geoc.getLocation(e.point, function (rs) {
+                        var addComp = rs.addressComponents;
+                        $("#provinceName").val(addComp.province);
+                        $("#cityName").val(addComp.city);
+                    });
+                    lat = e.point.lat;
+                    lng = e.point.lng;
+                }
+
+                map.addEventListener("click", showInfo);
+
+                // 添加带有定位的导航控件
+                var navigationControl = new BMap.NavigationControl({
+                    // 靠左上角位置
+                    anchor: BMAP_ANCHOR_TOP_LEFT,
+                    // LARGE类型
+                    type: BMAP_NAVIGATION_CONTROL_LARGE,
+                    // 启用显示定位
+                    enableGeolocation: true
+                });
+                map.addControl(navigationControl);
+                // 添加定位控件
+                var geolocationControl = new BMap.GeolocationControl();
+                geolocationControl.addEventListener("locationSuccess", function (e) {
+                    // 定位成功事件
+                    var address = '';
+
+                    address += e.addressComponent.province;
+                    address += e.addressComponent.city;
+                    address += e.addressComponent.district;
+                    address += e.addressComponent.street;
+                    address += e.addressComponent.streetNumber;
+                });
+                geolocationControl.addEventListener("locationError", function (e) {
+                    // 定位失败事件
+                    layer.msg("定位失败", {
+                        icon: 2
+                    });
+                });
+                map.addControl(geolocationControl);
+
+
+                //建立一个自动完成的对象
+                var ac = new BMap.Autocomplete({
+                    "input": "suggestId",
+                    "location": map
+                });
+
+                //鼠标放在下拉列表上的事件
+                ac.addEventListener("onhighlight", function(e) {
+                    var str = "";
+                    var _value = e.fromitem.value;
+                    var value = "";
+                    if (e.fromitem.index > -1) {
+                        value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+                    }
+                    str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+                    value = "";
+                    if (e.toitem.index > -1) {
+                        _value = e.toitem.value;
+                        value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+                    }
+                    str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+                    $('#searchResultPanel').html(str);
+                });
+
+                var myValue;
+
+                //鼠标点击下拉列表后的事件
+                ac.addEventListener("onconfirm", function(e) {
+                    $("#provinceName").val(e.item.value.city);
+                    $("#cityName").val(e.item.value.district);
+                    var _value = e.item.value;
+                    myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+                    $('#searchResultPanel').html("onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue);
+                    setPlace();
+                });
+
+                function setPlace(){
+                    map.clearOverlays();    //清除地图上所有覆盖物
+                    function myFun(){
+                        var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                        lat = pp.lat;
+                        lng = pp.lng;
+                        map.centerAndZoom(pp, 18);
+                        map.addOverlay(new BMap.Marker(pp));    //添加标注
+                    }
+                    var local = new BMap.LocalSearch(map, { //智能搜索
+                        onSearchComplete: myFun
+                    });
+                    local.search(myValue);
+                }
+            }
+        })
+    }
+
+    function selectEX(floorId,boothIds) {
+        var Layer = layer.open({
+            skin: 'card', //自定义样式winning-class
+            title: "选择展区",
+            area: ['600px', '400px'],
+            resize: true, //是否拉升
+            offset: 'auto', //居中
+            content: template("boothList", {
+                title: "123"
+            }),
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                var list = $("#boothTable").bootstrapTable('getSelections');
+                if (list.length < 1) {
+                    layer.msg("请先选择要设置的展区", {
+                        icon: 2
+                    });
+                    return;
+                }
+                var exhibitionSiteId = list[0].id;
+                var exhibitionSiteName = list[0].name;
+                for (var i = 1; i < list.length; i++) {
+                    exhibitionSiteId = exhibitionSiteId + "," + list[i].id
+                    exhibitionSiteName = exhibitionSiteName + "," + list[i].name
+                }
+                $("#exhibitionSiteId").val(exhibitionSiteId);
+                $("#exhibitionSiteName").val(exhibitionSiteName);
+                layer.close(Layer);
+
+            },
+            success: function (layero) {
+            	console.info(boothIds)
+                var enterpriseId = "1";
+                var boothMode = new boothMode_option(floorId, boothIds);
+                boothMode.init();
+                boothMode.bindCreate();
+            }
+        })
+    }
+</script>
+
+<script>
+    var floorTable_option = function () {
+        return {
+            node: $('#myFloorTable'),
+            init: function () {
+                $.show_overall_loding();
+                var that = this;
+                this.node.bootstrapTable({
+                    url: userServiceUrl + "/organizationFloor/list",
+                    method: 'get', //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    toolbar: '', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    sortable: false, //是否启用排序
+                    singleSelect: true,
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 10, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    queryParamsType: '',
+                    queryParams: that.queryParams, //传递参数（*）
+                    strictSearch: true,
+                    uniqueId: "id", //每一行的唯一标识，一般为主键列
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    clickToSelect: true, //点击行是否选中
+                    responseHandler: function (data) {
+                        var res = [];
+                        if (data.code == 0) {
+                            var result = data.data;
+                            res.push({
+                                total: result.total,
+                                rows: result.list
+                            });
+                            return res[0];
+                        } else {
+                            res.push({
+                                total: 0,
+                                rows: null
+                            });
+                            return res[0];
+                        }
+                    },
+                    onLoadSuccess: function () {
+
+                        $.hide_overall_loding();
+                    },
+                    onDblClickRow: function (row) {
+                        console.info(row);
+                    },
+                    columns: [{
+                        checkbox: true
+                    }, {
+                        width: 50,
+                        title: '序号',
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    }, {
+                        field: 'name',
+                        title: '楼层名称',
+                        width: 300
+                    }, {
+                        field: 'imgSvg',
+                        title: '楼层svg图',
+                        width: 300
+                    }]
+                });
+            },
+            queryParams: function (params) {
+                $.show_overall_loding();
+                var data = {
+                    token: $.getToken(),
+                    pageSize: params.pageSize,
+                    pageNum: params.pageNumber
+                }
+                var organizationData = organization.getSelectedVal();
+                if (organizationData.length > 0 && organizationData[0].id != "myTree") {
+                    $.extend(data, {
+                        "organizationId": organizationData[0].id
+                    });
+                } else {
+                    $.extend(data, {
+                        "organizationId": 9999
+                    });
+                }
+                return data;
+            },
+            refresh: function () {
+                $.show_overall_loding();
+                this.node.bootstrapTable('refresh')
+            },
+            getSelectVal: function () {
+                var data = this.node.bootstrapTable('getSelections');
+                return data[0];
+            },
+            bindCreate: function () {
+                var that = this;
+
+                $("#removeFloor").on("click", function () {
+                    var data = that.node.bootstrapTable('getSelections');
+                    if (data.length == 1) {
+                        var conlayer = layer.confirm("确定删除？", {
+                            btn: ['确定', '取消']
+                        }, function () {
+                            $.show_overall_loding();
+                            $.deleteJSON(userServiceUrl + "/organizationFloor?id=" + data[0].id, {}, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(conlayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    $('#myFloorTable').bootstrapTable('refresh');
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            })
+                        }, function () {
+                            layer.close(conlayer);
+                        });
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                $("#addFloor").on("click", function () {
+                    that.showAddFloorModel("添加楼层", 1);
+                });
+                $("#editFloor").on("click", function () {
+                    var data = that.node.bootstrapTable('getSelections');
+                    if (data.length == 1) {
+                        url = "";
+                        that.showAddFloorModel("修改楼层", 2);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+                $("#managerBooth").on("click", function () {
+                    var floorData = that.node.bootstrapTable('getSelections');
+                    if (floorData.length == 1) {
+                        url = "";
+                        that.showBoothModel("管理展位", floorData[0].id, 2);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+            },
+            showAddFloorModel: function (title, flag, index) {
+                var that = this;
+                var isAdd = true;
+                if (flag == 1) {
+                    isAdd = true;
+                } else {
+                    isAdd = false;
+                }
+
+                html = template("addFloorModel", {title: "123"});
+
+
+                var myLayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: title,
+                    area: ['400px', '330px'],	        //宽高
+                    resize: true,				//是否拉升
+                    offset: 'auto',				//居中
+                    content: html,
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        $("#floorForm").submit();
+                    },
+                    success: function (layero) {
+                        if (flag == 1) {
+                            var data = organization.getSelectedVal();
+                            $("#organizationId").attr("value", data[0].id);
+                        } else if (flag == 2) {
+                            var data = that.node.bootstrapTable('getSelections');
+
+                            $("#name").attr("value", data[0].name);
+                            $("#imgSvg").attr("value", data[0].imgSvg);
+                            $("#floorId").attr("value", data[0].id);
+                        }
+                    }
+                });
+                //validata开始
+                var validate = $("#floorForm").validate({
+                    rules: {
+                        name: {
+                            required: true
+                        },
+                        imgSvg: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        name: {
+                            required: "请输入楼层名称"
+                        },
+                        imgSvg: {
+                            required: "请输入楼层svg源码"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        let floorName = $("#name").val();
+                        let imgSvg = $("#imgSvg").val();
+                        let id = $("#floorId").val();
+                        let organizationId = $("#organizationId").val();
+
+                        $.show_overall_loding();
+                        if (isAdd) {
+                            $.postJSON(userServiceUrl + "/organizationFloor/addFloor", {
+                                organizationId: organizationId,
+                                name: floorName,
+                                imgSvg: imgSvg
+                            }, function (resData) {
+                                if (resData.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {icon: 1});
+                                    $('#myFloorTable').bootstrapTable('refresh');
+                                    return true;
+                                } else {
+                                    layer.msg("操作失败", {icon: 2});
+                                    $.hide_overall_loding();
+                                }
+                            })
+                        } else {
+                            $.putJSON(userServiceUrl + "/organizationFloor", {
+                                id: id,
+                                name: floorName,
+                                imgSvg: imgSvg
+                            }, function (resData) {
+                                if (resData.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {icon: 1});
+                                    $('#myFloorTable').bootstrapTable('refresh');
+                                    return true;
+                                } else {
+                                    layer.msg("操作失败", {icon: 2});
+                                    $.hide_overall_loding();
+                                }
+                            })
+                        }
+                    }
+                });
+                //validata结束
+            },
+
+            showBoothModel: function (title, floorId, index) {
+
+                html = template("boothModel", {title: "123"});
+
+                var myLayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: "管理展位",
+                    area: ['700px', '600px'],	        //宽高
+                    resize: true,				//是否拉升
+                    offset: 'auto',				//居中
+                    content: html,
+                    success: function (layero) {
+                        var boothTable = new boothTable_option(floorId);
+                        boothTable.init();
+                        boothTable.bindCreate();
+
+                    }
+                });
+            }
+        }
+    }
+
+</script>
+<script>
+
+    var boothTable_option = function (floorId) {
+        return {
+            node: $('#myBoothTable'),
+            init: function () {
+                $.show_overall_loding();
+                var that = this;
+                this.node.bootstrapTable({
+                    url: userServiceUrl + "/organizationFloorBooth/list",
+                    method: 'get', //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    toolbar: '', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    sortable: false, //是否启用排序
+                    singleSelect: true,
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 10, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    queryParamsType: '',
+                    queryParams: that.queryParams, //传递参数（*）
+                    strictSearch: true,
+                    uniqueId: "id", //每一行的唯一标识，一般为主键列
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    clickToSelect: true, //点击行是否选中
+                    responseHandler: function (data) {
+                        var res = [];
+                        if (data.code == 0) {
+                            var result = data.data;
+                            res.push({
+                                total: result.total,
+                                rows: result.list
+                            });
+                            return res[0];
+                        } else {
+                            res.push({
+                                total: 0,
+                                rows: null
+                            });
+                            return res[0];
+                        }
+                    },
+                    onLoadSuccess: function () {
+
+                        $.hide_overall_loding();
+                    },
+                    onDblClickRow: function (row) {
+                        console.info(row);
+                    },
+                    columns: [{
+                        checkbox: true
+                    }, {
+                        width: 50,
+                        title: '序号',
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    }, {
+                        field: 'name',
+                        title: '展位名称',
+                        width: 300
+                    }, {
+                        field: 'area',
+                        title: '面积/平方米',
+                        width: 300
+                    }, {
+                        field: 'organizationName',
+                        title: '所属企业',
+                        width: 300
+                    }]
+                });
+            },
+            queryParams: function (params) {
+
+                //console.log(params);
+                $.show_overall_loding();
+                var data = {
+                    token: $.getToken(),
+                    pageSize: params.pageSize,
+                    pageNum: params.pageNumber,
+                    floorId: floorId
+                }
+                return data;
+            },
+            refresh: function () {
+                $.show_overall_loding();
+                this.node.bootstrapTable('refresh')
+            },
+            getSelectVal: function () {
+                var data = this.node.bootstrapTable('getSelections');
+                return data[0];
+            },
+            bindCreate: function () {
+                var that = this;
+
+                $("#removeBooth").on("click", function () {
+                    var data = that.node.bootstrapTable('getSelections');
+                    if (data.length == 1) {
+                        var conlayer = layer.confirm("确定删除？", {
+                            btn: ['确定', '取消']
+                        }, function () {
+                            $.show_overall_loding();
+                            $.deleteJSON(userServiceUrl + "/organizationFloorBooth?id=" + data[0].id, {}, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(conlayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    $('#myBoothTable').bootstrapTable('refresh');
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            })
+                        }, function () {
+                            layer.close(conlayer);
+                        });
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                $("#addBooth").on("click", function () {
+                    that.showAddBoothModel("添加展位", 1);
+                });
+                $("#editBooth").on("click", function () {
+                    var data = that.node.bootstrapTable('getSelections');
+                    if (data.length == 1) {
+                        url = "";
+                        that.showAddBoothModel("修改展厅", 2);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+            },
+            showAddBoothModel: function (title, flag, index) {
+                var that = this;
+                var isAdd = true;
+                if (flag == 1) {
+                    isAdd = true;
+                } else {
+                    isAdd = false;
+                }
+
+                html = template("addBoothModel", {title: "123"});
+
+
+                var myLayermode = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: title,
+                    area: ['600px', '500px'],	        //宽高
+                    resize: true,				//是否拉升
+                    offset: 'auto',				//居中
+                    content: html,
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+
+                        $("#boothForm").submit();
+                    },
+                    success: function (layero) {
+                        var boothData;
+
+                        var floorData = $("#myFloorTable").bootstrapTable('getSelections');
+                        $("#floorId").attr("value", floorData[0].id);
+                        $("#floorSvg").val(floorData[0].imgSvg);
+                        if (flag == 2) {
+
+                            boothData = that.node.bootstrapTable('getSelections');
+                            $("#boothForm").setForm(boothData[0])
+//				            		$("#boothImage").attr("src",boothData[0].boothImage);
+//				            		$("#boothName").attr("value",boothData[0].name);
+//				            		$("#boothId").attr("value",boothData[0].id);
+                        }
+
+
+                        $("#selectBooth").on("click", function () {
+                            var myLay = layer.open({
+                                skin: 'card',
+                                type: 1,
+                                title: title,
+                                area: ['700px', '600px'],	        //宽高
+                                resize: true,				//是否拉升
+                                offset: 'auto',				//居中
+                                content: '<div id="showSvg"></div>',
+                                btn: ['提交', '取消'],
+                                yes: function (index, layero) {
+                                    layer.close(myLay);
+                                },
+                                success: function (layero) {
+                                    $("#showSvg").html(floorData[0].imgSvg)
+                                    var boothImages = [];
+                                    $.ajax({
+                                        type: "get",
+                                        url: userServiceUrl + "/organizationFloorBooth/list",
+                                        async: false,
+                                        data: {
+                                            token: $.getToken(),
+                                            floorId: floorData[0].id
+                                        },
+                                        success: function (resData) {
+                                            if (resData.code == 0) {
+                                                for (var i = 0; i < resData.data.list.length; i++) {
+                                                    var index = parseInt(resData.data.list[i].boothImage);
+//															console.info(index)
+                                                    boothImages.push(index)
+                                                    $("#showSvg .cls-1").eq(index).css('fill', '#808080');
+                                                }
+                                            } else {
+                                                layer.msg("请求失败！", {icon: 2});
+                                            }
+                                        },
+                                        fail: function (resData) {
+
+                                        }
+                                    })
+                                    if ($("#boothImage").val() != "") {
+                                        $("#showSvg .cls-1").eq($("#boothImage").val()).css('fill', '#ff0000');
+                                    }
+                                    $(".cls-1").on("click", function () {
+                                        if (boothImages.indexOf($(this).index()) > -1) {
+                                            layer.msg("该区域已被绑定展区！", {icon: 2});
+                                            return
+                                        }
+                                        Array.prototype.indexOf = function (val) {
+                                            for (var i = 0; i < this.length; i++) {
+                                                if (this[i] == val) return i;
+                                            }
+                                            return -1;
+                                        };
+                                        Array.prototype.remove = function (val) {
+                                            var index = this.indexOf(val);
+                                            if (index > -1) {
+                                                this.splice(index, 1);
+                                            }
+                                        };
+//							            		console.info(boothImages)
+                                        if ($("#boothImage").val() != "") {
+                                            boothImages.remove($("#boothImage").val())
+                                            $("#showSvg .cls-1").eq($("#boothImage").val()).css('fill', '');
+                                        }
+                                        $("#boothImage").val($(this).index())
+                                        boothImages.push($(this).index())
+//							            		console.info(boothImages)
+                                        $("#showSvg .cls-1").eq($(this).index()).css('fill', '#ff0000');
+                                    })
+                                }
+                            });
+
+                        })
+                    }
+                });
+                //validata开始
+                var validate = $("#boothForm").validate({
+                    rules: {
+                        name: {
+                            required: true
+                        },
+                        boothImage: {
+                            required: true
+                        },
+                        area: {
+                            required: true,
+                            number: true
+                        }
+                    },
+                    messages: {
+                        name: {
+                            required: "请输入展位名称"
+                        },
+                        boothImage: {
+                            required: "请选择展区"
+                        },
+                        area: {
+                            required: "请填写区域面积"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        let boothName = $("#boothName").val();
+                        let area = $("#boothArea").val();
+                        let floorId = $("#floorId").val();
+                        let boothId = $("#boothId").val();
+                        let boothImage = $("#boothImage").val();
+                        if (boothImage == "" || boothImage == null) {
+                            layer.msg("请选择展区", {icon: 2});
+                            return;
+                        }
+
+                        $.show_overall_loding();
+                        if (isAdd) {
+                            $.postJSON(userServiceUrl + "/organizationFloorBooth", {
+                                floorId: floorId,
+                                boothImage: boothImage,
+                                name: boothName,
+                                area: area
+                            }, function (resData) {
+                                if (resData.code == 0) {
+                                    layer.close(myLayermode);
+                                    layer.msg("成功", {icon: 1});
+                                    $('#myBoothTable').bootstrapTable('refresh');
+                                    return true;
+                                } else {
+                                    layer.msg("操作失败", {icon: 2});
+                                }
+                            })
+                        } else {
+                            $.putJSON(userServiceUrl + "/organizationFloorBooth", {
+                                id: boothId,
+                                boothImage: boothImage,
+                                name: boothName,
+                                area: area
+                            }, function (resData) {
+                                if (resData.code == 0) {
+                                    layer.close(myLayermode);
+                                    layer.msg("成功", {icon: 1});
+                                    $('#myBoothTable').bootstrapTable('refresh');
+                                    return true;
+                                } else {
+                                    layer.msg("操作失败", {icon: 2});
+                                }
+                            })
+                        }
+                    }
+                });
+                //validata结束
+            }
+        }
+    }
+
+</script>
+<script>
+    var boothMode_option = function (floorId, boothIds) {
+        return {
+            node: $("#boothTable"), //渲染节点
+            init: function () {
+                $.show_overall_loding();
+                var that = this;
+                this.node.bootstrapTable({
+                    url: userServiceUrl + "/organizationFloorBooth/list", //请求后台的URL（*）
+                    method: 'get', //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    toolbar: '', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    singleSelect: false,//是否单选
+                    sortable: false, //是否启用排序
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 5, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    queryParamsType: '',
+                    queryParams: that.queryParams, //传递参数（*）
+                    strictSearch: true,
+                    uniqueId: "id", //每一行的唯一标识，一般为主键列
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    clickToSelect: true, //点击行是否选中
+                    responseHandler: function (data) {
+                        var res = [];
+                        if (data.code == 0) {
+                            var result = data.data;
+                            res.push({
+                                total: result.total,
+                                rows: result.list
+                            });
+                            return res[0];
+                        } else {
+                            res.push({
+                                total: 0,
+                                rows: null
+                            });
+                            return res[0];
+                        }
+                    },
+                    //单击行选中的操作
+                    onClickRow: function (row) {
+                        uModeId = row.id;
+                    },
+                    //双击行选中的操作
+                    onDblClickRow: function (row) {
+                        uModeId = row.id;
+                    },
+                    onLoadSuccess: function () {
+                        $.hide_overall_loding();
+                    },
+                    columns: [{
+                        checkbox: true,
+                        
+                        formatter:function(value,row,index){//设置满足条件的行可以使用复选框
+					         for (var i = 0; i < boothIds.length; i++) {
+					         	if(row.id == boothIds[i]){
+					             	return {
+										checked: true
+									}
+					             }
+					         }
+					         if(row.enterpriseId !=''){
+					             return {
+					                 disabled : true
+					            }
+					         }
+					     }
+                    }, {
+                        width: 50,
+                        title: '序号',
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    }, {
+                        field: 'name',
+                        title: '展位名称',
+                        width: 300
+                    }, {
+                        field: 'organizationName',
+                        title: '所属企业',
+                        width: 300
+                    },{
+                        field: 'enterpriseId',
+                        title: '是否绑定企业',
+                        width: 300,
+                        formatter: function(value, row, index) {
+							var state = "";
+							if(value != "") {
+								state = '<span style="color:red">已绑定</span>'
+							} else{
+								state = '<span style="color:green">未绑定</span>'
+							}
+							return state;
+						}
+                    }]
+                });
+
+            },
+            queryParams: function (params) {
+                $.show_overall_loding();
+                return {
+                    token: $.getToken(),
+                    pageSize: params.pageSize,
+                    pageNum: params.pageNumber,
+                    floorId: floorId,
+                    notBindEnterprise: ""
+                }
+            },
+            refresh: function () {
+                $.show_overall_loding();
+                this.node.bootstrapTable('refresh')
+            },
+            bindCreate: function () {
+            }
+        }
+    }
+</script>
+<script>
+    var roleTable_option = function () {
+        return {
+            node: $('#myTable'),
+            init: function () {
+                $.show_overall_loding();
+                var that = this;
+                this.node.bootstrapTable({
+                    url: userServiceUrl + "/role/list",
+                    //data: tableData, //本地数据
+                    method: 'get', //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    toolbar: '', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    sortable: false, //是否启用排序
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 10, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    queryParamsType: '',
+                    queryParams: that.queryParams, //传递参数（*）
+                    strictSearch: true,
+                    uniqueId: "id", //每一行的唯一标识，一般为主键列
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    clickToSelect: true, //点击行是否选中
+                    responseHandler: function (data) {
+                        var res = [];
+                        if (data.code == 0) {
+                            var result = data.data;
+                            res.push({
+                                total: result.total,
+                                rows: result.list
+                            });
+                            return res[0];
+                        } else {
+                            res.push({
+                                total: 0,
+                                rows: null
+                            });
+                            return res[0];
+                        }
+                    },
+                    onLoadSuccess: function () {
+                        //					$('.dropdown-toggle').on("click", function() {
+                        //						// $('.dropdown-toggle').parent().toggleClass("open");
+                        //					});
+
+                        $.hide_overall_loding();
+                    },
+                    onDblClickRow: function (row) {
+                        console.info(row);
+                    },
+                    columns: [{
+                        checkbox: true
+                    }, {
+                        width: 50,
+                        title: '序号',
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    }, {
+                        field: 'roleName',
+                        title: '角色名称',
+                        width: 300
+                    }, {
+                        field: 'roleDescription',
+                        title: '角色描述',
+                        width: 500
+                    }, {
+                        field: 'createDate',
+                        title: '创建时间',
+                        width: 300
+                    }]
+                });
+            },
+            queryParams: function (params) {
+                //console.log(params);
+                $.show_overall_loding();
+                var data = {
+                    token: $.getToken(),
+                    pageSize: params.pageSize,
+                    pageNum: params.pageNumber
+                }
+                //console.log(organization.node);
+                var organizationData = organization.getSelectedVal();
+                //console.log(organizationData);
+                if (organizationData.length > 0 && organizationData[0].id != "myTree") {
+                    $.extend(data, {
+                        "organizationId": organizationData[0].id
+                    });
+                } else {
+                    $.extend(data, {
+                        "organizationId": 9999
+                    });
+                }
+                return data;
+            },
+            refresh: function () {
+                $.show_overall_loding();
+                this.node.bootstrapTable('refresh')
+            },
+            getSelectVal: function () {
+                var data = this.node.bootstrapTable('getSelections');
+                return data[0];
+            },
+            bindCreate: function () {
+                var that = this;
+                $("#addRole").on("click", function () {
+                    var data = organization.getSelectedVal();
+                    if (data.length < 1) {
+                        layer.msg("请先选择机构再添加", {
+                            icon: 5
+                        });
+                        return;
+                    }
+                    that.showRoleModel("添加角色", 1);
+                });
+
+                $("#editRole").on("click", function () {
+                    var data = that.node.bootstrapTable('getSelections');
+                    if (data.length == 1) {
+                        url = "";
+                        that.showRoleModel("修改角色", 2);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                $("#getAuthor").on("click", function () {
+                    var data = that.node.bootstrapTable('getSelections');
+                    if (data.length == 1) {
+                        authorTree.showAuthorModel();
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                $("#removeRole").on("click", function () {
+                    var data = that.node.bootstrapTable('getSelections');
+                    if (data.length == 1) {
+                        var conlayer = layer.confirm("确定删除？", {
+                            btn: ['确定', '取消']
+                        }, function () {
+                            $.show_overall_loding();
+                            $.deleteJSON(userServiceUrl + "/role?id=" + data[0].id, {}, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(conlayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    $('#myTable').bootstrapTable('refresh');
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            })
+                        }, function () {
+                            layer.close(conlayer);
+                        });
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+            },
+            showRoleModel: function (title, flag, index) {
+                var that = this;
+                if (flag == 1) {
+                    isAdd = true;
+                } else {
+                    isAdd = false;
+                }
+                html = template("modelRole", {
+                    title: "123"
+                });
+                var myLayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: title,
+                    area: ['500px', '320px'], //宽高
+                    resize: true, //是否拉升
+                    offset: 'auto', //居中
+                    content: html,
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        $("#roleForm").submit();
+                    },
+                    success: function (layero) {
+                        if (flag == 2) {
+                            var data = $("#myTable").bootstrapTable('getSelections')[0];
+                            $("#roleForm").setForm(data);
+                        }
+                    }
+                });
+                var validate = $("#roleForm").validate({
+                    rules: {
+                        roleName: {
+                            required: true
+                        },
+                        roleDescription: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        roleName: {
+                            required: "请输入用户名称"
+                        },
+                        roleDescription: {
+                            required: "请输入登录名称"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        //								var userName = $("#userName").val();
+                        //								var loginName = $("#loginName").val();
+                        //								var userMoble = $("#userMoble").val();
+                        //								var userEmail = $("#userEmail").val();
+                        var data = $("#roleForm").serializeJson();
+                        var organizationData = organization.getSelectedVal();
+                        if (organizationData.length > 0 && organizationData[0].id != "myTree") {
+                            $.extend(data, {
+                                "organizationId": organizationData[0].id
+                            });
+                        }
+                        //console.log(isAdd);
+                        $.show_overall_loding();
+                        if (isAdd) {
+                            $.postJSON(userServiceUrl + "/role", data, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.node.bootstrapTable('refresh');
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            });
+                        } else {
+                            $.putJSON(userServiceUrl + "/role", data, function (data) {
+                                $.hide_overall_loding();
+                                if (data.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.node.bootstrapTable('refresh');
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    var roleTable = new roleTable_option();
+    roleTable.init();
+    roleTable.bindCreate();
+
+    var author = function () {
+        return {
+            node: $("#authorityTree"), //借点
+            data: "", //数据
+            init: function () {
+                var that = this;
+                if (that.data == "") {
+                    $.sanjiGetJSON(userServiceUrl + "/user/menuTree", {isMenu: "1"}, function (data) {
+                        that.data = that.getTreeData(data.data);
+                        that.initData();
+                    });
+                    return true;
+                }
+                that.initData();
+            },
+            initData: function () {
+                var that = this;
+                that.node.treeview({
+                    data: that.data,
+                    levels: 2,
+                    showCheckbox: true,
+                    onNodeChecked: function (event, node) { //选中节点
+                        var selectNodes = getChildNodeIdArr(node); //获取所有子节点
+                        if (selectNodes) { //子节点不为空，则选中所有子节点
+                            that.node.treeview('checkNode', [selectNodes, {
+                                silent: true
+                            }]);
+                        }
+                        // var parentNode = that.node.treeview("getNode", node.parentId);
+                        // setParentNodeCheck(node);
+                    },
+                    onNodeUnchecked: function (event, node) { //取消选中节点
+                        // 取消父节点 子节点取消
+                        var selectNodes = setChildNodeUncheck(node); //获取未被选中的子节点
+                        var childNodes = getChildNodeIdArr(node); //获取所有子节点
+                        if (selectNodes && selectNodes.length == 0) { //有子节点且未被选中的子节点数目为0，则取消选中所有子节点
+                            //console.log("反选");
+                            that.node.treeview('uncheckNode', [childNodes, {
+                                silent: true
+                            }]);
+                        }
+                        //                      // 取消节点 父节点取消
+                        //                      var parentNode = that.node.treeview("getNode", node.parentId); //获取父节点
+                        //                      var selectNodes = getChildNodeIdArr(node);
+                        //                      setParentNodeCheck(node);
+                    }
+                });
+
+                var role = roleTable.getSelectVal();
+                $.show_overall_loding();
+                $.sanjiGetJSON(userServiceUrl + "/role/getAuthority?roleId=" + role.id, {}, function (data) {
+                    $.hide_overall_loding();
+                    if (data.code == 0) {
+                        var list = data.data;
+                        var thatNode = that.node.treeview("getUnselected");
+                        for (var i = 0; i < thatNode.length; i++) {
+                            if (list.indexOf(thatNode[i].id) >= 0) {
+                                that.node.treeview("checkNode", [thatNode[i].nodeId, {
+                                    silent: true
+                                }]);
+                            }
+                        }
+
+                        //                      	for (var i=0;i<list.length;i++) {
+                        //                      		var node=list[i];
+                        //                      		 console.log(node);
+                        //
+                        //                      		 console.log(thatNode);
+                        //                      		 that.node.treeview("checkNode", [thatNode.nodeId, {
+                        //		                            silent: true
+                        //		                       	 }]);
+                        //                      	}
+
+                        //                      that.node.treeview('selectNode', [1, {
+                        //                          silent: true
+                        //                     	 }]);
+                    }
+                });
+
+            },
+            //          getTreeData: function(data) {
+            //              for(var i = 0; i < data.length; i++) {
+            //                  var node = data[i];
+            //                  var one = {};
+            //                  one.text = node.authorityName;
+            //                  one.id = node.id;
+            //                  one.state['checked'] = true;
+            //                  if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+            //                      one.nodes = this.getTreeData(node.childrens);
+            //                  }
+            //                  rdata.push(one);
+            //              }
+            //              return rdata;
+            //          },
+            getTreeData: function (data) {
+                var rdata = [];
+                for (var i = 0; i < data.length; i++) {
+                    var node = data[i];
+                    var one = {};
+                    one.text = node.authorityName;
+                    one.id = node.id;
+                    one.nodeId = node.id;
+                    if (node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                        one.nodes = this.getTreeData(node.childrens);
+                    }
+                    rdata.push(one);
+                }
+                return rdata;
+            },
+            showAuthorModel: function () {
+                var that = this;
+                var _html = template("modelTree", {
+                    title: "123"
+                });
+                var authlayer = layer.open({
+                    type: 1,
+                    title: '菜单权限配置',
+                    closeBtn: 1,
+                    shade: false,
+                    moveType: 0, //拖拽模式，0或者1
+                    maxWidth: 500,
+                    zIndex: layer.zIndex,
+                    content: _html,
+                    area: ['500px', '500px'],
+                    offset: 'auto',
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        var authorarr = that.node.treeview("getChecked");
+                        var authids = [];
+                        for (var i in authorarr) {
+                            authids.push(authorarr[i].id);
+                        }
+                        var role = roleTable.getSelectVal();
+                        var data = {};
+                        data.authorityIds = authids;
+                        data.roleId = role.id;
+                        $.show_overall_loding();
+                        $.postJSON(userServiceUrl + "/role/addAuthority", data, function (data) {
+                            $.hide_overall_loding();
+                            if (data.code == 0) {
+                                layer.close(authlayer);
+                                layer.msg("成功", {
+                                    icon: 1
+                                });
+                                //roleTable.bootstrapTable('refresh');
+                                return true;
+                            }
+                            layer.msg("操作失败", {
+                                icon: 2
+                            });
+                        });
+                    },
+                    success: function (layero) {
+                        that.node = layero.find("#authorityTree");
+                        that.init();
+                    }
+                });
+            }
+        }
+    }
+
+    var authorTree = new author();
+
+    // authorTree.init();
+
+    function getChildNodeIdArr(node) {
+        var ts = [];
+        if (node.nodes) {
+            for (x in node.nodes) {
+                ts.push(node.nodes[x].nodeId);
+                if (node.nodes[x].nodes) {
+                    var getNodeDieDai = getChildNodeIdArr(node.nodes[x]);
+                    for (j in getNodeDieDai) {
+                        ts.push(getNodeDieDai[j]);
+                    }
+                }
+            }
+        } else {
+            ts.push(node.nodeId);
+        }
+        return ts;
+    }
+
+    // 取消父节点时 取消所有子节点
+    function setChildNodeUncheck(node) {
+        if (node.nodes) {
+            var ts = []; //当前节点子集中未被选中的集合
+            for (x in node.nodes) {
+                if (!node.nodes[x].state.checked) {
+                    ts.push(node.nodes[x].nodeId);
+                }
+                if (node.nodes[x].nodes) {
+                    var getNodeDieDai = node.nodes[x];
+                    for (j in getNodeDieDai) {
+
+                        if (!getNodeDieDai.state.checked) {
+                            ts.push(getNodeDieDai[j]);
+                        }
+                    }
+                }
+            }
+        }
+        return ts;
+    }
+
+    function initDatepicker() {
+        // 时间选择
+        jQuery('.js-datetimepicker').each(function () {
+            var $input = jQuery(this);
+            $input.datetimepicker({
+                format: $input.data('format') ? $input.data('format') : false,
+                useCurrent: $input.data('use-current') ? $input.data('use-current') : false,
+                locale: moment.locale('' + ($input.data('locale') ? $input.data('locale') : '') + ''),
+                showTodayButton: $input.data('show-today-button') ? $input.data('show-today-button') : false,
+                showClear: $input.data('show-clear') ? $input.data('show-clear') : false,
+                showClose: $input.data('show-close') ? $input.data('show-close') : false,
+                sideBySide: $input.data('side-by-side') ? $input.data('side-by-side') : false,
+                inline: $input.data('inline') ? $input.data('inline') : false,
+            });
+        });
+
+        // 日期选择
+        jQuery('.js-datepicker').each(function () {
+            var $input = jQuery(this);
+            $input.datepicker({
+                weekStart: 1,
+                autoclose: true,
+                todayHighlight: true,
+                language: 'zh-CN',
+            });
+        });
+    }
+
+    //异步获取当前组织所有楼层
+    function getAllFloor(organizationId, deviceFloor) {
+        $("#deviceFloorId").html('<option value=""> 选择楼层</option>');
+        $.ajax({
+            type: "get",
+            url: userServiceUrl + "/organizationFloor/list",
+            data: {
+                token: $.getToken(),
+                organizationId: organizationId
+            },
+            success: function (resData) {
+                $('#deviceFloorId').change(function () {
+                    var floorId = this.value;
+                    getAllBooth(floorId, '');
+                });
+                let floorList = resData.data.list;
+                if (floorList.length > 0) {
+                    let htmls = '<option value=""> 选择楼层</option>';
+                    for (let i = 0; i < floorList.length; i++) {
+                        let floor = floorList[i];
+                        htmls += '<option value="' + floor.id + '">' + floor.name + '</option>';
+                    }
+                    $("#deviceFloorId").html(htmls);
+                    $("#deviceFloorId").val(deviceFloor);
+
+                }
+            },
+            fail: function (resData) {
+
+            }
+        })
+    }
+
+    //异步获取展位
+    function getAllBooth(floorId, deviceBooth) {
+        $("#deviceBoothId").html('<option value=""> 选择展位</option>');
+        if (floorId == "" || floorId == null) {
+            return;
+        }
+        $.ajax({
+            type: "get",
+            url: userServiceUrl + "/organizationFloorBooth/list",
+            data: {
+                token: $.getToken(),
+                floorId: floorId
+            },
+            success: function (resData) {
+                let boothList = resData.data.list;
+                if (boothList.length > 0) {
+                    let htmls = '<option value=""> 选择展位</option>';
+                    for (let i = 0; i < boothList.length; i++) {
+                        let booth = boothList[i];
+                        htmls += '<option value="' + booth.id + '">' + booth.name + '</option>';
+                    }
+                    $("#deviceBoothId").html(htmls);
+                    $("#deviceBoothId").val(deviceBooth);
+                }
+            },
+            fail: function (resData) {
+
+            }
+        })
+    }
+
+
+</script>
+
+<!--权限新增修改模板-->
+<script type="text/html" id="modelOrg">
+    <section class="openDetail" style="width: 100%;">
+        <div class="panel-body">
+            <form id="orgForm">
+                <div class="row">
+                	<input type="hidden" id="picResolution" />
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label orgShowName">组织机构名称：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="organizationName" name="organizationName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label orgShowDesc">组织机构描述：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="organizationDescription" name="organizationDescription"
+                                   type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">负责人：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="personCharge" name="personCharge" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">联系电话：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="personMobile" name="personMobile" type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-6 MarginPx addEnt addRE">
+                        <label class="layui-form-label">类型：</label>
+                        <div class="layui-input-block">
+                            <select class="form-control" id="type" name="type">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addEnt addRE">
+                        <label class="layui-form-label">企业楼层：</label>
+                        <div class="layui-input-block">
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="deviceFloor"
+                                    id="deviceFloorId" data-live-search="true">
+                                <option value="">请选择楼层</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addEnt addRE">
+                        <label class="layui-form-label">企业展位：</label>
+                        <div class="layui-input-block">
+                            <input type="hidden" class="form-control" id="exhibitionSiteId" name="exhibitionSiteId"
+                                   type="text">
+                            <input type="text" class="form-control" id="exhibitionSiteName" name="exhibitionSiteName"
+                                   type="text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addEnt addRE">
+                        <label class="layui-form-label">选择展位：</label>
+                        <div class="layui-input-block">
+                            <button style="width: 180px;" type="button" class="btn btn-success" id="selectEX"> 选择展区
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addRoom addRE">
+                        <label class="layui-form-label">建设时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="form-control js-datetimepicker" id="constructionTime"
+                                   name="constructionTime" data-format="YYYY-MM-DD HH:mm:ss">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">邮箱：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="personMail" name="personMail" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addRE">
+                        <label class="layui-form-label">状态：</label>
+                        <div class="layui-input-block">
+                            <select class="form-control" id="states" name="states">
+                                <option value="0">未完成</option>
+                                <option value="1">已完成</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addRE">
+                        <label class="layui-form-label">完成时间：</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="form-control js-datetimepicker" id="completionTime"
+                                   name="completionTime" data-format="YYYY-MM-DD HH:mm:ss">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx isShows addRoom addRE">
+                        <label class="layui-form-label">国家：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" value="中国" id="countryName" name="country" type="text"
+                                   readonly="readonly">
+                            <!--<input type="hidden" id="s_country" name="country" />-->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx isShows addRoom addRE">
+                        <label class="layui-form-label">省份：</label>
+                        <div class="layui-input-block">
+                            <!--<input type="hidden" id="s_province"  name="province" />-->
+                            <input class="form-control" id="provinceName" name="province" type="text"
+                                   readonly="readonly">
+                            <!--<div>
+                                <select id="s_province" name="province" style="width: 40%;height: 38px;"></select>
+                                <select id="s_city" name="city" style="width: 57%;height: 38px;"></select>
+                                <select id="s_county" name="county" style="display: none;"></select>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx isShows addRoom addRE">
+                        <label class="layui-form-label">市区：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="cityName" name="city" type="text" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addRoom addRE">
+                        <label class="layui-form-label ">经度：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="longitude" name="longitude" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addRoom addRE">
+                        <label class="layui-form-label">纬度：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="latitude" name="latitude" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx addRoom addRE">
+                        <label class="layui-form-label ">地图定点：</label>
+                        <div class="layui-input-block">
+                            <button style="width: 180px;" type="button" class="btn btn-success" id="showMap"><i
+                                    class="fa fa-map"></i> 选择经纬度
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="boothImageAdd" name="logo"/>
+                    <div class="form-group addEnt addRE">
+                        <label for="imgUrl" class="col-sm-3 control-label">上传logo：</label>
+                        <div class="col-sm-2" style="margin-left: -9%;margin-top: -1%;">
+                            <div id="imgPreview">
+		                            <span id="imgSpan" style="text-align: center;line-height:30px;">
+		                            	只能上传分辨率为120 * 32 的图片
+		                            </span>
+                                <img src="" id="imgUrl"/>
+                            </div>
+                        </div>
+                        <button style="width: 90px;margin-left: 0%;" onclick="triggerInput()" type="button"
+                                class="btn btn-success">选择图片
+                        </button>
+                        <input type="file" id="file" accept="image/jpg,image/jpeg,image/png,image/PNG"
+                               onchange="getPic()" value="" style="display: none"/>
+                    </div>
+                </div>
+
+                <input type="hidden" id="orgId" name="id"/>
+            </form>
+        </div>
+    </section>
+</script>
+<!--角色新增修改模板-->
+<script type="text/html" id="modelRole">
+    <section class="openDetail" style="width: 100%;">
+        <div class="panel-body">
+            <form id="roleForm">
+                <div class="row">
+                    <div class="col-lg-12" style="margin: 20px 0;">
+                        <label class="layui-form-label">角色名称：</label>
+                        <input style="width: 70%;" class="form-control" id="roleName" name="roleName" type="text">
+                    </div>
+                    <div class="col-lg-12" style="margin: 20px 0;">
+                        <label class="layui-form-label">角色描述：</label>
+                        <input style="width: 70%;" class="form-control" id="roleDescription" name="roleDescription"
+                               type="text">
+                    </div>
+                </div>
+                <div class="clearfix" style="margin-bottom: 15px;"></div>
+                <input type="hidden" id="roleId" name="id"/>
+            </form>
+        </div>
+    </section>
+</script>
+
+<!--菜单权限配置模板-->
+<script type="text/html" id="modelTree">
+    <section class="openDetail" style="width: 100%;height:100%">
+        <div>
+            <div class="panel-body" style="width: 100%;height:300px">
+                <div id="authorityTree" style="width: 450px;height: 100%;"></div>
+            </div>
+        </div>
+    </section>
+</script>
+
+<!--显示地图-->
+<script type="text/html" id="modelMap">
+    <div id="allmap"></div>
+    <div id="r-result" style="position: absolute;left: 60px;top: 15px;">
+        <input type="text" id="suggestId" size="20" value="" style="width:200px;" placeholder="搜索地区..."/>
+    </div>
+    <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+</script>
+
+<script type="text/html" id="floorModel">
+    <div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;">
+        <div class="card-header">
+            <h4>管理楼层</h4>
+        </div>
+        <div class="card-body">
+            <!--Start-->
+            <!--平台楼层列表-->
+            <div class="buttons">
+                <button type="button" class="btn btn-primary" id="addFloor"><i
+                        class="fa fa-plus"></i> 新增
+                </button>
+                <button type="button" class="btn btn-info" id="editFloor"><i
+                        class="fa fa-trash-o"></i> 编辑
+                </button>
+                <button type="button" class="btn btn-danger" id="removeFloor"><i
+                        class="fa fa-trash-o"></i> 删除
+                </button>
+                <button type="button" class="btn btn-info" id="managerBooth"><i
+                        class="fa fa-trash-o"></i> 管理展位
+                </button>
+            </div>
+            <div id="myFloorTable"></div>
+        </div>
+    </div>
+</script>
+
+<!--新增/修改楼层模板-->
+<script type="text/html" id="addFloorModel">
+    <section class="openDetail" style="width: 100%;text-align: center">
+        <div class="panel-body">
+            <form class="form-horizontal" id="floorForm">
+                <input type="hidden" id="floorId" name="id"/>
+                <input type="hidden" name="organizationId" id="organizationId"/>
+                <div class="form-group">
+                    <label for="name" class="col-sm-5 control-label">楼层名称：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-5 control-label">楼层svg源码：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="imgSvg" name="imgSvg">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+
+<script type="text/html" id="boothModel">
+    <div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;">
+        <div class="card-header">
+            <h4>管理展位</h4>
+        </div>
+        <div class="card-body">
+            <!--Start-->
+            <!--平台楼层列表-->
+            <div class="buttons">
+                <button type="button" class="btn btn-primary" id="addBooth"><i
+                        class="fa fa-plus"></i> 新增
+                </button>
+                <button type="button" class="btn btn-info" id="editBooth"><i
+                        class="fa fa-trash-o"></i> 编辑
+                </button>
+                <button type="button" class="btn btn-danger" id="removeBooth"><i
+                        class="fa fa-trash-o"></i> 删除
+                </button>
+            </div>
+            <div id="myBoothTable"></div>
+        </div>
+    </div>
+</script>
+
+<!--新增/修改展位模板-->
+<script type="text/html" id="addBoothModel">
+    <section class="openDetail" style="width: 100%;text-align: center">
+        <div class="panel-body">
+            <form class="form-horizontal" id="boothForm">
+                <input type="hidden" id="boothId" name="id"/>
+                <input type="hidden" name="floorId" id="floorId"/>
+                <input type="hidden" name="floorSvg" id="floorSvg"/>
+                <div class="form-group">
+                    <label for="name" class="col-sm-5 control-label">展位名称：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="boothName" name="name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-sm-5 control-label">展位面积/M&sup2;：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="boothArea" name="area">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="boothImage" class="col-sm-5 control-label">展区编号：</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="boothImage" name="boothImage" disabled="disabled">
+                    </div>
+                </div>
+                <div class="col-lg-5 MarginPx " style="margin-left: 34%;">
+                    <button type="button" class="btn btn-success form-control" id="selectBooth"><span id="showTitle">选择展区</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+
+<!-- 选择展区 -->
+<script type="text/html" id="boothList">
+    <section class="openDetail" style="width: 100%; ">
+        <div class="panel-body">
+            <div id="boothTable"></div>
+        </div>
+    </section>
+</script>
+
+<style>
+    label {
+        font-weight: normal;
+    }
+
+    .form-horizontal .control-label {
+        width: 35%;
+    }
+
+    .uploadFileButton {
+        width: 90px;
+        color: #0069d9;
+        height: 25px;
+        background: #2ecc71;
+        border: 1px solid lightgrey;
+        border-radius: 10px;
+    }
+
+    #imgPreview {
+        width: 110px;
+        height: 90px;
+        margin: 5px auto 0px 0px;
+        border: 1px solid lightgrey;
+        text-align: center;
+    }
+
+    #imgSpan {
+        margin: auto;
+    }
+</style>
+<script>
+    function triggerInput() {
+        $("#file").click();
+    }
+
+    function getPic() {
+        let imagePath = $("#file").val();
+        if (imagePath == "") {
+            $("#imgSpan").css("display", "block");
+            $("#imgUrl").attr("src", "");
+            $("#imgUrl").css("display", "none");
+        } else {
+            let reader = new FileReader();
+            reader.readAsDataURL(document.getElementById("file").files[0]);
+            reader.onload = function () {
+                $("#imgUrl").attr("src", this.result);
+            }
+            $("#imgSpan").css("display", "none");
+            $("#imgUrl").css("display", "block");
+
+
+            let formData = new FormData();
+            formData.append("file", $("#file")[0].files[0]);
+            $.ajax({
+                type: "post",
+                url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    $.hide_overall_loding();
+                    if (res.code == 0) {
+                    	var image = new Image();
+						image.src = res.data.filePath;
+						image.onload = function() {
+							picPictureSize = this.width + " * " + this.height
+							$("#picResolution").val(picPictureSize)
+						};
+                    	
+                        $("#boothImageAdd").attr("value", res.data.filePath);
+                    } else {
+                        layer.msg("操作失败", {icon: 2});
+                    }
+                },
+                fail: function () {
+                    layer.msg("操作失败", {icon: 2});
+                }
+            })
+        }
+    }
+
+</script>
+
+</body>
+
+</html>

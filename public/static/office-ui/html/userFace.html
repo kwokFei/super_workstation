@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+
+		<link rel="stylesheet" href="../css/bootstrap-select.css" />
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/bootstrap-select.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+		<!--时间选择插件-->
+		<script src="../js/laydate/laydate.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+
+		<style type="text/css">
+			.MarginPx {
+				margin-top: 30px;
+			}
+			
+			.layui-form-label {
+				width: 130px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>人脸审核管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label class="form-label" for="s_userName">用户名称：</label>
+											<input class="form-control" name="s_userName" id="s_userName" placeholder="用户名称" type="text">
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label class="form-label" for="s_userName">所属部门：</label>
+											<input class="form-control" name="s_organizationName" id="s_organizationName" placeholder="所属部门" type="text">
+										</div>
+									</div>
+									<div class="col-lg-2">
+										<div class="form-group">
+											<label class="form-label" for="s_userName">用户手机：</label>
+											<input class="form-control" name="s_userMobile" id="s_userMobile" placeholder="用户手机" type="text">
+										</div>
+									</div>
+										<div class="col-lg-2">
+										<div class="form-group">
+											<label class="form-label" for="s_userName">审核状态：</label>
+												<select class="form-control selectpickers" style="max-height: 500px;" name="s_userFaceType" id="s_userFaceType" data-live-search="true">
+												<option value="">请选择审核状态</option>
+												<option value="1">待审核</option>
+												<option value="2">审核通过</option>
+												<option value="3">审核失败</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-success" id="search"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--Start-->
+								<!--平台设备位置列表-->
+								<div class="ibox-content">
+									<!--<div id="buttons">
+										<button type="button" class="btn btn-info" id="add_office"><i class="fa fa-plus"></i> 添加会议室</button>
+									</div>-->
+									<div id="myTable">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<div id="loadDiv"></div>
+	</body>
+	<script type="text/javascript">
+		var html;
+		$("#loadDiv").html(loadHtml);
+		var url = "";
+
+		$(".selectpickers").selectpicker('refresh');
+		$(function() {
+			$.show_overall_loding();
+			$('#myTable').bootstrapTable({
+				url: userServiceUrl + "/user/face_list", //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var result = data.data;
+					rdata = result.list;
+					var res = [];
+					res.push({
+						total: result.total,
+						rows: result.list
+					});
+					return res[0];
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					checkbox: true
+				}, {
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'userName',
+					title: '用户名称',
+					width: 300
+				}, {
+					field: 'userMobile',
+					title: '手机号',
+					width: 300
+				}, {
+					field: 'organizationName',
+					title: '所属部门',
+					width: 400
+				}, {
+					field: 'userFaceType',
+					title: '审核状态',
+					width: 400,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 1) {
+							state = '<span style="color:orange">待审核</span>'
+						} else if(value == 2) {
+							state = '<span style="color:green">审核通过</span>'
+						} else {
+							state = '<span style="color:green">审核失败</span>'
+						}
+						return state;
+					}
+				}, {
+					field: 'userFaceImage',
+					title: '人脸头像',
+					align: 'center',
+					width: 400,
+					formatter: function(value, row, index) {
+						return '<img  src=' + value + ' width="100" height="100" class="img-rounded" >';
+					}
+
+				}, {
+					title: "操作",
+					width: 200,
+					clickToSelect: false,
+					formatter: function(value, row, index) {
+						console.log(value);
+						console.log(row);
+						console.log(index);
+						var str =
+							'<button data-toggle="tooltip" title="审核" type="button" onclick="updata(' + index + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>' +
+							'<button data-toggle="tooltip" title="删除" type="button" onclick="del(' + index + ');" class="btn btn-danger tableButton"><i class="fa fa-window-close-o"> </i></button>';
+						return str;
+					},
+
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					organizationName: $("#s_organizationName").val(),
+					userFaceImage: $("#s_userFaceImage").val(),
+					userMobile: $("#s_userMobile").val(),
+					userFaceType: $("#s_userFaceType").val(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber
+				};
+			}
+
+			html = template("modelWin", {
+				title: "123"
+			});
+		});
+
+		$("#search").click(function() {
+			$.show_overall_loding();
+			$('#myTable').bootstrapTable('refresh');
+		});
+
+		$("#clean").click(function() {
+			$("#s_roomName").val("");
+			$(".selectpickers").val("");
+			$(".selectpickers").selectpicker('refresh');
+			$("#search").trigger("click");
+		});
+		function updata(obj){
+			var area = ['500px', '340px'];
+			var btn = ['提交', '取消'];
+			html = template("modelWin", {
+				title: "123"
+			});
+			var one = $("#myTable").bootstrapTable('getData')[obj];
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: ["审核人脸", ""],
+				area: area, //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: btn,
+				yes: function(index, layero) {
+					var conlayer = layer.confirm("是否确定审核？", {
+						btn: ['确定', '取消']
+					}, function() {
+						$.show_overall_loding();
+						$.putJSON(userServiceUrl + "/user/updateFace", {
+							id:one.id,
+							userFaceType:$("#userFaceType").val()
+						}, function(data) {
+							$.show_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$.show_overall_loding();
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						})
+					}, function() {
+						layer.close(conlayer);
+					});
+				},
+				success: function(layero) {
+					$("#userFaceType").selectpicker('refresh');
+				}
+			});
+		}
+		
+		function del(obj) {
+			var data = $("#myTable").bootstrapTable('getData');
+			var conlayer = layer.confirm("是否确定删除？删除后用户的人脸将不可用，需要重新上传审核才能复用", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.putJSON(userServiceUrl + "/user/updateFace", {
+					id:data[obj].id,
+					userFaceType:0
+				}, function(data) {
+					$.show_overall_loding();
+					if(data.code == 0) {
+						layer.close(conlayer);
+						layer.msg("成功", {
+							icon: 1
+						});
+						$.show_overall_loding();
+						$('#myTable').bootstrapTable('refresh');
+						return true;
+					}
+					layer.msg("操作失败", {
+						icon: 2
+					});
+				})
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+	</script>
+
+	<!--模式新增修改模板-->
+<script type="text/html" id="modelWin">
+		<section class="openDetail" style="width: 95%; margin-top: 20px;">
+			<div class="panel-body">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-12 MarginPx">
+							<label class="layui-form-label">审核状态:</label>
+							<div class="layui-input-block">
+								<select class="form-control selectpickers" style="max-height: 500px;" name="userFaceType" id="userFaceType" data-live-search="true">
+									<option value="2">审核通过</option>
+									<option value="3">审核失败</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+</html>

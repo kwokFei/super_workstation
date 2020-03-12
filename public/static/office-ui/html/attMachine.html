@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>海克斯后台管理系统</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="../css/style.min.css" rel="stylesheet">
+	<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+	<link href="../css/commonStyle.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="../css/bootstrap-select.css" />
+	<link rel="stylesheet" href="../css/layui.css" />
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/bootstrap-select.js"></script>
+	<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../plus/layer/layer.js"></script>
+	<script src="../js/template-web.js"></script>
+	<script src="../plus/validate/jquery.validate.min.js"></script>
+	<script src="../plus/validate/messages_zh.min.js"></script>
+	<script src="../js/bootstrap-treeview.js"></script>
+
+	<!--		<script src="../js/httpUtils.js"></script>-->
+	<!--<script src="../js/Md5.js"></script>-->
+
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BLmvFHqpvs06ks32cjabm9ZldnvhFVBW"></script>
+	<style type="text/css">
+		#DemoBox {
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			left: 50%;
+			top: 50%;
+			z-index: 9999;
+			transform: translate(-50%, -50%);
+			overflow: hidden;
+			background: rgba(0, 0, 0, 0.2);
+		}
+
+		.dropdown-menu .inner {
+			height: 350px;
+		}
+
+		#allmap {
+			width: 745px;
+			height: 455px;
+			left: 0;
+			top: 0;
+			position: absolute;
+			background-color: #FFFFFF;
+		}
+
+		.ss_cont {
+			background-color: white;
+			width: 700px;
+			height: 600px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			z-index: 9999;
+			transform: translate(-50%, -50%);
+			overflow: hidden;
+			box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+		}
+
+		#Example2 {
+			/*border: 1px solid red;*/
+			width: 700px;
+			height: 600px;
+		}
+
+		.goOut {
+			position: relative;
+			/*border: 1px solid red;*/
+			height: 40px;
+			line-height: 40px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+			background: #f8f8f8;
+		}
+
+		.goOut i {
+			height: 20px;
+			width: 20px;
+			/*border: 1px solid red;*/
+			position: absolute;
+			top: 0;
+			right: 35px;
+			cursor: pointer;
+		}
+	</style>
+</head>
+
+<body>
+<main>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4>设备管理</h4>
+					</div>
+					<div class="card-body">
+						<div class="ibox-content row">
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">设备名称：</label>
+									<input class="form-control" name="s_deviceAlias" id="s_deviceAlias" placeholder="设备名称" type="text">
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">所属位置：</label>
+									<input class="form-control organizationInput position-box" id="s_positionName" name="s_positionName" type="text" onclick="$('#s_positionTree').show();" placeholder="所属位置" readonly="readonly" style="cursor: pointer">
+									<input type="hidden" id="s_positionId" name="s_positionId" value="">
+									<div id="s_positionTree" style="display: none; width: 250px; position: absolute;z-index: 999;background-color: #FFF;"></div>
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">所属机构：</label>
+									<input class="form-control organizationInput position-box" id="s_organization" name="s_organization" type="text" onclick="$('#s_organizationTree').show();" placeholder="所属机构" readonly="readonly" style="cursor: pointer">
+									<input type="hidden" id="s_organizationId" name="s_organizationId" value="">
+									<div id="s_organizationTree" style="display: none; width: 250px;position: absolute;z-index: 999;background-color: #FFF;"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="ibox-content row">
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">订阅账号：</label>
+									<input class="form-control" name="s_deviceSubscriberNumber" id="s_deviceSubscriberNumber" placeholder="订阅账号" type="text">
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">序列编号：</label>
+									<input class="form-control" name="s_serialNum" id="s_serialNum" placeholder="序列编号" type="text">
+								</div>
+							</div>
+							<div class="col-lg-1">
+								<div class="form-group">
+									<div id="buttons" style="margin-top: 24px;">
+										<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-1">
+								<div class="form-group">
+									<div id="buttons" style="margin-top: 24px;">
+										<button type="button" class="btn btn-success" id="search"><i class="fa fa-search"></i> 查询</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--Start-->
+						<!--平台设备位置列表-->
+						<div class="ibox-content">
+							<div id="buttons">
+								<button type="button" class="btn btn-info" id="machineSet"><i class="fa fa-save"></i> 配置打卡机</button>
+							</div>
+							<div id="myTable">
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+<div id="loadDiv"></div>
+</body>
+<script type="text/javascript">
+    var html;
+    $("#loadDiv").html(loadHtml)
+    var userLongName = $.getCookie("userName");
+    var userIdd = $.getCookie("userId");
+    $(function() {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: deviceServiceUrl + "/device/list", //请求后台的URL（*）
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function(data) {
+                var result = data.data;
+                rdata = result.list;
+                var res = [];
+                res.push({
+                    total: result.total,
+                    rows: result.list
+                });
+                return res[0];
+            },
+            onDblClickRow: function(row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function(value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'deviceAlias',
+                title: '设备名称',
+                width: 300
+            }, {
+                field: 'serialNum',
+                title: '序列编号',
+                width: 400
+            }, {
+                field: 'organizationName',
+                title: '所属机构',
+                width: 300
+            }, {
+                field: 'isAttendanceMachine',
+                title: '是否考勤机',
+                width: 200,
+                formatter: function(value, row, index) {
+                    var state = "";
+                    if(value == 0) {
+                        state = '<span style="color:green">取消考勤机</span>'
+                    } else if(value == 1) {
+                        state = '<span style="color:green">设定考勤机</span>'
+                    }
+                    return state;
+                }
+            }, {
+                title: "操作",
+                width: 200,
+                clickToSelect: false,
+                formatter: function(i1, i2, i3) {
+                    var str =
+                        '<button data-toggle="tooltip" title="考勤打卡" type="button" onclick="attMachineClick(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-play-circle"></i></button>'
+                    return str;
+                },
+                cellStyle: function() {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            $.show_overall_loding();
+            return {
+                token: $.getToken(),
+                isScreenOrganization: 1,
+                deviceAlias: $("#s_deviceAlias").val(),
+                deviceSubscriberNumber: $("#s_deviceSubscriberNumber").val(),
+                productCode: "00000345",
+                serialNum: $("#s_serialNum").val(),
+                sorganizationId: $("#s_organizationId").val(),
+                positionId: $("#s_positionId").val(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber
+            };
+        }
+    });
+
+    $("#search").click(function() {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable('refresh');
+    });
+
+
+    $("#clean").click(function() {
+        $("#s_deviceAlias").val("");
+        $("#s_deviceSubscriberNumber").val("");
+        $("#s_productCode").val("");
+        $("#s_serialNum").val("");
+        $("#s_organizationId").val("");
+        $("#s_positionId").val("");
+        $("#s_organization").val("");
+        $("#s_positionName").val("");
+        $("#search").trigger("click");
+    });
+
+
+    /*考勤打卡*/
+    function attMachineClick (obj) {
+        var data = $("#myTable").bootstrapTable('getData');
+        /*if(data[obj].isAttendanceMachine == 0){
+			layer.msg('当前设备不是考勤机',{icon: 5});
+            return;
+		}*/
+        var conlayer = layer.confirm("确认" + " " + userLongName + " " + "打卡?", {
+            btn: ['确定', '取消']
+        }, function() {
+            $.show_overall_loding();
+            $.postJSON(deviceServiceUrl + "/amtCon", {
+                "userId":userIdd,
+                "dkTime":frontOneHour('yyyy-MM-dd hh:mm:ss'),
+				"deviceId":data[obj].id
+            }, function(data) {
+                $.hide_overall_loding();
+                if(data.code == 0) {
+                    layer.close(conlayer);
+                    layer.msg("成功", {
+                        icon: 1
+                    });
+                    $.show_overall_loding();
+                    $('#myTable').bootstrapTable('refresh');
+                    return true;
+                }
+                else {
+                    if(data.code == 401000) {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    } else if(data.messages != null) {
+                        parent.layer.msg(data.messages[0].error, {
+                            icon: 5
+                        });
+                    } else {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            });
+        }, function() {
+            layer.close(conlayer);
+        });
+    }
+
+
+    /*时间格式化*/
+    function frontOneHour (fmt) {
+        var currentTime = new Date(new Date().getTime())
+        console.log(currentTime) // Wed Jun 20 2018 16:12:12 GMT+0800 (中国标准时间)
+        var o = {
+            'M+': currentTime.getMonth() + 1, // 月份
+            'd+': currentTime.getDate(), // 日
+            'h+': currentTime.getHours(), // 小时
+            'm+': currentTime.getMinutes(), // 分
+            's+': currentTime.getSeconds(), // 秒
+            'q+': Math.floor((currentTime.getMonth() + 3) / 3), // 季度
+            'S': currentTime.getMilliseconds() // 毫秒
+        }
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (currentTime.getFullYear() + '').substr(4 - RegExp.$1.length))
+        for (var k in o) {
+            if (new RegExp('(' + k + ')').test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+        }
+        return fmt
+    }
+
+
+    /*配置打卡机*/
+    $("#machineSet").click(function () {
+        var list = $("#myTable").bootstrapTable('getSelections');
+        console.log(list);
+        if (list.length < 1) {
+            layer.msg("请先选择要设定考勤机", {
+                icon: 2
+            });
+            return;
+        }
+        var myLayer = layer.open({
+            skin: 'card', //自定义样式winning-class
+            title: "设定考勤机",
+            area: ['500px', '250px'],
+            resize: true, //是否拉升
+            offset: 'auto', //居中
+            content: template("modelMachineWin", {
+                title: "123"
+            }),
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                var ids = [];
+                for (var i = 0; i < list.length; i++) {
+                    var one = list[i];
+                    ids.push(one.id);
+                }
+                var isAttendanceMachine = $('#isAttendanceMachine  option:selected').val();
+                // $.show_overall_loding();
+                $.putJSON(deviceServiceUrl + "/device/batchUpMachine", {
+                    'isAttendanceMachine': isAttendanceMachine,
+                    'deviceIds': ids
+                }, function (data) {
+                    $.hide_overall_loding();
+                    if (data.code == 0) {
+                        parent.layer.msg("操作成功", {
+                            icon: 6
+                        });
+                        layer.close(myLayer);
+                        $('#myTable').bootstrapTable('refresh');
+                        return true;
+                    } else {
+                        $('#myTable').bootstrapTable('refresh');
+                        if (data.code == 401000) {
+                            parent.layer.msg(data.message, {
+                                icon: 5
+                            });
+                        } else if (data.messages != null) {
+                            parent.layer.msg(data.messages[0].error, {
+                                icon: 5
+                            });
+                        } else {
+                            parent.layer.msg(data.message, {
+                                icon: 5
+                            });
+                        }
+                    }
+                });
+            },
+            success: function (layero) {
+            }
+        })
+    });
+
+    var organizationData = "";
+    function get_o_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.organizationName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_o_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+    function s_init_o_Tree() {
+        if(organizationData == "") {
+            $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+                organizationData = get_o_TreeData(data.data);
+                s_initTreeData();
+            });
+            return;
+        }
+        s_initTreeData();
+    }
+    function s_initTreeData() {
+        var options = {
+            checkedIcon: "glyphicon glyphicon-check",
+            nodeIcon: "none", //所有节点的默认图标
+            levels: 1,
+            data: organizationData,
+            // onhoverColor: "rgba(255,255,255,0.9)",
+            onhoverColor: "rgba(0,0,0,0.1)",
+            onNodeSelected: function(event, data) {
+                $("#s_organization").val(data.text);
+                $("#s_organizationId").val(data.id);
+                $("#s_organizationTree").hide();
+            }
+        };
+        $('#s_organizationTree').treeview(options);
+    }
+    s_init_o_Tree();
+
+    var positionData = "";
+    function get_p_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.devicePositionName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_p_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+    function s_init_p_Tree() {
+        if(positionData == "") {
+            $.sanjiGetJSON(deviceServiceUrl + "/devicess/treeList", {}, function(data) {
+                positionData = get_p_TreeData(data.data);
+                s_init_p_TreeData();
+            });
+            return;
+        }
+        s_init_p_TreeData();
+    }
+    function s_init_p_TreeData() {
+        var options = {
+            checkedIcon: "glyphicon glyphicon-check",
+            nodeIcon: "none", //所有节点的默认图标
+            levels: 1,
+            data: positionData,
+            // onhoverColor: "rgba(255,255,255,0.9)",
+            onhoverColor: "rgba(0,0,0,0.1)",
+            onNodeSelected: function(event, data) {
+                $("#s_positionName").val(data.text);
+                $("#s_positionId").val(data.id);
+                $("#s_positionTree").hide();
+            }
+        };
+        $('#s_positionTree').treeview(options);
+    }
+    s_init_p_Tree();
+</script>
+
+<!--配置风盘-->
+<script type="text/html" id="modelMachineWin">
+	<section class="openDetail" style="width: 95%; margin-top: 20px;">
+		<div class="panel-body">
+			<div class="layui-row layui-col-space10 layui-form-item">
+				<div class="col-lg-12">
+					<label class="layui-form-label">配置设备：</label>
+					<div class="layui-input-block">
+						<select class="form-control" id="isAttendanceMachine" name="isAttendanceMachine">
+							<option value="0">取消考勤机</option>
+							<option value="1">设定考勤机</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</script>
+
+<script>
+    $(document).bind("click", function (e) {
+        var con_one = $(".position-box");// 设置目标区域
+        // console.info(con_one);
+        var f = 'expand-icon';	//点击treeView的加号图标不隐藏
+        if (!con_one.is(e.target) && con_one.has(e.target).length === 0 && !e.target.classList.contains(f)) {
+            $("#s_positionTree").hide();//需要隐藏的元素
+            $("#s_organizationTree").hide();//需要隐藏的元素
+        }
+    });
+</script>
+
+</html>

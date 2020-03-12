@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body,html{
+            height: 100%;
+            width: 100%;
+            ;
+            padding: 0.2rem;
+            font-font: "微软雅黑";
+        }
+        html {
+            font-size: calc(100vw * 100 / 1920);
+        }
+        .oneBox{
+            margin-top: 0.1rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .oneBox .oneItem{
+            width: 6rem;
+            height: 2.6rem;
+            border-radius: 0.1rem;
+            overflow: hidden;
+        }
+        .oneBox .oneItem:nth-child(1){
+            background-color: #c12d3b;
+        }
+        .oneBox .oneItem:nth-child(2){
+            background-color: #333399;
+        }
+        .oneBox .oneItem:nth-child(3){
+            background-color: #f09f1c;
+        }
+        .oneBox .oneItem .header{
+            height: 0.6rem;
+            line-height: 0.6rem;
+            width: 100%;
+            padding-left: 0.2rem;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .oneBox .oneItem .header img{
+            width: 0.22rem;
+            height: 0.22rem;
+        }
+        .oneBox .oneItem .header span{
+            font-size: 0.3rem;
+            margin-left:0.05rem;
+
+        }
+        .numberList{
+            margin-top: 0.3rem;
+            width: 100%;
+            font-size: 0.26rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+        }
+        .numberList .numberItem{
+            text-align: center;
+            margin: 0 0.2rem;
+        }
+        .infoBox{
+            width: 100%;
+            height: 0.6rem;
+            display: flex;
+            font-size: 0.3rem;
+            font-weight: bold;
+            color: white;
+            line-height: 0.6rem;
+        }
+        .infoBox span{
+            display: inline-block;
+        }
+        .infoBox span:nth-child(1){
+            width: 40%;
+            text-align: right;
+        }
+        .infoBox span:nth-child(2){
+            width:60%;
+            text-align: center;
+        }
+        .listBox{
+            width: 100%;
+            font-size: 0.24rem;
+            color:white;
+            height: 0.48rem;
+            line-height: 0.48rem;
+            padding-left: 0.1rem;
+        }
+        .listBox span{
+            display: inline-block;
+        }
+        .listBox span:nth-child(3){
+            margin-left: 1rem;
+        }
+        .twoBox{
+            width: 100%;
+            margin-top: 0.2rem;
+            height: 3.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .twoBox .twoLeft{
+            border-radius: 0.1rem;
+            height: 100%;
+            width:32%;
+            background-color: white;
+        }
+        .twoBox .twoRight{
+            border-radius: 0.1rem;
+            width:66%;
+            height: 100%;
+            background-color: white;
+        }
+        .title{
+            font-size: 0.3rem;
+            color: black;
+            height: 0.6rem;
+            line-height: 0.6rem;
+        }
+        .title img{
+            margin-left: 0.2rem;
+            width: 0.2rem;
+            height: 0.2rem;
+        }
+        .threeBox{
+            width: 100%;
+            background-color: white;
+            margin-top: 0.3rem;
+            height: 6rem;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div class="oneBox">
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/zm/zm0.png" alt="">
+            <span>设备数量</span>
+        </div>
+        <div class="numberList">
+            <span class="numberItem">
+                <span style="font-size: 0.42rem">300 <span style="font-size: 0.24rem">个</span></span>
+                <br>
+                <span>开启</span>
+            </span>
+            <span class="numberItem">
+                <span style="font-size: 0.42rem">300 <span style="font-size: 0.24rem">个</span></span>
+                <br>
+                <span>关闭</span>
+            </span>
+            <span class="numberItem">
+                <span style="font-size: 0.42rem">300 <span style="font-size: 0.24rem">个</span></span>
+                <br>
+                <span>故障</span>
+            </span>
+        </div>
+    </div>
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/zm/zm02.png" alt="">
+            <span>设备报警信息</span>
+        </div>
+        <p class="infoBox" style="margin-top: 0.3rem">
+            <span>今日离线</span>
+            <span>2 次</span>
+        </p>
+        <p class="infoBox">
+            <span>近7日离线</span>
+            <span>2 次</span>
+        </p>
+    </div>
+    <div class="oneItem">
+        <div class="header">
+            <img src="../img/zm/zm03.png" alt="">
+            <span>设备日志</span>
+        </div>
+        <div class="listBox">
+            <span>1.</span>
+            <span>0312546设备打开成功！</span>
+            <span>2019-04-01   12:00</span>
+        </div>
+        <div class="listBox">
+            <span>2.</span>
+            <span>0312546设备打开成功！</span>
+            <span>2019-04-01   12:00</span>
+        </div>
+        <div class="listBox">
+            <span>3.</span>
+            <span>0312546设备打开成功！</span>
+            <span>2019-04-01   12:00</span>
+        </div>
+        <div class="listBox">
+            <span>4.</span>
+            <span>0312546设备打开成功！</span>
+            <span>2019-04-01   12:00</span>
+        </div>
+    </div>
+</div>
+<div class="twoBox">
+    <div class="twoLeft">
+        <div class="title">
+            <img src="../img/icon/icon04.png" alt="">
+            <span>故障维修</span>
+        </div>
+        <div style="width: 100%;margin-top: 0.5rem">
+            <p class="infoBox" style="color: black;margin: 0.2rem 0;">
+                <span>故障总数</span>
+                <span>28次</span>
+            </p>
+            <p class="infoBox" style="color: black;margin: 0.2rem 0;">
+                <span>维修派遣</span>
+                <span>18次</span>
+            </p>
+        </div>
+    </div>
+    <div class="twoRight">
+        <div id="main01" style="width: 100%;height: 200px;"></div>
+    </div>
+</div>
+<div class="threeBox">
+    <div class="title" style="position: absolute;top:0;left: 0;">
+        <img src="../img/zm/zm05.png" alt="">
+        <span>运行统计</span>
+    </div>
+    <div id="main02" style="width: 100%;height: 360px;"></div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById('main01'));
+
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '设备故障 '
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['今天']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name:'',
+                type:'line',
+                stack: '总量',
+                data:[12, 13, 10, 13, 9, 23, 21,12, 13, 10, 13, 9, 23, 21,10]
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+</script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    let myChart02 = echarts.init(document.getElementById('main02'));
+
+    // 指定图表的配置项和数据
+    option = {
+        xAxis: [{
+            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            axisLabel: {
+                interval: 0,
+                show: false
+            },
+        },{
+            data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00'],
+            axisLabel: {
+                interval: 0,
+                show: true
+            },
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            gridIndex: 1
+        }],
+        yAxis: [{
+            type: 'value',
+            show: true
+        },{
+            gridIndex: 1,
+            show: false,
+        }],
+        grid: [{
+            width: '80%',
+            left: '10%'
+        },{
+            left: '13.3%',
+            width: '80%'
+        }],
+        series: [
+            {
+                type: 'bar',
+                barWidth: 10,
+                data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
+                itemStyle: {
+                    barBorderRadius: 10,
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: '#37FFF9' // 0% 处的颜色
+                        }, {
+                            offset: 1, color: 'rgba(0, 222, 215, 0.2)' // 100% 处的颜色
+                        }],
+                    }
+                }
+
+            },
+            {
+                type: 'bar',
+                barWidth: 10,
+                data: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+                itemStyle: {
+                    barBorderRadius: 10,
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: '#FF5624' // 0% 处的颜色
+                        }, {
+                            offset: 1, color: 'rgba(255, 86, 36, 0.2)' // 100% 处的颜色
+                        }],
+                    }
+                }
+            },
+            {
+                type: 'bar',
+                barWidth: 10,
+                data: [10, 15, 30, 20, 35, 40, 35, 50, 45, 60, 55,30],
+                itemStyle: {
+                    barBorderRadius: 10,
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: '#ff38ab' // 0% 处的颜色
+                        }, {
+                            offset: 1, color: 'rgba(255, 86, 36, 0.2)' // 100% 处的颜色
+                        }],
+                    }
+                }
+            },
+            {
+                type: 'bar',
+                barWidth: 10,
+                data: [5, 10, 15, 40, 25, 20, 30, 40, 15, 50, 25, 20],
+                itemStyle: {
+                    barBorderRadius: 10,
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: '#2ac9ff' // 0% 处的颜色
+                        }, {
+                            offset: 1, color: 'rgba(255, 86, 36, 0.2)' // 100% 处的颜色
+                        }],
+                    }
+                }
+            },
+        ]
+    };
+
+
+    myChart02.setOption(option);
+</script>
+</body>
+</html>

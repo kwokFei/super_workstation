@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>sensor</title>
+    <link rel="stylesheet" href="../../css/elementUI.css">
+    <link rel="stylesheet" href="../../css/basicStyle.css">
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/elementUI.js"></script>
+    <style >
+
+        [v-cloak]{
+            display: none;
+        }
+        #sensor {
+            display: flex;
+            justify-content: center;
+            /*flex-direction: column;*/
+        }
+
+        #sensor:before {
+            display: table;
+            content: "";
+        }
+
+        .contentBox {
+            width: 100%;
+            /*height: 89%;*/
+            background-color: #ffffff;
+            margin: 0.2rem;
+            padding: 2%;
+            position: relative;
+            /*overflow: auto;*/
+        }
+
+        .line, .table {
+            width: 100%;
+            margin-bottom: 0.6rem;
+        }
+
+        .line > ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        /*三角形按钮旋转*/
+        .ulChecked {
+            transform: rotate(90deg) !important;
+        }
+
+        .textHidden {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /*订阅账号*/
+
+        .line > ul:first-child {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .contentBox > .line > ul > li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            /*width: 270px;*/
+            margin-bottom: 1.5%;
+
+        }
+
+        .contentBox>.line:first-child{
+            margin-bottom: 0;
+        }
+
+        .line > ul > li > span:first-child {
+            display: inline-block;
+            /*width: 32%;*/
+            width: 0.9rem;
+            text-align: right;
+            font-size: 0.16rem;
+            /*font-size: 16px;*/
+            position: relative;
+            min-width: 60px;
+        }
+
+        .line > ul > li > span:nth-child(2),
+        .line > ul > li > input {
+            width: 200px;
+            height: 26px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            border: solid 1px #bfbfbf;
+            line-height: 26px;
+            position: relative;
+            margin-left: 3%;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+
+        }
+        .line > ul > li > span:nth-child(2)>span,
+        .line > ul > li > input{
+            font-size: 0.16rem;
+        }
+
+
+        .line > ul > li > span:nth-child(2) > img {
+            width: 0.08rem;
+            height: 0.16rem;
+        }
+
+        /*!*设备正品码*!*/
+        .contentBox > .line:nth-child(2) {
+            display: flex;
+            align-items: center;
+            margin: 0 0 1.5% 0;
+        }
+
+        .contentBox > .line > ul > .btns {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+
+        .contentBox > .line:nth-child(3) > .btns {
+            justify-content: flex-end;
+        }
+
+        .contentBox > .line:nth-child(3) > .btns > button {
+            background-color: #333399
+        }
+
+        .contentBox > .line > ul > li > .btn,
+        .table > ul > li > span > button {
+            /*width: 26%;*/
+            width: 70px;
+            height: 26px;
+            background-color: #333399;
+            border-radius: 4px;
+            color: #ffffff;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            line-height: 26px;
+            /*margin-right: 0.1rem;*/
+            cursor: pointer;
+        }
+        .contentBox > .line > ul > .btns > button:first-child{
+            margin-right: 0.1rem;
+        }
+
+
+        /*添加 按钮行*/
+        .line > .btns {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+        }
+
+        .line > .btns > button {
+            width: 70px;
+            height: 26px;
+            line-height: 26px;
+            background-color: #333399;
+            border-radius: 0.04rem;
+            color: #ffffff;
+            margin-right: 0.7%;
+        }
+
+        .line > .btns > button:last-child {
+            background-color: #999999;
+        }
+
+        /*表格*/
+        /*.table {*/
+        /*height: 386px;*/
+        /*overflow-y: hidden;*/
+        /*}*/
+
+        .table > ul > li {
+            text-align: left;
+            height: 35px;
+            margin-left: 1px;
+        }
+
+        .table > ul > li > span {
+            display: inline-block;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            border: solid 1px #cccccc;
+            margin: 0px 0px -1px -1px;
+            color: #333333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-max-size: 14px;
+            font-min-size: 14px;
+
+        }
+
+        .table > ul > li:first-child > span {
+            background-color: #EAEAF5;
+
+        }
+
+        .table > ul > li > span:first-child {
+            width: 3%;
+        }
+
+        .table > ul > li > span:nth-child(2) {
+            width: 2.7%;
+        }
+
+        .table > ul > li > span:nth-child(3) {
+            width: 8%;
+        }
+
+        .table > ul > li > span:nth-child(4) {
+            width: 8%;
+        }
+
+        .table > ul > li > span:nth-child(5) {
+            width: 6%;
+        }
+
+        .table > ul > li > span:nth-child(6) {
+            width: 11%;
+        }
+
+        .table > ul > li > span:nth-child(7) {
+            width: 9%;
+        }
+
+        .table > ul > li > span:nth-child(8) {
+            width: 5%;
+        }
+
+        .table > ul > li > span:nth-child(9) {
+            width: 6%;
+        }
+
+        .table > ul > li > span:nth-child(10) {
+            width: 7%;
+        }
+
+        .table > ul > li > span:nth-child(11) {
+            width: 8%;
+        }
+
+        .table > ul > li > span:nth-child(12) {
+            width: 9%;
+        }
+
+        .table > ul > li > span:nth-child(13) {
+            width: 4%;
+        }
+
+        .table > ul > li > span:nth-child(14) {
+            width: 14%;
+
+        }
+
+        .table > ul > li > span > button {
+            height: 20px;
+            line-height: 20px;
+            width: 20%;
+        }
+
+        .table > ul > li > span > button:first-child {
+            width: 33%;
+            min-width: 55px;
+        }
+
+        .table > ul > li > span > button:nth-child(2) {
+            margin: 0 0.05rem;
+            background: #3366CC;
+        }
+
+        .table > ul > li > span > button:last-child {
+            background: #FF3333;
+        }
+
+        .paging {
+            width: 100%;
+            /*height: 0.24rem;*/
+            min-height: 24px;
+            position: absolute;
+            bottom: 2%;
+            left: 0;
+            padding: 0 2%;
+        }
+
+        .paging > div {
+            width: 100%;
+            height: 100%;
+            /*background: blue;*/
+        }
+
+        /*蒙版*/
+        .mask {
+            width: calc(100%);
+            height: calc(100%);
+            background-color: rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-width: 1000px;
+        }
+
+        .maskBox {
+            width: 73%;
+            /*height: 33.5%;*/
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 1%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            min-width: 371px;
+        }
+
+        .maskBox > .line {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0.2rem;
+        }
+
+        .maskBox > .line:first-child {
+            justify-content: space-between;
+        }
+
+        .maskBox > .line:first-child > span {
+            font-size: 0.18rem;
+        }
+
+        .maskBox > .line:first-child > img {
+            width: 0.16rem;
+            cursor: pointer;
+        }
+
+        .maskBox > .line:nth-child(2) {
+            justify-content: flex-start;
+            color: #333333;
+            opacity: 0.6;
+            font-size: 0.16rem;
+        }
+
+        .maskBox .line > span {
+            display: inline-block;
+        }
+
+        .maskBox .line > span:first-child {
+            width: 31%;
+            text-align: left;
+        }
+
+        .maskBox .line > span:nth-child(2),
+        .maskBox .line > input {
+            width: 47%;
+            height: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+            position: relative;
+            cursor: pointer;
+            background-color: #ffffff;
+            border-radius: 0.04rem;
+            border: solid 0.01rem #a0a0a0;
+        }
+
+        .maskBox .line > span:nth-child(2) > span,
+        .maskBox .line > input {
+            color: #333333;
+        }
+
+        .maskBox .line > span > ul,
+        .line > ul > li > span:nth-child(2) > ul {
+            position: absolute;
+            left: 0;
+            top: 24px;
+            z-index: 100;
+            width: 100%;
+            max-height: 80px;
+            overflow-y: auto;
+            background: #d7d4d4;
+        }
+
+        .line > ul > li > span:nth-child(2) > ul {
+            max-height: 100px;
+        }
+
+        .maskBox .line > span > ul > li {
+            height: 20px;
+            line-height: 20px;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        .line > ul > li > span:nth-child(2) > ul > li {
+            height: 25px;
+            line-height: 25px;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        .maskBox .line > span > ul > li:hover,
+        .line > ul > li > span:nth-child(2) > ul > li:hover {
+            background: #333399;
+            color: #FFFFFF;
+        }
+
+        .maskBox .line > button {
+            width: 0.8rem;
+            min-width: 80px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            margin: 0 3%;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 0.14rem;
+        }
+
+        .maskBox .line > button:last-child {
+            background-color: #333399;
+        }
+
+        .import > .line:nth-child(2) {
+            padding: 5%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .import > .line:nth-child(2) > p {
+            font-size: 0.18rem;
+        }
+
+        .import > .line:nth-child(2) > img {
+            width: 30%;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .mask .table > ul > li > span:first-child {
+            width: 5.2%;
+        }
+
+        .mask .table > ul > li > span:nth-child(2) {
+            width: 4.7%;
+        }
+
+        .mask .table > ul > li > span:nth-child(3) {
+            width: 12.7%;
+        }
+
+        .mask .table > ul > li > span:nth-child(4) {
+            width: 14.7%;
+        }
+
+        .mask .table > ul > li > span:nth-child(5) {
+            width: 10.94%;
+        }
+
+        .mask .table > ul > li > span:nth-child(6) {
+            width: 18.1%;
+        }
+
+        .mask .table > ul > li > span:nth-child(7) {
+            width: 15.1%;
+        }
+        .mask .table > ul > li > span:nth-child(8) {
+            width: 8.1%;
+        }
+        .mask .table > ul > li > span:nth-child(9) {
+            width: 11.1%;
+        }
+
+        .maskBox .table {
+            max-height: 144px;
+            overflow-y: auto;
+        }
+        /*蒙版*/
+        .mask {
+            width: calc(100%);
+            height: calc(100%);
+            background-color: rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-width: 1000px;
+        }
+
+        .import,
+        .promptBox{
+            width: 25.7%;
+            /*height: 41.8%;*/
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 1%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            min-width: 371px;
+        }
+
+        .import > .line {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5.9%;
+        }
+
+        .maskBox > .line:first-child {
+            justify-content: space-between;
+        }
+
+        .maskBox > .line:first-child > span {
+            font-size: 0.18rem;
+        }
+
+        /*.maskBox > .line:first-child > img {*/
+        /*    width: 4.5%;*/
+        /*    cursor: pointer;*/
+        /*}*/
+
+        .maskBox .line > span {
+            display: inline-block;
+        }
+
+        .maskBox .line > span:first-child {
+            width: 30%;
+            text-align: left;
+        }
+
+        .maskBox .line > span:nth-child(2),
+        .maskBox .line > input {
+            width: 49%;
+            height: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+            position: relative;
+            cursor: pointer;
+            background-color: #ffffff;
+            border-radius: 0.04rem;
+            border: solid 0.01rem #a0a0a0;
+        }
+
+        .maskBox .line > span:nth-child(2) > span,
+        .maskBox .line > input {
+            color: #333333;
+        }
+
+        .maskBox .line > span > ul,
+        .line > ul > li > span:nth-child(2) > ul {
+            position: absolute;
+            left: 0;
+            top: 24px;
+            z-index: 100;
+            width: 100%;
+            max-height: 80px;
+            overflow-y: auto;
+            background: #d7d4d4;
+        }
+
+        .line > ul > li > span:nth-child(2) > ul {
+            max-height: 100px;
+        }
+
+        .maskBox .line > span > ul > li {
+            height: 20px;
+            line-height: 20px;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        .line > ul > li > span:nth-child(2) > ul > li {
+            height: 25px;
+            line-height: 25px;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        .maskBox .line > span > ul > li:hover,
+        .line > ul > li > span:nth-child(2) > ul > li:hover {
+            background: #333399;
+            color: #FFFFFF;
+        }
+
+        .import .line > button {
+            width: 21.5%;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            margin: 0 8.5%;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 0.14rem;
+        }
+
+        .maskBox .line > button:last-child {
+            background-color: #333399;
+        }
+
+        .import > .line:nth-child(2) {
+            padding: 5%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .import > .line:nth-child(2) > p {
+            font-size: 0.18rem;
+        }
+
+        .import > .line:nth-child(2) > img {
+            width: 30%;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .maskBox>.line>.close{
+            width: 0.5rem !important;
+            display: flex !important;
+            justify-content: center !important;
+            border: none !important;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+    <div id="sensorApp" v-cloak>
+
+        <div id="sensor" >
+
+            <!--主要显示内容-->
+            <div class="contentBox">
+
+                <!--传感器名称-->
+                <div class="line">
+                    <ul>
+                        <li>
+                            <span>传感器名称</span>
+                            <span @click="handleAddSelect('sensorName')">
+                            <span>{{sensorName}}</span>
+                            <img src="../../img/public/triangle.png" alt=""
+                                 @click="handleAddSelect('sensorName')"
+                                 :class=" ulOptionChecked === 'sensorName' ? 'ulChecked' : ''">
+                            <ul v-show=" showAddUl === 'sensorName'">
+                        <li @click.stop="handleAddSelectOption('sensorName','DYZH123451')">DYZH12341</li>
+                        <li @click.stop="handleAddSelectOption('sensorName','DYZH123452')">DYZH123452</li>
+                        <li @click.stop="handleAddSelectOption('sensorName','DYZH123453')">DYZH123453</li>
+                        <li @click.stop="handleAddSelectOption('sensorName','DYZH123454')">DYZH123454</li>
+                        <li @click.stop="handleAddSelectOption('certified','DYZH123455')">DYZH123455</li>
+                    </ul>
+
+                        </span>
+                        </li>
+                        <li>
+                            <span>传感器位置</span>
+                            <input type="text" v-model="sensorAddr">
+                        </li>
+                        <li>
+                            <span>所属模块</span>
+                            <input type="text" v-model="sensorBelong">
+                        </li>
+                        <li>
+                            <span>模块编码</span>
+                            <input type="text" v-model="moduleNum">
+                        </li>
+                        <li>
+                            <span>业主名称</span>
+                            <input type="text" v-model="ownerName" place>
+                        </li>
+                        <li>
+                            <span>业主电话</span>
+                            <input type="text" v-model="ownerNumber">
+                        </li>
+                        <li>
+                            <span>当前状态</span>
+                            <span @click="handleAddSelect('statusNow')">
+                            <span>{{statusNow}}</span>
+                            <img src="../../img/public/triangle.png" alt=""
+                                 @click="handleAddSelect('statusNow')"
+                                 :class=" ulOptionChecked === 'statusNow' ? 'ulChecked' : ''">
+                            <ul v-show=" showAddUl === 'statusNow'">
+                        <li @click.stop="handleAddSelectOption('statusNow','就绪')">就绪</li>
+                        <li @click.stop="handleAddSelectOption('statusNow','异常')">异常</li>
+                    </ul>
+                        </span>
+                        </li>
+                        <li>
+                            <span>链接端口</span>
+                            <span @click="handleAddSelect('linepost')">
+                            <span>{{linepost}}</span>
+                            <img src="../../img/public/triangle.png" alt=""
+                                 @click="handleAddSelect('linepost')"
+                                 :class=" ulOptionChecked === 'linepost' ? 'ulChecked' : ''">
+                            <ul v-show=" showAddUl === 'linepost'">
+                        <li @click.stop="handleAddSelectOption('linepost','11')">11</li>
+                        <li @click.stop="handleAddSelectOption('linepost','22')">22</li>
+                    </ul>
+                        </span>
+                        </li>
+                        <li class="btns">
+                            <button class="btn">查询</button>
+                            <button class="btn">过滤</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--添加 按钮行-->
+                <div class="line">
+                    <div class="btns">
+                        <button @click="handlMask('add')">添加</button>
+                        <button @click="handlMask('import')">批量添加</button>
+                        <button @click="handlMask('delAll')">删除全部</button>
+                    </div>
+                </div>
+
+                <!--表格-->
+                <div class="table">
+                    <ul>
+                        <li>
+                            <span>选择</span>
+                            <span>序号</span>
+                            <span>传感器名称</span>
+                            <span>传感器位置</span>
+                            <span>传感器编码</span>
+                            <span>所属模块</span>
+                            <span>模块编码</span>
+                            <span>链接端口</span>
+                            <span>报警事件</span>
+                            <span>推送业主姓名</span>
+                            <span>同步推送业主</span>
+                            <span>推送业主APP账号</span>
+                            <span>状态</span>
+                            <span>操作</span>
+                        </li>
+                        <li v-for="(item,i) in  data">
+                        <span>
+                            <el-radio v-model="deviceChoose" :label="i"></el-radio>
+                        </span>
+                            <span>{{i + 1}}</span>
+                            <span :title="item.name ">{{item.name }}</span>
+                            <span :title="item.addr ">{{item.addr }}</span>
+                            <span :title="item.number">{{item.number}}</span>
+                            <span :title="item.belong ">{{item.belong }}</span>
+                            <span :title="item.moduleNum ">{{item.moduleNum }}</span>
+                            <span :title="item.post ">{{item.post }}</span>
+                            <span :title="item.event ">{{item.event }}</span>
+                            <span :title="item.ownerName ">{{item.ownerName }}</span>
+                            <span :title="item.ownerNumber ">{{item.ownerNumber }}</span>
+                            <span :title="item.app ">{{item.app }}</span>
+                            <span :title="item.statue ">{{item.statue }}</span>
+                            <span>
+                            <button>查看详情</button>
+                            <button>修改</button>
+                            <button @click="handlDel(i)">删除</button>
+                        </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--分页-->
+                <div class="paging">
+                    <Pagination @func="getPageNum" :pageData="pageData"/>
+                </div>
+
+            </div>
+
+            <!--蒙版-->
+            <div class="mask" v-show=" mask === 'add' ||
+             mask === 'import' ||
+             mask === 'prompt'">
+
+                <!--添加-->
+                <div class="maskBox add" v-show="mask === 'add'">
+                    <div class="line">
+                        <span>添加</span>
+                        <span class="close" @click="handlCancel('cancel')">
+                        <img src="../../img/public/close.png" alt="">
+                    </span>
+                    </div>
+                    <div class="line">
+                        请选中所要添加的传感器
+                    </div>
+
+                    <!--表格-->
+                    <div class="table">
+                        <ul>
+                            <li>
+                                <span>选择</span>
+                                <span>序号</span>
+                                <span>传感器名称</span>
+                                <span>传感器位置</span>
+                                <span>传感器编码</span>
+                                <span>所属模块</span>
+                                <span>模块编码</span>
+                                <span>链接端口</span>
+                                <span>报警事件</span>
+                            </li>
+                            <li v-for="(item,i) in  addData">
+                        <span>
+                            <el-radio v-model="addChoose" :label="i"></el-radio>
+                        </span>
+                                <span>{{i + 1}}</span>
+                                <span :title="item.name">{{item.name}}</span>
+                                <span :title="item.addr">{{item.addr}}</span>
+                                <span :title="item.number">{{item.number}}</span>
+                                <span :title="item.belong">{{item.belong}}</span>
+                                <span :title="item.moduleNum">{{item.moduleNum}}</span>
+                                <span :title="item.post">{{item.post}}</span>
+                                <span :title="item.event">{{item.event}}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!--按钮-->
+                    <div class="line">
+                        <button @click="handlCancel">取消</button>
+                        <button @click="handlAdd"> 确定</button>
+                    </div>
+                </div>
+
+                <!--批量增加 导入-->
+                <div class="maskBox import" v-show="mask === 'import'">
+                    <div class="line">
+                        <span>批量添加</span>
+                        <span class="close" @click="handlCancel('cancel')">
+                        <img src="../../img/public/close.png" alt="">
+                    </span>
+
+                    </div>
+                    <div class="line">
+                        <input type="file" ref="file" accept=".xls,.xlsx" class="outputlist_upload"
+                               @change="handleFileUpload($event)" v-show="false">
+                        <img src="../../img/index/upload.png" alt="" @click="handleFile($event)">
+                        <p>{{fileName}}</p>
+                    </div>
+                    <div class="line">
+                        <button @click="handlCancel">取消</button>
+                        <button @click="handlImport"> 确定</button>
+                    </div>
+                </div>
+
+                <!--提示框-->
+                <div class="maskBox promptBox" v-show="mask === 'prompt'">
+                    <PromptBox @funcChoose="promptChoose" :prompt="prompt"/>
+                </div>
+
+            </div>
+
+
+        </div>
+
+</div>
+</body>
+<script>
+
+    let sensorVue = new Vue({
+        el: '#sensorApp',
+
+        data() {
+            return {
+                outputs: [],    //导入表格
+
+                data: [
+
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "紧急事件报警",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "紧急事件报警",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "紧急事件报警",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "紧急事件报警",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "紧急事件报警",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "紧急事件报警",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "紧急事件报警",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "报警事件",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "报警事件",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post: "1号端口",
+                        event: "报警事件",
+                        ownerName: "刘XX",
+                        ownerNumber: "13******1234",
+                        app: "APP12345",
+                        statue: "在线",
+                    },
+
+                ],         // 表格数据
+
+                deviceChoose: null, //选择框选项
+                pageNumber: "", // 分页查询页数
+
+                pageData: {
+
+                    url: "传感器管理后台查询接口",
+                    total : 100,                        //当前总条数
+
+                },   // 传递给分页组件的数据
+
+
+                ulOptionChecked: null, // 下拉菜单三角形变化
+                showAddUl: "",               //添加下拉框
+
+                //主界面
+                sensorName: "ZPM1234561",    //传感器名称
+                sensorAddr: null,            //传感器位置
+                sensorBelong: null,          //所属模块
+                moduleNum: null,           //模块编码
+                ownerName: null,            //业主名称
+                ownerNumber: null,          //业主电话
+                statusNow: "就绪",           //当前状态
+                linepost: "111",            //链接端口
+
+                //弹框页面
+                mask: null,
+
+                // 添加页面
+                addChoose: null,
+                addData: [
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post : "1号端口",
+                        event : "燃气泄漏报警"
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post : "1号端口",
+                        event : "燃气泄漏报警"
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post : "1号端口",
+                        event : "燃气泄漏报警"
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post : "1号端口",
+                        event : "燃气泄漏报警"
+                    },
+                    {
+                        name: "人体红外传感器",
+                        addr: "1栋1单元101室",
+                        number: "CGQ1230",
+                        belong: "博世XX型号通讯模块",
+                        moduleNum: "MKBM1234561",
+                        post : "1号端口",
+                        event : "燃气泄漏报警"
+                    },
+
+                ],
+
+                //批量添加
+                fileName: "没有选择文件",   //文件名
+
+
+                //提示框
+                prompt : null               //提示框组件内容
+
+            };
+
+        },
+
+        methods: {
+
+            // 文件导入 批量导入 表格导入
+            handleFile(event) {
+
+                let prve = event.currentTarget.previousElementSibling;
+                var e = document.createEvent("MouseEvents");
+                e.initEvent("click", true, true);
+                prve.dispatchEvent(e);
+
+            },
+
+            handleFileUpload(e) {
+                this.readExcel(e);
+
+            },
+
+            //批量导入
+            handlImport() {
+
+                for (let i = 0; i < this.outputs.length; i++) {
+                    let obj = {
+                        account: this.outputs[i].account,
+                        name: this.outputs[i].name,
+                        empower: this.outputs[i].empower,
+                        certified: this.outputs[i].certified,
+                        addr: this.outputs[i].addr,
+                    }
+                    this.data.push(obj);
+                }
+                this.handlCancel();
+
+            },
+
+            //表格导入
+            readExcel(e) {
+                var that = this;
+                const files = e.target.files;
+                // console.log(files.length);
+                if (files.length <= 0) {//如果没有文件名
+                    return false;
+                } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+                    this.$Message.error('上传格式不正确，请上传xls或者xlsx格式');
+                    return false;
+                }
+
+                const fileReader = new FileReader();
+                fileReader.onload = (ev) => {
+                    try {
+                        const data = ev.target.result;
+                        const workbook = XLSX.read(data, {
+                            type: 'binary'
+                        });
+                        const wsname = workbook.SheetNames[0];//取第一张表
+                        const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]);//生成json表格内容
+                        // console.log(ws);
+                        that.outputs = [];//清空接收数据
+
+                        that.fileName = e.target.files[0].name;
+
+                        that.outputs = ws;
+
+                        // console.log(that.outputs);
+
+                        this.$refs.upload.value = '';
+
+                    } catch (e) {
+
+                        return false;
+                    }
+                };
+                fileReader.readAsBinaryString(files[0]);
+            },
+
+
+            // 获取分页查询页数
+            getPageNum(data) {
+
+                if(data.url === this.pageData.url){
+
+                    this.pageNumber = data.page;
+
+                    // console.log(this.pageNumber);
+
+                }
+
+            },
+
+            //蒙版展开
+            handlMask(data) {
+
+                // 删除全部
+                if(data === "delAll") {
+
+                    this.data = [];
+                }
+                // 删除一个
+                else if(data === "delOne")
+                {
+                    this.prompt = data;
+                    this.mask = "prompt";
+                    return;
+                }
+                else if(data === "err")
+                {
+                    this.prompt = data;
+                    this.mask = "prompt";
+                    return;
+                }
+
+                this.mask = data;
+            },
+
+
+            //取消蒙版
+            handlCancel() {
+
+                this.mask = null;
+                this.showAddUl = null;
+                this.ulOptionChecked = null;
+            },
+
+
+            // 删除全部删除某一个
+            promptChoose(data){
+                // 确定
+
+                if(data.choose === "confirm")
+                {
+                    if(data.title === "delAll")
+                    {
+                        this.data = [];
+                    }
+
+                    else if(data.title === "delOne")
+                    {
+
+                        this.data.splice(this.deviceChoose, 1);
+                    }
+
+                }
+
+                this.handlCancel();
+                // console.log(data);
+            },
+
+            // 表格操作
+            // 删除
+            handlDel(index) {
+
+              this.data.splice(index,1)
+
+
+            },
+
+            //修改
+
+            //查看
+
+
+            // 添加页面
+            //下拉框展开
+            handleAddSelect(data) {
+                this.showAddUl = data;
+                this.ulOptionChecked = data;
+            },
+
+            // 下拉菜单  选项
+            handleAddSelectOption(name, data) {
+                // console.log(this[name]);
+                this[name] = data;
+
+                // 关闭下拉框
+                this.showAddUl = null;
+                this.ulOptionChecked = null;
+            },
+
+            // 确定 取消按钮
+            handlAdd() {
+                let _this = this.addData[this.addChoose];
+
+                // 如果添加内容为空
+                if(!_this) return;
+
+                let obj = {
+                    name: _this.name,
+                    addr: _this.addr,
+                    number: _this.number,
+                    belong: _this.belong,
+                    moduleNum: _this.moduleNum,
+                    post: _this.post,
+                    event: _this.event,
+                    ownerName: _this.ownerName,
+                    ownerNumber: _this.ownerNumber,
+                    app: _this.app,
+                }
+                this.data.push(obj);
+                this.handlCancel();
+            },
+
+
+        },
+
+    });
+
+</script>
+</html>

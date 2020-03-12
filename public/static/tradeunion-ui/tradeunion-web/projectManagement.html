@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="../images/title_icon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>项目管理</title>
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/header2.css">
+		<link rel="stylesheet" href="css/projectManagement.css">
+		<script src="./js/jquery.min.js"></script>
+		<script src="../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript"
+            src='http://api.map.baidu.com/api?v=2.0&ak=1pSTowk3vMReXCQA08ypPGfGoOaZI0qk'></script>
+		<script src="../js/httpUtils.js"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/base.js"></script>
+		<script src="js/projectManagement.js"></script>
+	</head>
+
+	<body>
+
+		<div>
+			<!--头部-->
+			<div id="header">
+				<script>
+					$("#header").load("header2.html");
+					if ($.getCookie("orgLv") == "0") {
+
+                    }else{
+                        window.location.href = "./../html/Login/login.html";
+                    }
+				</script>
+				<div></div>
+			</div>
+			<!--内容-->
+			<div id="contentBox">
+				<div class="leftContent">
+					<!--项目总览-->
+					<div class="box">
+						<!--标题-->
+						<div class="title" style="margin-bottom: 0.51rem">
+							<img src="./img/public/dot.png" alt="">
+							<span>项目总览</span>
+						</div>
+						<!--内容-->
+						<div class="littleBox">
+							<div>
+								<img src="./img/projectManagement/bubble2.png" alt=>
+								<span id="header_span1" style="color: #6ad7dc"></span>
+								<span>总项目</span>
+								<canvas id="header_canvas1" style="position:absolute;bottom:0;left: 0.1rem;"></canvas>
+							</div>
+							<div>
+								<img src="./img/projectManagement/bubble3.png" alt=>
+								<span id="header_span2" style="color: #40db8c"></span>
+								<span>建设中</span>
+								<canvas id="header_canvas2" style="position:absolute;bottom:0;left: 0.1rem;"></canvas>
+							</div>
+							<div id="thumbnail_canvas">
+								<img src="./img/projectManagement/bubble1.png" alt=>
+								<span id="header_span3" style="color: #da8702;"></span>
+								<span>已完成</span>
+								<canvas id="header_canvas3" style="position:absolute;bottom:0;left: 0.1rem;"></canvas>
+							</div>
+						</div>
+					</div>
+					<!--项目排行榜-->
+					<div class="leftTwoBox">
+						<div class="titleBox">
+							<img src="img/public/icon.png" alt="">
+							<span> 项目排行榜</span>
+						</div>
+						<div class="enterpriseFB">
+						</div>
+
+					</div>
+				</div>
+
+				<div class="centerContent">
+					<div class="mark-box">
+						<div class="active" show="all">全部</div>
+						<div class="active" show="project">
+							<span class="icon-completed"></span>
+							<span>已完成的项目</span>
+						</div>
+						<div class="active" show="room">
+							<span class="icon-building"></span>
+							<span>建设中的项目</span>
+						</div>
+					</div>
+					<!--                地图-->
+					<div class="map">
+						<div id="ec_map" style="width: 9.72rem;height: 6.61rem;"></div>
+					</div>
+					<!--                项目管理 测试中心管理 企业管理-->
+					<ul class="nav-box">
+						<li class="active" onclick="window.location.href='projectManagement.html'">项目管理</li>
+						<li onclick="window.location.href='exhibitionIndex.html'">测试中心</li>
+						<li onclick="window.location.href='enterpriseIndex.html'">公司管理</li>
+					</ul>
+				</div>
+
+				<div class="rightContent">
+					<!--项目统计-->
+					<div class="box">
+						<!-- 标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>项目统计</span>
+						</div>
+						<div class="contAll">
+							<span class="name">总企业<span id="cnum" class="number" style="color: rgb(0,255,255)"></span></span>
+							<span class="name">建造中<span id="nnum" class="number" style="color: rgb(51,204,0)"></span></span>
+							<span class="name">已完成<span id="ynum" class="number" style="color: rgb(255,153,0)"></span></span>
+						</div>
+						<div id="enterpriseEcharts" style="width: 3.79rem;height: 3rem;"></div>
+					</div>
+					<!--项目进度-->
+					<div class="box">
+						<!--标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>项目进度</span>
+						</div>
+						<div class="xmjdBox">
+							<input class="searchInput" type="text" placeholder="" readonly="readonly">
+							<img class="iconImg" src="img/xqq.png" alt="">
+							<!--下拉数据-->
+							<div class="dataBox">
+							</div>
+							<!--echarts-->
+							<div class="ecBox">
+								<div id="ecOne"></div>
+								<div id="ecRatio">
+								</div>
+							</div>
+							<!--``项目进度统计``-->
+							<div class="productBox">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		$(function() {
+			if($.getCookie("orgLv") != "0") {
+				window.location.href = "../../html/Login/login.html";
+			}
+			
+			let monthArr = [];
+			let cnumArr = [];
+			let ynumArr = [];
+			let nnumArr = [];
+			$.ajax({
+				cache: true,
+				type: "get",
+				url: userServiceUrl + "/projectInfo/getStatisticsData",
+				async: false,
+				success: function(data) {
+					let original = data.data.list[0];
+					let list = original.dataList;
+					document.getElementById("cnum").innerText = original.cnum;
+					document.getElementById("nnum").innerText = original.nnum;
+					document.getElementById("ynum").innerText = original.ynum;
+					for(let i = 0; i < list.length; i++) {
+						monthArr.push(list[i].month);
+						cnumArr.push(list[i].cnum);
+						ynumArr.push(list[i].ynum);
+						nnumArr.push(list[i].nnum);
+					}
+				},
+				error: function(errorMsg) {
+					console.info("项目统计数据加载失败啦!");
+				}
+			});
+
+			//获取当前日期
+			let date = new Date();
+			let nowDate = date.getDate();
+			let numberArr = [];
+			for(let i = 1; i <= nowDate; i++) {
+				numberArr.push(i);
+			}
+			//企业统计Echarts
+			// 基于准备好的dom，初始化echarts实例
+			var enterprise = echarts.init(document.getElementById('enterpriseEcharts'));
+
+			// 指定图表的配置项和数据
+			option = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						label: {
+							backgroundColor: '#6a7985'
+						}
+					}
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					boundaryGap: false,
+					data: monthArr,
+					//设置轴线的属性
+					axisLine: {
+						lineStyle: {
+							color: '#FFFFFF',
+						}
+					}
+				}],
+				yAxis: [{
+					type: 'value',
+					//设置轴线的属性
+					axisLine: {
+						lineStyle: {
+							color: '#FFFFFF',
+						}
+					}
+				}],
+				series: [{
+						name: '总企业',
+						type: 'line',
+						color: "rgb(0,255,255)",
+						smooth: true,
+						stack: '总量',
+						areaStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									// 0% 处的颜色   
+									offset: 0,
+									color: "rgba(0,255,255,1)" 
+								},
+								{
+									// 100% 处的颜色
+									offset: 1,
+									color: 'rgba(255,255,255,0)'
+								}
+							], false)
+						},
+						data: cnumArr
+					},
+					{
+						name: '建设中',
+						type: 'line',
+						color: "rgb(51,204,0)",
+						smooth: true,
+						stack: '总量',
+						areaStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									// 0% 处的颜色   
+									offset: 0,
+									color: "rgba(0,255,255,1)" 
+								},
+								{
+									// 100% 处的颜色
+									offset: 1,
+									color: 'rgba(255,255,255,0)'
+								}
+							], false)
+						},
+						data: nnumArr
+					},
+					{
+						name: '已完成',
+						type: 'line',
+						color: "rgb(255,153,0)",
+						smooth: true,
+						stack: '总量',
+						areaStyle: {
+							color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									// 0% 处的颜色   
+									offset: 0,
+									color: "rgba(0,255,255,1)" 
+								},
+								{
+									// 100% 处的颜色
+									offset: 1,
+									color: 'rgba(255,255,255,0)'
+								}
+							], false)
+						},
+						data: ynumArr
+					},
+				]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			enterprise.setOption(option);
+			$("#enterpriseEcharts").css({
+				"width": "3.79rem",
+				"height": "3rem"
+			});
+
+		});
+	</script>
+	<script>
+		$(function() {
+			function getProjectProgress(id) {
+			    $.ajax({
+			    	cache: true,
+			    	type: "get",
+			    	url: userServiceUrl + "/projectInfo/getProjectProgress?id="+id,
+			    	async: false,
+			    	success: function(data) {
+			    		if(data.code == 0) {
+							let original = data.data.list[0];
+							$(".productBox").html("");
+							$("#ecRatio").html("");
+							let content = "<p class='pcTitle'>项目进度统计</p>"+
+											"<div class='listBox'>"+
+												"<span class='jdBox'>"+
+													"<span class='minjdBox' style='width: "+original.cdratio+"%'></span>"+
+												"</span>"+
+												"<span class='xmName'>方案设计</span>"+
+												"<span class='bfb'>"+original.cdratio+"%</span>"+
+											"</div>"+
+											"<div class='listBox'>"+
+												"<span class='jdBox'>"+
+													"<span class='minjdBox' style='width: "+original.adratio+"%'></span>"+
+												"</span>"+
+												"<span class='xmName'>应用开发</span>"+
+												"<span class='bfb'>"+original.adratio+"%</span>"+
+											"</div>"+
+											"<div class='listBox'>"+
+												"<span class='jdBox'>"+
+													"<span class='minjdBox' style='width: "+original.piratio+"%'></span>"+
+												"</span>"+
+												"<span class='xmName'>产品安装</span>"+
+												"<span class='bfb'>"+original.piratio+"%</span>"+
+											"</div>"+
+											"<div class='listBox'>"+
+												"<span class='jdBox'>"+
+													"<span class='minjdBox' style='width: "+original.ptratio+"%'></span>"+
+												"</span>"+
+												"<span class='xmName'>项目测试</span>"+
+												"<span class='bfb'>"+original.ptratio+"%</span>"+
+											"</div>"
+							$(".productBox").append(content);
+							let ecRatio = "<span style='display: flex;align-items: center;margin: 0.2rem'><i class='ii'></i>已完成"+original.yratio+"%</span>"+
+										  "<span style='display: flex;align-items: center;margin: 0.2rem'><i class='iii'></i>未完成"+original.nratio+"%</span>"
+							$("#ecRatio").append(ecRatio);
+							initPieCharts1('ecOne', original.yratio, original.nratio, '#00FFFF', '#FD9D02');
+			    		}
+			    	},
+			    	error: function(errorMsg) {
+			    		console.info("项目进度数据加载失败啦!");
+			    	}
+			    });
+			}
+			
+			$.ajax({
+				cache: true,
+				type: "get",
+				url: userServiceUrl + "/projectInfo/list",
+				async: false,
+				success: function(data) {
+					if(data.code == 0) {
+						let list = data.data.list;
+						let content = "<ul>"
+						for(let i = 0; i < list.length; i++) {
+							if(i==0){
+								$(".searchInput").val(list[i].name);
+								getProjectProgress(list[i].id);
+							}
+							content +="<li id='"+list[i].id+"'>"+
+									  "<span class='comName'>"+list[i].name+"</span>"+
+									  "</li>"
+						}
+						content += "</ul>"
+						$(".dataBox").append(content);
+					}
+				},
+				error: function(errorMsg) {
+					console.info("项目列表数据加载失败啦!");
+				}
+			});
+			
+			//获取下拉值
+			$(".searchInput").on('click', function() {
+				$(".dataBox").show();
+			});
+			$(".dataBox ul").children("li").each(function() {
+				$(this).on('click', function() {
+					let companyName = $(this)[0].innerText
+					let id = $(this)[0].id
+					getProjectProgress(id);
+					$(".searchInput").val(companyName);
+					$(".dataBox").hide();
+				});
+			});
+
+			//项目完成进度Echarts
+			//空气质量
+			//initPieCharts1('ecOne', 78, 22, '#00FFFF', '#FD9D02');
+
+			function initPieCharts1(id, count1, count2, color1, color2) {
+				var myChart = echarts.init(document.getElementById(id));
+				var option = {
+					title: {
+						text: count1,
+						x: 'center',
+						y: 'center',
+						itemGap: 60,
+						textStyle: {
+							color: '#ffffff',
+
+						},
+						fontSize: fontSize(14)
+					},
+					series: [{
+						type: 'pie',
+						clockWise: false,
+						radius: ['60%', '80%'],
+						hoverAnimation: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: false
+								},
+								labelLine: {
+									show: false
+								}
+							},
+						},
+						data: [{
+								value: count1,
+								name: '',
+								itemStyle: {
+									color: color1
+								}
+							},
+							{
+								value: count2,
+								name: '',
+								itemStyle: {
+									color: color2
+								}
+							}
+						]
+					}]
+				};
+				myChart.setOption(option);
+
+				$("#ecOne").css({
+					"width": "1.5rem",
+					"height": "1.5rem"
+				});
+
+			}
+
+		});
+	</script>
+
+</html>

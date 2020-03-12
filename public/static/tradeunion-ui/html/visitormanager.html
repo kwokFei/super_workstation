@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <script src="../plus/iview/vue.min.js"></script>
+    <style type="text/css">
+        .simButton {
+            padding: 8px;
+        }
+        .panel-body .list-group{
+            height: 210px;
+            overflow: scroll;
+        }
+    </style>
+    <!--时间选择插件-->
+    <link href="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datetimepicker/moment.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+    <!--日期选择插件-->
+    <link href="../plus/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="../plus/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>访客管理</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ibox-content row">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label" for="s_leaderOne">访客领队：</label>
+                                            <input class="form-control" name="s_leaderOne" id="s_leaderOne" placeholder="访客领队" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label">组织名称：</label>
+                                            <input class="form-control organizationInput position-box" id="s_organizationName" name="s_organizationName" type="text" onclick="$('#s_organizationTree').show();" placeholder="参观展厅" readonly="readonly" style="cursor: pointer">
+                                            <input type="hidden" id="s_organizationId" name="s_organizationId" value="">
+                                            <div id="s_organizationTree" class="organization_height"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div style="margin-top: 24px;">
+                                                <button type="button" class="btn btn-purple" id="clean"><i
+                                                        class="fa fa-eraser"></i> 清空
+                                                </button>
+                                                <button type="button" class="btn btn-success" id="search"
+                                                        style="margin-left: 10px"><i class="fa fa-search"></i> 查询
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Start-->
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                        <button type="button" class="btn btn-primary" id="addSlibings" onclick="newCamera()"><i class="fa fa-plus"></i>
+                                            录入
+                                        </button>
+                                    </div>
+
+                                    <div id="myTable">
+
+                                    </div>
+                                </div>
+                                <table id="visitorList"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+
+    </div>
+</div>
+<!--加载底部-->
+<div id="footer" class="classifyFooter">
+    <script type="text/javascript">
+        $(function () {
+            $("#footer").load("footer.html");
+        });
+    </script>
+</div>
+<div id="loadDiv"></div>
+</body>
+<script type="text/javascript">
+    $("#loadDiv").html(loadHtml);
+    let html;
+    var isRetract = false;
+    var isInput = false;
+    var isTree = false;
+    $(function () {
+        $('#visitorList').bootstrapTable({
+            url: userServiceUrl + "/visitormanager/list", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if (data.code == 0) {
+                    var result = data.data;
+                    rdata = result.list;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    $.hide_overall_loding();
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: []
+                    });
+                    layer.msg("获取数据失败！", {icon: 2});
+                    $.hide_overall_loding();
+                    return res[0];
+                }
+            },
+            onLoadSuccess: function () {
+                $.hide_overall_loding();
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function (value, row, index) {
+                    let pageSize = $('#visitorList').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                    let pageNumber = $('#visitorList').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                    return pageSize * (pageNumber - 1) + index + 1;
+                }
+            }, {
+                field: 'leaderOne',
+                title: '领队名称',
+                width: 100
+            }, {
+                field: 'organizationName',
+                title: '参观展厅',
+                width: 100
+            }, {
+                field: 'visitorState',
+                title: '访问状态',
+                width: 100,
+                formatter: function(value, row, index) {
+                    var state = "";
+                    if(value == 1) {
+                        state = '<span style="color:orange">未入场</span>'
+                    } else if(value == 2) {
+                        state = '<span style="color:green">已入场</span>'
+                    }
+                    return state;
+                }
+            },
+         {
+             field: 'visitorCount',
+             title: '参观人数',
+             width: 100
+         },
+                {
+                    field: 'visitorTime',
+                    title: '预约时间',
+                    width: 100
+                },
+                // {
+                //     field: 'visitorTime',
+                //     title: '到场时间',
+                //     width: 100
+                // },
+                {
+                    field: 'createDate',
+                    title: '创建时间',
+                    width: 100
+                }, {
+                    title: "操作",
+                    width: 100,
+                    clickToSelect: false,
+                    formatter: function (i1, i2, i3) {
+                        var str = '' +
+                            '<button data-toggle="tooltip" title="详情" type="button" onclick="getDetail(' + i3 +
+                            ');" class="btn btn-primary tableButton"><i class="fa fa-info-circle"> </i></button>' +
+                            '<button data-toggle="tooltip" title="编辑" type="button" onclick="editVisitor(' + i3 +
+                            ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"> </i></button>' +
+                            '<button data-toggle="tooltip" title="删除" type="button" onclick="delVisitor(' + i3 +
+                            ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"> </i></button>'+
+                            '<button data-toggle="tooltip" title="签到" type="button" onclick="qVisitor(' + i3 +
+                            ');" class="btn btn-dark tableButton"><i class="fa fa-paint-brush"> </i></button>';
+                        return str;
+                    },
+                    cellStyle: function () {
+                        return {
+                            classes: "",
+                            css: {
+                                "text-align": "center"
+                            }
+                        }
+                    }
+                }]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                leaderOne:$("#s_leaderOne").val(),
+                organizationName:$("#s_organizationName").val()
+            };
+        }
+
+        $("#search").on("click", function () {
+            $('#visitorList').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function () {
+            $("#s_leaderOne").val("");
+            $("#s_organizationName").val("");
+            $("#search").trigger("click");
+        });
+    });
+
+
+    var organizationData = "";
+    function get_o_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.organizationName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_o_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+    function s_init_o_Tree() {
+        if(organizationData == "") {
+            $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+                organizationData = get_o_TreeData(data.data);
+                s_initTreeData();
+            });
+            return;
+        }
+        s_initTreeData();
+    }
+    function s_initTreeData() {
+        var options = {
+            checkedIcon: "glyphicon glyphicon-check",
+            nodeIcon: "none", //所有节点的默认图标
+            levels: 1,
+            data: organizationData,
+            // onhoverColor: "rgba(255,255,255,0.9)",
+            onhoverColor: "rgba(0,0,0,0.1)",
+            onNodeSelected: function(event, data) {
+                $("#s_organizationName").val(data.text);
+                $("#s_organizationId").val(data.id);
+                $("#s_organizationTree").hide();
+            }
+        };
+        $('#s_organizationTree').treeview(options);
+    }
+    s_init_o_Tree();
+
+    //获取事件详情
+    function getDetail(id){
+        let dataList = $("#visitorList").bootstrapTable("getData");
+        let cameraData = dataList[id];
+        html = template("detailWindow",{title:"访客详情 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "访客详情",
+            area: ['700px','450px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                $("#leaderOne").val(cameraData.leaderOne);
+                $("#organizationName").val(cameraData.organizationName);
+                $("#visitorCount").val(cameraData.visitorCount);
+                $("#visitorTime").val(cameraData.visitorTime);
+                $("#visitorReason").val(cameraData.visitorReason);
+                $("#contactWay").val(cameraData.contactWay);
+                $("#visitorOrganization").val(cameraData.visitorOrganization);
+                $("#createDate").val(cameraData.createDate);
+                if(cameraData.accompanyName==null){
+                    $("#accompanyName").val("暂无陪同人员");
+                }else {
+                    $("#accompanyName").val(cameraData.accompanyName);
+                }
+                if(cameraData.visitorState ==1){
+                    $("#visitorState").val("未入场");
+                }else{
+                    $("#visitorState").val("已入场");
+                }
+                if(cameraData.remarks==1){
+                    $("#remarks").val("男");
+                }else {
+                    $("#remarks").val("女");
+                }
+            }
+        });
+    }
+    //获取事件详情结束
+
+    //修改事件开始
+    function editVisitor(id){
+        let dataList = $("#visitorList").bootstrapTable("getData");
+        let cameraData = dataList[id];
+        console.log("-----------------xxxxx",cameraData);
+        html = template("editWindow",{title:"编辑访客"});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "编辑访客管理",
+            area: ['700px','400px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交','取消'],
+            yes: function (index, layero) {
+                if(cameraData.visitorState==1&&$("#e_accompanyName").val()!=""){
+                    layer.msg("请先签到！", {
+                        icon: 5
+                    });
+                    return;
+                }
+                console.log("+++++++++++",$("#e_visitorTime").val());
+                let formData = {};
+                formData.organizationId = $("#e_organizationId").val();
+                formData.visitorTime = $("#e_visitorTime").val();
+                formData.organizationName = $("#e_organizationName").val();
+                formData.leaderOne = $("#e_leaderOne").val();
+                formData.visitorOrganization=$("#e_visitorOrganization").val();
+                formData.accompanyName=$("#e_accompanyName").val();
+                formData.visitorState=$("#e_visitorState").val();
+                formData.visitorCount = $("#e_visitorCount").val();
+                formData.contactWay = $("#e_contactWay").val();
+                formData.visitorReason = $("#e_visitorReason").val();
+                formData.id = cameraData.id;
+                $.putJSON(userServiceUrl + "/visitormanager",formData,function (updateRes) {
+                    if(updateRes.code == 0){
+                        $('#visitorList').bootstrapTable('refresh');
+                    }else{
+                        layer.msg("修改失败！", {icon: 2});
+                    }
+                    layer.close(myLayer);
+                });
+            },
+            success: function (layero) {
+                initDatepicker();
+                isRetract = true
+                isInput = true
+                isTree = true
+                init_o_Tree();
+                $("#eventEditForm").on("click",function(){
+                    if(!isRetract && !isInput && !isTree){
+                        $("#e_organizationTree").hide();
+                        isRetract = true;
+                    }
+                    isInput = false
+                    isTree = false
+                })
+                $("#e_organizationName").on("click",function(){
+                    initTreeData();
+                    isRetract = false;
+                    isInput = true
+                    $("#e_organizationTree").on("click",function(){
+                        isRetract = false;
+                        isTree = true
+                    })
+                })
+                init_p_Tree();
+                $("#e_visitorTime").val(cameraData.visitorTime);
+                $("#e_leaderOne").val(cameraData.leaderOne);
+                $("#e_visitorCount").val(cameraData.visitorCount);
+                $("#e_contactWay").val(cameraData.contactWay);
+                $("#e_visitorReason").val(cameraData.visitorReason);
+                $("#e_organizationId").val(cameraData.organizationId);
+                $("#e_visitorState").val(cameraData.visitorState);
+                $("#e_organizationName").val(cameraData.organizationName);
+                $("#e_accompanyName").val(cameraData.accompanyName);
+                $("#e_visitorOrganization").val(cameraData.visitorOrganization);
+                console.log("-----------------xxxxx"+cameraData.organizationId)
+            }
+        });
+    }
+    //修改事件结束
+    function initDatepicker() {
+        // 时间选择
+        jQuery('.js-datetimepicker').each(function() {
+            var $input = jQuery(this);
+            $input.datetimepicker({
+                format: "YYYY-MM-DD HH:mm:ss",
+                useCurrent: $input.data('use-current') ? $input.data('use-current') : false,
+                locale: moment.locale('' + ($input.data('locale') ? $input.data('locale') : '') + ''),
+                showTodayButton: $input.data('show-today-button') ? $input.data('show-today-button') : false,
+                showClear: $input.data('show-clear') ? $input.data('show-clear') : false,
+                showClose: $input.data('show-close') ? $input.data('show-close') : false,
+                sideBySide: $input.data('side-by-side') ? $input.data('side-by-side') : false,
+                inline: $input.data('inline') ? $input.data('inline') : false,
+            });
+        });
+
+        // 日期选择
+        jQuery('.js-datepicker').each(function() {
+            var $input = jQuery(this);
+            $input.datepicker({
+                weekStart: 1,
+                autoclose: true,
+                todayHighlight: true,
+                language: 'zh-CN',
+            });
+        });
+    }
+    // 新增开始
+    function newCamera(){
+        html = template("newCameraWindow",{title:"新增访客管理 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "新增访客",
+            area: ['700px','450px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定','取消'],
+            yes: function (index, layero) {
+                $("#newEventForm").submit();
+            },
+            success: function (layero) {
+                initDatepicker();
+                isRetract = true
+                isInput = true
+                isTree = true
+                init_o_Tree();//组织机构下拉框
+                $("#newEventForm").on("click",function(){
+                    if(!isRetract && !isInput && !isTree){
+                        $("#organizationTree").hide();
+                        isRetract = true;
+                    }
+                    isInput = false
+                    isTree = false
+                })
+                $("#n_organizationName").on("click",function(){
+                    initTreeData();
+                    isRetract = false;
+                    isInput = true
+                    $("#organizationTree").on("click",function(){
+                        isRetract = false;
+                        isTree = true
+                    })
+                })
+                init_p_Tree();//设备位置下拉框
+
+                // $("#selectrepairmUser").click(function() {
+                //     html = template("usermodeList", {
+                //         title: "123"
+                //     });
+                //     var modeLayer = layer.open({
+                //         skin: 'card', //自定义样式winning-class
+                //         type: 1,
+                //         title: ["选择人员", ""],
+                //         area: ['680px', '450px'], //宽高
+                //         resize: true, //是否拉升
+                //         offset: 'auto', //居中
+                //         content: html,
+                //         btn: ['设置', '取消'],
+                //         yes: function(index, layero) {
+                //             var list = $("#usermodeTable").bootstrapTable('getSelections');
+                //             if(list.length < 1) {
+                //                 layer.msg("请先选择要的展厅", {
+                //                     icon: 2
+                //                 });
+                //                 return;
+                //             }
+                //             var one=list[0];
+                //             $("#n_organizationId").val(one.organizationId);
+                //             $("#n_organizationName").val(one.organizationName);
+                //             layer.close(modeLayer);
+                //         },
+                //         success: function(layero) {
+                //             orgName = $("#n_organizationName").val();
+                //             orgId=$("#n_organizationId").val();
+                //             var showModes = new showUserMode();
+                //             showModes.init();
+                //             showModes.bindCreate();
+                //         }
+                //     });
+                // })
+
+                $("#selectrepairmUser").click(function() {
+                    html = template("usermodeList", {
+                        title: "123"
+                    });
+                    var modeLayer = layer.open({
+                        skin: 'card', //自定义样式winning-class
+                        type: 1,
+                        title: ["选择人员", ""],
+                        area: ['680px', '450px'], //宽高
+                        resize: true, //是否拉升
+                        offset: 'auto', //居中
+                        content: html,
+                        btn: ['设置', '取消'],
+                        yes: function(index, layero) {
+                            var list = $("#usermodeTable").bootstrapTable('getSelections');
+                            if(list.length < 1) {
+                                layer.msg("请先选择要设置的展厅", {
+                                    icon: 2
+                                });
+                                return;
+                            }
+                            var one=list[0];
+                            console.log("---------------tyty---",one)
+                            $("#l_organizationId").val(one.organizationId);
+                            $("#l_organizationName").val(one.organizationName);
+                            console.log("-----", $("#l_organizationId").val());
+                            layer.close(modeLayer);
+                        },
+                        success: function(layero) {
+                            uModeId = $("#s_userName").val();
+                            var showModes = new showUserMode();
+                            showModes.init();
+                            showModes.bindCreate();
+                        }
+                    });
+                })
+            }
+        });
+        //validata开始
+        var validate = $("#newEventForm").validate({
+            rules: {
+                n_deviceName:{
+                    required:true
+                }
+            },
+            messages: {
+                n_deviceName:{
+                    required:"设备不能为空"
+                }
+            },
+            submitHandler:function (form) {
+                let formData = {};
+                formData.leaderOne = $("#n_leaderOne").val();
+                formData.organizationName = $("#l_organizationName").val();
+                formData.organizationId = $("#l_organizationId").val();
+                formData.visitorReason = $("#n_visitorReason").val();
+                formData.visitorOrganization=$("#n_visitorOrganization").val();
+                formData.visitorTime = $("#n_visitorTime").val();
+                formData.visitorCount = $("#n_visitorCount").val();
+                formData.contactWay = $("#n_contactWay").val();
+                formData.remarks=$("#n_remarks").val();
+                console.log("---添加的值---",formData);
+                $.postJSON(userServiceUrl+"/visitormanager", formData,
+                    function (addRes) {
+                        console.log(addRes);
+                        if(addRes.code == 0){
+                            layer.close(myLayer);
+                            $("#visitorList").bootstrapTable("refresh");
+                        }else{
+                            layer.msg("添加失败,请输入该展厅规定的访问时间或输入正确参数",{icon:2});
+                        }
+                    }
+                );
+            }
+        });
+        //validata结束
+    }
+    //新增事件结束
+    //签到开始
+    function qVisitor(id){
+        let dataList = $("#visitorList").bootstrapTable("getData");
+        let cameraData = dataList[id];
+        html = template("itWindow",{title:"签到"});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "签到",
+            area: ['400px','300px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交','取消'],
+            yes: function (index, layero) {
+                if(cameraData.visitorState==2){
+                    layer.msg("不能多次签到！", {
+                        icon: 5
+                    });
+                    return;
+                }
+                let formData = {};
+
+                formData.accompanyName = $("#t_accompanyName").val();
+                formData.visitorState = $("#t_visitorState").val();
+                formData.id = cameraData.id;
+                $.putJSON(userServiceUrl + "/visitormanager/sign",formData,function (updateRes) {
+                    if(updateRes.code == 0){
+                        $('#visitorList').bootstrapTable('refresh');
+                    }else{
+                        layer.msg("签到失败！", {icon: 2});
+                    }
+                    layer.close(myLayer);
+                });
+            },
+            success: function (layero) {
+                isRetract = true
+                isInput = true
+                isTree = true
+                // $("#eventEditForm").on("click",function(){
+                //     if(!isRetract && !isInput && !isTree){
+                //         $("#e_organizationTree").hide();
+                //         isRetract = true;
+                //     }
+                //     isInput = false
+                //     isTree = false
+                // })
+                // $("#e_organizationName").on("click",function(){
+                //     initTreeData();
+                //     isRetract = false;
+                //     isInput = true
+                //     $("#e_organizationTree").on("click",function(){
+                //         isRetract = false;
+                //         isTree = true
+                //     })
+                // })
+                $("#t_accompanyName").val(cameraData.accompanyName);
+            }
+        });
+    }
+   //签到结束
+
+
+
+    //删除开始
+    function delVisitor(id){
+        let confirmLayer = layer.confirm("是否删除？",["确定","取消"],function () {
+            let dataList = $("#visitorList").bootstrapTable("getData");
+            let cameraData = dataList[id];
+            $.deleteJSON(addToUrlToken(userServiceUrl + "/visitormanager")+"&id="+cameraData.id,{},function (deleteRes) {
+                if(deleteRes.code == 0){
+                    $('#visitorList').bootstrapTable('refresh');
+                }else{
+                    layer.msg("删除失败！", {icon: 2});
+                }
+                layer.close(confirmLayer);
+            });
+        })
+    }
+    //删除结束
+
+    //表结束
+    //获取组织机构开始
+    var organizationData = "";
+
+    function init_o_Tree() {
+        if(organizationData == "") {
+            $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+                organizationData = get_o_TreeData(data.data);
+//              initTreeData();
+            });
+            return;
+        }
+//      initTreeData();
+    }
+
+    function get_o_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.organizationName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_o_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+
+    function initTreeData() {
+        var options = {
+            checkedIcon: "glyphicon glyphicon-check",
+            nodeIcon: "none", //所有节点的默认图标
+            levels: 1,
+            data: organizationData,
+            // onhoverColor: "rgba(255,255,255,0.9)",
+            onhoverColor: "rgba(0,0,0,0.1)",
+            onNodeSelected: function(event, data) {
+                $("#n_organizationName").val(data.text);
+                $("#n_organizationId").val(data.id);
+                $("#e_organizationName").val(data.text);
+                $("#e_organizationId").val(data.id);
+                $("#organizationTree").hide();
+                $("#e_organizationTree").hide();
+            }
+        };
+        $('#organizationTree').treeview(options);
+        $('#e_organizationTree').treeview(options);
+    }
+    //获取组织机构结束
+    //获取所有位置信息开始
+    var positionData = "";
+    function init_p_Tree() {
+        if(positionData == "") {
+            $.sanjiGetJSON(deviceServiceUrl + "/devicess/treeList", {}, function(data) {
+                positionData = get_p_TreeData(data.data);
+                // init_p_TreeData();
+            });
+            return;
+        }
+        init_p_TreeData();
+    }
+
+    function get_p_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.devicePositionName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_p_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+
+
+    var uModeId = "";
+    var showUserMode = function() {
+        return {
+            node: $("#usermodeTable"), //渲染节点
+            init: function() {
+                $.show_overall_loding();
+                var that = this;
+                this.node.bootstrapTable({
+                    url: userServiceUrl + "/visitorconfig/list", //请求后台的URL（*）
+                    method: 'get', //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    toolbar: '', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    singleSelect: true,
+                    sortable: false, //是否启用排序
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 3, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    queryParamsType: '',
+                    queryParams: that.queryParams, //传递参数（*）
+                    strictSearch: true,
+                    uniqueId: "id", //每一行的唯一标识，一般为主键列
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    clickToSelect: true, //点击行是否选中
+                    responseHandler: function(data) {
+                        var res = [];
+                        if(data.code == 0) {
+                            var result = data.data;
+                            res.push({
+                                total: result.total,
+                                rows: result.list
+                            });
+                            return res[0];
+                        } else {
+                            res.push({
+                                total: 0,
+                                rows: null
+                            });
+                            return res[0];
+                        }
+                    },
+                    //单击行选中的操作
+                    onClickRow: function(row) {
+                        uModeId = row.id;
+                    },
+                    //双击行选中的操作
+                    onDblClickRow: function(row) {
+                        uModeId = row.id;
+                    },
+                    onLoadSuccess: function() {
+                        $.hide_overall_loding();
+                    },
+                    columns: [{
+                        checkbox: true,
+                        formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+                            if(row.id == uModeId) { // 因为 判断数组里有没有这个 id
+                                // 存在则选中
+                                return {
+                                    checked: true
+                                };
+                            }
+                        }
+                    }, {
+                        width: 50,
+                        title: '序号',
+                        formatter: function(value, row, index) {
+                            return index + 1;
+                        }
+                    }, {
+                        field: 'organizationName',
+                        title: '展厅名称',
+                        width: 300
+                    }, {
+                        field: 'startTime',
+                        title: '开始时间',
+                        width: 300
+                    }, {
+                        field: 'endTime',
+                        title: '结束时间',
+                        width: 300
+                    }]
+                });
+
+            },
+            queryParams: function(params) {
+                $.show_overall_loding();
+                return {
+                    token: $.getToken(),
+                    pageSize: params.pageSize,
+                    pageNum: params.pageNumber,
+                    organizationName: $("#s_userName").val()
+                }
+            },
+            refresh: function() {
+                $.show_overall_loding();
+                this.node.bootstrapTable('refresh')
+            },
+            bindCreate: function() {
+                var that = this;
+                $("#search_userTable").on("click", function() {
+                    that.refresh();
+                });
+            }
+        }
+    }
+
+
+</script>
+
+<!--详情弹框-->
+<script type="text/html" id="detailWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventDetailForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">领队名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="leaderOne" name="leaderOne" type="text" readonly >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">领队名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="remarks" name="remarks" type="text" readonly >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">预约时间:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="visitorTime" name="visitorTime" type="text" readonly >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观展厅:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="organizationName" name="organizationName" type="text" readonly >
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">创建时间:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="createDate" name="createDate" type="text" readonly  >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">联系方式:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="contactWay" name="contactWay" type="text" readonly  >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观单位:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="visitorOrganization" name="visitorOrganization" type="text" readonly  >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">陪同人员:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="accompanyName" name="accompanyName" type="text" readonly  >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观状态:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="visitorState" name="visitorState" type="text" readonly  >
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label" >事由意见:</label>
+                        <div class="layui-input-block" >
+                            <textarea rows="4" class="form-control" id="visitorReason" name="visitorReason" type="text" placeholder="请输入描述" />
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--详情弹框结束-->
+<!--编辑弹框-->
+<script type="text/html" id="editWindow">
+    <section class="openDetail" style="width: 99%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventEditForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+
+                    <!--<div class="col-lg-8 MarginPx">-->
+                        <!--<label class="layui-form-label">预约时间:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input class="form-control" id="e_appointmentTime" name="appointmentTime" type="text" >-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">预约时间:</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="form-control js-datetimepicker" id="e_visitorTime" name="visitorTime" data-format="YYYY-MM-DD HH:mm:ss">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">领队名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="e_leaderOne" name="leaderOne" type="text" required >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观人数:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="e_visitorCount" name="visitorCount" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx isShows">
+                        <label class="layui-form-label">展厅机构:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control organizationInput" id="e_organizationName" name="n_organizationName" type="text" onclick="$('#e_organizationTree').show();" readonly="readonly" style="cursor: pointer">
+                            <input type="hidden" id="e_organizationId" name="n_organizationId" >
+                        </div>
+                        <div id="e_organizationTree" style="display: none; width: 250px;margin-left: 110px; position: absolute;z-index: 999;background-color: #FFF;"></div>
+                    </div>
+
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">联系方式:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="e_contactWay" name="contactWay" type="text">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观状态:</label>
+                        <div class="layui-input-block">
+                            <select class="form-control" id="e_visitorState" name="visitorState">
+                                <option value="1">未入场</option>
+                                <option value="2">已入场</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观单位:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="e_visitorOrganization" name="visitorOrganization" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">陪同人员:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="e_accompanyName" name="accompanyName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label" >事由意见:</label>
+                        <div class="layui-input-block" >
+                            <textarea rows="4" class="form-control" id="e_visitorReason" name="visitorReason" type="text" placeholder="请输入描述" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--编辑弹框结束-->
+
+<!--签到弹框-->
+<script type="text/html" id="itWindow">
+    <section class="openDetail" style="width: 99%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="itEditForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-8" style="margin:10px 0">
+                        <label class="layui-form-label">陪同人员:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="t_accompanyName" name="accompanyName" type="text" placeholder="陪同人员">
+                        </div>
+                        <input type="hidden" id="t_visitorState" name="t_visitorState" value="2">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+
+<script type="text/html" id="usermodeList">
+    <section class="openDetail" style="width: 100%; ">
+        <div class="panel-body">
+            <div class="ibox-content row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-label">展厅名称：</label>
+                        <input class="form-control" name="s_userName" id="s_userName" placeholder="展厅名称" type="text">
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <div id="buttons1" style="margin-top: 24px;">
+                            <button type="button" class="btn btn-success" id="search_userTable"><i class="fa fa-search"></i> 查询</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="usermodeTable"></div>
+        </div>
+    </section>
+</script>
+
+
+<!--添加弹框-->
+<script type="text/html" id="newCameraWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="newEventForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+
+                    <div class="col-lg-8 MarginPx">
+                        <label class="layui-form-label">展厅名称:</label>
+                        <div class="layui-input-block" >
+                            <input class="form-control" id="l_organizationName" name="organizationName" type="text" disabled="disabled">
+                        </div>
+                        <input type="hidden" id="l_organizationId" name="l_organizationId" value="">
+                    </div>
+                    <div class="col-lg-4 MarginPx">
+                        <button type="button" class="btn btn-success form-control" id="selectrepairmUser"><i class="fa fa-refresh"></i> <span id="showTitle">选择展厅</span></button>
+                    </div>
+
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">预约时间:</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="form-control js-datetimepicker" id="n_visitorTime" name="visitorTime" data-format="YYYY-MM-DD HH:mm:ss">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">领队名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_leaderOne" name="leaderOne" type="text" required >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">领队性别:</label>
+                        <div class="layui-input-block">
+                            <select class="form-control" id="n_remarks" name="visitorState">
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观人数:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_visitorCount" name="visitorCount" type="text" >
+                        </div>
+                    </div>
+                    <!--<div class="col-lg-6 MarginPx isShows">-->
+                        <!--<label class="layui-form-label">参观展厅:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input class="form-control organizationInput" id="n_organizationName" name="n_organizationName" type="text" onclick="$('#organizationTree').show();" readonly="readonly" style="cursor: pointer">-->
+                            <!--<input type="hidden" id="n_organizationId" name="n_organizationId" value="">-->
+                        <!--</div>-->
+                        <!--<div id="organizationTree" style="display: none; width: 250px;margin-left: 110px; position: absolute;z-index: 999;background-color: #FFF;"></div>-->
+                    <!--</div>-->
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">联系方式:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_contactWay" name="contactWay" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">参观单位:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_visitorOrganization" name="visitorOrganization" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label" >事由意见:</label>
+                        <div class="layui-input-block" >
+                            <textarea rows="4" class="form-control" id="n_visitorReason" name="visitorReason" type="text" placeholder="请输入描述" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--添加弹框结束-->
+
+</html>

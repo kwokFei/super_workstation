@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<body>
+<div class="box">
+    <input type="file" name="front" class="upload-file">
+    <a href="javascript:;">侧面</a>
+    <img src="" alt="">
+</div>
+</body>
+<script>
+    $(function () {
+        function imgPreview(fileDom,e,ele){
+            //获取文件
+            var file = fileDom.files[0];
+            var supportedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+            if(!(supportedTypes.indexOf(file.type)>-1)){
+                alert('请选择.jpg、.png格式图片')
+                return;
+            }
+            var uploadFiles = e.target.files || e.dataTransfer.files;
+            console.log(file.name);
+            var size=uploadFiles.length;
+            for(var i=0;i<size;i++){
+                /*读取文件*/
+                var reader=new FileReader();
+                reader.readAsDataURL(uploadFiles[i]);
+                reader.onload=function (e) {
+                    var imgBase=e.target.result;
+                    // console.log(e.target);
+                    console.log("---"+imgBase);
+                    ele.siblings('img').attr('src',imgBase).show()
+                }
+            }
+
+        }
+        $('.upload-file').change(function (e) {
+            imgPreview(this,e,$(this));
+        })
+    });
+</script>
+</html>

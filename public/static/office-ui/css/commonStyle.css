@@ -1,0 +1,41 @@
+.tableButton {
+    margin: 2px;
+}
+
+table {
+    table-layout: fixed;
+}
+
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > thead > tr > th {
+    text-align: center;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.error {
+    color: red;
+}
+
+/*取消input为readonly的默认颜色*/
+.form-control[readonly] {
+    background: none;
+}
+
+/*更改bootstrapTable加载时白色背景*/
+.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
+    background: none;
+    /*min-height: 500px;*/
+}
+
+.Pos_footer{
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+}

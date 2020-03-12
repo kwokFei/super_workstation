@@ -1,0 +1,268 @@
+.manage-item {
+	display: flex;
+	flex-direction: column;
+	margin-left: 23px;
+}
+
+.manage-item .manage-item-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 840px;
+	padding-left: 10px;
+	margin-bottom: 5px;
+}
+
+.manage-item-head .item-head-text {
+	font-size: 16px;
+	color: rgba(153, 153, 153, 1);
+	line-height: 36px;
+}
+
+.manage-item-head .item-head-btn {
+	display: flex;
+	align-items: center;
+}
+
+.manage-item-head .item-btn {
+	width: 80px;
+	height: 26px;
+	background-color: rgba(153, 153, 153, 1);
+	border-radius: 4px;
+	text-align: center;
+	line-height: 26px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.manage-item-head .item-btn:hover {
+	opacity: 0.8;
+}
+
+.manage-item-head .item-btn-success {
+	background-color: #33cabb;
+}
+
+.manage-item-head .item-btn-primary {
+	background-color: rgba(46, 128, 236, 1);
+}
+
+.manage-item-body {
+	width: 100%;
+}
+
+.manage-item-body .manage-item-list {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.manage-item-list .manage-list-i {
+	width: 160px;
+	height: 212px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	position: relative;
+	cursor: pointer;
+}
+
+.manage-item-list>li.check-on {
+	box-shadow: 0px 0px 5px #5899F0;
+	-webkit-box-shadow: 0px 0px 5px #5899F0;
+	-moz-box-shadow: 0px 0px 5px #5899F0;
+	-o-box-shadow: 0px 0px 5px #5899F0;
+	-ms-box-shadow: 0px 0px 5px #5899F0;
+}
+
+.manage-item-list .manage-list-i>p {
+	width: 160px;
+	height: 16px;
+	text-align: center;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	margin-bottom: 10px;
+}
+
+.manage-item-list .manage-list-i .manage-i-img {
+	width: 160px;
+	height: 160px;
+	background-color: #666;
+	position: relative;
+}
+
+.manage-item-list .manage-list-i .manage-i-img img {
+	width: 100%;
+	height: 160px;
+}
+
+.manage-item-list .manage-list-i .manage-i-delete {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 160px;
+	height: 24px;
+	background: rgba(230, 230, 230, 1);
+	cursor: pointer;
+}
+
+.manage-item-list .manage-list-i .check-state {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 20px;
+	height: 20px;
+	background-color: rgba(205, 205, 205, 1);
+	border-radius: 50%;
+}
+
+.manage-item-list>li.check-on .check-state {
+	background: url('../images/selected.png') no-repeat;
+}
+
+.icon-delete {
+	width: 16px;
+	height: 16px;
+	background: url('../images/delete.png') no-repeat;
+}
+
+.pic-item {
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid rgba(230, 230, 230, 1);
+}
+
+.manage-item-body .view-more {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.manage-item-body .view-more .more-btn {
+	display: none;
+	width: 100px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	color: #FFFFFF;
+	border-radius: 4px;
+	background: rgba(46, 128, 236, 1);
+	cursor: pointer;
+}
+
+.manage-item-body .view-more .more-btn:hover {
+	opacity: 0.8;
+}
+
+
+/*视频相关*/
+
+.videolist {
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+	position: relative;
+	z-index: 10;
+}
+
+.videos {
+	display: none;
+	border: 1px solid #080808;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	margin-left: -320px;
+	margin-top: -210px;
+	z-index: 110000000;
+	width: 640px;
+	height: 360px;
+}
+
+.vclose {
+	position: absolute;
+	right: 1%;
+	top: 1%;
+	border-radius: 100%;
+	cursor: pointer;
+}
+
+.video-play {
+	width: 49px;
+	height: 47px;
+	background: url('../images/video.png') no-repeat;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+}
+
+
+/*上传文件弹框样式*/
+
+#picVideoForm .form-label,
+#picTimeForm .form-label {
+	height: 36px;
+	line-height: 36px;
+}
+
+#picVideoForm .layui-input-block {
+	margin-left: 0;
+}
+
+#picVideoForm .upfile-box {
+	display: inline-block;
+	width: 160px;
+	height: 160px;
+	border: 1px solid #ddd;
+	overflow: hidden;
+}
+
+#picVideoForm .upfile-box img {
+	width: 100%;
+}
+
+#picVideoForm .up-content-box {
+	display: flex;
+	align-items: center;
+	height: 160px;
+}
+
+#picVideoForm .btn {
+	margin-left: 50px;
+    width: 100px;
+}
+
+#picVideoForm .videolist {
+	background-color: #999;
+}
+
+#upPic,
+#upVideo {
+	display: none;
+}
+
+.progress-container {
+	display: none;
+	width: 200px;
+    height: 20px;
+    background-color: #e2e2e2;
+    border-radius: 50px;
+    margin-top: 20px;
+}
+
+#progress {
+	height: 20px;
+    background-color: #33cabb;
+    display: inline-block;
+    border-radius: 50px;
+    padding: 0 5px;
+    line-height: 20px;
+}
+
+.flie-up{
+	display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 160px;
+    margin-left: 20px;
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/layui.css"/>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <style>
+        .plaFooter {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div id="hander">
+	<script>
+		$(function() {
+			$("#hander").load("handMenu.html");
+		});
+	</script>
+</div>
+<main class="lyear-layout-content" style="display: none">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>互联网资产设置</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox-content">
+                            <form id="platformBCCAForm">
+                                <div class="form-group">
+                                    <label class="form-label" for="assetsNumber">资产个数：</label>
+                                    <input class="form-control" name="assetsNumber" id="assetsNumber" placeholder="请输入资产个数"
+                                           type="text">
+                                </div>
+                                <input type="hidden" name="id" id="id"/>
+                                <button type="submit" class="btn btn-info">确 认</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+<script>
+	var id = "";
+    $(function () {
+        fromBCCALoad();
+    });
+    /*互联网资产参数配置*/
+    var validate = $("#platformBCCAForm").validate({
+        rules: {
+            assetsNumber: {
+                required: true
+            }
+        },
+        messages: {
+            assetsNumber: {
+                required: "请输入资产个数"
+            }
+        },
+        submitHandler: function (form) {
+            var assetsNumber = $("#assetsNumber").val();
+            $.show_overall_loding();
+            $.putJSON(userServiceUrl + "/systemSet", {
+                "id": id,
+                "assetsNumber": assetsNumber,
+            }, function (data) {
+                $.hide_overall_loding();
+                if (data.code == 0) {
+                    parent.layer.msg("操作成功", {
+                        icon: 6
+                    });
+                    fromBCCALoad();
+                    return true;
+                } else {
+                    if (data.code == 401000) {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    } else if (data.messages != null) {
+                        parent.layer.msg(data.messages[0].error, {
+                            icon: 5
+                        });
+                    } else {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    }
+                }
+
+            })
+
+        }
+    });
+	
+    function fromBCCALoad() {
+        $.show_overall_loding();
+        $.sanjiGetJSON(userServiceUrl + "/systemSet/list", {
+        }, function (data) {
+            $.hide_overall_loding();
+            if (data.code == 0) {
+                var assetsNumber = data.data.list[0].assetsNumber;
+                id = data.data.list[0].id;
+                $('#assetsNumber').val(assetsNumber);
+                return true;
+            } else {
+                if (data.code == 401000) {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                } else if (data.messages != null) {
+                    parent.layer.msg(data.messages[0].error, {
+                        icon: 5
+                    });
+                } else {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                }
+            }
+
+        })
+    }
+</script>
+
+</html>

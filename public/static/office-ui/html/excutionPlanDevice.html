@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>海克斯后台管理系统</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/layui.css"/>
+    <link rel="stylesheet" href="../plus/iview/iview.css"/>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <!--时间选择插件-->
+    <link href="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datetimepicker/moment.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+    <!--日期选择插件-->
+    <link href="../plus/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="../plus/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+
+    <!--		<script src="../js/httpUtils.js"></script>-->
+    <!--<script src="../js/Md5.js"></script>-->
+    <script src="../plus/iview/vue.min.js"></script>
+    <script src="../plus/iview/iview.min.js"></script>
+    <style type="text/css">
+        .btn {
+            padding: 8px;
+        }
+
+        .layui-form-label {
+            width: 95px !important;
+        }
+
+        .form-control {
+            width: 99% !important;
+        }
+
+        .inlineBlock {
+            width: 40%;
+            display: inline-block;
+        }
+
+        .bootstrap-datetimepicker-widget table td span {
+            width: 40px !important;
+        }
+
+        .col-lg-3 {
+            float: left;
+            width: 25%;
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>执行计划</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox-content row" id="app">
+                            <div class="col-lg-3" style="margin-bottom: 20px;" v-for="v in list">
+                                <div class="form-group" style="text-align: center">
+                                    <label class="form-label" for="s_excutionPlanName" v-text="v.yjlx_mc"></label>
+                                    <div style="background-color: #f8f8f9;" @click="showModel(v)">
+                                        <img :src="v.fjtp" alt="v.fjmc">
+                                    </div>
+                                    <div id="btns" style="margin-top: 10px;letter-spacing: 100px;">
+                                        <button class="btn btn-success" @click="deviceList(v.yj_id, 1)">绑定</button>
+                                        <button class="btn btn-warning" @click="deviceList(v.yj_id, 2)">解绑</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12" style="width: 100%;text-align: right;float: right;">
+                                <Page :total="total" :page-size="pageSize" @on-change="change" show-elevator/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div id="loadDiv"></div>
+</body>
+<script type="text/javascript">
+    $("#loadDiv").html(loadHtml);
+    var app;
+    app = new Vue({
+        el: "#app",
+        data: {
+            token: "",
+            list: [],
+            total: 20,
+            pageSize: 8,
+            pageNumber: 1,
+        },
+        methods: {
+            getToken: function () {
+                var token = "";
+                var getTokenData = {service_id: service_id, user_id: $.getCookie("userId")};
+                $.ajax({
+                    url: plan_3D_url + "/otheAPI/getUserToken",
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(getTokenData),
+                    async: false,
+                    success: function (res) {
+                        console.info(res);
+                        if (res.status == 200) {
+                            app.token = res.data.userToken;
+                            token = res.data.userToken;
+                        } else if (res.status == 401) {    // 未注册的账户
+                            var _data = {
+                                service_id: service_id,
+                                dept_id: $.getCookie("userOrg"),
+                                user_id: $.getCookie("userId"),
+                                user_name: $.getCookie("userName")
+                            };
+                            $.ajax({
+                                url: plan_3D_url + "/otheAPI/registerUser",
+                                type: "post",
+                                contentType: "application/json",
+                                dataType: "json",
+                                data: JSON.stringify(_data),
+                                async: false,
+                                success: function (res1) {
+                                    if (res1.status == 200) {
+                                        app.token = res1.data.userToken;
+                                        token = res.data.userToken;
+                                    }
+                                },
+                            });
+                        }
+                    }
+                });
+                return token;
+            },
+            getList: function (pageNumber) {
+                if (pageNumber != 0) app.pageNumber = pageNumber;
+                var data = {
+                    user_token: app.token,
+                    pageNo: app.pageNumber,
+                    pageSize: app.pageSize,
+                    only_bond: ""
+                };
+                $.ajax({
+                    url: plan_3D_url + "/otheAPI/getYJInfo",
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        console.info(res);
+                        if (res.status == 200) {
+                            app.list = res.data.list;
+                            app.total = res.data.totalRecords;
+                        } else if (res.status == 401) {
+                            app.getToken();
+                            app.getList();
+                        }
+                    }
+                });
+            },
+            change: function (pageNumber) {
+                app.getList(pageNumber);
+            },
+            deviceList: function (id,index) {
+                var html = template("listModel", {
+                    title: "123"
+                });
+                var myLayer = layer.open({
+                    skin: 'card', //自定义样式winning-class
+                    type: 1,
+                    title: ["设备列表", ""],
+                    area: ['1000px', '680px'], //宽高
+                    maxHeight: '500px',
+                    resize: true, //是否拉升
+                    offset: 'auto', //居中
+                    content: html,
+                    success: function (layero) {
+                        if (index == 1) {
+                            initTbale(id, 1);
+                            $("#bangding").on("click", function () {
+                                console.info($('#deviceTable').bootstrapTable('getData'));
+                                var bond_list = [];
+                                var arr = $('#deviceTable').bootstrapTable('getData');
+                                for (var i in arr) {
+                                    if (arr[i][0]) {
+                                        console.info(arr[i]);
+                                        var _data = {yj_id: id};
+                                        _data.serial_num = arr[i].serialNum;
+                                        _data.equip_name = arr[i].deviceAlias;
+                                        bond_list.push(_data);
+                                    }
+                                }
+
+                                var data = {
+                                    user_token: app.token,
+                                    service_id: service_id,
+                                    bond_list: bond_list
+                                }
+                                $.ajax({
+                                    url: plan_3D_url + "/otheAPI/bondDevToEle",
+                                    type: "post",
+                                    contentType: "application/json",
+                                    dataType: "json",
+                                    data: JSON.stringify(data),
+                                    success: function (res) {
+                                        console.info(res);
+                                        if (res.status == 200) {
+                                            layer.msg("绑定成功", {
+                                                icon: 1
+                                            });
+                                        } else {
+                                            layer.msg(res.msg, {
+                                                icon: 2
+                                            });
+                                        }
+                                    }
+                                });
+                            });
+                        }else {
+                            initTbale(id, 2);
+                            $("#bangding").hide();
+                            $("#buttons").append('<button class="btn btn-info" id="jiebang">解绑</button>');
+                            $("#jiebang").on("click", function () {
+                                var bond_list = {};
+                                var arr = $('#deviceTable').bootstrapTable('getData');
+                                for (var i in arr) {
+                                    if (arr[i][0]) {
+                                        console.info(arr[i]);
+                                        bond_list[arr[i].serialNum] = id;
+                                    }
+                                }
+                                var data = {
+                                    user_token: app.token,
+                                    service_id: service_id,
+                                    bond_list: bond_list
+                                }
+                                $.ajax({
+                                    url: plan_3D_url + "/otheAPI/unbondDevFromEle",
+                                    type: "post",
+                                    contentType: "application/json",
+                                    dataType: "json",
+                                    data: JSON.stringify(data),
+                                    success: function (res) {
+                                        console.info(res);
+                                        if (res.status == 200) {
+                                            layer.msg("绑定成功", {
+                                                icon: 1
+                                            });
+                                        } else {
+                                            layer.msg(res.msg, {
+                                                icon: 2
+                                            });
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+            },
+            showModel:function (obj) {
+                console.info(obj.fjdz);
+                layer.msg("我不会")
+                /*var myLayer = layer.open({
+                    skin: 'card', //自定义样式winning-class
+                    type: 1,
+                    title: ["设备列表", ""],
+                    area: ['500px', '500px'], //宽高
+                    maxHeight: '500px',
+                    resize: true, //是否拉升
+                    offset: 'auto', //居中
+                    content: '<iframe src="'+obj.fjdz+'" id="ifr" width="100%" height="500px" frameborder="0" scrolling="no"></iframe>'
+                });*/
+            }
+        },
+    });
+
+    function initTbale(id, index) {
+        var arr = [];
+        if (index == 2) {
+            $.ajax({
+                url: plan_3D_url + "/otheAPI/getBondInfo",
+                type: "post",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({yj_id:id, user_token: app.token}),
+                success: function (res) {
+                    console.info(res);
+                    if (res.status == 200) {
+                        arr = res.data;
+                    } else {
+                        layer.msg(res.msg, {
+                            icon: 2
+                        });
+                    }
+                }
+            });
+        }
+        $('#deviceTable').bootstrapTable({
+            url: deviceServiceUrl + "/device/list", //请求后台的URL（*）
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: index == 1 ? true : false, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                console.info(data);
+                if (data.code == 0) {
+                    var result = data.data;
+                    var tempList = [];
+                    if (index == 2) {
+                        for(var i in result.list) {
+                            if (arr.indexOf(result.list[i].serialNum) > -1) {
+                                tempList.push(result.list[i]);
+                            }
+                        }
+                        result.list = tempList;
+                    }
+                    var res = [];
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function (row) {
+                // console.info(row);
+            },
+            onLoadSuccess: function () {
+                $.hide_overall_loding();
+                if (index == 2) {
+                    $(".fixed-table-pagination").hide();
+                }
+            },
+            columns: [
+                {
+                    checkbox: true
+                }, {
+                    width: 50,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        var pageSize = $('#deviceTable').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+                        var pageNumber = $('#deviceTable').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1;
+                    }
+                }, {
+                    field: 'deviceAlias',
+                    title: '设备名称',
+                }, {
+                    field: 'serialNum',
+                    title: '设备序列号',
+                }, {
+                    field: 'deviceSubscriberNumber',
+                    title: '所属订阅账号',
+                }, {
+                    field: 'deviceMac',
+                    title: '设备mac地址',
+                }
+            ]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: index == 1 ? params.pageSize : 9999,
+                pageNum: params.pageNumber,
+                deviceName: $("#s_deviceAlias").val(),
+                serialNum: $("#s_serialNum").val(),
+                deviceSubscriberNumber: $("#s_subscriber").val(),
+            };
+        }
+    }
+
+    function search() {
+        $('#deviceTable').bootstrapTable('refresh');
+    }
+
+    function reset() {
+        $("#s_deviceAlias").val("");
+        $("#s_serialNum").val("");
+        $("#s_subscriber").val("");
+        $('#deviceTable').bootstrapTable('refresh');
+    }
+
+    $(function () {
+        app.getToken();
+        app.getList();
+    });
+</script>
+
+<!-- 设备列表模板 -->
+<script type="text/html" id="listModel">
+    <section class="openDetail" style="width: 95%;">
+        <div class="panel-body">
+            <div>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-label">设备名称：</label>
+                        <input class="form-control" id="s_deviceAlias" placeholder="设备名称" type="text">
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-label">设备序列号：</label>
+                        <input class="form-control" id="s_serialNum" placeholder="设备序列号" type="text">
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-label">订阅账号：</label>
+                        <input class="form-control" id="s_subscriber" placeholder="订阅账号" type="text">
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <div style="margin-top: 22px;letter-spacing: 15px" id="buttons">
+                            <button class="btn btn-info" onclick="search()">查询</button>
+                            <button class="btn btn-info" onclick="reset()">重置</button>
+                            <button class="btn btn-info" id="bangding">绑定</button>
+                        </div>
+                    </div>
+                </div>
+                <table id="deviceTable"></table>
+            </div>
+        </div>
+    </section>
+</script>
+</html>

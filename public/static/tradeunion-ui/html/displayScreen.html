@@ -1,0 +1,2654 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>中国工业互联网研究院测试中心</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../css/display-screen.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<script src="../js/httpUtils.js"></script>
+		<script src="../js/Md5.js"></script>
+		<style>
+			.bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
+				display: none;
+			}
+			
+			.userFooter {
+				position: absolute;
+				width: 100%;
+				bottom: 0;
+				left: 0;
+				/*z-index: 9999;*/
+			}
+			
+			#modelInfo {
+				width: 60%;
+			}
+			
+			.MarginPx {
+				margin: 15px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="lyear-layout-web">
+			<div class="lyear-layout-container">
+
+				<!--加载头部和菜单栏-->
+				<div id="hander">
+					<script>
+						$(function() {
+							$("#hander").load("handMenu.html");
+						});
+					</script>
+				</div>
+
+				<!--页面主要内容-->
+				<main class="lyear-layout-content" style="display: none">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card">
+									<div class="card-header">
+										<h4></h4>
+									</div>
+									<div class="card-body">
+
+										<div class="ibox float-e-margins">
+											<div class="ibox-content row">
+												<div class="col-lg-3">
+													<div class="form-group">
+														<label class="form-label" for="s_deviceName">设备名称：</label>
+														<input class="form-control" name="s_deviceName" id="s_deviceName" placeholder="设备名称" type="text">
+													</div>
+												</div>
+
+												<div class="col-lg-1">
+													<div class="form-group">
+														<div id="buttons1" style="margin-top: 24px;">
+															<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-1">
+													<div class="form-group">
+														<div id="buttons2" style="margin-top: 24px;">
+															<button type="button" class="btn btn-success" id="search"><i class="fa fa-search"></i> 查询</button>
+														</div>
+													</div>
+												</div>
+
+											</div>
+											<div class="ibox-content">
+												<!--页面内容部分-->
+												<!-- 这里写内容 -->
+												<div id="buttons">
+													<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i> 批量发布</button>
+													<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 批量修改分辨率</button>
+													<button type="button" class="btn btn-info" id="picVideo"><i class="fa fa-photo"></i> 图片/视频管理</button>
+													<button type="button" class="btn btn-warning" id="getImgAuthor"><i class="fa fa-warning"></i>图片配置</button>
+													<button type="button" class="btn btn-warning" id="getVideoAuthor"><i class="fa fa-warning"></i>视频配置</button>
+												</div>
+
+												<div id="myTable">
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+				<!--End 页面主要内容-->
+			</div>
+		</div>
+		<!--视频弹框-->
+		<div class="videos" id="videos">
+		</div>
+		<!--加载底部-->
+		<div id="footer" class="userFooter">
+			<script type="text/javascript">
+				$(function() {
+					$("#footer").load("footer.html");
+				});
+			</script>
+		</div>
+		<div id="loadDiv"></div>
+
+	</body>
+
+	<script>
+		var html;
+		var rdata = {};
+		var videImgList = [];
+		/*全局数据*/
+		var globalArrayList = [];
+
+		function globalArrayDate(vireType, deviceId) {
+			globalArrayList = [];
+			$.ajax({
+				url: addToUrlToken(deviceServiceUrl + "/vdVtr/list"),
+				type: "get",
+				contentType: "application/json",
+				dataType: "json",
+				timeout: 10000,
+				data: {
+					"deviceId": deviceId,
+					"vireType": vireType
+				},
+				async: false,
+				success: function(res) {
+					if(res.code == 0) {
+						console.log(res.data.list);
+						if(res.data.list.length > 0) {
+							for(var i = 0; i < res.data.list.length; i++) {
+								globalArrayList += res.data.list[i].videoId + ",";
+							}
+							globalArrayList = globalArrayList.substring(0, globalArrayList.length - 1);
+							globalArrayList = globalArrayList.split(",");
+						}
+					}
+				}
+			});
+		}
+		$("#loadDiv").html(loadHtml);
+		$(function() {
+
+			$.show_overall_loding();
+			$('#myTable').bootstrapTable({
+				url: deviceServiceUrl + "/ipush/list", //请求后台的URL（*）
+				//data: data1, //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				//          data-side-pagination="server"
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				//          height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var result = data.data;
+					rdata = result.list;
+					var res = [];
+					res.push({
+						total: result.total,
+						rows: result.list
+					});
+					return res[0];
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					checkbox: true
+				}, {
+					width: 100,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'deviceAlias',
+					title: '设备名称',
+					width: 300
+				}, {
+					field: 'deviceMac',
+					title: '设备Mac',
+					width: 300
+				},{
+					field: 'organizationName',
+					title: '所属机构',
+					width: 400
+				}, {
+					title: "操作",
+					width: 300,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="修改分辨率" type="button" onclick="tabEidt(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-pencil-square"></i></button>' +
+							'<button data-toggle="tooltip" title="发布信息" type="button" onclick="tabAdd(' + i3 + ');" class="btn btn-primary tableButton"><i class="fa fa-plus"></i></button>' +
+							'<button data-toggle="tooltip" title="历史发布" type="button" onclick="hisInfo(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-info-circle"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					isScreenOrganization: 1,
+					productCode: "00047701",
+					deviceAlias: $("#s_deviceName").val()
+				};
+			}
+			$("#addSlibings").on("click", function() {
+				var data = $("#myTable").bootstrapTable('getSelections');
+				if(data.length != 0) {
+					for(var i = 0; i < data.length; i++) {
+						if(data[i].ipId == null || data[i].ipId == "") {
+							layer.msg("请先设置设备分辨率！", {
+								icon: 5
+							});
+							return;
+						}
+						//						else if(data[i].pushResolution != data[0].pushResolution){
+						//							layer.msg("设备分辨率不一致", {icon: 5});
+						//							return;
+						//						}else if(data[i].pushPicture != data[0].pushPicture){
+						//							layer.msg("设备背景图不一致", {icon: 5});
+						//							return;
+						//						}else if(data[i].firstPage != data[0].firstPage){
+						//							layer.msg("设备首页图不一致", {icon: 5});
+						//							return;
+						//						}
+					}
+					showModel("批量发布信息", 1);
+				} else {
+					layer.msg("请选择数据", {
+						icon: 2
+					});
+					return;
+				}
+
+			});
+
+			/*图片配置*/
+			$("#getImgAuthor").on("click", function() {
+				var data = $("#myTable").bootstrapTable('getSelections');
+				if(data.length == 1) {
+					if(data[0].ipId == null || data[0].ipId == "") {
+						layer.msg("请先设置设备分辨率！", {
+							icon: 5
+						});
+						return;
+					}
+					showAuthorModel(1, data[0].deviceId);
+				} else {
+					layer.msg("请选择一条数据", {
+						icon: 5
+					});
+				}
+			});
+			/*视频配置*/
+			$("#getVideoAuthor").on("click", function() {
+				var data = $("#myTable").bootstrapTable('getSelections');
+				if(data.length == 1) {
+					if(data[0].ipId == null || data[0].ipId == "") {
+						layer.msg("请先设置设备分辨率！", {
+							icon: 5
+						});
+						return;
+					}
+					showAuthorModel(2, data[0].deviceId);
+				} else {
+					layer.msg("请选择一条数据", {
+						icon: 5
+					});
+				}
+			});
+
+			$("#edit").on("click", function() {
+				var data = $("#myTable").bootstrapTable('getSelections');
+				if(data.length != 0) {
+					showModel("批量修改分辨率", 3);
+				} else {
+					layer.msg("请选择数据", {
+						icon: 2
+					});
+					return;
+				}
+
+			});
+
+			$("#picVideo").on("click", function() {
+				var data = $("#myTable").bootstrapTable('getSelections');
+				if(data.length == 1) {
+					if(data[0].ipId == null || data[0].ipId == "") {
+						layer.msg("请先设置设备分辨率！", {
+							icon: 5
+						});
+						return;
+					}
+					picVideoPub(data[0]);
+				} else {
+					layer.msg("请选择一条数据", {
+						icon: 2
+					});
+					return;
+				}
+
+			});
+
+			var serchaData = {};
+			$("#search").click(function() {
+				$.show_overall_loding();
+				$('#myTable').bootstrapTable('refresh');
+			});
+
+			$("#clean").click(function() {
+				$("#s_deviceName").val("");
+				$("#search").trigger("click");
+			});
+
+		});
+
+		/*视频资源详情*/
+		function showAuthorModel(vireType, deviceId) {
+			var authlayer = layer.open({
+				skin: 'card',
+				type: 1,
+				title: '视频资源详情',
+				closeBtn: 1,
+				shade: 0.5,
+				moveType: 0, //拖拽模式，0或者1
+				maxWidth: 500,
+				content: template("modelVideoResource", {
+					title: "123"
+				}),
+				area: ['900px', '550px'],
+				offset: 'auto',
+				btn: ['关闭'],
+				yes: function(index, layero) {
+					layer.close(authlayer);
+				},
+				success: function(layero) {
+					getVideoResource(vireType, deviceId);
+				}
+			});
+		}
+
+		/*数组移除数据*/
+		Array.prototype.remove = function(val) {
+			var index = this.indexOf(val);
+			if(index > -1) {
+				this.splice(index, 1);
+			}
+		};
+
+		function getVideoResource(vireType, deviceId) {
+			$.show_overall_loding();
+			$('#deviceVideoResource').bootstrapTable({
+				url: deviceServiceUrl + "/vdVtr/byDevIdlist", //请求后台的URL（*）
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				// pagination: true,                       //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					field: 'checked',
+					checkbox: true
+				}, {
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'vireName',
+					title: '资源名称',
+					width: 100
+				}, {
+					field: 'vireDepict',
+					title: '资源描述',
+					width: 200
+				}, {
+					field: 'vdNum',
+					title: '资源序号',
+					width: 100
+				}, {
+					field: 'virePath',
+					title: '资源路径',
+					width: 600
+				}, {
+					title: "操作",
+					width: 100,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="编辑" type="button" onclick="tabEidtVideo(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-edit"></i></button>'
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					deviceId: deviceId,
+					vireType: vireType,
+					userName: $("#ss_userName").val(),
+					vireName: $("#ss_vireName").val(),
+				};
+			}
+
+			var serchaData = {};
+			$("#search2").click(function() {
+				$.show_overall_loding();
+				$('#deviceVideoResource').bootstrapTable('refresh');
+			});
+
+			$("#clean2").click(function() {
+				$("#ss_userName").val("");
+				$("#ss_vireName").val("");
+				$("#search2").trigger("click");
+			});
+
+			/*新增资源数据*/
+			$("#addVideoRe").on("click", function() {
+				globalArrayDate(vireType, deviceId);
+				var authlayer = layer.open({
+					skin: 'card',
+					type: 1,
+					title: '配置资源',
+					closeBtn: 1,
+					shade: 0.5,
+					moveType: 0, //拖拽模式，0或者1
+					maxWidth: 500,
+					content: template("modelImgVideo", {
+						title: "123"
+					}),
+					area: ['900px', '550px'],
+					offset: 'auto',
+					btn: ['提交', '关闭'],
+					yes: function(index, layero) {
+						$.show_overall_loding();
+						$.postJSON(deviceServiceUrl + "/vdVtr", {
+							"vireType": vireType,
+							"deviceId": deviceId,
+							"videoIds": globalArrayList
+						}, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								parent.layer.msg("操作成功", {
+									icon: 6
+								});
+								$('#modelImgVideo').bootstrapTable('refresh');
+								$('#deviceVideoResource').bootstrapTable('refresh');
+								return true;
+							} else {
+								$('#modelImgVideo').bootstrapTable('refresh');
+								$('#deviceVideoResource').bootstrapTable('refresh');
+								if(data.code == 401000) {
+									parent.layer.msg(data.message, {
+										icon: 5
+									});
+								} else if(data.messages != null) {
+									parent.layer.msg(data.messages[0].error, {
+										icon: 5
+									});
+								} else {
+									parent.layer.msg(data.message, {
+										icon: 5
+									});
+								}
+							}
+						});
+					},
+					success: function(layero) {
+						getImgVIdeoTable(vireType, deviceId);
+					},
+					end: function() { //无论是确认还是取消，只要层被销毁了，end都会执行，不携带任何参数。layer.open关闭事件
+						globalArrayList = [];
+					}
+				});
+			});
+
+			/*批量删除*/
+			$("#removeVideoResource").on("click", function() {
+				var data = $("#deviceVideoResource").bootstrapTable('getSelections');
+				var ids = [];
+				for(var i = 0; i < data.length; i++) {
+					var one = data[i];
+					ids.push(one.id);
+				}
+				if(ids.length == 0) {
+					layer.msg('请选择需删除的视频资源', {
+						icon: 5
+					});
+					return;
+				}
+				var conlayer = layer.confirm("确定删除选中数据？", {
+					btn: ['确定', '取消']
+				}, function() {
+					$.show_overall_loding();
+					$.deleteJSON(deviceServiceUrl + "/vdVtr?videoDevIds=" + ids, {}, function(data) {
+						$.hide_overall_loding();
+						if(data.code == 0) {
+							layer.close(conlayer);
+							layer.msg("成功", {
+								icon: 1
+							});
+							$('#deviceImgVideo').bootstrapTable('refresh');
+							$('#deviceVideoResource').bootstrapTable('refresh');
+							return true;
+						} else {
+							$('#deviceVideoResource').bootstrapTable('refresh');
+							$('#deviceImgVideo').bootstrapTable('refresh');
+							if(data.code == 401000) {
+								parent.layer.msg(data.message, {
+									icon: 5
+								});
+							} else if(data.messages != null) {
+								parent.layer.msg(data.messages[0].error, {
+									icon: 5
+								});
+							} else {
+								parent.layer.msg(data.message, {
+									icon: 5
+								});
+							}
+						}
+					})
+				}, function() {
+					layer.close(conlayer);
+				});
+			});
+
+		}
+
+		function tabEidtVideo(obj) {
+			var data = $("#deviceVideoResource").bootstrapTable('getData')[obj];
+			console.log(data);
+			var myEditLayer = layer.open({
+				skin: 'card',
+				type: 1,
+				title: "编辑设备资源",
+				area: ['600px', '425px'], //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: template("modelEdit", {
+					title: "123"
+				}),
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var vireType = $("#vireType").val();
+					var vdNum = $("#vdNum").val();
+					$.show_overall_loding();
+					$.putJSON(deviceServiceUrl + "/vdVtr", {
+						"id": data.id,
+						"deviceId": data.deviceId,
+						'vireType': vireType,
+						'vdNum': vdNum
+					}, function(data) {
+						$.hide_overall_loding();
+						if(data.code == 0) {
+							layer.close(myEditLayer);
+							layer.msg("成功", {
+								icon: 1
+							});
+							$('#deviceVideoResource').bootstrapTable('refresh');
+							return true;
+						} else {
+							$('#deviceVideoResource').bootstrapTable('refresh');
+							if(data.code == 401000) {
+								parent.layer.msg(data.message, {
+									icon: 5
+								});
+							} else if(data.messages != null) {
+								parent.layer.msg(data.messages[0].error, {
+									icon: 5
+								});
+							} else {
+								parent.layer.msg(data.message, {
+									icon: 5
+								});
+							}
+						}
+					});
+				},
+				success: function(layero) {
+					$(".deviceDisabled").attr("disabled", "disabled");
+					if(data != null) {
+						$("#vireType").val(data.vireType);
+						$("#vdNum").val(data.vdNum);
+					}
+				}
+			});
+		}
+
+		function getImgVIdeoTable(obj, deviceId) {
+			$.show_overall_loding();
+			$('#deviceImgVideo').bootstrapTable({
+				url: deviceServiceUrl + "/videoRe/list", //请求后台的URL（*）
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				/*选中单选框*/
+				onCheck: function(row) {
+					globalArrayList.push(row.id);
+					console.log(globalArrayList);
+				},
+				/*取消单选框*/
+				onUncheck: function(row) {
+					globalArrayList.remove(row.id);
+					console.log(globalArrayList);
+				},
+				/*选中全选框*/
+				onCheckAll: function(rows) {
+					for(var i = 0; i < rows.length; i++) {
+						if(globalArrayList.indexOf(rows[i].id) == -1) {
+							globalArrayList.push(rows[i].id);
+						}
+					}
+					console.log(globalArrayList);
+				},
+				/*取消全选框*/
+				onUncheckAll: function(rows) {
+					for(var i = 0; i < rows.length; i++) {
+						globalArrayList.remove(rows[i].id);
+					}
+					console.log(globalArrayList);
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					field: 'checked',
+					checkbox: true,
+					formatter: stateFormatter
+				}, {
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'vireName',
+					title: '资源名称',
+					width: 100
+				}, {
+					field: 'vireDepict',
+					title: '资源描述',
+					width: 100
+				}, {
+					field: 'virePath',
+					title: '资源路径',
+					width: 360
+				}, {
+					field: 'userName',
+					title: '创建人',
+					width: 100
+				}, ]
+			});
+
+			function queryParams(params) {
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					vireType: obj,
+					userName: $("#s_userName").val(),
+					vireName: $("#s_vireName").val(),
+				};
+			}
+
+			function stateFormatter(value, row, index) {
+				var videImgLoadDate = "";
+				$.ajax({
+					url: addToUrlToken(deviceServiceUrl + "/vdVtr/list"),
+					type: "get",
+					contentType: "application/json",
+					dataType: "json",
+					timeout: 10000,
+					data: {
+						"deviceId": deviceId,
+						"videoId": row.id,
+					},
+					async: false,
+					success: function(res) {
+						if(res.code == 0) {
+							videImgLoadDate = res.data.list;
+						}
+					}
+				});
+				if(videImgLoadDate.length == 1) {
+					return {
+						disabled: false,
+						checked: true,
+					}
+				}
+				return value;
+			}
+
+			var serchaData = {};
+			$("#search1").click(function() {
+				$.show_overall_loding();
+				$('#deviceImgVideo').bootstrapTable('refresh');
+			});
+
+			$("#clean1").click(function() {
+				$("#s_userName").val("");
+				$("#s_vireName").val("");
+				$("#search1").trigger("click");
+			});
+		}
+
+		function tabEidt(obj) {
+
+			showModel("修改分辨率", 4, obj);
+		}
+
+		function tabAdd(obj) {
+			data = $("#myTable").bootstrapTable('getData')[obj];
+			if(data.ipId == null || data.ipId == "") {
+				layer.msg("请先设置设备分辨率！", {
+					icon: 5
+				});
+				return;
+			}
+			showModel("发布信息", 2, obj);
+		}
+
+		function hisInfo(obj) {
+
+			showHisModel("历史信息", 1, obj);
+		}
+
+		var isAdd = true;
+
+		function showModel(title, flag, index) {
+
+			if(flag == 1 || flag == 2) {
+				isAdd = true;
+				html = template("modelPush", {
+					title: "消息发布"
+				});
+			} else {
+				isAdd = false;
+				html = template("modelInfo", {
+					title: "修改分辨率"
+				});
+			}
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['550px'], //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					if(flag == 1 || flag == 2) {
+						var data = $("#pushForm").serializeJson();
+						console.info($("#fileUrls").val())
+						if(($("#fileUrls").val() != "" && $("#fileUrls").val() != null) || ($("#h5File").val() != "" && $("#h5File").val() != null)) {
+
+						} else {
+							layer.msg("文件不能为空", {
+								icon: 2
+							});
+							return;
+						}
+						var url;
+						if(data.url == "" || data.url == null) {
+							url = $("#h5File").val();
+						} else {
+							url = data.url;
+						}
+						if($("#repeatType").val() == "repeat" && $("#filetype").val() == "img") {
+							var r = /^\+?[1-9][0-9]*$/;
+							if($("#switchTime").val() == "") {
+								layer.msg("时间间隔不能为空", {
+									icon: 2
+								});
+								return;
+							} else if(!r.test($("#switchTime").val())) {
+								layer.msg("时间间隔必须为正整数", {
+									icon: 2
+								});
+								return;
+							}
+						}
+
+						var deviceIds = $("#deviceId").val().split(",");
+
+						var height = data.pushResolution.split("*")[1].replace(/\s*/g, "");
+						var width = data.pushResolution.split("*")[0].replace(/\s*/g, "");
+						var bj_img = data.pushPicture + "," + data.firstPage;
+						var pushData = {
+							"deviceId": deviceIds,
+							//							"height": height,
+							//							"width": width,
+							//							"bj_img": bj_img,
+							"repeatType": data.repeatType,
+							"url": url,
+							"switchTime": data.switchTime,
+							"filetype": data.filetype
+						}
+
+						$.postJSON(deviceServiceUrl + "/ipushlog/batch_up_push", pushData, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$.show_overall_loding();
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败" + data.message, {
+								icon: 2
+							});
+						});
+					} else {
+						var data = $("#infoForm").serializeJson();
+						console.info($("#deviceId").val())
+						if(data.pushPicture == "" || data.firstPage == "" || data.pushPicture == null || data.firstPage == null) {
+							layer.msg("背景图与首页图不能为空", {
+								icon: 2
+							});
+							return;
+						}
+						var resolution = $("#pushResolution").val();
+						if(resolution != $("#pushPicResolution").val()) {
+							layer.msg("背景图与所选分辨率不匹配", {
+								icon: 2
+							});
+							return;
+						}
+						if(resolution != $("#firstResolution").val()) {
+							layer.msg("背景图与所选分辨率不匹配", {
+								icon: 2
+							});
+							return;
+						}
+
+						var deviceInfos = $("#deviceId").val().split(",");
+						var deviceIds = [];
+						for(var i = 0; i < deviceInfos.length; i++) {
+							deviceIds.push(deviceInfos[i].split("_")[0])
+						}
+						$.extend(data, {
+							"deviceId": deviceIds
+						});
+						$.postJSON(deviceServiceUrl + "/ipush/batch_up_information", data, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$.show_overall_loding();
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					}
+				},
+				success: function(layero) {
+					$(".layui-layer-title").addClass("card-header");
+					var data = null;
+					if(flag == 1 || flag == 3) {
+						data = $("#myTable").bootstrapTable('getSelections');
+						var deviceIds = data[0].deviceId + "_" + data[0].deviceSubscriberNumber + "_" + data[0].productCode + "_" + data[0].serialNum;
+						for(var i = 1; i < data.length; i++) {
+							deviceIds = deviceIds + "," + data[i].deviceId + "_" + data[i].deviceSubscriberNumber + "_" + data[i].productCode + "_" + data[i].serialNum;
+						}
+						if(isAdd) {
+							$("#pushForm").setForm(data[0]);
+						}
+						$("#deviceId").val(deviceIds);
+					} else {
+						data = $("#myTable").bootstrapTable('getData')[index];
+
+						if(isAdd) {
+							$("#pushForm").setForm(data);
+						} else {
+							$("#infoForm").setForm(data);
+							$("#pushResolution").val("1920 * 1080");
+							if(data.ipId != null && data.ipId != "") {
+								$("#pushPicResolution").val(data.pushResolution)
+								$("#firstResolution").val(data.pushResolution)
+								$("#pushResolution").val(data.pushResolution)
+								$("#imgUrl").attr("src", data.pushPicture)
+								$("#imgUrl1").attr("src", data.firstPage)
+								$("#imgSpan").css("display", "none");
+								$("#imgUrl").css("display", "block");
+								$("#imgSpan1").css("display", "none");
+								$("#imgUrl1").css("display", "block");
+							}
+
+						}
+						$("#deviceId").val(data.deviceId + "_" + data.deviceSubscriberNumber + "_" + data.productCode + "_" + data.serialNum);
+					}
+
+					$('#filetype').change(function() {
+						var filetypeVal = this.value;
+						if(filetypeVal == "h5") {
+							$("#repeatType").val("one");
+							$("#repeatType").attr("disabled", "disabled")
+							$("#onlyH5").css("display", "block")
+							$("#onlyVideo").css("display", "none")
+							$(".onlyPic").css("display", "none")
+						} else if(filetypeVal == "video") {
+							$("#repeatType").val("one");
+							$("#repeatType").attr("disabled", false)
+							$("#onlyVideo").css("display", "block")
+							$("#onlyH5").css("display", "none")
+							$(".onlyPic").css("display", "none")
+						} else if(filetypeVal == "img") {
+							$("#repeatType").val("one");
+							$("#repeatType").attr("disabled", false)
+							$("#onlyPic").css("display", "block")
+							$("#onlyVideo").css("display", "none")
+							$("#onlyH5").css("display", "none")
+						}
+					});
+
+					$("#repeatType").change(function() {
+						console.info($("#repeatType").val())
+						console.info($("#filetype").val())
+						if($("#repeatType").val() == "repeat" && $("#filetype").val() == "img") {
+							$("#onlyVideo").css("display", "none")
+							$("#onlyPic").css("display", "none")
+							$(".onlyPic").css("display", "block")
+						} else if($("#repeatType").val() == "repeat" && $("#filetype").val() == "video") {
+							$(".onlyPic").css("display", "none")
+							$("#onlyVideo").css("display", "block")
+						} else {
+							$("#onlyVideo").css("display", "none")
+							$(".onlyPic").css("display", "none")
+							$("#onlyPic").css("display", "block")
+						}
+						$("#onlyH5").css("display", "none")
+					})
+				}
+			});
+		}
+
+		//图片、视频管理
+		var picPage = 1,
+			videoPage = 1;
+
+		//图片、视频管理弹框
+		function picVideoPub(data) {
+			let html = template("picVideoPub", {
+				title: ""
+			});
+
+			var modeLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: '图片/视屏管理',
+				area: ['930px', '600px'], //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: '',
+				success: function(layero) {
+					var deviceId = data.deviceId + "_" + data.deviceSubscriberNumber + "_" + data.productCode + "_" + data.serialNum;
+					$('#deviceId').val(deviceId);
+					$('#picVideoPubBox').attr({
+						'data-pushResolution': data.pushResolution
+					});
+					getPicVideoList(1, '');
+					$('#picVideoPubBox').on('click', '.manage-list-i', function(e) {
+						e.stopPropagation();
+						if($(this).hasClass('check-on')) {
+							$(this).removeClass('check-on');
+						} else {
+							$(this).addClass('check-on');
+						}
+					});
+
+					$('#picVideoPubBox').on('click', '.manage-i-delete', function(e) {
+						e.stopPropagation();
+						let _this = $(this);
+						let id = _this.parent().attr('data-id');
+						let conlayer = layer.confirm("确定删除吗？", {
+							btn: ['确定', '取消']
+						}, function() {
+							$.deleteJSON(addToUrlToken(deviceServiceUrl + "/videoRe") + "&id=" + id, {}, function(res) {
+								if(res.code == 0) {
+									layer.msg("删除成功！", {
+										icon: 1
+									});
+									$('#picVideoPubBox').find('.pic-item .manage-item-list').html('');
+									$('#picVideoPubBox').find('.video-item .manage-item-list').html('');
+									picPage = 1;
+									videoPage = 1;
+									getPicVideoList(1, '');
+								} else {
+									layer.msg("删除失败！", {
+										icon: 2
+									});
+								}
+								layer.close(conlayer);
+							});
+						}, function() {
+							layer.close(conlayer);
+						});
+					});
+
+					$('#picVideoPubBox').on('click', '.pic-item .more-btn', function() {
+						picPage++;
+						getPicVideoList(picPage, 1);
+					});
+
+					$('#picVideoPubBox').on('click', '.video-item .more-btn', function() {
+						videoPage++;
+						getPicVideoList(videoPage, 2);
+					});
+				}
+			});
+		}
+
+		//图片、视频管理发布
+		function pubMethod(ele, type) {
+			let list = [];
+			let vireUrl = '';
+			let deviceId = [];
+			deviceId.push($(ele).parents('#picVideoPubBox').find('#deviceId').val());
+			let pushResolution = $(ele).parents('#picVideoPubBox').attr('data-pushResolution');
+			if(!pushResolution) {
+				layer.msg("请先设置设备分辨率", {
+					icon: 2
+				});
+				return;
+			}
+			if(type == 1) {
+				list = $(ele).parents('.pic-item').find('li.check-on');
+				if(list.length == 1) {
+					vireUrl = $(ele).parents('.pic-item').find('li.check-on img').attr('src');
+					let data = {
+						"deviceId": deviceId,
+						"repeatType": 'one',
+						"url": vireUrl,
+						"switchTime": '',
+						"filetype": 'img'
+					}
+					pubRequest(data, '');
+				} else if(list.length == 0) {
+					layer.msg("请先选择要发布的图片", {
+						icon: 2
+					});
+					return;
+				} else {
+					let html = template("picTimeTip", {
+						title: ""
+					});
+					var myLayer = layer.open({
+						skin: 'card', //自定义样式winning-class
+						type: 1,
+						title: '间隔时间设置',
+						area: ['450px', '200px'], //宽高
+						resize: true, //是否拉升
+						offset: 'auto', //居中
+						content: html,
+						btn: ['提交', '取消'],
+						yes: function(index, layero) {
+							let r = /^\+?[1-9][0-9]*$/;
+							if($("#picTimeForm #switchTime2").val() == "") {
+								layer.msg("时间间隔不能为空", {
+									icon: 2
+								});
+								return;
+							} else if(!r.test($("#picTimeForm #switchTime2").val())) {
+								layer.msg("时间间隔必须为正整数", {
+									icon: 2
+								});
+								return;
+							}
+							let data = $("#picTimeForm").serializeJson();
+							let imgList = $(ele).parents('.pic-item').find('li.check-on img');
+							let imgUrl = '';
+							for(let i = 0, len = imgList.length; i < len; i++) {
+								let src = imgList[i].src;
+								if(i == (len - 1)) {
+									imgUrl += src;
+								} else {
+									imgUrl += src + ',';
+								}
+							}
+							data.deviceId = deviceId;
+							data.repeatType = 'repeat';
+							data.filetype = 'img';
+							data.url = imgUrl;
+							pubRequest(data, myLayer);
+						},
+						success: function(layero) {
+
+						}
+					});
+				}
+			} else {
+				list = $(ele).parents('.video-item').find('li.check-on');
+				if(list.length == 1) {
+					vireUrl = $(ele).parents('.video-item').find('li.check-on .videolist').attr('ipath');
+					let data = {
+						"deviceId": deviceId,
+						"repeatType": 'one',
+						"url": vireUrl,
+						"switchTime": '',
+						"filetype": 'video'
+					}
+					pubRequest(data, '');
+				} else if(list.length == 0) {
+					layer.msg("请先选择要发布的视频", {
+						icon: 2
+					});
+					return;
+				} else {
+					let data = {
+						"deviceId": deviceId,
+						"repeatType": 'repeat',
+						"switchTime": '',
+						"filetype": 'video'
+					}
+					let videoList = $(ele).parents('.video-item').find('li.check-on .videolist');
+					console.log(videoList)
+					let videoUrl = '';
+					for(let i = 0, len = videoList.length; i < len; i++) {
+						let src = videoList[i].attributes[2].value;
+						if(i == (len - 1)) {
+							videoUrl += src;
+						} else {
+							videoUrl += src + ',';
+						}
+					}
+					data.url = videoUrl;
+					pubRequest(data, '');
+				}
+			}
+		}
+
+		function pubRequest(data, ele) {
+			$.postJSON(deviceServiceUrl + "/ipushlog/batch_up_push", data, function(data) {
+				if(data.code == 0) {
+					layer.msg("成功", {
+						icon: 1
+					});
+					layer.close(ele);
+					$('#picVideoPubBox').find('.pic-item .manage-item-list').html('');
+					$('#picVideoPubBox').find('.video-item .manage-item-list').html('');
+					picPage = 1;
+					videoPage = 1;
+					getPicVideoList(1, '');
+					return true;
+				} else {
+					layer.msg("操作失败" + data.message, {
+						icon: 2
+					});
+				}
+			});
+		}
+
+		//图片、视频管理上传
+		function upMethod(type, title) {
+			let html;
+			if(type == 1) {
+				html = template("picTip", {
+					title: ""
+				});
+			} else if(type == 2) {
+				html = template("videoTip", {
+					title: ""
+				});
+			} else {
+				layer.msg("出错了", {
+					icon: 2
+				});
+				return;
+			}
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['550px', '400px'], //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					var data = $("#picVideoForm").serializeJson();
+					if(type == 1) {
+						data.virePath = $("#picVideoForm").find('.upfile-box img').attr('src');
+						if(data.vireName == '') {
+							layer.msg("文件名称不能为空", {
+								icon: 2
+							});
+							return;
+						} else if(data.virePath == '') {
+							layer.msg("文件不能为空", {
+								icon: 2
+							});
+							return;
+						}
+						upLoadFileAll(data, myLayer);
+					} else if(type == 2) {
+						data.virePath = $("#picVideoForm").find('.videolist').attr('ipath');
+						if(data.vireName == '') {
+							layer.msg("文件名称不能为空", {
+								icon: 2
+							});
+							return;
+						} else if(data.virePath == '') {
+							layer.msg("文件不能为空", {
+								icon: 2
+							});
+							return;
+						}
+						upLoadFileAll(data, myLayer);
+					}
+				},
+				success: function(layero) {
+					if(type == 2) {
+						$('#upVideo').show();
+						$('#picVideoForm .videolist').click(function(e) { //这个视频被点击后执行
+							e.stopPropagation();
+							var img = $(this).attr('vpath'); //获取视频预览图
+							var video = $(this).attr('ipath'); //获取视频路径
+							$('.videos').html("<video id=\"video\" poster='" + img + "' style='width: 640px' src='" + video + "' preload=\"auto\" controls=\"controls\" autoplay=\"autoplay\"></video><img onClick=\"close1()\" class=\"vclose\" src=\"../images/gb.png\" width=\"25\" height=\"25\">");
+							$('.videos').show();
+						});
+					}
+				}
+			});
+
+		}
+
+		function upFile(type) {
+			if(type == 1) {
+				$('#picUp').click();
+			} else if(type == 2) {
+				$('#videoUp').click();
+			}
+		}
+
+		//上传进度回调函数：  
+		function progressHandlingFunction(e) {
+			$('.progress-container').show();
+			if(e.lengthComputable) {
+				$('#progress').attr({
+					value: e.loaded,
+					max: e.total
+				}); //更新数据到进度条  
+				var percent = e.loaded / e.total * 100;
+//				$('#progress').html(e.loaded + "/" + e.total + " bytes. " + percent.toFixed(2) + "%");
+				$('#progress').html(percent.toFixed(2) + "%");
+				$('#progress').css('width', percent.toFixed(2) + "%");
+			}
+		}
+
+		function upLoadImgFile(ele) {
+			let imagePath = $(ele).val();
+			let idName = $(ele).attr('id');
+			if(imagePath == "") {
+				layer.msg("请选择要上传的文件", {
+					icon: 2
+				});
+				return;
+			} else {
+				let formData = new FormData();
+				formData.append("file", $(ele)[0].files[0]);
+				//				$.show_overall_loding();
+				$.ajax({
+					type: "post",
+					url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+					data: formData,
+					contentType: false,
+					processData: false,
+					xhr: function() { //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数  
+
+						myXhr = $.ajaxSettings.xhr();
+						if(myXhr.upload) { //检查upload属性是否存在  
+							//绑定progress事件的回调函数  
+							myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
+						}
+						return myXhr; //xhr对象返回给jQuery使用  
+					},
+					success: function(res) {
+						//						$.hide_overall_loding();
+						if(res.code == 0) {
+							let virePath = res.data.filePath;
+							$(ele).parent().parent().find('.upfile-box img').attr('src', virePath);
+						} else {
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						}
+					},
+					fail: function() {
+						layer.msg("操作失败", {
+							icon: 2
+						});
+					}
+				})
+			}
+		}
+
+		function upLoadVideoFile(ele) {
+			let imagePath = $(ele).val();
+			let idName = $(ele).attr('id');
+			if(imagePath == "") {
+				layer.msg("请选择要上传的文件", {
+					icon: 2
+				});
+				return;
+			} else {
+				let formData = new FormData();
+				formData.append("file", $(ele)[0].files[0]);
+				//				$.show_overall_loding();
+				$.ajax({
+					type: "post",
+					url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+					data: formData,
+					contentType: false,
+					processData: false,
+					xhr: function() { //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数  
+
+						myXhr = $.ajaxSettings.xhr();
+						if(myXhr.upload) { //检查upload属性是否存在  
+							//绑定progress事件的回调函数  
+							myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
+						}
+						return myXhr; //xhr对象返回给jQuery使用  
+					},
+					success: function(res) {
+						//						$.hide_overall_loding();
+						if(res.code == 0) {
+							let virePath = res.data.filePath;
+							$(ele).parent().parent().find('.videolist').attr('ipath', virePath);
+						} else {
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						}
+					},
+					fail: function() {
+						layer.msg("操作失败", {
+							icon: 2
+						});
+					}
+				})
+			}
+		}
+
+		function upLoadFileAll(data, ele) {
+			$.postJSON(deviceServiceUrl + "/videoRe", data, function(data) {
+				$.hide_overall_loding();
+				layer.close(ele);
+				if(data.code == 0) {
+					layer.msg("成功", {
+						icon: 1
+					});
+					$('#picVideoPubBox').find('.pic-item .manage-item-list').html('');
+					$('#picVideoPubBox').find('.video-item .manage-item-list').html('');
+					$('#picVideoPubBox').find('.pic-item .more-btn').hide();
+					$('#picVideoPubBox').find('.video-item .more-btn').hide();
+					picPage = 1;
+					videoPage = 1;
+					getPicVideoList(1, '');
+					return true;
+				} else {
+					if(data.code == 401000) {
+						parent.layer.msg(data.message, {
+							icon: 5
+						});
+					} else if(data.messages != null) {
+						parent.layer.msg(data.messages[0].error, {
+							icon: 5
+						});
+					} else {
+						parent.layer.msg(data.message, {
+							icon: 5
+						});
+					}
+				}
+			});
+		}
+
+		//图片、视频管理数据渲染
+		function getPicVideoList(pageNum, type) {
+			$.get(deviceServiceUrl + "/videoRe/lists?token=" + $.getToken() + "&pageSize=5&pageNum=" + pageNum, function(res) {
+				if(res.code == 0) {
+					console.log(res);
+					let imgList = res.data.image;
+					let imgHtml = '';
+					for(let i = 0, length = imgList.length; i < length; i++) {
+						if(imgList[i].checktype == '1') {
+							imgHtml += '<li class="manage-list-i check-on" data-id="' + imgList[i].id + '">' +
+								'<p title="'+imgList[i].vireName+'">' + imgList[i].vireName + '</p>' +
+								'<div class="manage-i-img">' +
+								'<span class="check-state"></span>' +
+								'<img src="' + imgList[i].virePath + '" />' +
+								'</div>' +
+								'<div class="manage-i-delete">' +
+								'<span class="icon-delete"></span>' +
+								'</div>' +
+								'</li>';
+						} else {
+							imgHtml += '<li class="manage-list-i" data-id="' + imgList[i].id + '">' +
+								'<p title="'+imgList[i].vireName+'">' + imgList[i].vireName + '</p>' +
+								'<div class="manage-i-img">' +
+								'<span class="check-state"></span>' +
+								'<img src="' + imgList[i].virePath + '" />' +
+								'</div>' +
+								'<div class="manage-i-delete">' +
+								'<span class="icon-delete"></span>' +
+								'</div>' +
+								'</li>';
+						}
+					}
+
+					let videoList = res.data.video;
+					let videoHtml = '';
+					for(let i = 0, length = videoList.length; i < length; i++) {
+						if(videoList[i].checktype == '1') {
+							videoHtml += '<li class="manage-list-i check-on" data-id="' + videoList[i].id + '">' +
+								'<p title="'+videoList[i].vireName+'">' + videoList[i].vireName + '</p>' +
+								'<div class="manage-i-img">' +
+								'<span class="check-state"></span>' +
+								'<div class="videolist" vpath="" ipath="' + videoList[i].virePath + '">' +
+								'<span class="video-play" onClick="videoPlay(this)"></span>' +
+								'</div>' +
+								'</div>' +
+								'<div class="manage-i-delete">' +
+								'<span class="icon-delete"></span>' +
+								'</div>' +
+								'</li>';
+						} else {
+							videoHtml += '<li class="manage-list-i" data-id="' + videoList[i].id + '">' +
+								'<p title="'+videoList[i].vireName+'">' + videoList[i].vireName + '</p>' +
+								'<div class="manage-i-img">' +
+								'<span class="check-state"></span>' +
+								'<div class="videolist" vpath="" ipath="' + videoList[i].virePath + '">' +
+								'<span class="video-play" onClick="videoPlay(this)"></span>' +
+								'</div>' +
+								'</div>' +
+								'<div class="manage-i-delete">' +
+								'<span class="icon-delete"></span>' +
+								'</div>' +
+								'</li>';
+						}
+					}
+
+					if(type == 1) {
+						$('#picVideoPubBox').find('.pic-item .manage-item-list').append(imgHtml);
+						if(imgList.length == 5) {
+							$('#picVideoPubBox').find('.pic-item .more-btn').show();
+						} else {
+							$('#picVideoPubBox').find('.pic-item .more-btn').hide();
+						}
+					} else if(type == 2) {
+						$('#picVideoPubBox').find('.video-item .manage-item-list').append(videoHtml);
+						if(videoList.length == 5) {
+							$('#picVideoPubBox').find('.video-item .more-btn').show();
+						} else {
+							$('#picVideoPubBox').find('.video-item .more-btn').hide();
+						}
+					} else {
+						$('#picVideoPubBox').find('.pic-item .manage-item-list').append(imgHtml);
+						if(imgList.length == 5) {
+							$('#picVideoPubBox').find('.pic-item .more-btn').show();
+						} else {
+							$('#picVideoPubBox').find('.pic-item .more-btn').hide();
+						}
+						$('#picVideoPubBox').find('.video-item .manage-item-list').append(videoHtml);
+						if(videoList.length == 5) {
+							$('#picVideoPubBox').find('.video-item .more-btn').show();
+						} else {
+							$('#picVideoPubBox').find('.video-item .more-btn').hide();
+						}
+					}
+
+					if(imgList.length == 0 && type == 1) {
+						layer.msg("暂无更多数据", {
+							icon: 2
+						});
+						$('#picVideoPubBox').find('.pic-item .more-btn').hide();
+					} else if(videoList.length == 0 && type == 2) {
+						layer.msg("暂无更多数据", {
+							icon: 2
+						});
+						$('#picVideoPubBox').find('.video-item .more-btn').hide();
+					}
+				}
+			});
+		}
+
+		//视频相关
+		function close1() {
+			var v = document.getElementById('video'); //获取视频节点
+			$('.videos').hide(); //点击关闭按钮关闭暂停视频
+			v.pause();
+			$('.videos').html();
+		}
+
+		function videoPlay(ele) {
+			window.event ? window.event.cancelBubble = true : e.stopPropagation();
+			var img = $(ele).parent().attr('vpath'); //获取视频预览图
+			var video = $(ele).parent().attr('ipath'); //获取视频路径
+			$('.videos').html("<video id=\"video\" poster='" + img + "' style='width: 640px' src='" + video + "' preload=\"auto\" controls=\"controls\" autoplay=\"autoplay\"></video><img onClick=\"close1()\" class=\"vclose\" src=\"../images/gb.png\" width=\"25\" height=\"25\">");
+			$('.videos').show();
+		}
+
+		function showHisModel(title, flag, index) {
+			html = template("hisInfoList", {
+				title: "123"
+			});
+			var modeLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['680px', '450px'], //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['设置', '取消'],
+				yes: function(index, layero) {
+					layer.close(modeLayer);
+				},
+				success: function(layero) {
+					data = $("#myTable").bootstrapTable('getData')[index];
+
+					$("#h_pushPicture").val(data.pushPicture)
+					$("#h_deviceInfo").val(data.deviceId + "_" + data.deviceSubscriberNumber + "_" + data.productCode + "_" + data.serialNum, )
+					$("#h_firstPage").val(data.firstPage)
+					$("#h_pushResolution").val(data.pushResolution)
+
+					var showModes = new showHisMode(data.deviceId);
+					showModes.init();
+					showModes.bindCreate();
+				}
+			});
+		}
+
+		var showHisMode = function(deviceId) {
+			return {
+				node: $("#hisInfoTable"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/ipushlog/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						singleSelect: true,
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 3, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						//单击行选中的操作
+						onClickRow: function(row) {},
+						//双击行选中的操作
+						onDblClickRow: function(row) {},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'pushType',
+							title: '发布类型',
+							width: 300,
+							formatter: function(value, row, index) {
+								var state = "";
+								if(value == "video") {
+									state = '<span">视频</span>'
+								} else if(value == "img") {
+									state = '<span">图片 </span>'
+								} else if(value == "h5") {
+									state = '<span">其他</span>'
+								}
+								return state;
+							}
+						}, {
+							field: 'playType',
+							title: '播放类型',
+							width: 300,
+							formatter: function(value, row, index) {
+								var state = "";
+								if(value == "one") {
+									state = '<span">单个循环</span>'
+								} else if(value == "repeat") {
+									state = '<span">多个循环 </span>'
+								}
+								return state;
+							}
+						}, {
+							field: 'resourceUrl',
+							title: '资源地址',
+							width: 300
+						}, {
+							title: "操作",
+							width: 200,
+							clickToSelect: false,
+							formatter: function(i1, i2, i3) {
+								var str =
+									'<button data-toggle="tooltip" title="重新发布" type="button" onclick="resend(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-refresh"></i></button>'
+								return str;
+							},
+							cellStyle: function() {
+								return {
+									classes: "",
+									css: {
+										"text-align": "center"
+									}
+								}
+							}
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						deviceId: deviceId
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#hisInfoTable").on("click", function() {
+//						that.refresh();
+					});
+
+				}
+			}
+		}
+
+		function resend(obj) {
+			console.info(111)
+			data = $("#hisInfoTable").bootstrapTable('getData')[obj];
+			var height = $("#h_pushResolution").val().replace(/\s*/g, "").split("*")[1];
+			var width = $("#h_pushResolution").val().replace(/\s*/g, "").split("*")[0];
+			var bj_img = $("#h_pushPicture").val() + "," + $("#h_firstPage").val();
+
+			var pushData = {
+				"deviceId": $("#h_deviceInfo").val(),
+				//				"height": height,
+				//				"width": width,
+				//				"bj_img": bj_img,
+				"repeatType": data.playType,
+				"url": data.resourceUrl,
+				"switchTime": data.switchTime,
+				"filetype": data.pushType
+			}
+			$.postJSON(deviceServiceUrl + "/ipushlog/batch_up_repush", pushData, function(data) {
+				$.hide_overall_loding();
+				if(data.code == 0) {
+					layer.msg("成功", {
+						icon: 1
+					});
+					$.show_overall_loding();
+					$('#hisInfoTable').bootstrapTable('refresh');
+					return true;
+				}
+				layer.msg("操作失败" + data.message, {
+					icon: 2
+				});
+			});
+		};
+	</script>
+
+	<!--图片视频模板-->
+	<script type="text/html" id="modelImgVideo">
+		<section class="openDetail" style="width: 100%;height:100%">
+			<div>
+				<div class="panel-body">
+					<div class="ibox-content row">
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="form-label" for="s_vireName">资源名称：</label>
+								<input class="form-control" name="s_vireName" id="s_vireName" placeholder="资源名称" type="text">
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label class="form-label" for="s_userName">用户名称：</label>
+								<input class="form-control" name="s_userName" id="s_userName" placeholder="用户名称" type="text">
+							</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="form-group">
+								<div style="margin-top: 24px;">
+									<button type="button" class="btn btn-purple" id="clean1"><i class="fa fa-eraser"></i> 清空</button>
+									<button type="button" class="btn btn-success" id="search1" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<table id="deviceImgVideo" class="selected"></table>
+				</div>
+			</div>
+		</section>
+	</script>
+
+	<!--视频资源详情-->
+	<script type="text/html" id="modelVideoResource">
+		<section class="openDetail" style="width: 100%;height:100%">
+			<div>
+				<div class="panel-body">
+					<div class="ibox-content row">
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="form-label" for="ss_vireName">资源名称：</label>
+								<input class="form-control" name="ss_vireName" id="ss_vireName" placeholder="资源名称" type="text">
+							</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="form-label" for="ss_userName">用户名称：</label>
+								<input class="form-control" name="ss_userName" id="ss_userName" placeholder="用户名称" type="text">
+							</div>
+						</div>
+						<div class="col-lg-3">
+							<div class="form-group">
+								<div style="margin-top: 24px;">
+									<button type="button" class="btn btn-purple" id="clean2"><i class="fa fa-eraser"></i> 清空</button>
+									<button type="button" class="btn btn-success" id="search2" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="buttons">
+						<button type="button" class="btn btn-primary" id="addVideoRe"><i class="fa fa-plus"></i> 新增资源</button>
+						<button type="button" class="btn btn-danger" id="removeVideoResource"><i class="fa fa-trash-o"></i> 批量删除
+					</button>
+					</div>
+
+					<div id="deviceVideoResource" class="selected"></div>
+				</div>
+			</div>
+		</section>
+	</script>
+
+	<!--编辑设备视频-->
+	<script type="text/html" id="modelEdit">
+		<section class="openDetail" style="width: 100%;">
+			<div class="panel-body">
+				<form id="modelEditForm">
+					<div class="row">
+						<div class="col-lg-12" style="margin: 10px 0">
+							<label class="layui-form-label">资源序号：</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="vdNum" name="vdNum" placeholder="设备资源序号(只可输入数字)" type="text" maxlength="4" value="0" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
+							</div>
+						</div>
+						<div class="col-lg-12" style="margin: 20px 0;">
+							<label class="layui-form-label">资源类型：</label>
+							<div class="layui-input-block">
+								<select class="form-control deviceDisabled" id="vireType" name="vireType">
+									<option value="0">--请选择资源--</option>
+									<option value="1">图片</option>
+									<option value="2">视频</option>
+								</select>
+							</div>
+						</div>
+						<input type="hidden" id="id" name="id" />
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<!--信息发布模板-->
+	<script type="text/html" id="modelPush">
+		<section class="openDetail" style="width: 95%;margin-top: 4%;">
+			<div class="panel-body">
+				<form id="pushForm">
+					<input type="hidden" name="deviceId" id="deviceId" />
+					<input type="hidden" id="fileUrls" name="url" />
+					<input type="hidden" id="resolution1" name="pushResolution" />
+					<input type="hidden" id="pushPic" name="pushPicture" />
+					<input type="hidden" id="firstPic" name="firstPage" />
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-11 MarginPx">
+							<div class="form-group">
+								<label class="col-sm-4 form-label">文件类型：</label>
+								<select class="form-control" id="filetype" name="filetype" style="margin-left: 28%;margin-top: -7%;width: 50%;">
+									<option value="video">视频</option>
+									<option value="img">图片</option>
+									<option value="h5">H5网页</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-11 MarginPx">
+							<div class="form-group">
+								<label class="col-sm-4 form-label">播放类型：</label>
+								<select class="form-control" id="repeatType" name="repeatType" style="margin-left: 28%;margin-top: -7%;width: 50%;">
+									<option value="one">单次</option>
+									<option value="repeat">循环</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-11 MarginPx onlyPic" style="display: none;">
+							<div class="form-group">
+								<label class="col-sm-4 form-label">间隔时间/秒：</label>
+								<div class="layui-input-block">
+									<input class="form-control" type="text" id="switchTime" name="switchTime" placeholder="请输入时间间隔" style="margin-left: 41px;width: 220px;" required="required" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group" id="onlyVideo">
+							<label class="col-sm-4 control-label">上传视频：</label>
+							<button style="width: 90px;margin-left: 1%;" onclick="uplodeVideo()" type="button" class="btn btn-success">选择视频</button>
+							<button style="width: 90px;margin-left: 1%;" onclick="reload()" type="button" class="btn btn-success">重新上传</button>
+							<div class='progress-container' style="margin-left: 160px;margin-top: 10px;">
+								<span id="progress"></span>
+							</div>
+							<input type="file" id="videoFile" accept="audio/mp4, video/mp4" onchange="selectVideo()" value="" style="display: none" />
+							<div id="videoBox" class="uploadBox" style="margin-top: 5%;"></div>
+						</div>
+						<div class="form-group onlyPic" id="onlyPic" style="display: none;">
+							<label class="col-sm-4 control-label">上传图片：</label>
+							<button style="width: 90px;margin-left: 1%;" onclick="uplodePic()" type="button" class="btn btn-success">选择图片</button>
+							<button style="width: 90px;margin-left: 1%;" onclick="reload()" type="button" class="btn btn-success">重新上传</button>
+							<input type="file" id="picFile" accept="image/jpg,image/jpeg,image/png,image/PNG" onchange="selectPic()" value="" style="display: none" />
+							<div id="picBox" class="uploadBox" style="margin-top: 5%;"></div>
+						</div>
+
+						<div class="form-group" id="onlyH5" style="display: none;">
+							<label class="col-sm-4 layui-form-label" style="width:100px;;">H5网页URL：</label>
+							<!--<button style="width: 90px;margin-left: 1%;" onclick="uplodeH5()" type="button" class="btn btn-success">选择H5</button>
+                    <button style="width: 90px;margin-left: 1%;" onclick="reload()" type="button" class="btn btn-success">重新上传</button>-->
+							<!--<input type="file"  id="h5File" accept="text/html" onchange="selectH5()" value="" style="display: none" />-->
+							<div class="layui-input-block">
+								<input class="form-control col-sm-6" type="text" id="h5File" name="h5Url" placeholder="请输入URL" style="margin-left: 20px;" />
+							</div>
+
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+		</section>
+	</script>
+
+	<!--修改分辨率模板-->
+	<script type="text/html" id="modelInfo">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="infoForm">
+					<input type="hidden" name="ipId" id="infoId" />
+					<input type="hidden" name="deviceId" id="deviceId" />
+					<input type="hidden" id="pushPicture" name="pushPicture" />
+					<input type="hidden" id="firstPage" name="firstPage" />
+					<input type="hidden" id="pushPicResolution" />
+					<input type="hidden" id="firstResolution" />
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-11 MarginPx">
+							<div class="form-group">
+								<label class="form-label" style="width: 20%;margin-left: 3%;">分辨率：</label>
+								<select class="form-control" id="pushResolution" name="pushResolution" style="margin-left: 28%;margin-top: -7%;width: 50%;">
+									<option value="320 * 240">320 * 240</option>
+									<option value="336 * 190">336 * 190</option>
+									<option value="320 * 480">320 * 480</option>
+									<option value="400 * 240">400 * 240</option>
+									<option value="432 * 240">432 * 240</option>
+									<option value="480 * 320">480 * 320</option>
+									<option value="640 * 480">640 * 480</option>
+									<option value="800 * 480">800 * 480</option>
+									<option value="768 * 480">768 * 480</option>
+									<option value="854 * 480">854 * 480</option>
+									<option value="960 * 640">960 * 640</option>
+									<option value="576 * 520">576 * 520</option>
+									<option value="486 * 440">486 * 440</option>
+									<option value="800 * 600">800 * 600</option>
+									<option value="1024 * 576">1024 * 576</option>
+									<option value="1024 * 768">1024 * 768</option>
+									<option value="1152 * 864">1152 * 864</option>
+									<option value="1280 * 720">1280 * 720</option>
+									<option value="1280 * 768">1280 * 768</option>
+									<option value="1280 * 800">1280 * 800</option>
+									<option value="1280 * 854">1280 * 854</option>
+									<option value="1280 * 1024">1280 * 1024</option>
+									<option value="1366 * 768">1366 * 768</option>
+									<option value="1280 * 960">1280 * 960</option>
+									<option value="1400 * 1050">1400 * 1050</option>
+									<option value="1440 * 900">1440 * 900</option>
+									<option value="1600 * 900">1600 * 900</option>
+									<option value="1600 * 1024">1600 * 1024</option>
+									<option value="1680 * 1050">1680 * 1050</option>
+									<option value="1600 * 1200">1600 * 1200</option>
+									<option value="1920 * 1080">1920 * 1080</option>
+									<option value="2048 * 1152">2048 * 1152</option>
+									<option value="1920 * 1200">1920 * 1200</option>
+									<option value="1920 * 1400">1920 * 1400</option>
+									<option value="2048 * 1536">2048 * 1536</option>
+									<option value="2560 * 1440">2560 * 1440</option>
+									<option value="2560 * 1600">2560 * 1600</option>
+									<option value="2560 * 2048">2560 * 2048</option>
+									<option value="2800 * 2100">2800 * 2100</option>
+									<option value="3200 * 2048">3200 * 2048</option>
+									<option value="3200 * 2400">3200 * 2400</option>
+									<option value="3840 * 2160">3840 * 2160</option>
+									<option value="3840 * 2400">3840 * 2400</option>
+									<option value="4096 * 2304">4096 * 2304</option>
+									<option value="4096 * 3072">4096 * 3072</option>
+									<option value="5120 * 3200">5120 * 3200</option>
+									<option value="5120 * 4096">5120 * 4096</option>
+									<option value="6400 * 4096">6400 * 4096</option>
+									<option value="6400 * 4800">6400 * 4800</option>
+									<option value="7680 * 4320">7680 * 4320</option>
+									<option value="7680 * 4800">7680 * 4800</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="imgUrl" class="col-sm-3 control-label">上传背景图：</label>
+							<div class="col-sm-3">
+								<div class="imgPreview">
+									<span id="imgSpan" class="imgSpans">
+		                            </span>
+									<img src="" id="imgUrl" class="imgUrls" />
+								</div>
+							</div>
+							<button style="width: 90px;margin-top: 10%;" onclick="triggerInput()" type="button" class="btn btn-success">选择图片</button>
+							<input type="file" id="file" accept="image/jpg,image/jpeg,image/png,image/PNG" onchange="getPic()" value="" style="display: none" />
+						</div>
+						<div class="form-group">
+							<label for="imgUrl1" class="col-sm-3 control-label">上传首页图：</label>
+							<div class="col-sm-3">
+								<div class="imgPreview">
+									<span id="imgSpan1" class="imgSpans">
+		                            </span>
+									<img src="" id="imgUrl1" class="imgUrls" />
+								</div>
+							</div>
+							<button style="width: 90px;margin-top: 10%;" onclick="triggerInput1()" type="button" class="btn btn-success">选择图片</button>
+							<input type="file" id="file1" accept="image/jpg,image/jpeg,image/png,image/PNG" onchange="getPic1()" value="" style="display: none" />
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+		</section>
+	</script>
+
+	<!--图片视频管理-->
+	<script type="text/html" id="picVideoPub">
+		<section id="picVideoPubBox" class="openDetail" style="width: 100%; ">
+			<input type="hidden" name="deviceId" id="deviceId" />
+			<div class="panel-body">
+				<div class="manage-item pic-item">
+					<div class="manage-item-head">
+						<span class="item-head-text">图片管理</span>
+						<div class="item-head-btn">
+							<span class="item-btn item-btn-success" id="picPub" style="margin-right: 10px;" onclick="pubMethod(this,1)">发布</span>
+							<span class="item-btn item-btn-primary" onclick="upMethod(1,'上传图片')">上传</span>
+						</div>
+					</div>
+					<div class="manage-item-body">
+						<ul class="manage-item-list"></ul>
+						<div class="view-more">
+							<span class="more-btn">查看更多</span>
+						</div>
+					</div>
+				</div>
+				<div class="manage-item video-item">
+					<div class="manage-item-head">
+						<span class="item-head-text">视频管理</span>
+						<div class="item-head-btn">
+							<span class="item-btn item-btn-success" id="videoPub" style="margin-right: 10px;" onclick="pubMethod(this,2)">发布</span>
+							<span class="item-btn item-btn-primary" onclick="upMethod(2,'上传视频')">上传</span>
+						</div>
+					</div>
+					<div class="manage-item-body">
+						<ul class="manage-item-list"></ul>
+						<div class="view-more">
+							<span class="more-btn">查看更多</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</script>
+
+	<!--上传图片视频内容弹框-->
+	<script type="text/html" id="picTip">
+		<section class="openDetail" style="width: 100%; ">
+			<div class="panel-body">
+				<form id="picVideoForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="col-sm-3 form-label">文件名称：</label>
+								<div class="layui-input-block">
+									<input class="form-control" type="text" id="vireName" name="vireName" placeholder="请输入文件名称" style="margin-left: 41px;width: 220px;" required="required" />
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="col-sm-3 form-label">文件描述：</label>
+								<div class="layui-input-block">
+									<input class="form-control" type="text" id="vireDepict" name="vireDepict" placeholder="请输入文件描述" style="margin-left: 41px;width: 220px;" />
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="col-sm-3 form-label">上传图片：</label>
+								<div class="up-content-box">
+									<div class="upfile-box">
+										<img src="" />
+									</div>
+									<div class="flie-up">
+										<button onclick="upFile(1)" type="button" class="btn btn-success">选择图片</button>
+										<input type="file" id="picUp" accept="image/jpg,image/jpeg,image/png,image/PNG" onchange="upLoadImgFile(this)" value="" style="display: none" />
+										<div class='progress-container'>
+											<span id="progress"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<script type="text/html" id="videoTip">
+		<section class="openDetail" style="width: 100%; ">
+			<div class="panel-body">
+				<form id="picVideoForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="col-sm-3 form-label">文件名称：</label>
+								<div class="layui-input-block">
+									<input class="form-control" type="text" id="vireName" name="vireName" placeholder="请输入文件名称" style="margin-left: 41px;width: 220px;" required="required" />
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="col-sm-3 form-label">文件描述：</label>
+								<div class="layui-input-block">
+									<input class="form-control" type="text" id="vireDepict" name="vireDepict" placeholder="请输入文件描述" style="margin-left: 41px;width: 220px;" />
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="col-sm-3 form-label">上传视频：</label>
+								<div class="up-content-box">
+									<div class="videolist upfile-box" vpath="" ipath="">
+										<span class="video-play"></span>
+									</div>
+									<div class="flie-up">
+										<button onclick="upFile(2)" type="button" class="btn btn-success">选择视频</button>
+										<input type="file" id="videoUp" accept="video/*" onchange="upLoadVideoFile(this)" value="" style="display: none" />
+										<div class='progress-container'>
+											<span id="progress"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<!--多张图发布时时间间隔设置-->
+	<script type="text/html" id="picTimeTip">
+		<section class="openDetail" style="width: 100%; ">
+			<div class="panel-body">
+				<form id="picTimeForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="col-sm-4 form-label">间隔时间/秒：</label>
+								<div class="layui-input-block">
+									<input class="form-control" type="text" id="switchTime2" name="switchTime" placeholder="请输入时间间隔" style="margin-left: 41px;width: 220px;" required="required" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<!--历史发布记录-->
+	<script type="text/html" id="hisInfoList">
+		<section class="openDetail" style="width: 100%; ">
+			<div class="panel-body">
+				<div class="ibox-content row">
+					<input type="hidden" id="h_deviceInfo" />
+					<input type="hidden" id="h_pushPicture" />
+					<input type="hidden" id="h_firstPage" />
+					<input type="hidden" id="h_pushResolution" />
+				</div>
+				<div id="hisInfoTable"></div>
+			</div>
+		</section>
+	</script>
+
+	<style>
+		label {
+			font-weight: normal;
+		}
+		
+		.form-horizontal .control-label {
+			width: 35%;
+		}
+		
+		.uploadFileButton {
+			width: 90px;
+			color: #0069d9;
+			height: 25px;
+			background: #2ecc71;
+			border: 1px solid lightgrey;
+			border-radius: 10px;
+		}
+		
+		.imgPreview {
+			width: 90px;
+			height: 90px;
+			margin: 5px auto 0px 0px;
+			border: 1px solid lightgrey;
+			text-align: center;
+		}
+		
+		.imgSpans {
+			margin: auto;
+		}
+		
+		.imgUrls {
+			height: 100%;
+			width: 100%;
+			display: none;
+		}
+	</style>
+	<script>
+		function triggerInput() {
+			if($("#pushResolution").val() == "" || $("#pushResolution").val() == null) {
+				layer.msg("请先选择分辨率", {
+					icon: 2
+				});
+				return;
+			}
+			$("#file").click();
+		}
+
+		function getPic() {
+			let imagePath = $("#file").val();
+			if(imagePath == "") {
+				$("#imgSpan").css("display", "block");
+				$("#imgUrl").attr("src", "");
+				$("#imgUrl").css("display", "none");
+			} else {
+				let reader = new FileReader();
+				reader.readAsDataURL(document.getElementById("file").files[0]);
+				reader.onload = function() {
+					$("#imgUrl").attr("src", this.result);
+				}
+				$("#imgSpan").css("display", "none");
+				$("#imgUrl").css("display", "block");
+
+				let formData = new FormData();
+				formData.append("file", $("#file")[0].files[0]);
+				$.ajax({
+					type: "post",
+					url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+					data: formData,
+					contentType: false,
+					processData: false,
+					success: function(res) {
+						$.hide_overall_loding();
+						if(res.code == 0) {
+							var image = new Image();
+							image.src = res.data.filePath;
+							image.onload = function() {
+								pushPictureSize = this.width + " * " + this.height
+								$("#pushPicResolution").val(pushPictureSize)
+								console.info("背景图：" + pushPictureSize)
+							};
+							$("#pushPicture").attr("value", res.data.filePath);
+						} else {
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						}
+					},
+					fail: function() {
+						layer.msg("操作失败", {
+							icon: 2
+						});
+					}
+				})
+			}
+		}
+
+		function triggerInput1() {
+			if($("#pushResolution").val() == "" || $("#pushResolution").val() == null) {
+				layer.msg("请先选择分辨率", {
+					icon: 2
+				});
+				return;
+			}
+			$("#file1").click();
+		}
+
+		function getPic1() {
+			let imagePath = $("#file1").val();
+			if(imagePath == "") {
+				$("#imgSpan1").css("display", "block");
+				$("#imgUrl1").attr("src", "");
+				$("#imgUrl1").css("display", "none");
+			} else {
+				let reader = new FileReader();
+				reader.readAsDataURL(document.getElementById("file1").files[0]);
+				reader.onload = function() {
+					$("#imgUrl1").attr("src", this.result);
+				}
+				$("#imgSpan1").css("display", "none");
+				$("#imgUrl1").css("display", "block");
+
+				let formData = new FormData();
+				formData.append("file", $("#file1")[0].files[0]);
+				$.ajax({
+					type: "post",
+					url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+					data: formData,
+					contentType: false,
+					processData: false,
+					success: function(res) {
+						$.hide_overall_loding();
+						if(res.code == 0) {
+							var image = new Image();
+							image.src = res.data.filePath;
+							image.onload = function() {
+								pushPictureSize = this.width + " * " + this.height
+								$("#firstResolution").val(pushPictureSize)
+								console.info("首页图：" + pushPictureSize)
+							};
+
+							$("#firstPage").attr("value", res.data.filePath);
+						} else {
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						}
+					},
+					fail: function() {
+						layer.msg("操作失败", {
+							icon: 2
+						});
+					}
+				})
+			}
+		}
+	</script>
+	<script>
+		function uplodePic() {
+			$("#picFile").click();
+		}
+
+		function selectPic() {
+			let imagePath = $("#picFile").val();
+
+			if(imagePath == "") {} else {
+				//	            let formData = new FormData();
+				//	            formData.append("file",$("#picFile")[0].files[0]);
+
+				let formData = new FormData();
+				formData.append("file", $("#picFile")[0].files[0]);
+				let reader = new FileReader();
+				reader.readAsDataURL(document.getElementById("picFile").files[0]);
+				reader.onload = function() {
+					if($("#repeatType").val() == "one") {
+						$("#fileUrls").val("");
+						$('#picBox div').remove();
+					}
+					$.ajax({
+						type: "post",
+						url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+						data: formData,
+						contentType: false,
+						async: false,
+						processData: false,
+						success: function(res) {
+							$.hide_overall_loding();
+							if(res.code == 0) {
+								if($("#repeatType").val() == "repeat") {
+									var fileUrlsVal = $("#fileUrls").val();
+									if(fileUrlsVal == "" || fileUrlsVal == null) {
+										fileUrlsVal = res.data.filePath
+									} else {
+										fileUrlsVal = fileUrlsVal + "," + res.data.filePath
+									}
+
+									$("#fileUrls").val(fileUrlsVal)
+								} else {
+									$("#fileUrls").val(res.data.filePath)
+								}
+								$('<div class="col-sm-3" style="height: 100px;"><img src="' + res.data.filePath + '" style="height: 100px;"/></div>').appendTo($('#picBox'));
+							} else {
+								layer.msg("操作失败", {
+									icon: 2
+								});
+								return;
+							}
+						},
+						fail: function() {
+							layer.msg("操作失败", {
+								icon: 2
+							});
+							return;
+						}
+					})
+
+				}
+			}
+		}
+
+		function reload() {
+			$(".uploadBox div").remove();
+			$("#fileUrls").val("")
+		}
+
+		function uplodeVideo() {
+			$("#videoFile").click();
+		}
+		
+		//上传进度回调函数：  
+		function progressHandlingFunction(e) {
+			$('.progress-container').show();
+			if(e.lengthComputable) {
+				$('#progress').attr({
+					value: e.loaded,
+					max: e.total
+				}); //更新数据到进度条  
+				var percent = e.loaded / e.total * 100;
+//				$('#progress').html(e.loaded + "/" + e.total + " bytes. " + percent.toFixed(2) + "%");
+				$('#progress').html(percent.toFixed(2) + "%");
+				$('#progress').css('width', percent.toFixed(2) + "%");
+			}
+		}
+
+		function selectVideo() {
+			let imagePath = $("#videoFile").val();
+			if(imagePath == "") {} else {
+				let formData = new FormData();
+				formData.append("file", $("#videoFile")[0].files[0]);
+
+				let reader = new FileReader();
+				reader.readAsDataURL(document.getElementById("videoFile").files[0]);
+				reader.onload = function() {
+					if($("#repeatType").val() == "one") {
+						$("#fileUrls").val("");
+						$('#videoBox div').remove();
+					}
+
+					$.ajax({
+						type: "post",
+						url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+						data: formData,
+						contentType: false,
+						processData: false,
+						xhr: function() { //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数  
+	
+							myXhr = $.ajaxSettings.xhr();
+							if(myXhr.upload) { //检查upload属性是否存在  
+								//绑定progress事件的回调函数  
+								myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
+							}
+							return myXhr; //xhr对象返回给jQuery使用  
+						},
+						success: function(res) {
+							$.hide_overall_loding();
+							if(res.code == 0) {
+								$('.progress-container').hide();
+								if($("#repeatType").val() == "repeat") {
+									var fileUrlsVal = $("#fileUrls").val();
+									if(fileUrlsVal == "" || fileUrlsVal == null) {
+										fileUrlsVal = res.data.filePath
+									} else {
+										fileUrlsVal = fileUrlsVal + "," + res.data.filePath
+									}
+
+									$("#fileUrls").val(fileUrlsVal)
+
+								} else {
+									$("#fileUrls").val(res.data.filePath)
+								}
+								$('<div class="col-sm-5" style="height: 100px;"><video src="' + res.data.filePath + '" style="height: 100px;" controls="controls"></video></div>').appendTo($('#videoBox'));
+							} else {
+								layer.msg("操作失败", {
+									icon: 2
+								});
+								return;
+							}
+						},
+						fail: function() {
+							layer.msg("操作失败", {
+								icon: 2
+							});
+							return;
+						}
+					})
+
+				}
+
+			}
+		}
+
+		function uplodeH5() {
+			$("#h5File").click();
+		}
+
+		function selectH5() {
+			let imagePath = $("#h5File").val();
+			if(imagePath == "") {} else {
+				let reader = new FileReader();
+				reader.readAsDataURL(document.getElementById("h5File").files[0]);
+				reader.onload = function() {}
+
+				let formData = new FormData();
+				formData.append("file", $("#h5File")[0].files[0]);
+				$.ajax({
+					type: "post",
+					url: "http://39.98.137.198:7788/api/file/upload?appId=168254",
+					data: formData,
+					contentType: false,
+					processData: false,
+					success: function(res) {
+						$.hide_overall_loding();
+						if(res.code == 0) {
+							$("#fileUrls").val(res.data.filePath)
+							layer.msg("上传成功", {
+								icon: 1
+							});
+						} else {
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						}
+					},
+					fail: function() {
+						layer.msg("操作失败", {
+							icon: 2
+						});
+					}
+				})
+			}
+		}
+	</script>
+
+</html>

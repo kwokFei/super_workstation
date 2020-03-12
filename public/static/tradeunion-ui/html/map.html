@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <style>
+    	.mapFooter{
+    		position: absolute;
+    		width: 100%;
+    		bottom: 0;
+    		left: 0;
+    	}
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content" style="display: none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>设备位置管理</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                        <button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i>
+                                            录入同级
+                                        </button>
+                                        <button type="button" class="btn btn-primary" id="addSlibingsDown"><i
+                                                class="fa fa-plus"></i> 录入下级
+                                        </button>
+                                        <button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 编辑
+                                        </button>
+                                        <!--<button type="button" class="btn btn-success" id="recover"><i class="fa fa-reply"></i> 启用</button>-->
+                                        <!--<button type="button" class="btn btn-warning" id="lock"><i class="fa fa-warning"></i> 禁用</button>-->
+                                        <button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 删除
+                                        </button>
+                                    </div>
+
+                                    <div id="myMap" style="margin-top: 20px">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<!--加载底部-->
+		<div id="footer" class="mapFooter">
+			<script type="text/javascript">
+				$(function(){
+					$("#footer").load("footer.html");
+				});
+			</script>
+		</div>
+</body>
+
+<script>
+    var html;
+
+    var rdata = {};
+
+    var typeHide;
+
+    var authorityTypeValue = $('#authorityType  option:selected').val();
+
+    function getVue() {
+        typeHide = new Vue({
+            el: '#menuForm',
+            data: {
+                typeChange: false,
+                selected: "--请选择菜单类型--"
+            },
+            watch: {
+                selected: function (val) {
+                    this.typeChange = val == "权限菜单" ? true : false;
+                }
+            }
+
+        });
+    }
+
+    function getTable() {
+        $('#menuResourceTable').bootstrapTable({
+            url: userServiceUrl + "/resource/list", //请求后台的URL（*）
+            method: 'get',                         //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '',                            //工具按钮用哪个容器
+            striped: true,                          //是否显示行间隔色
+            cache: true,                           //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                       //是否显示分页（*）
+            sortable: false,                        //是否启用排序
+            sidePagination: "server",               //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                          //初始化加载第一页，默认第一页
+            pageSize: 10,                           //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],            //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams,               //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                         //每一行的唯一标识，一般为主键列
+            cardView: false,                        //是否显示详细视图
+            detailView: false,                      //是否显示父子表
+            clickToSelect: true,                    //点击行是否选中
+            responseHandler: function (data) {
+                var result = data.data;
+                rdata = result.list;
+                var res = [];
+                res.push({
+                    total: result.total,
+                    rows: result.list
+                });
+                return res[0];
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            columns: [
+                {
+                    checkbox: true,
+                }, {
+                    width: 50,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                }, {
+                    field: 'resourcesName',
+                    title: '资源名称',
+                    width: 300
+                }, {
+                    field: 'resourcesUrl',
+                    title: '资源URL',
+                    width: 400
+                }, {
+                    field: 'resourcesDescription',
+                    title: '资源描述',
+                    width: 200
+                }
+            ]
+        });
+
+        function queryParams(params) {
+            return {
+                pageSize: params.pageSize,
+                pageNumber: params.pageNumber
+            };
+        }
+
+    }
+
+    var menu_option = function () {
+        return {
+            node: $("#myMap"),//渲染节点
+            data: "",//机构数据
+            init: function () {  //初始化数据
+                var options = {
+                    checkedIcon: "glyphicon glyphicon-check",
+                    nodeIcon: "none", //所有节点的默认图标
+                    levels: 5,
+                    data: this.data,
+                    onhoverColor: "rgba(0,0,0,0.1)",
+                    onNodeSelected: function (event, data) {
+                        //$('#myTable').bootstrapTable('refresh');
+                    }
+                };
+                this.node.treeview(options);
+            },
+            initData: function () {
+                var _this = this;
+                //if(this.data == "") {
+                $.sanjiGetJSON(userServiceUrl + "/menu/treeList", {}, function (data) {
+                    _this.data = _this.getTreeData(data.data);
+                    _this.init();
+                });
+                //return;
+                //}
+                //_this.init();
+            },
+            getTreeData: function (data) {
+                var rdata = [];
+                for (var i = 0; i < data.length; i++) {
+                    var node = data[i];
+                    var one = {};
+                    one.text = node.authorityName;
+                    one.parentIds = node.parentId;
+                    one.authoritySign = node.authoritySign;
+                    one.authorityType = node.authorityType;
+                    one.menuUrl = node.menuUrl;
+                    one.authorityName = node.authorityName;
+                    one.authorityDescription = node.authorityDescription;
+                    one.id = node.id;
+                    if (node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                        one.nodes = this.getTreeData(node.childrens);
+                    }
+                    rdata.push(one);
+                }
+                return rdata;
+            },
+
+            bindCreate: function () {
+                var that = this;
+                /* 添加同级菜单 */
+                $("#addSlibings").on("click", function () {
+                    var data = $("#myMap").treeview('getSelected');
+                    if (data.length == 1) {
+                        that.showMenuModel("添加同级菜单", 1);
+
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+                /* 配置资源 */
+                $("#getAuthor").on("click", function () {
+                    var data = $("#myMap").treeview('getSelected');
+                    if (data.length == 1) {
+                        that.showAuthorModel(data[0].id);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+
+                /* 添加下级菜单 */
+                $("#addSlibingsDown").on("click", function () {
+                    var data = $("#myMap").treeview('getSelected');
+                    if (data.length == 1) {
+                        that.showMenuModel("添加下级菜单", 3);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+                /* 编辑菜单信息 */
+                $("#edit").on("click", function () {
+                    var data = $("#myMap").treeview('getSelected');
+
+                    if (data.length == 1) {
+                        that.showMenuModel("编辑菜单信息", 2);
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+                $("#remove").on("click", function () {
+                    var data = $("#myMap").treeview('getSelected');
+                    if (data.length == 1) {
+                        var conlayer = layer.confirm("确定" + " " + data[0].authorityName + " " + "删除？", {
+                            btn: ['确定', '取消']
+                        }, function () {
+                            $.deleteJSON(userServiceUrl + "/menu?id=" + data[0].id, {}, function (data) {
+                                if (data.code == 0) {
+                                    layer.close(conlayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.initData();
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            })
+                        }, function () {
+                            layer.close(conlayer);
+                        });
+                    } else {
+                        layer.msg("请选择一条数据", {
+                            icon: 5
+                        });
+                    }
+                });
+            },
+
+            showAuthorModel: function () {
+                var html = template("modelMenuResource", {title: "123"});
+
+                var authlayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: '配置资源',
+                    closeBtn: 1,
+                    shade: 0.5,
+                    moveType: 0, //拖拽模式，0或者1
+                    maxWidth: 500,
+                    content: html,
+                    area: ['500px','600px'],
+                    offset: 'auto',
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        var resourceArr = $("#menuResourceTable").bootstrapTable('getSelections');
+                        var data = $("#myMap").treeview('getSelected');
+                        var menuAuthorityId = data[0].id;
+                        var resourceIds = "";
+                        for (var i in resourceArr) {
+                            resourceIds += resourceArr[i].id + ",";
+                        }
+                        resourceIds = resourceIds.substring(0, resourceIds.length - 1);
+                        var resourceIds1 = resourceIds.split(",");
+                        if (resourceIds.length == 0) {
+                            layer.msg('请选择资源', {icon: 5});
+                            return;
+                        }
+                        $.ajax({
+                            url: userServiceUrl + "/menu/addResource",
+                            type: "post",
+                            contentType: "application/json",
+                            dataType: "json",
+                            async: false,
+                            data: JSON.stringify({
+                                "menuAuthorityId": menuAuthorityId,
+                                "resourceIds": resourceIds1
+                            }),
+                            success: function (res) {
+                                layer.close(authlayer)
+                                if (res.success) {
+                                    layer.open({
+                                        content: res.message,
+                                        yes: function (index, layero) {
+                                            window.location.reload();
+                                        }
+                                    });
+                                } else {
+                                    layer.msg(res.message, {icon: 5});
+                                }
+                            }
+                        });
+                    },
+                    success: function (layero) {
+                        getTable();
+                    }
+                });
+            },
+
+            /* 打开模态框 */
+            showMenuModel: function (title, flag, index) {
+                var that = this;
+                var isAdd = true;
+                var isDown = false;
+                if (flag == 2) {
+                    isAdd = false;
+                }
+                if (flag == 3) {
+                    isDown = true;
+                }
+                html = template("modelMenu", {
+                    title: "123"
+                });
+                var myLayer = layer.open({
+                    skin: 'card',
+                    type: 1,
+                    title: title,
+                    area: ['450px', '500px'], //宽高
+                    resize: true, //是否拉升
+                    offset: 'auto', //居中
+                    content: html,
+                    btn: ['提交', '取消'],
+                    yes: function (index, layero) {
+                        $("#menuForm").submit();
+                    },
+                    success: function (layero) {
+
+                        getVue();
+                        if (flag == 2) {
+                            var data = that.node.treeview('getSelected');
+                            $("#menuForm").setForm(data[0]);
+                        }
+                    }
+                });
+                var validate = $("#menuForm").validate({
+                    rules: {
+                        authorityName: {
+                            required: true
+                        },
+                        authorityType: {
+                            required: true
+                        },
+                        authorityDescription: {
+                            required: true
+                        },
+                        authoritySign: {
+                            required: true
+                        },
+                        menuUrl: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        authorityName: {
+                            required: "请输入菜单名称"
+                        },
+                        authorityType: {
+                            required: "请选择菜单类型"
+                        },
+                        authorityDescription: {
+                            required: "请输入菜单描述"
+                        },
+                        authoritySign: {
+                            required: "请输入唯一标识"
+                        },
+                        menuUrl: {
+                            required: "请输入菜单URL"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        /* 当前选择id */
+                        var oldData = that.node.treeview('getSelected');
+                        var data = $("#menuForm").serializeJson();
+                        var authorityName = $("#authorityName").val();
+                        var authorityTypeValue = $('#authorityType  option:selected').val();
+                        if (authorityTypeValue == "0") {
+                            layer.msg('请选择资菜单类型', {icon: 5});
+                            return;
+                        }
+                        if (oldData[0].parentIds == 0 && authorityTypeValue == "2" && isDown == false) {
+                            layer.msg('顶级菜单不可有按钮', {icon: 5});
+                            return;
+                        }
+                        if (isAdd == false) {
+                            $("#authorityType").attr("disabled", "disabled");
+                        }
+                        // console.log(oldData[0]);
+
+                        if (isDown) {
+                            $.extend(data, {
+                                "parentId": oldData[0].id
+                            });
+                        } else {
+                            $.extend(data, {
+                                "parentId": oldData[0].parentIds
+                            });
+                        }
+                        // console.log(data);
+                        if (isAdd) {
+                            $.postJSON(userServiceUrl + "/menu", data, function (data) {
+                                if (data.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.initData();
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            });
+                        } else {
+                            $.putJSON(userServiceUrl + "/menu", data, function (data) {
+                                if (data.code == 0) {
+                                    layer.close(myLayer);
+                                    layer.msg("成功", {
+                                        icon: 1
+                                    });
+                                    that.initData();
+                                    return true;
+                                }
+                                layer.msg("操作失败", {
+                                    icon: 2
+                                });
+                            });
+                        }
+                    },
+                });
+            }
+        }
+    }
+    var menu = new menu_option();
+    menu.initData();
+    menu.bindCreate();
+</script>
+
+<script type="text/javascript">
+    function gradeChange() {
+        var authorityTypeValue = $('#authorityType  option:selected').val();
+        if (authorityTypeValue == "2") {
+            (function () {
+                $("#menuUrl").val("");
+                $("#authoritySignHide").val("");
+            })();
+            $("#menuUrlHide").hide();
+            $("#authoritySignHide").hide();
+        } else {
+            $("#menuUrlHide").show();
+            $("#authoritySignHide").show();
+        }
+    }
+</script>
+
+<!--新增修改模板-->
+<script type="text/html" id="modelMenu">
+    <section class="openDetail" style="width: 100%;">
+        <div class="panel-body">
+            <form id="menuForm">
+                <div class="form-group">
+                    <label>菜单名称：</label>
+                    <input class="form-control" id="authorityName" name="authorityName" type="text">
+                </div>
+                <div class="form-group">
+                    <label>菜单类型：</label>
+                    <select class="form-control" id="authorityType" name="authorityType" onchange="gradeChange()">
+                        <option value="0">--请选择菜单类型--</option>
+                        <option value="1">权限菜单</option>
+                        <option value="2">权限按钮</option>
+                    </select>
+                    <!-- <input class="form-control" id="authorityDescription" name="authorityDescription" type="text"> -->
+                </div>
+                <div class="form-group">
+                    <label>菜单描述：</label>
+                    <input class="form-control" id="authorityDescription" name="authorityDescription" type="text">
+                </div>
+                <div class="form-group" id="authoritySignHide" style="display: none;">
+                    <label>菜单唯一标识：</label>
+                    <input class="form-control" id="authoritySign" name="authoritySign" type="text">
+                </div>
+                <div class="form-group" id="menuUrlHide" style="display: none;">
+                    <label>菜单URL：</label>
+                    <input class="form-control" id="menuUrl" name="menuUrl" type="text">
+                </div>
+                <input type="hidden" id="id" name="id"/>
+            </form>
+        </div>
+    </section>
+</script>
+
+<!--资源配置模板-->
+<script type="text/html" id="modelMenuResource">
+    <section class="openDetail" style="width: 100%;height:100%">
+        <div>
+            <div class="panel-body">
+                <div id="menuResourceTable" style="width: 450px;" class="selected"></div>
+            </div>
+        </div>
+    </section>
+</script>
+</html>

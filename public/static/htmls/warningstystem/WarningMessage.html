@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>warningMessage</title>
+    <link rel="stylesheet" href="../../css/elementUI.css">
+    <link rel="stylesheet" href="../../css/basicStyle.css">
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/elementUI.js"></script>
+    <style >
+
+        [v-cloak]{
+            display: none;
+        }
+        #warningMessage {
+            display: flex;
+            justify-content: center;
+            /*flex-direction: column;*/
+        }
+
+        #warningMessage:before {
+            display: table;
+            content: "";
+        }
+
+        .contentBox {
+            width: 100%;
+            /*height: 89%;*/
+            background-color: #ffffff;
+            margin: 0.2rem;
+            padding: 2%;
+            position: relative;
+            /*overflow: auto;*/
+        }
+
+        .line, .table {
+            width: 100%;
+            margin-bottom: 0.6rem;
+        }
+
+        .line > ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        /*三角形按钮旋转*/
+        .ulChecked {
+            transform: rotate(90deg) !important;
+        }
+
+
+        .textHidden {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /*订阅账号*/
+
+        .line > ul:first-child {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .contentBox > .line > ul > li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            /*width: 270px;*/
+            margin-bottom: 1.5%;
+        }
+
+        .contentBox > .line:first-child {
+            margin-bottom: 0;
+        }
+
+        .line > ul > li > span:first-child {
+            display: inline-block;
+            /*width: 32%;*/
+            width: 0.9rem;
+            text-align: right;
+            font-size: 0.16rem;
+            /*font-size: 16px;*/
+            position: relative;
+            min-width: 60px;
+        }
+
+        .line > ul > li > span:nth-child(2),
+        .line > ul > li > input {
+            width: 200px;
+            height: 26px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            border: solid 1px #bfbfbf;
+            line-height: 26px;
+            position: relative;
+            margin-left: 3%;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+        }
+
+        /*时间选择器*/
+        .line > ul > li > div {
+            margin-left: 8.484px;
+        }
+
+        .line > ul > li > div,
+        .line > ul > li > div > div {
+            width: 498px;
+            height: 26px;
+        }
+
+        .line > ul > li > div > div {
+            border: solid 1px #bfbfbf;
+        }
+
+        .line > ul > li > span:nth-child(2) > span,
+        .line > ul > li > input {
+            font-size: 0.16rem;
+        }
+
+        .line > ul > li:nth-child(2) > span:first-child {
+            /*width: 80px;*/
+        }
+
+
+        .line > ul > li > span:nth-child(2) > img {
+            width: 0.08rem;
+            height: 0.16rem;
+        }
+
+        /*!*设备正品码*!*/
+        .contentBox > .line:nth-child(2) {
+            display: flex;
+            align-items: center;
+            margin: 0 0 1.5% 0;
+        }
+
+        .contentBox > .line > ul > .btns {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .contentBox > .line > ul > li > .btn,
+        .table > ul > li > span > button {
+            width: 70px;
+            height: 26px;
+            background-color: #333399;
+            border-radius: 4px;
+            color: #ffffff;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            line-height: 26px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .contentBox > .line > ul > .btns > button:first-child {
+            margin-right: 0.1rem;
+        }
+
+
+        /*表格*/
+        /*.table {*/
+        /*height: 386px;*/
+        /*overflow-y: hidden;*/
+        /*}*/
+
+        .table > ul > li {
+            text-align: left;
+            height: 35px;
+            margin-left: 1px;
+        }
+
+        .table > ul > li > span {
+            display: inline-block;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            border: solid 1px #cccccc;
+            margin: 0px 0px -1px -1px;
+            color: #333333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+        }
+
+        .table > ul > li:first-child > span {
+            background-color: #EAEAF5;
+
+        }
+
+        .table > ul > li > span:first-child {
+            width: 3.2%;
+        }
+
+        .table > ul > li > span:nth-child(2) {
+            width: 3.9%;
+        }
+
+        .table > ul > li > span:nth-child(3) {
+            width: 10.7%;
+        }
+
+        .table > ul > li > span:nth-child(4) {
+            width: 11.9%;
+        }
+
+        .table > ul > li > span:nth-child(5) {
+            width: 10.94%;
+        }
+
+        .table > ul > li > span:nth-child(6) {
+            width: 8.1%;
+        }
+
+        .table > ul > li > span:nth-child(7) {
+            width: 11.5%;
+        }
+
+        .table > ul > li > span:nth-child(8) {
+            width: 12.3%;
+        }
+
+        .table > ul > li > span:nth-child(9) {
+            width: 9%;
+        }
+
+        .table > ul > li > span:nth-child(10) {
+            width: 19%;
+        }
+
+        .table > ul > li > span > button {
+            height: 20px;
+            line-height: 20px;
+            width: 20%;
+        }
+
+        .table > ul > li > span > button:first-child {
+            width: 30%;
+            min-width: 60px;
+        }
+
+        .table > ul > li > span > button:nth-child(2) {
+            margin: 0 0.05rem;
+            background: #3366CC;
+        }
+
+        .table > ul > li > span > button:last-child {
+            background: #FF3333;
+        }
+
+        .paging {
+            width: 100%;
+            /*height: 0.24rem;*/
+            min-height: 24px;
+            position: absolute;
+            bottom: 2%;
+            left: 0;
+            padding: 0 2%;
+        }
+
+        .paging > div {
+            width: 100%;
+            height: 100%;
+            /*background: blue;*/
+        }
+
+
+        .line > ul > li > span:nth-child(2) > ul {
+            position: absolute;
+            left: 0;
+            top: 24px;
+            z-index: 100;
+            width: 100%;
+            max-height: 100px;
+            overflow-y: auto;
+            background: #d7d4d4;
+        }
+
+
+        .line > ul > li > span:nth-child(2) > ul > li {
+            height: 25px;
+            line-height: 25px;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+
+        .line > ul > li > span:nth-child(2) > ul > li:hover {
+            background: #333399;
+            color: #FFFFFF;
+        }
+
+        /*报警事件*/
+        .yellow {
+            color: #ffcc66 !important;
+        }
+
+        .green {
+            color: #00cc00 !important;
+        }
+
+        .orange {
+            color: #ff6600 !important;
+        }
+
+        .red {
+            color: #ff0000 !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="warningMessageApp"v-cloak>
+
+        <div id="warningMessage">
+            <!--主要显示内容-->
+            <div class="contentBox">
+
+                <!--模块名称-->
+                <div class="line">
+                    <ul>
+                        <li>
+                            <span>报警事件</span>
+                            <span @click="handleAddSelect('warnEvent')">
+                            <span>{{warnEvent}}</span>
+                            <img src="../../img/public/triangle.png" alt=""
+                                 @click="handleAddSelect('warnEvent')"
+                                 :class=" ulOptionChecked === 'warnEvent' ? 'ulChecked' : ''">
+                            <ul v-show=" showAddUl === 'warnEvent'">
+                        <li @click.stop="handleAddSelectOption('warnEvent','DYZH123451')">DYZH12341</li>
+                        <li @click.stop="handleAddSelectOption('warnEvent','DYZH123452')">DYZH123452</li>
+                        <li @click.stop="handleAddSelectOption('warnEvent','DYZH123453')">DYZH123453</li>
+                        <li @click.stop="handleAddSelectOption('warnEvent','DYZH123454')">DYZH123454</li>
+                        <li @click.stop="handleAddSelectOption('certified','DYZH123455')">DYZH123455</li>
+                    </ul>
+
+                        </span>
+                        </li>
+                        <li>
+                            <span>时间</span>
+                            <div class="block">
+                                <el-date-picker
+                                        v-model="timeValue"
+                                        type="datetimerange"
+                                        range-separator="-"
+                                        start-placeholder="开始日期"
+                                        end-placeholder="结束日期">
+                                </el-date-picker>
+                            </div>
+                        </li>
+                        <li>
+                            <span>传感器位置</span>
+                            <input type="text" v-model="sensorAddr">
+                        </li>
+                        <li>
+                            <span>推送业主</span>
+                            <span @click="handleAddSelect('propeOwner')">
+                            <span>{{propeOwner}}</span>
+                            <img src="../../img/public/triangle.png" alt=""
+                                 @click="handleAddSelect('propeOwner')"
+                                 :class=" ulOptionChecked === 'propeOwner' ? 'ulChecked' : ''">
+                            <ul v-show=" showAddUl === 'propeOwner'">
+                                <li @click.stop="handleAddSelectOption('propeOwner','DYZH123451')">DYZH12341</li>
+                                <li @click.stop="handleAddSelectOption('propeOwner','DYZH123452')">DYZH123452</li>
+                                <li @click.stop="handleAddSelectOption('propeOwner','DYZH123453')">DYZH123453</li>
+                                <li @click.stop="handleAddSelectOption('propeOwner','DYZH123454')">DYZH123454</li>
+                                <li @click.stop="handleAddSelectOption('propeOwner','DYZH123455')">DYZH123455</li>
+                            </ul>
+                        </span>
+                        </li>
+                        <li>
+                            <span>业主姓名</span>
+                            <input type="text" v-model="ownerName">
+                        </li>
+                        <li class="btns">
+                            <!--<span></span>-->
+                            <button class="btn">查询</button>
+                            <button class="btn" @click="handlRset">重置</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--表格-->
+                <div class="table">
+                    <ul>
+                        <li>
+                            <span>选择</span>
+                            <span>序号</span>
+                            <span>报警事件</span>
+                            <span>报警时间</span>
+                            <span>报警传感器位置</span>
+                            <span>推送业主姓名</span>
+                            <span>推送业主电话</span>
+                            <span>推送业主APP账号</span>
+                            <span>业主端是否阅读</span>
+                            <span>物业端报警信息处理状态</span>
+                        </li>
+                        <li v-for="(item,i) in  data">
+                        <span>
+                            <el-radio v-model="deviceChoose" :label="i"></el-radio>
+                        </span>
+                            <span>{{i + 1}}</span>
+                            <span :class="item.color">{{item.event}}</span>
+                            <span>{{item.time}}</span>
+                            <span>{{item.addr}}</span>
+                            <span>{{item.name}}</span>
+                            <span>{{item. phoneNum}}</span>
+                            <span>{{item.app}}</span>
+                            <span>{{item.isRead}}</span>
+                            <span>【{{item.isHandle}}】</span>
+
+                        </li>
+                    </ul>
+                </div>
+
+                <!--分页-->
+                <div class="paging">
+                    <Pagination @func="getPageNum" :pageData="pageData"/>
+                </div>
+            </div>
+
+    </div>
+
+
+</div>
+
+</body>
+
+<script>
+
+    let warningMessageVue = new Vue({
+        el: '#warningMessageApp',
+
+        data() {
+            return {
+
+                data: [
+
+
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+                        color: "orange"
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+                        color: "red"
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                    {
+                        event: "紧急事件报警",
+                        time: "2019-8-19  08:00",
+                        addr: "1栋1单元101室",
+                        name: "刘XX",
+                        phoneNum: "13******1234",
+                        app: "APP12345",
+                        isRead: "已阅",
+                        isHandle: "未处理",
+
+                    },
+                ],         // 表格数据
+
+                deviceChoose: null, //选择框选项
+                pageNumber: "", // 分页查询页数
+
+                pageData: {
+
+                    url: "报警信息管理后台查询接口",
+                    total: 100,                        //当前总条数
+
+                },   // 传递给分页组件的数据
+
+
+                ulOptionChecked: null, // 下拉菜单三角形变化
+                showAddUl: "",               //添加下拉框
+
+                //主界面
+
+                warnEvent: "ZPM1234561",    //报警事件
+                timeValue: null,          //时间
+                sensorAddr: null,          //传感器位置
+                propeOwner: "DYZH",        //推送业主
+                ownerName: null,         //业主姓名
+
+
+            };
+
+        },
+
+        methods: {
+
+            // 重置按钮
+            handlRset() {
+                this.warnEvent = "ZPM1234561";
+                this.timeValue = null;          //时间
+                this.sensorAddr = null;          //传感器位置
+                this.propeOwner = "DYZH";        //推送业主
+                this.ownerName = null;        //业主姓名
+            },
+
+            // 获取分页查询页数
+            getPageNum(data) {
+
+                if (data.url === this.pageData.url) {
+                    this.pageNumber = data.page;
+                    // console.log(this.pageNumber)
+                }
+
+            },
+
+        },
+    });
+</script>
+</html>

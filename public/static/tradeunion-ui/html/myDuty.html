@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <script src="../plus/iview/vue.min.js"></script>
+    <style type="text/css">
+        .simButton {
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>我的值班管理</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ibox-content row">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label" for="s_title">标题：</label>
+                                            <input class="form-control" name="title" id="s_title" placeholder="标题" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div style="margin-top: 24px;">
+                                                <button type="button" class="btn btn-purple" id="clean"><i
+                                                        class="fa fa-eraser"></i> 清空
+                                                </button>
+                                                <button type="button" class="btn btn-success" id="search"
+                                                        style="margin-left: 10px"><i class="fa fa-search"></i> 查询
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Start-->
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                    </div>
+
+                                    <div id="myTable">
+
+                                    </div>
+                                </div>
+                                <table id="messageTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+
+    </div>
+</div>
+<!--加载底部-->
+<div id="footer" class="classifyFooter">
+    <script type="text/javascript">
+        $(function () {
+            $("#footer").load("footer.html");
+        });
+    </script>
+</div>
+<div id="loadDiv"></div>
+</body>
+<script type="text/javascript">
+    $("#loadDiv").html(loadHtml);
+    let html;
+    $(function () {
+        $('#messageTable').bootstrapTable({
+            url: userServiceUrl + "/platformNotice/list", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if (data.code == 0) {
+                    var result = data.data;
+                    rdata = result.list;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    $.hide_overall_loding();
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: []
+                    });
+                    layer.msg("获取数据失败！", {icon: 2});
+                    $.hide_overall_loding();
+                    return res[0];
+                }
+            },
+            onLoadSuccess: function () {
+                $.hide_overall_loding();
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function (value, row, index) {
+                    let pageSize = $('#messageTable').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                    let pageNumber = $('#messageTable').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                    return pageSize * (pageNumber - 1) + index + 1;
+                }
+            }, {
+                field: 'organizationName',
+                title: '消息发起机构',
+                width: 100
+            }, {
+                field: 'userName',
+                title: '消息发起者',
+                width: 100
+            },{
+                field: 'title',
+                title: '标题',
+                width: 100
+            }, {
+                field: 'createDate',
+                title: '创建时间',
+                width: 100
+            },{
+                title: "操作",
+                width: 100,
+                clickToSelect: false,
+                formatter: function (i1, i2, i3) {
+                    var str = '' +
+                        '<button data-toggle="tooltip" title="详情" type="button" onclick="getDetail(' + i3 +
+                        ');" class="btn btn-primary tableButton"><i class="fa fa-info-circle"> </i></button>' 
+//                      +
+//                      '<button data-toggle="tooltip" title="编辑" type="button" onclick="editEvent(' + i3 +
+//                      ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"> </i></button>' +
+//                      '<button data-toggle="tooltip" title="编辑" type="button" onclick="delMsg(' + i3 +
+//                      ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"> </i></button>';
+                    return str;
+                },
+                cellStyle: function () {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                title:$("#s_title").val()
+            };
+        }
+
+        $("#search").on("click", function () {
+            $('#messageTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function () {
+            $("#s_title").val("");
+            $("#search").trigger("click");
+        });
+    });
+
+    //获取事件详情
+    function getDetail(id){
+        let dataList = $("#messageTable").bootstrapTable("getData");
+        html = template("detailWindow",{title:"通知详情 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "通知详情",
+            area: ['700px','550px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                $("#i_title").val(dataList[id].title);
+                $("#i_content").val(dataList[id].content);
+                $("#i_createTime").val(dataList[id].createDate);
+                $("#i_organization").val(dataList[id].organizationName);
+                $("#i_user").val(dataList[id].userName);
+            }
+        });
+    }
+    //获取事件详情结束
+
+    //修改事件开始
+    function editEvent(id){
+        let dataList = $("#messageTable").bootstrapTable("getData");
+        html = template("editWindow",{title:"事件编辑 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "事件编辑",
+            area: ['700px','550px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交','取消'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+                $.putJSON(deviceServiceUrl + "/message/update",{id:dataList[id].id,top:$("#e_top").val(),content:$("#e_content").val()},function (updateRes) {
+                    if(updateRes.code == 0){
+                        layer.close(myLayer);
+                        $('#messageTable').bootstrapTable('refresh');
+                    }else{
+                        layer.msg("修改失败！", {
+                            icon: 2
+                        });
+                    }
+                });
+            },
+            success: function (layero) {
+                $("#e_content").val(dataList[id].content);
+                $("#e_top").val(dataList[id].top);
+            }
+        });
+    }
+    //修改事件结束
+
+    //删除信息
+    function delMsg(id){
+        $.show_overall_loding();
+        let dataList = $("#messageTable").bootstrapTable("getData");
+        $.putJSON(deviceServiceUrl + "/message/delete",{id:dataList[id].id},function (delRes) {
+            $.hide_overall_loding();
+            if(delRes.code == 0){
+                $('#messageTable').bootstrapTable('refresh');
+            }else{
+                layer.msg("修改失败！", {
+                    icon: 2
+                });
+            }
+        });
+    }
+
+    //新增事件开始
+    function newEvent(){
+        html = template("newEventWindow",{title:"新增通知 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "新增通知",
+            area: ['700px','500px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定','取消'],
+            yes: function (index, layero) {
+                $.show_overall_loding();
+                $("#newEventForm").submit();
+            },
+            success: function (layero) {
+            }
+        });
+        //validata开始
+        var validate = $("#newEventForm").validate({
+            rules: {
+            },
+            messages: {
+            },
+            submitHandler:function (form) {
+                $.postJSON(deviceServiceUrl+"/message/add",
+                    {title:$("#n_title").val(),content:$("#n_content").val(),top:$("#n_top").val()},
+                    function (addRes) {
+                        $.hide_overall_loding();
+                        if(addRes.code == 0){
+                            layer.close(myLayer);
+                            $("#messageTable").bootstrapTable("refresh");
+                        }else{
+                            layer.msg("添加失败",{icon:2});
+                        }
+                    }
+                );
+            }
+        });
+        //validata结束
+    }
+    //新增事件结束
+    //选择所有用户
+    function selectUser(type) {
+        html = template("selectUserWindow",{title:"选择用户 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "选择用户",
+            area: ['700px','400px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定','取消'],
+            yes: function (index, layero) {
+                let rows = $("#select_table2").bootstrapTable("getSelections");
+                if(rows.length > 1){
+                    layer.msg("只能选择一条数据",{icon:2});
+                }else if(rows.length == 0){
+                    layer.msg("请选择一条数据",{icon:2});
+                }else{
+                    if(type == 1){
+                        $("#n_processingUserName").val(rows[0].userName);
+                        $("#n_processingUserPhone").val(rows[0].userMobile);
+                        $("#n_userId").val(rows[0].id);
+                    }else{
+                        $("#e_processingUserName").val(rows[0].userName);
+                        $("#e_processingUserPhone").val(rows[0].userMobile);
+                        $("#e_userId").val(rows[0].id);
+                    }
+                    layer.close(myLayer);
+                }
+            },
+            success: function (layero) {
+                //表格渲染开始
+                $('#select_table2').bootstrapTable({
+                    url: userServiceUrl + "/user/list", //请求后台的URL（*）
+                    //data: data1,                            //本地数据
+                    method: 'get', //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    toolbar: '', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    sortable: false, //是否启用排序
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 10, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    queryParamsType: '',
+                    queryParams: select_queryParams2, //传递参数（*）
+                    strictSearch: true,
+                    // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id", //每一行的唯一标识，一般为主键列
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    clickToSelect: true, //点击行是否选中
+                    responseHandler: function (data) {
+                        let res = [];
+                        if (data.code == 0) {
+                            let result = data.data;
+                            rdata = result.list;
+                            res.push({
+                                total: result.total,
+                                rows: result.list
+                            });
+                            $.hide_overall_loding();
+                            return res[0];
+                        } else {
+                            res.push({
+                                total: 0,
+                                rows: []
+                            });
+                            layer.msg("获取数据失败！", {icon: 2});
+                            $.hide_overall_loding();
+                            return res[0];
+                        }
+                    },
+                    onLoadSuccess: function () {
+                        $.hide_overall_loding();
+                    },
+                    onDblClickRow: function (row) {
+                        console.info(row);
+                    },
+                    columns: [{
+                        checkbox: true
+                    }, {
+                        width: 50,
+                        title: '序号',
+                        formatter: function (value, row, index) {
+                            let pageSize = $('#select_table2').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                            let pageNumber = $('#select_table2').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                            return pageSize * (pageNumber - 1) + index + 1;
+                        }
+                    }, {
+                        field: 'userName',
+                        title: '处理人名称',
+                        width: 100
+                    }, {
+                        field: 'userMobile',
+                        title: '处理人电话',
+                        width: 100
+                    },{
+                        field: 'organizationName',
+                        title: '组织机构',
+                        width: 100
+                    }]
+                });
+                //表格渲染结束
+                //查询参数
+                function select_queryParams2(params) {
+                    return {
+                        token: $.getToken(),
+                        pageSize: params.pageSize,
+                        pageNum: params.pageNumber,
+                        userName:$("#select_userName").val(),
+                        userMobile:$("#select_userPhone").val(),
+                    };
+                }
+                //自动搜索
+                $("#select_userName").change(function () {
+                    $('#select_table2').bootstrapTable('refresh');
+                });
+                $("#select_userPhone").change(function () {
+                    $("#select_table2").bootstrapTable("refresh");
+                });
+            }
+        });
+    }
+    //选择所有用户结束
+    //选择所有设备
+    function selectDevice() {
+        html = template("selectDeviceWindow",{title:"选择设备 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "选择设备",
+            area: ['700px','500px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定','取消'],
+            yes: function (index, layero) {
+                let rows = $("#select_table").bootstrapTable("getSelections");
+                if(rows.length > 1){
+                    layer.msg("只能选择一条数据",{icon:2});
+                }else if(rows.length == 0){
+                    layer.msg("请选择一条数据",{icon:2});
+                }else{
+                    $("#n_deviceMac").val(rows[0].deviceMac);
+                    $("#n_deviceName").val(rows[0].deviceName);
+                    $("#n_deviceId").val(rows[0].id);
+                    layer.close(myLayer);
+                }
+            },
+            success: function (layero) {
+                //表格渲染开始
+                $('#select_table').bootstrapTable({
+                    url: deviceServiceUrl + "/device/list", //请求后台的URL（*）
+                    //data: data1,                            //本地数据
+                    method: 'get', //请求方式（*）
+                    contentType: "application/x-www-form-urlencoded",
+                    toolbar: '', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    sortable: false, //是否启用排序
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 10, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    queryParamsType: '',
+                    queryParams: select_queryParams, //传递参数（*）
+                    strictSearch: true,
+                    // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "id", //每一行的唯一标识，一般为主键列
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    clickToSelect: true, //点击行是否选中
+                    responseHandler: function (data) {
+                        let res = [];
+                        if (data.code == 0) {
+                            let result = data.data;
+                            rdata = result.list;
+                            res.push({
+                                total: result.total,
+                                rows: result.list
+                            });
+                            $.hide_overall_loding();
+                            return res[0];
+                        } else {
+                            res.push({
+                                total: 0,
+                                rows: []
+                            });
+                            layer.msg("获取数据失败！", {icon: 2});
+                            $.hide_overall_loding();
+                            return res[0];
+                        }
+                    },
+                    onLoadSuccess: function () {
+                        $.hide_overall_loding();
+                    },
+                    onDblClickRow: function (row) {
+                        console.info(row);
+                    },
+                    columns: [{
+                        checkbox: true
+                    }, {
+                        width: 50,
+                        title: '序号',
+                        formatter: function (value, row, index) {
+                            let pageSize = $('#select_table').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                            let pageNumber = $('#select_table').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                            return pageSize * (pageNumber - 1) + index + 1;
+                        }
+                    }, {
+                        field: 'deviceName',
+                        title: '设备名称',
+                        width: 100
+                    }, {
+                        field: 'deviceMac',
+                        title: '设备MAC',
+                        width: 100
+                    }]
+                });
+                //表格渲染结束
+                //查询参数
+                function select_queryParams(params) {
+                    return {
+                        token: $.getToken(),
+                        pageSize: params.pageSize,
+                        pageNum: params.pageNumber,
+                        deviceName:$("#select_deviceName").val(),
+                        deviceMac:$("#select_deviceMac").val(),
+                    };
+                }
+                //自动搜索
+                $("#select_deviceName").change(function () {
+                    $('#select_table').bootstrapTable('refresh');
+                });
+                $("#select_deviceMac").change(function () {
+                    $("#select_table").bootstrapTable("refresh");
+                });
+            }
+        });
+    }
+    //选择所有设备结束
+    //获取所有用户
+    function getAllUser(phoneData, dataList, id) {
+        $.ajax(
+            {
+                type: "get",
+                url: userServiceUrl + "/user/list?token=" + $.getToken(),
+                success: function (userRes) {
+                    console.log(userRes);
+                    let userListHtml = '<option value="" >' + "请选择处理人" + '</option>';
+                    if (userRes.code == 0) {
+                        for (let i = 0; i < userRes.data.list.length; i++) {
+                            userListHtml += '<option value="' + userRes.data.list[i].id + '" >' + userRes.data.list[i].userName + '</option>';
+                            phoneData.append(userRes.data.list[i].id, userRes.data.list[i].userMobile);
+                        }
+                        $("#e_processingUserName").html(userListHtml);
+                        if (dataList[id].processingUser != null && dataList[id].processingUser != "") {
+                            $("#e_processingUserName").val(dataList[id].processingUser);
+                            $("#e_processingUserPhone").val(phoneData.get(dataList[id].processingUser));
+                        }
+                    } else {
+                        console.log("fail");
+                        $("#e_processingUserName").html('<option value="" >' + "请选择处理人" + '</option>');
+                    }
+                },
+                fail: function (userRes) {
+                    console.log("fail");
+                    $("#e_processingUserName").html('<option value="" >' + "请选择处理人" + '</option>');
+                }
+            }
+        )
+    }
+    //获取所有设备
+    function getAllDevice(macData) {
+        $.ajax(
+            {
+                type: "get",
+                url: deviceServiceUrl + "/device/list",
+                success: function (deviceRes) {
+                    console.log(deviceRes);
+                    let deviceListHtml = '<option value="" >' + "请选择设备" + '</option>';
+                    if (deviceRes.code == 0) {
+                        for (let i = 0; i < deviceRes.data.list.length; i++) {
+                            deviceListHtml += '<option value="' + deviceRes.data.list[i].id + '" >' + deviceRes.data.list[i].deviceName + '</option>';
+                            macData.append(deviceRes.data.list[i].id, deviceRes.data.list[i].deviceMac);
+                        }
+                        $("#n_deviceName").html(deviceListHtml);
+                    } else {
+                        console.log("fail");
+                        $("#n_deviceName").html('<option value="" >' + "请选择设备" + '</option>');
+                    }
+                },
+                fail: function (deviceRes) {
+                    console.log("deviceRes");
+                    $("#n_deviceName").html('<option value="" >' + "请选择设备" + '</option>');
+                }
+            }
+        )
+        $("#n_deviceName").change(function () {
+            $("#n_deviceMac").val(macData.get($("#n_deviceName").val()));
+        });
+    }
+</script>
+
+<!--详情弹框-->
+<script type="text/html" id="detailWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventDetailForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_title">标题:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_title" name="i_title" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_createTime">创建时间:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_createTime" name="i_createTime" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_organization">发起机构:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_organization" name="i_organization" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_user">发起者:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_user" name="i_user" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">内容:</label>
+                        <div class="layui-input-block">
+                            <textarea class="form-control" rows="4" id="i_content" name="i_content" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--详情弹框结束-->
+<!--编辑弹框-->
+<script type="text/html" id="editWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventEditForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">是否置顶:</label>
+                        <div class="layui-input-block">
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="e_top" id="e_top" data-live-search="true">
+                                <option value="">是否置顶</option>
+                                <option value="1">置顶</option>
+                                <option value="2">不置顶</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">内容:</label>
+                        <div class="layui-input-block">
+                            <textarea class="form-control" id="e_content" name="e_content" type="text" rows="15"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--编辑弹框结束-->
+<!--添加弹框-->
+<script type="text/html" id="newEventWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="newEventForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">标题:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_title" name="title" type="text" required >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">是否置顶:</label>
+                        <div class="layui-input-block">
+                            <!--<input class="form-control" id="n_deviceType" name="deviceType" type="text" readonly>-->
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="top" id="n_top" data-live-search="true">
+                                <option value="">是否置顶</option>
+                                <option value="1">置顶</option>
+                                <option value="2">不置顶</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">内容:</label>
+                        <div class="layui-input-block">
+                            <textarea class="form-control" id="n_content" name="content" rows="15"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--添加弹框结束-->
+<!--选择设备弹框开始-->
+<script type="text/html" id="selectDeviceWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="selectDeviceForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="select_deviceName" name="deviceName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备MAC:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="select_deviceMac" name="deviceMac" type="text">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <table id="select_table"></table>
+        </div>
+    </section>
+</script>
+<!--选择设备弹框结束-->
+<!--选择用户弹框开始-->
+<script type="text/html" id="selectUserWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="selectUserForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人名:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="select_userName" name="userName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人电话:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="select_userPhone" name="userPhone" type="text">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <table id="select_table2"></table>
+        </div>
+    </section>
+</script>
+<!--选择用户弹框结束-->
+</html>

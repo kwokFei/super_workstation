@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content" style="display: none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>我的设备维修</h4>
+                            </div>
+                            <div class="card-body">
+								 <div class="ibox-content row">
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label" for="s_repairmUser">维修人员：</label>
+                                                <input class="form-control" name="repairmUserName" id="s_repairmUser" placeholder="维修人员" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label" for="deviceName">设备名：</label>
+                                                <input class="form-control" name="deviceAlias" id="l_deviceAlias" placeholder="设备名" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">维修状态：</label>
+                                                <select class="form-control" id="s_repairmState" name="repairmState">
+													<option value="">请选择维修状态</option>
+													<option value="1">待维修</option>
+													<option value="2">已维修</option>
+												</select>
+                                            </div>
+                                        </div>
+                                         <div class="col-lg-3">
+                                             <div class="form-group">
+                                                 <div style="margin-top: 24px;">
+                                                     <button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+                                                     <button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                 </div>
+
+                                    
+								<div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                        <!--<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 修改
+                                        </button>-->
+                                    </div>
+
+                                    <div id="myTable">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<!--加载底部-->
+		<div id="footer" class="Pos_footer">
+			<script type="text/javascript">
+				$(function(){
+					$("#footer").load("footer.html");
+				});
+			</script>
+		</div>
+        <div id="loadDiv"></div>
+</body>
+
+<script>
+    var html;
+    var rdata = {};
+    $("#loadDiv").html(loadHtml);
+    $(function () {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: deviceServiceUrl + "/devicerepairm/myList", //请求后台的URL（*）
+            method: 'get',                         //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '',                            //工具按钮用哪个容器
+            striped: true,                          //是否显示行间隔色
+            cache: false,                           //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                       //是否显示分页（*）
+            sortable: false,                        //是否启用排序
+            sidePagination: "server",               //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                          //初始化加载第一页，默认第一页
+            pageSize: 10,                           //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],            //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams,               //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                         //每一行的唯一标识，一般为主键列
+            cardView: false,                        //是否显示详细视图
+            detailView: false,                      //是否显示父子表
+            clickToSelect: true,                    //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [
+                {
+                    checkbox: true
+                }, {
+                    width: 50,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                }, {
+                    field: 'deviceAlias',
+                    title: '设备名称',
+                    width: 300
+                },{
+                    field: 'deviceDesc',
+                    title: '设备描述',
+                    width: 200
+                }, {
+                    field: 'repairmUserName',
+                    title: '维修人',
+                    width: 200
+                },{
+                    field: 'repairmUserPhone',
+                    title: '联系电话',
+                    width: 200
+                }, {
+                    field: 'createDate',
+                    title: '创建时间',
+                    width: 200
+                }, {
+                    field: 'repairmState',
+                    title: '维修状态',
+                    width: 200,
+                    formatter: function(value, row, index) {
+						var state = "";
+						if(value == 1) {
+							state = '<span style="color:orange">待维修</span>'
+						} else if(value == 2) {
+							state = '<span style="color:green">已维修</span>'
+						}
+						return state;
+					}
+                },{
+					title: "操作",
+					width: 200,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>'
+							+'<button data-toggle="tooltip" title="编辑" type="button" onclick="tabEidt(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>'
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}
+            ]
+        });
+
+        function queryParams(params) {
+        	$.show_overall_loding();
+            return {
+            	token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                repairmUserName: $("#s_repairmUser").val(),
+                deviceAlias: $("#l_deviceAlias").val(),
+                repairmState: $("#s_repairmState").val()
+            };
+        }
+
+
+        var serchaData = {};
+        $("#search").click(function() {
+            $.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function() {
+            $("#s_repairmUser").val("");
+            $("#l_deviceAlias").val("");
+            $("#s_repairmState").val("");
+            $("#search").trigger("click");
+        });
+
+
+    });
+
+	function detail(obj) {
+        url = "";
+        showDetailModel("查看详情",obj);
+    };
+    
+    function tabEidt(obj) {
+		url = "";
+		showModel("修改维保信息", 3, obj);
+	}
+    
+    function showDetailModel(title,index) {
+        html = template("modelDetailWin", {
+            title: "123"
+        });
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: title,
+            area: ['800px', '350px'],	//宽高
+            resize: true,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确认'],
+            yes: function (index, layero) {
+            	layer.close(myLayer);
+				return;
+            },
+            success: function (layero) {
+                var data = $("#myTable").bootstrapTable('getData')[index];
+				$("#deviceNameDetail").val(data.deviceAlias);
+				$("#repairmDescDetail").val(data.repairmDesc);
+				$("#repairmUserNameDetail").val(data.repairmUserName);
+				$("#deviceDescDetail").val(data.deviceDesc);
+				$("#createDateDetail").val(data.createDate);
+				if(data.repairmState ===1){
+					$("#repairmStateDetail").val("待维修");
+				}else{
+					$("#repairmStateDetail").val("已维修");
+				}
+				
+            }
+        });
+    }
+
+    var isAdd = true;  //是否为增加
+    function showModel(title, flag, index) {
+        if (flag == 1) {
+            isAdd = true;
+        } else {
+            isAdd = false;
+        }
+        html = template("modelWin", {
+            title: "123"
+        });
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: title,
+            area: ['800px', '350px'],	//宽高
+            resize: true,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                $("#repairForm").submit();
+            },
+            success: function (layero) {
+            	var data = $("#myTable").bootstrapTable('getData')[index];
+//              var data = $("#myTable").bootstrapTable('getSelections');
+//              if (flag == 3) {
+//              	$("#RepairId").val(data.id);
+//					$("#repairmDesc").val(data.repairmDesc);
+//					
+//					var count = $("#editrepairmState option").length;
+//					var tf = data.repairmState;//后端传值
+//				    for (var i = 0; i < count; i++) {
+//					    if ($("#editrepairmState ").get(0).options[i].value ==tf) {//获取select 的value值和入参比较
+//						    $("#editrepairmState ").get(0).options[i].selected = true;
+//						    break;
+//					    }
+//					}
+//					
+//              }
+                
+                if (data != null) {
+                    $("#repairForm").setForm(data);
+                }
+                
+                
+            }
+        });
+        var validate = $("#repairForm").validate({
+            rules: {
+            },
+            messages: {
+            },
+            submitHandler: function (form) {
+                $.show_overall_loding();
+                var data = $("#repairForm").serializeJson()
+                $.show_overall_loding();
+                if (isAdd) {
+                    $.postJSON(deviceServiceUrl + "/devicerepairm", data, function (data) {
+                        $.hide_overall_loding();
+                        if (data.code == 0) {
+                            layer.close(myLayer);
+                            layer.msg("成功", {
+                                icon: 1
+                            });
+                            $.show_overall_loding();
+                            $('#myTable').bootstrapTable('refresh');
+                            return true;
+                        }
+                        layer.msg("操作失败", {
+                            icon: 2
+                        });
+                    });
+                } else {
+                    $.putJSON(deviceServiceUrl + "/devicerepairm", data, function (data) {
+                        $.hide_overall_loding();
+                        if (data.code == 0) {
+                            layer.close(myLayer);
+                            layer.msg("成功", {
+                                icon: 1
+                            });
+                            $.show_overall_loding();
+                            $('#myTable').bootstrapTable('refresh');
+                            return true;
+                        }
+                        layer.msg("操作失败", {
+                            icon: 2
+                        });
+                    });
+                }
+            }
+        });
+    }
+
+</script>
+
+<!-- 查看详情模板-->
+<script type="text/html" id="modelDetailWin">
+    <section class="openDetail" style="width: 100%;">
+        <div class="panel-body">
+			<div class="layui-row layui-col-space10 layui-form-item">
+				<div class="col-lg-6 MarginPx" >
+					<label class="layui-form-label" style="width: 103px;">BCCA设备名称:</label>
+					<div class="layui-input-block">
+						<input class="form-control" id="deviceNameDetail" type="text" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-lg-6 MarginPx">
+					<label class="layui-form-label">维修状态:</label>
+					<div class="layui-input-block">
+						<input class="form-control" id="repairmStateDetail" type="text" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-lg-6 MarginPx">
+					<label class="layui-form-label">设备描述:</label>
+					<div class="layui-input-block">
+						<input class="form-control" id="deviceDescDetail" type="text" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-lg-6 MarginPx">
+					<label class="layui-form-label">维修人员:</label>
+					<div class="layui-input-block">
+						<input class="form-control" id="repairmUserNameDetail" type="text" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-lg-6 MarginPx">
+					<label class="layui-form-label">维修详情:</label>
+					<div class="layui-input-block">
+						<input class="form-control" id="repairmDescDetail" type="text" disabled="disabled">
+					</div>
+				</div>
+				
+				<div class="col-lg-6 MarginPx">
+					<label class="layui-form-label">创建时间:</label>
+					<div class="layui-input-block">
+						<input class="form-control" id="createDateDetail" type="text" disabled="disabled">
+					</div>
+				</div>
+			</div>
+        </div>
+    </section>
+</script>
+
+<!--新增修改模板-->
+<script type="text/html" id="modelWin">
+    <section class="openDetail" style="width: 100%;">
+        <div class="panel-body">
+            <form id="repairForm">
+				<div class="layui-row layui-col-space10 layui-form-item">
+					<input type="hidden" name="id" id="RepairId" />
+					<div class="col-lg-9 MarginPx">
+						<label class="layui-form-label" style="width: 110px;float:left;">维修状态：</label>
+	                    <div class="layui-input-block">
+		                    <select class="form-control" id="editrepairmState" name="repairmState">
+								<option value="1">待维修</option>
+								<option value="2">已维修</option>
+		                    </select>
+	                    </div>
+					</div>
+					<div class="col-lg-9 MarginPx">
+						<label class="layui-form-label">维修详情:</label>
+						<div class="layui-input-block">
+							<textarea rows="4" class="form-control" id="repairmDesc" name="repairmDesc" type="text" placeholder="请输入描述" />
+						</div>
+					</div>
+			</form>
+        </div>
+    </section>
+</script>
+
+</html>

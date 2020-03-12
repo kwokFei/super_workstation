@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<style>
+			.col-lg-3{
+				float: left;
+				width: 25%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>音频控制管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="s_voiceContent">音频内容：</label>
+											<input class="form-control" name="s_voiceContent" id="s_voiceContent" placeholder="音频内容" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="s_voiceModeName">模版名称：</label>
+											<input class="form-control" name="s_voiceModeName" id="s_voiceModeName" placeholder="模版名称" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+												<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="ibox-content">
+									<!--页面内容部分-->
+									<!-- 这里写内容 -->
+									<!--<div id="buttons">-->
+									<!--&lt;!&ndash;<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i> 录入</button>&ndash;&gt;-->
+									<!--&lt;!&ndash;<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 编辑</button>&ndash;&gt;-->
+									<!--&lt;!&ndash;<button type="button" class="btn btn-success" id="recover"><i class="fa fa-reply"></i> 启用</button>&ndash;&gt;-->
+									<!--&lt;!&ndash;<button type="button" class="btn btn-warning" id="lock"><i class="fa fa-warning"></i> 禁用</button>&ndash;&gt;-->
+									<!--&lt;!&ndash;<button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 删除</button>&ndash;&gt;-->
+									<!--</div>-->
+									<div id="buttons">
+										<button type="button" class="btn btn-primary" id="addVoice"><i class="fa fa-plus"></i> 新增音频控制</button>
+									</div>
+									<div id="myTable">
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+	</body>
+
+	<script>
+		var html;
+		var url = "";
+		$("#loadDiv").html(loadHtml);
+		$(function() {
+			$.show_overall_loding();
+			$('#myTable').bootstrapTable({
+				url: deviceServiceUrl + "/vocieControl/list", //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'voiceContent',
+					title: '音频内容',
+					width: 800
+				}, {
+					field: 'voiceModeName',
+					title: '所属模版',
+					width: 800
+				}, {
+					field: 'createDate',
+					title: '登陆时间',
+					width: 800
+				}, {
+					title: "操作",
+					width: 400,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="编辑" type="button" onclick="updata(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>' +
+							'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					voiceContent: $("#s_voiceContent").val(),
+					voiceModeName: $("#s_voiceModeName").val()
+
+				};
+			}
+
+			$("#search").click(function() {
+				$.show_overall_loding();
+				$('#myTable').bootstrapTable('refresh');
+			});
+
+			$("#clean").click(function() {
+				$("#s_voiceContent").val("");
+				$("#s_voiceModeName").val("");
+				$("#search").trigger("click");
+			});
+
+		});
+
+		function tabRemove(obj) {
+			var data = $("#myTable").bootstrapTable('getData');
+			var id = data[obj].id;
+			var conlayer = parent.layer.confirm("确定删除？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.ajax({
+					url: "",
+					type: "post",
+					dataType: "json",
+					success: function(res) {
+						parent.layer.msg("成功", {
+							icon: 1
+						});
+						$('#myTable').bootstrapTable('refresh');
+					}
+				});
+			}, function() {
+				parent.layer.close(conlayer);
+			});
+		}
+
+		function updata(obj) {
+			var data = $("#myTable").bootstrapTable('getData');
+			var id = data[obj].id;
+			showModel("修改音频控制", 2, obj);
+		}
+
+		$("#addVoice").click(function() {
+			showModel("添加音频控制", 1);
+		});
+
+		function showModel(title, flag, index) {
+			var area = ['480px', '250px'];
+			var btn = ['提交', '取消'];
+			html = template("modelvocieControl", {
+				title: "123"
+			});
+			isAdd = false;
+			if(flag == 1) {
+				isAdd = true;
+			}
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: area, //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: btn,
+				yes: function(index, layero) {
+					$("#vocieControlForm").submit();
+				},
+				success: function(layero) {
+					var data = $("#myTable").bootstrapTable('getData')[index];
+					if(data != null) {
+						$("#vocieControlForm").setForm(data);
+					}
+					$("#selectVoice").click(function() {
+						html = template("modelmodeList", {
+							title: "123"
+						});
+						var modeLayer = layer.open({
+							skin: 'card', //自定义样式winning-class
+							type: 1,
+							title: ["选择模式", ""],
+							area: ['680px', '450px'], //宽高
+							resize: true, //是否拉升
+							offset: 'auto', //居中
+							content: html,
+							btn: ['设置', '取消'],
+							yes: function(index, layero) {
+								var list = $("#modeTable").bootstrapTable('getSelections');
+								if(list.length < 1) {
+									layer.msg("请先选择要设置的设备", {
+										icon: 2
+									});
+									return;
+								}
+								var one = list[0];
+								$("#voiceModeId").val(one.id);
+								$("#voiceModeName").val(one.modeName);
+								layer.close(modeLayer);
+							},
+							success: function(layero) {
+								mModeId = $("#voiceModeId").val();
+								var showModes = new showMode();
+								showModes.init();
+								showModes.bindCreate();
+							}
+						});
+					})
+				}
+			});
+			var validate = $("#vocieControlForm").validate({
+				rules: {},
+				messages: {},
+				submitHandler: function(form) {
+					var data = $("#vocieControlForm").serializeJson();
+					$.show_overall_loding();
+					if(isAdd) {
+						console.log(1);
+						$.postJSON(deviceServiceUrl + "/vocieControl", data, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							if(data.code == 400002) {
+								layer.msg("添加的音频内容重复！", {
+									icon: 2
+								});
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					} else {
+						$.putJSON(deviceServiceUrl + "/vocieControl", data, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					}
+				}
+			});
+		}
+
+		var mModeId = "";
+		var showMode = function() {
+			return {
+				node: $("#modeTable"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/mode/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						singleSelect: true,
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 3, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						//单击行选中的操作
+						onClickRow: function(row) {
+							mModeId = row.id;
+						},
+						//双击行选中的操作
+						onDblClickRow: function(row) {
+							mModeId = row.id;
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							checkbox: true,
+							formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+								if(row.id == mModeId) { // 因为 判断数组里有没有这个 id
+									// 存在则选中
+									return {
+										checked: true
+									};
+								}
+							}
+						}, {
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'modeName',
+							title: '模式名称',
+							width: 500
+						}, {
+							field: 'modeReadme',
+							title: '模式说明',
+							width: 500
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						modeName: $("#s_modeName").val()
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_deviceTable").on("click", function() {
+						that.refresh();
+					});
+				}
+			}
+		}
+	</script>
+
+	<script type="text/html" id="modelvocieControl">
+		<section class="openDetail" style="width: 95%; ">
+			<div class="panel-body">
+				<form id="vocieControlForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<input type="hidden" name="id" id="id" />
+						<div class="col-lg-12 MarginPx">
+							<label class="layui-form-label">音频内容:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="voiceContent" name="voiceContent" type="text">
+							</div>
+						</div>
+						<div class="col-lg-9 MarginPx">
+							<label class="layui-form-label">所属模式:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="voiceModeId" name="voiceModeId" type="hidden">
+								<input class="form-control" id="voiceModeName" name="voiceModeName" type="text" disabled="disabled">
+							</div>
+						</div>
+						<div class="col-lg-3 MarginPx">
+							<button type="button" class="btn btn-success form-control" id="selectVoice"><i class="fa fa-refresh"></i> <span id="showTitle">选择模式</span></button>
+						</div>
+				</form>
+				</div>
+		</section>
+	</script>
+
+	<script type="text/html" id="modelmodeList">
+		<section class="openDetail" style="width: 100%; ">
+			<div class="panel-body">
+				<div class="ibox-content row">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="form-label">模式名称：</label>
+							<input class="form-control" name="s_modeName" id="s_modeName" placeholder="模式名称" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div id="buttons" style="margin-top: 24px;">
+								<button type="button" class="btn btn-success" id="search_deviceTable"><i class="fa fa-search"></i> 查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="modeTable"></div>
+			</div>
+		</section>
+	</script>
+
+</html>

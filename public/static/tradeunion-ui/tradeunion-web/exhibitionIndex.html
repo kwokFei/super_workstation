@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="../images/title_icon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>测试中心</title>
+		<link rel="stylesheet" type="text/css" href="../plus/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+
+	    <link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/header2.css">
+		<script type="text/javascript"
+				src='http://api.map.baidu.com/api?v=2.0&ak=1pSTowk3vMReXCQA08ypPGfGoOaZI0qk'></script>
+		<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/exhibitionIndex.css"/>
+		<script src="../js/jquery.min.js"></script>
+		<script src="js/base.js"></script>
+		<script src="../js/httpUtils.js"></script>
+	</head>
+
+	<body>
+		<div id="main">
+			<div id="header">
+				<script type="text/javascript">
+					$("#header").load("header2.html");
+                    if ($.getCookie("orgLv") == "0") {
+
+                    }else{
+                        window.location.href = "./../html/Login/login.html";
+                    }
+				</script>
+			</div>
+			<div class="section">
+				<div id="left">
+					<div class="left-one box-line">
+						<div class="title-box">
+							<span></span>
+							<p>测试中心总览</p>
+						</div>
+						<div class="content-box">
+							<div class="bar-item">
+								<span class="icon-complete-bar font-blue-light">
+									<canvas id="header_canvas1" style="position:absolute;bottom:0;left: 0.1rem;"></canvas>
+								</span>
+								<span>总测试中心</span>
+							</div>
+							<div class="bar-item">
+								<span class="icon-building-bar font-green">
+									<canvas id="header_canvas2" style="position:absolute;bottom:0;left: 0.1rem;"></canvas>
+								</span>
+								<span>已完成</span>
+							</div>
+							<div class="bar-item">
+								<span class="icon-all-bar font-yellow" id="thumbnail_canvas">
+									<canvas id="header_canvas3" style="position:absolute;bottom:0;left: 0.1rem;"></canvas>
+								</span>
+								<span>建设中</span>
+							</div>
+						</div>
+					</div>
+					<div class="left-two box-line">
+						<div class="title-box">
+							<span></span>
+							<p>测试中心分布</p>
+						</div>
+                        <!--TODO-->
+						<div class="content-box">
+							<div id="distributionDiv" class="content-head">
+							</div>
+							<ul id="distributionUl" class="content-body">
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div id="center">
+					<div class="mark-box">
+						<div class="active" show="all">全部</div>
+						<div class="active" show="complete">
+							<span class="icon-builded"></span>
+							<span>已完成测试中心</span>
+						</div>
+						<div class="active" show="ncomplete">
+							<span class="icon-building"></span>
+							<span>建设中测试中心</span>
+						</div>
+					</div>
+					 <div class="map">
+			                <div id="ec_map" style="width: 9.72rem;height: 7rem;"></div>
+		            </div>
+					<ul class="nav-box">
+						<li onclick="window.location.href='projectManagement.html'">项目管理</li>
+						<li onclick="window.location.href='exhibitionIndex.html'" class="active">测试中心</li>
+						<li onclick="window.location.href='enterpriseIndex.html'">公司管理</li>
+					</ul>
+				</div>
+				<div id="right">
+					<div class="right-one box-line">
+						<div class="title-box">
+							<span></span>
+							<p>测试中心统计</p>
+						</div>
+						<ul class="statistics-data">
+							<li>
+								<span>总测试中心</span>
+								<span id="cnum" class="font-blue-light"></span>
+							</li>
+							<li>
+								<span>已完成</span>
+								<span id="ynum" class="font-green"></span>
+							</li>
+							<li>
+								<span>建造中</span>
+								<span id="nnum" class="font-yellow"></span>
+							</li>
+						</ul>
+						<div class="statistics-echart">
+							<div id="echarts1"></div>
+						</div>
+					</div>
+					<div class="right-two box-line">
+						<div class="title-box">
+							<span></span>
+							<p>测试中心企业</p>
+						</div>
+						<div class="company-list">
+							<ul>
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--测试中心信息-->
+		<script type="text/html" id="tip_box">
+			<a class="tip-content-body">
+				<p title="001号测试中心">001号测试中心</p>
+				<p title="20家展示企业，20个展示区域，1584台只能那个设备">20家展示企业，20个展示区域，1584台只能那个设备</p>
+				<div><span>2019年12月1日建立</span><span>接纳访客24000人</span></div>
+			</a>
+		</script>
+
+		<script src="../plus/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/template-web.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/exhibitionIndex.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/httpUtils.js"></script>
+	</body>
+
+<!--<script type="text/html" id="eachDevice">-->
+	<!--{{if data.length > 0}}-->
+	<!--{{each data}}-->
+	<!--<li>-->
+		<!--<div class="city-img-box">-->
+			<!--<img src="img/exhibition/city.png" />-->
+		<!--</div>-->
+		<!--<div class="exhibition-info">-->
+			<!--<div>-->
+				<!--<span class="font-14-bold">{{$value.province}}</span>-->
+				<!--<span class="font-16-bold">{{$value.exhibitionCount}}家</span>-->
+			<!--</div>-->
+			<!--<div>-->
+				<!--<div class="layui-progress">-->
+					<!--<div class="layui-progress-bar layui-bg-orange" lay-percent="40%"></div>-->
+				<!--</div>-->
+				<!--<span>{{$value.count}}个设备</span>-->
+			<!--</div>-->
+		<!--</div>-->
+	<!--</li>-->
+	<!--{{/each}}-->
+	<!--{{else}}-->
+	<!--{{/if}}-->
+<!--</script>-->
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/layui.css"/>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+
+    <script src="../js/laydate/laydate.js"></script>
+    <style>
+        .plaFooter {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div id="hander">
+    <script>
+        $(function() {
+            $("#hander").load("handMenu.html");
+        });
+    </script>
+</div>
+<main class="lyear-layout-content" style="display: none">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>考勤参数配置</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox-content">
+                            <form id="platformAttTimeForm">
+                                <!--<div class="form-group">
+                                    <label class="form-label" for="startTime">上班时间：</label>
+                                    <input class="form-control" name="startTime" id="startTime" placeholder="上班时间"
+                                           type="text">
+                                </div>-->
+                                <div class="col-lg-12" style="margin: 10px 0">
+                                    <label class="layui-form-label">上班时间：</label>
+                                    <div class="layui-input-block">
+                                        <input class="form-control" id="startTime" name="startTime" type="text" placeholder="上班时间">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" style="margin: 10px 0">
+                                    <label class="layui-form-label">上班延迟：</label>
+                                    <div class="layui-input-block">
+                                        <input class="form-control" id="startAdvance" name="startAdvance" placeholder="上班延迟时间" type="text" maxlength="2" value="0"
+                                               onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                               onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" style="margin: 10px 0">
+                                    <label class="layui-form-label">下班时间：</label>
+                                    <div class="layui-input-block">
+                                        <input class="form-control" id="endTime" name="endTime" type="text" placeholder="下班时间">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" style="margin: 10px 0">
+                                    <label class="layui-form-label">下班提前：</label>
+                                    <div class="layui-input-block">
+                                        <input class="form-control" id="endDelay" name="endDelay" placeholder="下班提前时间" type="text" maxlength="2" value="0"
+                                               onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                               onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}">
+                                    </div>
+                                </div>
+
+                               <!-- <div class="form-group">
+                                    <label class="form-label" for="startAdvance">上班延迟时间：</label>
+                                    <input class="form-control" name="startAdvance" id="startAdvance"
+                                           placeholder="上班延迟时间" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="endTime">下班时间：</label>
+                                    <input class="form-control" name="endTime" id="endTime" placeholder="下班时间" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="endDelay">下班提前时间：</label>
+                                    <input class="form-control" name="endDelay" id="endDelay"
+                                           placeholder="下班提前时间" type="text">
+                                </div>-->
+                                <input type="hidden" name="id" id="attTimeId"/>
+                                <button type="submit" class="btn btn-info" style="margin-left: 50%">确 认</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div id="loadDiv"></div>
+</body>
+<script>
+    var attTimeId = "";
+
+
+    var startTimeValue;
+    var startAdvanceValue;
+    var endTimeValue;
+    var endDelayValue;
+    $(function () {
+        fromAttTimeLoad();
+    });
+    /*BCCA平台参数配置*/
+    $('#startTime').mouseenter(function() {
+        laydate.render({
+            elem: '#startTime',
+            type: 'time'
+        });
+
+    });
+
+    $('#endTime').mouseenter(function() {
+        laydate.render({
+            elem: '#endTime',
+            type: 'time'
+        });
+
+    });
+    var validate = $("#platformAttTimeForm").validate({
+        rules: {
+            startTime: {
+                required: true
+            },
+            startAdvance: {
+                required: true
+            },
+            endTime: {
+                required: true
+            },
+            endDelay: {
+                required: true
+            }
+        },
+        messages: {
+            startTime: {
+                required: "请选择上班时间"
+            },
+            startAdvance: {
+                required: "请输入上班延迟时间"
+            },
+            endTime: {
+                required: "请选择下班时间"
+            },
+            endDelay: {
+                required: "请输入下班提前时间"
+            }
+        },
+        submitHandler: function (form) {
+            var startTime = $("#startTime").val();
+            var startAdvance = $("#startAdvance").val();
+            var endTime = $("#endTime").val();
+            var endDelay = $("#endDelay").val();
+            var xx = compare(startTime,endTime);
+            if(startAdvance > 10 || endDelay > 10){
+                layer.msg('上班最多延迟10分钟,下班可提前10分钟', {
+                    icon: 5
+                });
+                return;
+            }
+            if(xx == 1){
+                layer.msg('下班时间需大于上班时间', {
+                    icon: 5
+                });
+                $('#startTime').val(startTimeValue);
+                $('#startAdvance').val(startAdvanceValue);
+                $('#endTime').val(endTimeValue);
+                $('#endDelay').val(endDelayValue);
+                return;
+            }
+            $.show_overall_loding();
+            $.putJSON(deviceServiceUrl + "/attTime", {
+                "id": attTimeId,
+                "startTime": startTime,
+                "startAdvance": startAdvance,
+                "endTime": endTime,
+                "endDelay": endDelay
+            }, function (data) {
+                $.hide_overall_loding();
+                if (data.code == 0) {
+                    parent.layer.msg("操作成功", {
+                        icon: 6
+                    });
+                    fromAttTimeLoad();
+                    return true;
+                } else {
+                    if (data.code == 401000) {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    } else if (data.messages != null) {
+                        parent.layer.msg(data.messages[0].error, {
+                            icon: 5
+                        });
+                    } else {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    }
+                }
+
+            })
+
+        }
+    });
+
+    function fromAttTimeLoad() {
+        $.show_overall_loding();
+        $.sanjiGetJSON(deviceServiceUrl + "/attTime/list", {
+        }, function (data) {
+            $.hide_overall_loding();
+            if (data.code == 0) {
+                console.log(data);
+                if (data.data.length > 0) {
+                    startTimeValue = data.data[0].startTime;
+                    startAdvanceValue = data.data[0].startAdvance;
+                    endTimeValue = data.data[0].endTime;
+                    endDelayValue = data.data[0].endDelay;
+                    /*var startTime = data.data[0].startTime;
+                    var startAdvance = data.data[0].startAdvance;
+                    var endTime = data.data[0].endTime;
+                    var endDelay = data.data[0].endDelay;*/
+                    attTimeId = data.data[0].id;
+                    $('#startTime').val(startTimeValue);
+                    $('#startAdvance').val(startAdvanceValue);
+                    $('#endTime').val(endTimeValue);
+                    $('#endDelay').val(endDelayValue);
+                }
+                return true;
+            } else {
+                if (data.code == 401000) {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                } else if (data.messages != null) {
+                    parent.layer.msg(data.messages[0].error, {
+                        icon: 5
+                    });
+                } else {
+                    parent.layer.msg(data.message, {
+                        icon: 5
+                    });
+                }
+            }
+
+        })
+    }
+
+    /*获取当天日期*/
+    function dateFu() {
+        // 获取当前日期
+        var date = new Date();
+        // 获取当前月份
+        var nowMonth = date.getMonth() + 1;
+        // 获取当前是几号
+        var strDate = date.getDate();
+        // 添加分隔符“-”
+        var seperator = "-";
+        // 对月份进行处理，1-9月在前面添加一个“0”
+        if (nowMonth >= 1 && nowMonth <= 9) {
+            nowMonth = "0" + nowMonth;
+        }
+        // 对月份进行处理，1-9号在前面添加一个“0”
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        // 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期
+        var nowDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
+        return nowDate;
+    }
+
+    /*时间大小比较*/
+    function compare(date1,date2){
+        var compareTo = 0;
+        var newDate1 = new Date(dateFu() + " " + date1);
+        var newDate2 = new Date(dateFu() + " " + date2);
+        if(newDate1.getTime() > newDate2.getTime()){
+            compareTo = 1;
+        }else{
+            compareTo = 2;
+        }
+        return compareTo;
+    }
+
+
+</script>
+
+</html>

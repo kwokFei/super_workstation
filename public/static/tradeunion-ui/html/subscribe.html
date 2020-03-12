@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../../office-ui/images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../../office-ui/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../../office-ui/css/font-awesome.min.css" rel="stylesheet">
+		<link href="../../office-ui/css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../../office-ui/css/style.min.css" rel="stylesheet">
+		<link href="../../office-ui/plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../../office-ui/css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../../office-ui/css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../../office-ui/css/layui.css" />
+
+		<script src="../../office-ui/js/jquery.min.js"></script>
+		<script src="../../office-ui/js/bootstrap.min.js"></script>
+		<script src="../../office-ui/plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../../office-ui/plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../../office-ui/plus/layer/layer.js"></script>
+		<script src="../../office-ui/js/template-web.js"></script>
+		<script src="../../office-ui/plus/validate/jquery.validate.min.js"></script>
+		<script src="../../office-ui/plus/validate/messages_zh.min.js"></script>
+		<script src="../../office-ui/js/bootstrap-treeview.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+<!--		<script src="../js/publicJs.js"></script>-->
+		<style type="text/css">
+			.subFooter {
+				width: 100%;
+				position: absolute;
+				bottom: -140px;
+				left: 0;
+			}
+			.col-lg-3{
+				float: left;
+				width: 25%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>订阅账号管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">订阅账号：</label>
+											<input class="form-control" name="subscriberNumber1" id="subscriberNumber1" placeholder="订阅账号" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">订阅状态：</label>
+											<select class="form-control" id="subscriberState1" name="subscriberState1">
+												<option value="">请选择订阅状态</option>
+												<option value="0">未发送订阅</option>
+												<option value="1">已发送订阅</option>
+												<option value="2">订阅成功</option>
+												<option value="3">订阅失败</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">第三方回调地址：</label>
+											<input class="form-control" name="callbackUrl1" id="callbackUrl1" placeholder="第三方回调地址" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<div style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+												<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="">
+									<div>
+										<button type="button" class="btn btn-primary" id="addAccount"><i class="fa fa-plus"></i> 绑定已有订阅账号</button>
+										<button type="button" class="btn btn-primary" id="addAccounts"><i class="fa fa-plus"></i> 创建全新订阅账号</button>
+									</div>
+									<!--Start-->
+									<div id="subscribe"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+	</body>
+	<script type="text/javascript">
+		var html;
+		var url = "";
+		// $("#loadDiv").html(loadHtml);
+		// $.show_overall_loding();
+		$(function() {
+			// $("#search").click(function() {
+			// 	$.show_overall_loding();
+			// 	$('#subscribe').bootstrapTable('refresh');
+			// });
+
+			// $("#clean").click(function() {
+			// 	$("#subscriberNumber1").val("");
+			// 	$("#subscriberState1").val("");
+			// 	$("#callbackUrl1").val("");
+			// 	$("#search").trigger("click");
+			// });
+
+			$('#subscribe').bootstrapTable({
+				url: "../../json/subscribe.json", //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var result = data.data;
+					rdata = result.list;
+					var res = [];
+					res.push({
+						total: result.total,
+						rows: result.list
+					});
+					return res[0];
+				},
+				onLoadSuccess: function() {
+					//$.hide_overall_loding();
+				},
+				onDblClickRow: function(row) {},
+				columns: [{
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'subscriberNumber',
+					title: '订阅账号',
+					width: 500
+				}, {
+					field: 'subscriberState',
+					title: '订阅状态',
+					width: 500,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 0) {
+							state = '<span style="color:yellow">未发送订阅</span>'
+						} else if(value == 1) {
+							state = '<span style="color:orange">已发送订阅</span>'
+						} else if(value == 2) {
+							state = '<span style="color:green">订阅成功</span>'
+						} else if(value == 3) {
+							state = '<span style="color:red">订阅失败</span>'
+						}
+						return state;
+					}
+				}, {
+					field: 'subscriberType',
+					title: '账号类型',
+					width: 500,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 1) {
+							state = '<span style="color:orange">绑定订阅账号</span>'
+						} else if(value == 2) {
+							state = '<span style="color:green">创建订阅账号</span>'
+						}
+						return state;
+					}
+				}, {
+					field: 'lastCreatTime',
+					title: '上一次调用更新设备时间',
+					width: 500
+				}, {
+					title: "操作",
+					width: 500,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str = '<button data-toggle="tooltip" title="详情" type="button"  class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>' +
+							'<button data-toggle="tooltip" title="编辑" type="button" class="btn btn-info tableButton"><i class="fa fa-pencil-square"></i></button>' +
+							'<button data-toggle="tooltip" title="订阅" type="button" class="btn btn-success tableButton"><i class="fa fa-rss"></i></button>' +
+							'<button data-toggle="tooltip" title="绑定设备" type="button" class="btn  btn-warning tableButton"><i class="fa fa-puzzle-piece"></i></button>' +
+							'<button data-toggle="tooltip" title="解绑设备" type="button" class="btn  btn-danger tableButton"><i class="fa fa-puzzle-piece"></i></button>' +
+							'<button data-toggle="tooltip" title="同步设备" type="button" class="btn btn-warning tableButton"><i class="fa fa-refresh"></i></button>' +
+							'<button data-toggle="tooltip" title="删除" type="button" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				// $.show_overall_loding();
+				return {
+					// token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					subscriberNumber: $('#subscriberNumber1').val(),
+					subscriberState: $('#subscriberState1').val(),
+					callbackUrl: $('#callbackUrl1').val(),
+					organizationId: $('#organizationId1').val()
+				};
+			}
+		});
+
+		// function getDevice(obj) {
+		// 	var data = $("#subscribe").bootstrapTable('getData');
+		// 	var subscriberNumber = data[obj].subscriberNumber;
+		// 	var conlayer = layer.confirm("确定更新设备？", {
+		// 		btn: ['确定', '取消']
+		// 	}, function() {
+		// 		$.show_overall_loding();
+		// 		$.sanjiGetJSON(deviceServiceUrl + "/device/importApcosDervice?account=" + subscriberNumber, {}, function(data) {
+		// 			//$.hide_overall_loding();
+		// 			if(data.code == 0) {
+		// 				layer.close(conlayer);
+		// 				layer.msg("更新成功", {
+		// 					icon: 6
+		// 				});
+		// 				$('#subscribe').bootstrapTable('refresh');
+		// 				return true;
+		// 			} else {
+		// 				if(data.code == 401000) {
+		// 					parent.layer.msg(data.message, {
+		// 						icon: 5
+		// 					});
+		// 				} else if(data.messages != null) {
+		// 					parent.layer.msg(data.messages[0].error, {
+		// 						icon: 5
+		// 					});
+		// 				} else {
+		// 					parent.layer.msg(data.message, {
+		// 						icon: 5
+		// 					});
+		// 				}
+		// 			}
+		// 		})
+		// 	}, function() {
+		// 		layer.close(conlayer);
+		// 	});
+		// }
+        //
+		// function subscriber(obj) {
+		// 	var data = $("#subscribe").bootstrapTable('getData');
+		// 	var subscriberNumber = data[obj].subscriberNumber;
+		// 	var conlayer = layer.confirm("确定订阅？", {
+		// 		btn: ['确定', '取消']
+		// 	}, function() {
+		// 		$.show_overall_loding();
+		// 		$.sanjiGetJSON(deviceServiceUrl + "/subscribertable/subscriber?subscriberNumber=" + subscriberNumber, {}, function(data) {
+		// 			//$.hide_overall_loding();
+		// 			if(data.code == 0) {
+		// 				layer.close(conlayer);
+		// 				layer.msg("订阅成功", {
+		// 					icon: 6
+		// 				});
+		// 				$('#subscribe').bootstrapTable('refresh');
+		// 				return true;
+		// 			} else {
+		// 				if(data.code == 401000) {
+		// 					parent.layer.msg(data.message, {
+		// 						icon: 5
+		// 					});
+		// 				} else if(data.messages != null) {
+		// 					parent.layer.msg(data.messages[0].error, {
+		// 						icon: 5
+		// 					});
+		// 				} else {
+		// 					parent.layer.msg(data.message, {
+		// 						icon: 5
+		// 					});
+		// 				}
+		// 			}
+		// 		})
+		// 	}, function() {
+		// 		layer.close(conlayer);
+		// 	});
+		// }
+        //
+		// function remove(obj) {
+		// 	var data = $("#subscribe").bootstrapTable('getData');
+		// 	var id = data[obj].id;
+		// 	var conlayer = layer.confirm("确定删除？", {
+		// 		btn: ['确定', '取消']
+		// 	}, function() {
+		// 		$.show_overall_loding();
+		// 		$.deleteJSON(deviceServiceUrl + "/subscribertable?id=" + id, {}, function(data) {
+		// 			//$.hide_overall_loding();
+		// 			if(data.code == 0) {
+		// 				layer.close(conlayer);
+		// 				layer.msg("删除成功", {
+		// 					icon: 6
+		// 				});
+		// 				$('#subscribe').bootstrapTable('refresh');
+		// 				return true;
+		// 			} else {
+		// 				if(data.code == 401000) {
+		// 					parent.layer.msg(data.message, {
+		// 						icon: 5
+		// 					});
+		// 				} else if(data.messages != null) {
+		// 					parent.layer.msg(data.messages[0].error, {
+		// 						icon: 5
+		// 					});
+		// 				} else {
+		// 					parent.layer.msg(data.message, {
+		// 						icon: 5
+		// 					});
+		// 				}
+		// 			}
+		// 		})
+		// 	}, function() {
+		// 		layer.close(conlayer);
+		// 	});
+		// }
+		// var isAdd = true;
+		// $("#addAccount").on("click", function() {
+		// 	$('#subscriberNumber').val();
+		// 	$('#remarks').val();
+		// 	$('#id').val();
+		// 	showAccount("添加账号", 1, 1);
+		// });
+		// $("#addAccounts").on("click", function() {
+		// 	$('#subscriberNumber').val();
+		// 	$('#remarks').val();
+		// 	$('#id').val();
+		// 	showAccount("申请账号", 3, 1);
+		// });
+		// var objUpdate;
+        //
+		// function update(obj) {
+		// 	objUpdate = obj;
+		// 	showAccount("修改账号", 2, 1);
+		// }
+        //
+		// function showone(obj) {
+		// 	objUpdate = obj;
+		// 	showAccount("账号详情", 2, 1);
+		// 	$("#accountForm input").attr("disabled", "disabled");
+		// 	$("#accountForm select").attr("disabled", "disabled");
+		// 	$("#accountForm textarea").attr("disabled", "disabled");
+		// }
+        //
+		// function intAreaClick() {
+		// 	var o1 = '<option value="">请选择省</option>';
+		// 	var o2 = '<option value="">请选择市</option>';
+		// 	var o3 = '<option value="">请选择区</option>';
+		// 	$("#areaCode1").html("");
+		// 	$("#areaCode1").append(o1);
+		// 	$("#areaCode2").html("");
+		// 	$("#areaCode2").append(o2);
+		// 	$("#areaCode3").html("");
+		// 	$("#areaCode3").append(o3);
+		// 	getAreaData(1, 0, $("#areaCode1"));
+        //
+		// 	$("#areaCode1").change(function() {
+		// 		$("#areaCode2").html("");
+		// 		$("#areaCode2").append(o2);
+		// 		$("#areaCode3").html("");
+		// 		$("#areaCode3").append(o3);
+		// 		getAreaData(2, $(this).find("option:selected").attr("id"), $("#areaCode2"));
+		// 	})
+		// 	$("#areaCode2").change(function() {
+		// 		$("#areaCode3").html("");
+		// 		$("#areaCode3").append(o3);
+		// 		getAreaData(3, $(this).find("option:selected").attr("id"), $("#areaCode3"));
+		// 	})
+        //
+		// }
+        //
+		// function getAreaData(levelNo, parentId, node) {
+		// 	var o1 = '<option value="">请选择省</option>';
+		// 	var o2 = '<option value="">请选择市</option>';
+		// 	var o3 = '<option value="">请选择区</option>';
+		// 	var data = {};
+		// 	data.levelNo = levelNo;
+		// 	data.parentId = parentId;
+		// 	$.show_overall_loding();
+		// 	$.sanjiGetJSON(deviceServiceUrl + "/sysarea/list", data, function(data) {
+		// 		//$.hide_overall_loding();
+		// 		if(data.code == 0) {
+		// 			var list = data.data;
+		// 			for(var i = 0; i < list.length; i++) {
+		// 				var one = list[i];
+		// 				if((code1 != "" && one.areaCode == code1) || (code2 != "" && one.areaCode == code2) || (code3 != "" && one.areaCode == code3)) {
+		// 					node.append('<option id="' + one.areaId + '" value="' + one.areaCode + '"  selected="selected">' + one.areaName + '</option>');
+		// 					if(one.areaCode == code1) {
+		// 						$("#areaCode2").html("");
+		// 						$("#areaCode2").append(o2);
+		// 						$("#areaCode3").html("");
+		// 						$("#areaCode3").append(o3);
+		// 						getAreaData(2, one.areaId, $("#areaCode2"));
+		// 					}
+		// 					if(one.areaCode == code2) {
+		// 						$("#areaCode3").html("");
+		// 						$("#areaCode3").append(o3);
+		// 						getAreaData(3, one.areaId, $("#areaCode3"));
+		// 					}
+		// 				} else {
+		// 					node.append('<option id="' + one.areaId + '" value="' + one.areaCode + '">' + one.areaName + '</option>');
+		// 				}
+		// 			}
+        //
+		// 		} else {
+		// 			return "";
+		// 		}
+		// 	})
+		// }
+		// var code1 = "";
+		// var code2 = "";
+		// var code3 = "";
+        //
+		// function showAccount(title, flag, index) {
+		// 	code1 = "";
+		// 	code2 = "";
+		// 	code3 = "";
+		// 	html = template("addSubscribe", {
+		// 		title: "123"
+		// 	});
+		// 	var myLayer = layer.open({
+		// 		skin: 'card',
+		// 		type: 1,
+		// 		title: [title, ''],
+		// 		area: ['650px', '450px'],
+		// 		resize: true,
+		// 		offset: 'auto',
+		// 		content: html,
+		// 		btn: ['提交', '取消'],
+		// 		yes: function(index, layero) {
+		// 			$("#accountForm").submit();
+		// 		},
+		// 		success: function(layero) {
+		// 			$(".layui-layer-title").addClass("card-header");
+		// 			initTree();
+		// 			if(flag == 2) {
+		// 				var data = $("#subscribe").bootstrapTable('getData');
+		// 				$("#accountForm").setForm(data[objUpdate]);
+		// 				isAdd = false;
+		// 				if(data[objUpdate].subscriberType == 1) {
+		// 					$(".type2").hide();
+		// 				} else {
+		// 					$(".type1").hide();
+		// 					intAreaClick();
+		// 					code1 = data[objUpdate].area_code1;
+		// 					code2 = data[objUpdate].area_code2;
+		// 					code3 = data[objUpdate].area_code3;
+		// 				}
+        //
+		// 			}
+		// 			if(flag == 1) {
+		// 				$(".type2").hide();
+		// 				isAdd = true;
+		// 			}
+		// 			if(flag == 3) {
+		// 				$(".type1").hide();
+		// 				intAreaClick();
+		// 				isAdd = true;
+		// 			}
+		// 		}
+		// 	});
+		// 	var validate = $("#accountForm").validate({
+		// 		rules: {
+		// 			subscriberNumber: {
+		// 				required: true
+		// 			}
+		// 		},
+		// 		messages: {
+		// 			subscriberNumber: {
+		// 				required: "请输入订阅账号"
+		// 			}
+		// 		},
+		// 		submitHandler: function(form) {
+		// 			var data = $("#accountForm").serializeJson()
+		// 			if(isAdd) {
+		// 				$.show_overall_loding();
+		// 				$.postJSON(deviceServiceUrl + "/subscribertable", data, function(data) {
+		// 					//$.hide_overall_loding();
+		// 					if(data.code == 0) {
+		// 						layer.close(myLayer);
+		// 						layer.msg("新增成功", {
+		// 							icon: 6
+		// 						});
+		// 						$('#subscribe').bootstrapTable('refresh');
+		// 						return true;
+		// 					} else {
+		// 						if(data.code == 401000) {
+		// 							parent.layer.msg(data.message, {
+		// 								icon: 5
+		// 							});
+		// 						} else if(data.messages != null) {
+		// 							parent.layer.msg(data.messages[0].error, {
+		// 								icon: 5
+		// 							});
+		// 						} else {
+		// 							parent.layer.msg(data.message, {
+		// 								icon: 5
+		// 							});
+		// 						}
+		// 					}
+		// 				});
+		// 			} else {
+		// 				$.show_overall_loding();
+		// 				$.putJSON(deviceServiceUrl + "/subscribertable", data, function(data) {
+		// 					//$.hide_overall_loding();
+		// 					if(data.code == 0) {
+		// 						layer.close(myLayer);
+		// 						layer.msg("修改成功", {
+		// 							icon: 6
+		// 						});
+		// 						$('#subscribe').bootstrapTable('refresh');
+		// 						return true;
+		// 					} else {
+		// 						if(data.code == 401000) {
+		// 							parent.layer.msg(data.message, {
+		// 								icon: 5
+		// 							});
+		// 						} else if(data.messages != null) {
+		// 							parent.layer.msg(data.messages[0].error, {
+		// 								icon: 5
+		// 							});
+		// 						} else {
+		// 							parent.layer.msg(data.message, {
+		// 								icon: 5
+		// 							});
+		// 						}
+		// 					}
+		// 				});
+		// 			}
+		// 		}
+		// 	});
+		// }
+        //
+		// var organizationData = "";
+        //
+		// function bidDevice(obj) {
+		// 	var data = $("#subscribe").bootstrapTable('getData');
+		// 	var subscriberNumber = data[obj].subscriberNumber;
+		// 	html = template("bindDevice", {
+		// 		title: "123"
+		// 	});
+		// 	var myLayer = layer.open({
+		// 		skin: 'card',
+		// 		type: 1,
+		// 		title: ["绑定设备", ''],
+		// 		area: ['450px', '270px'],
+		// 		resize: true,
+		// 		offset: 'auto',
+		// 		content: html,
+		// 		btn: ['提交', '取消'],
+		// 		yes: function(index, layero) {
+		// 			$("#bindDeviceForm").submit();
+		// 		},
+		// 		success: function(layero) {
+		// 			$(".layui-layer-title").addClass("card-header");
+		// 			$("#account").val(subscriberNumber);
+		// 		}
+		// 	});
+        //
+		// 	var validate = $("#bindDeviceForm").validate({
+		// 		rules: {
+		// 			account: {
+		// 				required: true
+		// 			},
+		// 			serial_num: {
+		// 				required: true
+		// 			},
+		// 			genuine_code: {
+		// 				required: true
+		// 			}
+		// 		},
+		// 		messages: {
+		// 			account: {
+		// 				required: "请输入订阅账号"
+		// 			},
+		// 			serial_num: {
+		// 				required: "请输入设备序列号"
+		// 			},
+		// 			genuine_code: {
+		// 				required: "请输入设备序正品码"
+		// 			}
+		// 		},
+		// 		submitHandler: function(form) {
+		// 			var data = $("#bindDeviceForm").serializeJson()
+		// 			$.show_overall_loding();
+		// 			$.postJSON(deviceServiceUrl + "/subscribertable/bindDevice", data, function(data) {
+		// 				//$.hide_overall_loding();
+		// 				if(data.code == 0) {
+		// 					layer.close(myLayer);
+		// 					layer.msg("绑定成功", {
+		// 						icon: 6
+		// 					});
+		// 					return true;
+		// 				} else {
+		// 					if(data.code == 401000) {
+		// 						parent.layer.msg(data.message, {
+		// 							icon: 5
+		// 						});
+		// 					} else if(data.messages != null) {
+		// 						parent.layer.msg(data.messages[0].error, {
+		// 							icon: 5
+		// 						});
+		// 					} else {
+		// 						parent.layer.msg(data.message, {
+		// 							icon: 5
+		// 						});
+		// 					}
+		// 				}
+		// 			});
+		// 		}
+		// 	});
+        //
+		// }
+        //
+		// function unbidDevice(obj) {
+		// 	var data = $("#subscribe").bootstrapTable('getData');
+		// 	var subscriberNumber = data[obj].subscriberNumber;
+		// 	html = template("unbindDevice", {
+		// 		title: "123"
+		// 	});
+		// 	var myLayer = layer.open({
+		// 		skin: 'card',
+		// 		type: 1,
+		// 		title: ["绑定设备", ''],
+		// 		area: ['450px', '220px'],
+		// 		resize: true,
+		// 		offset: 'auto',
+		// 		content: html,
+		// 		btn: ['提交', '取消'],
+		// 		yes: function(index, layero) {
+		// 			$("#unbindDeviceForm").submit();
+		// 		},
+		// 		success: function(layero) {
+		// 			$(".layui-layer-title").addClass("card-header");
+		// 			$("#account").val(subscriberNumber);
+		// 		}
+		// 	});
+        //
+		// 	var validate = $("#unbindDeviceForm").validate({
+		// 		rules: {
+		// 			account: {
+		// 				required: true
+		// 			},
+		// 			serial_num: {
+		// 				required: true
+		// 			}
+		// 		},
+		// 		messages: {
+		// 			account: {
+		// 				required: "请输入订阅账号"
+		// 			},
+		// 			serial_num: {
+		// 				required: "请输入设备序列号"
+		// 			}
+		// 		},
+		// 		submitHandler: function(form) {
+		// 			var data = $("#unbindDeviceForm").serializeJson()
+		// 			$.show_overall_loding();
+		// 			$.postJSON(deviceServiceUrl + "/subscribertable/unbindDevice", data, function(data) {
+		// 				//$.hide_overall_loding();
+		// 				if(data.code == 0) {
+		// 					layer.close(myLayer);
+		// 					layer.msg("解绑成功", {
+		// 						icon: 6
+		// 					});
+		// 					return true;
+		// 				} else {
+		// 					if(data.code == 401000) {
+		// 						parent.layer.msg(data.message, {
+		// 							icon: 5
+		// 						});
+		// 					} else if(data.messages != null) {
+		// 						parent.layer.msg(data.messages[0].error, {
+		// 							icon: 5
+		// 						});
+		// 					} else {
+		// 						parent.layer.msg(data.message, {
+		// 							icon: 5
+		// 						});
+		// 					}
+		// 				}
+		// 			});
+		// 		}
+		// 	});
+		// }
+        //
+		// function getTreeData(data) {
+		// 	var rdata = [];
+		// 	for(var i = 0; i < data.length; i++) {
+		// 		var node = data[i];
+		// 		var one = {};
+		// 		one.text = node.organizationName;
+		// 		one.id = node.id;
+		// 		if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+		// 			one.nodes = getTreeData(node.childrens);
+		// 		}
+		// 		rdata.push(one);
+		// 	}
+		// 	return rdata;
+		// }
+        //
+		// function initTree() {
+		// 	if(organizationData == "") {
+		// 		$.sanjiGetJSON(userServiceUrl + "/organization/treeList?isScreenOrganization=1", {}, function(data) {
+		// 			organizationData = getTreeData(data.data);
+		// 			initTreeData();
+		// 		});
+		// 		return;
+		// 	}
+		// 	initTreeData();
+		// }
+        //
+		// function initTreeData() {
+		// 	var options = {
+		// 		checkedIcon: "glyphicon glyphicon-check",
+		// 		nodeIcon: "none", //所有节点的默认图标
+		// 		levels: 1,
+		// 		data: organizationData,
+		// 		// onhoverColor: "rgba(255,255,255,0.9)",
+		// 		onhoverColor: "rgba(0,0,0,0.1)",
+		// 		onNodeSelected: function(event, data) {
+		// 			$("#organizationName").val(data.text);
+		// 			$("#organizationId").val(data.id);
+		// 			$("#myTree").hide();
+		// 		}
+		// 	};
+
+			// $('#myTree').treeview(options);
+		// }
+	</script>
+	<!--订阅账号新增-->
+	<script type="text/html" id="addSubscribe">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="accountForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-12 MarginPx type2">
+							<label class="layui-form-label">所在地区:</label>
+							<div class="layui-input-block">
+								<select class="form-control" style="float: left;width: 145px; margin-right :  12px;" id="areaCode1" name="areaCode1">
+									<option value="">请选择省</option>
+								</select>
+								<select class="form-control" style="float: left;width: 145px;margin-right :  12px;" id="areaCode2" name="areaCode2">
+									<option value="">请选择市</option>
+								</select>
+								<select class="form-control" style="float: left;width: 145px;" id="areaCode3" name="areaCode3">
+									<option value="">请选择区</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">组织机构:</label>
+							<div class="layui-input-block">
+								<input class="form-control organizationInput position-box" id="organizationName" name="organizationName" type="text" readonly="readonly"
+									   style="cursor: pointer">
+								<input type="hidden" id="organizationId" name="organizationId" value="">
+							</div>
+							<div id="myTree" style="display: none; width: 250px;margin-left: 110px; position: absolute;z-index: 999;background-color: #FFF;"></div>
+						</div>
+						<div class="col-lg-6 MarginPx type1">
+							<label class="layui-form-label">订阅账号:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="subscriberNumber" name="subscriberNumber" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx type2">
+							<label class="layui-form-label">账号名称:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="userName" name="userName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx type2">
+							<label class="layui-form-label">账号密码:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="password" name="password" type="password">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx type2">
+							<label class="layui-form-label">账号手机:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="userPhone" name="userPhone" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx type2">
+							<label class="layui-form-label">账号邮箱:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="email" name="email" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx type2">
+							<label class="layui-form-label">身份证号:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="idNo" name="idNo" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx type2">
+							<label class="layui-form-label">账号性别:</label>
+							<div class="layui-input-block">
+								<select class="form-control" id="gender" name="gender">
+									<option value="">请选择订阅状态</option>
+									<option value="1">男</option>
+									<option value="2">女</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-12 MarginPx">
+							<label class="layui-form-label">回调URL:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="callbackUrl" name="callbackUrl" type="text">
+							</div>
+						</div>
+
+						<div class="col-lg-12 MarginPx">
+							<label class="layui-form-label">账号描述:</label>
+							<div class="layui-input-block">
+								<textarea rows="5" class="form-control" id="remarks" name="remarks"></textarea>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" name="id" id="id" />
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<script type="text/html" id="bindDevice">
+		<section class="openDetail" style="width: 95%; margin-top: 20px;">
+			<div class="panel-body">
+				<form id="bindDeviceForm">
+					<div class="col-lg-12 MarginPx">
+						<label class="layui-form-label">设备序列号:</label>
+						<div class="layui-input-block">
+							<input class="form-control" id="serial_num" name="serial_num" type="text">
+						</div>
+					</div>
+					<div class="col-lg-12 MarginPx " style=" margin-top: 20px;">
+						<label class="layui-form-label">设备正品码:</label>
+						<div class="layui-input-block">
+							<input class="form-control" id="genuine_code" name="genuine_code" type="text">
+						</div>
+					</div>
+					<input type="hidden" name="account" id="account" />
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<script type="text/html" id="unbindDevice">
+		<section class="openDetail" style="width: 95%; margin-top: 20px;">
+			<div class="panel-body">
+				<form id="unbindDeviceForm">
+					<div class="col-lg-12 MarginPx">
+						<label class="layui-form-label">设备序列号:</label>
+						<div class="layui-input-block">
+							<input class="form-control" id="serial_num" name="serial_num" type="text">
+						</div>
+					</div>
+					<input type="hidden" name="account" id="account" />
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<script>
+        $(document).bind("click", function (e) {
+            var con_one = $(".position-box");// 设置目标区域
+            // console.info(con_one);
+            var f = 'expand-icon';	//点击treeView的加号图标不隐藏
+            if (!con_one.is(e.target) && con_one.has(e.target).length === 0 && !e.target.classList.contains(f)) {
+                $("#myTree").hide();//需要隐藏的元素
+            }
+        });
+	</script>
+
+</html>

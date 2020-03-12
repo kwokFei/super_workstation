@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>海克斯后台管理系统</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="../css/style.min.css" rel="stylesheet">
+	<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+	<link href="../css/commonStyle.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/layui.css" />
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../plus/layer/layer.js"></script>
+	<script src="../js/template-web.js"></script>
+	<script src="../plus/validate/jquery.validate.min.js"></script>
+	<script src="../plus/validate/messages_zh.min.js"></script>
+	<script src="../js/bootstrap-treeview.js"></script>
+
+<!--			<script src="../js/httpUtils.js"></script>-->
+<!--	<script src="../js/Md5.js"></script>-->
+	<style>
+		.col-lg-3{
+			float: left;
+			width: 25%;
+		}
+		/*body{*/
+		/*	padding: 1rem 0;*/
+		/*}*/
+	</style>
+</head>
+
+<body>
+<main>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4>摄像头管理</h4>
+					</div>
+					<div class="card-body">
+						<div class="ibox-content row">
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_cameraName">摄像头名称：</label>
+									<input class="form-control" name="s_cameraName" id="s_cameraName" placeholder="摄像头名称" type="text">
+								</div>
+							</div>
+							<!--<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_positionName">位置名称：</label>
+									<input class="form-control" name="s_positionName" id="s_positionName" placeholder="位置名称" type="text">
+								</div>
+							</div>-->
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">所属位置：</label>
+									<input class="form-control organizationInput position-box" id="s_positionName" name="s_positionName" type="text" onclick="$('#s_positionTree').show();" placeholder="所属位置" readonly="readonly" style="cursor: pointer">
+									<input type="hidden" id="s_positionId" name="s_positionId" value="">
+									<div id="s_positionTree" style="display: none; width: 250px; position: absolute;z-index: 999;background-color: #FFF;"></div>
+								</div>
+							</div>
+
+							<!--<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_orangeName">组织名称：</label>
+									<input class="form-control" name="s_orangeName" id="s_orangeName" placeholder="设备名称" type="text">
+								</div>
+							</div>-->
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">组织名称：</label>
+									<input class="form-control organizationInput position-box" id="s_orangeName" name="s_orangeName" type="text" onclick="$('#s_organizationTree').show();" placeholder="所属机构" readonly="readonly" style="cursor: pointer">
+									<input type="hidden" id="s_orangeId" name="s_orangeId" value="">
+									<div id="s_organizationTree" style="display: none; width: 250px;position: absolute;z-index: 999;background-color: #FFF;"></div>
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<div id="buttons" style="margin-top: 24px;">
+										<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+										<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="ibox-content">
+							<div id="buttons">
+								<button type="button" class="btn btn-primary" id="addCamera"><i class="fa fa-plus"></i> 新增摄像头</button>
+								<button type="button" class="btn btn-danger" id="remove">
+									<i class="fa fa-trash-o"></i> 批量删除
+								</button>
+							</div>
+							<table id="myTable">
+
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<div id="loadDiv"></div>
+</body>
+
+<script>
+    var html;
+    var url = "";
+    // $("#loadDiv").html(loadHtml);
+    $(function() {
+        // $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: '../../json/test002.json', //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function(data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function(row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                // $.hide_overall_loding();
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function(value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'cameraName',
+                title: '摄像头名称',
+                width: 200
+            }, {
+                field: 'orangeName',
+                title: '组织名称',
+                width: 200
+            }, {
+                field: 'positionName',
+                title: '位置名称',
+                width: 200
+            }, {
+                field: 'cameraVideo',
+                title: '视频地址',
+                width: 200
+            }, {
+                title: "操作",
+                width: 100,
+                clickToSelect: false,
+                formatter: function(i1, i2, i3) {
+                    var str =
+                        '<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>' +
+                        '<button data-toggle="tooltip" title="编辑" type="button" onclick="updata(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>'
+                    return str;
+                },
+                cellStyle: function() {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            // $.show_overall_loding();
+            return {
+                // token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                cameraName: $("#s_cameraName").val(),
+                positionName: $("#s_positionName").val(),
+                orangeName: $("#s_orangeName").val()
+
+            };
+        }
+
+        $("#search").click(function() {
+            $.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function() {
+            $("#s_cameraName").val("");
+            $("#s_positionName").val("");
+            $("#s_orangeName").val("");
+            $("#search").trigger("click");
+        });
+    });
+
+    /*批量删除*/
+    $("#remove").on("click", function () {
+        var data = $("#myTable").bootstrapTable('getSelections');
+        var ids = [];
+        for (var i = 0; i < data.length; i++) {
+            var one = data[i];
+            ids.push(one.id);
+        }
+        if (ids.length == 0) {
+            layer.msg('请选择需删除的摄像头', {icon: 5});
+            return;
+        }
+        var conlayer = layer.confirm("确定删除选中数据？", {
+            btn: ['确定', '取消']
+        }, function () {
+            $.show_overall_loding();
+            $.deleteJSON(deviceServiceUrl + "/camerGl?clIds=" + ids, {}, function (data) {
+                if (data.code == 0) {
+                    layer.close(conlayer);
+                    layer.msg("成功", {
+                        icon: 1
+                    });
+                    $.show_overall_loding();
+                    $('#myTable').bootstrapTable('refresh');
+                    return true;
+                } else {
+                    $('#myTable').bootstrapTable('refresh');
+                    if (data.code == 401000) {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    } else if (data.messages != null) {
+                        parent.layer.msg(data.messages[0].error, {
+                            icon: 5
+                        });
+                    } else {
+                        parent.layer.msg(data.message, {
+                            icon: 5
+                        });
+                    }
+                }
+            })
+        }, function () {
+            layer.close(conlayer);
+        });
+    });
+
+    /*修改*/
+    function updata(obj) {
+        showModel("修改摄像头", 2, obj);
+    }
+
+    /*详情*/
+    function detail(obj){
+        url = "";
+        showModelDetails("摄像头详情", obj);
+    }
+
+    function showModelDetails(title, index) {
+        var html = template("modelCamera", {
+            title: "123"
+        });
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: '摄像头详情',
+            area: ['700px', '443px'], //宽高
+            resize: true, //是否拉升
+            offset: 'auto', //居中
+            content: html,
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                var data = $("#myTable").bootstrapTable('getData')[index];
+                if (data != null) {
+                    $("#modelCameraForm").setForm(data);
+                }
+                $(".eventDisabled").attr("disabled", "disabled");
+            }
+        });
+    }
+
+    /*增加消息*/
+    $("#addCamera").click(function() {
+        showModel("添加摄像头", 1);
+    });
+
+    var isAdd = true;
+    function showModel(title, flag, index) {
+        if (flag == 1) {
+            isAdd = true;
+        } else {
+            isAdd = false;
+        }
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: title,
+            area: ['800px', '400px'],	//宽高
+            resize: true,				//是否拉升
+            offset: 'auto',				//居中
+            content: template("modelCamera", {
+                title: "123"
+            }),
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                $("#modelCameraForm").submit();
+            },
+            success: function (layero) {
+                var data = null;
+                if (flag == 2) {
+                    data = $("#myTable").bootstrapTable('getData')[index];
+                    $(".hide1").hide();
+                }
+                if (data != null) {
+                    $("#modelCameraForm").setForm(data)
+                }
+                $(".layui-layer-title").addClass("card-header");
+                init_o_Tree();
+                init_p_Tree();
+            }
+        });
+        var validate = $("#modelCameraForm").validate({
+            rules: {
+                cameraName: {
+                    required: true
+                },
+                cameraJt: {
+                    required: true
+                },
+                cameraVideo: {
+                    required: true
+                }
+            },
+            messages: {
+                cameraName: {
+                    required: "请输入摄像头名称"
+                },
+                cameraJt: {
+                    required: "请输入消息内截图地址"
+                },
+                cameraVideo: {
+                    required: "请输入视频地址"
+                }
+            },
+            submitHandler: function (form) {
+                var data = $("#modelCameraForm").serializeJson();
+                var userIds = $("#userIds").val();
+                if (userIds == "") {
+                    layer.msg('请配置设备', {icon: 5});
+                    return;
+                }
+                if (userIds == "") {
+                    layer.msg('请配置组织', {icon: 5});
+                    return;
+                }
+                if (userIds == "") {
+                    layer.msg('请配置位置', {icon: 5});
+                    return;
+                }
+                $.show_overall_loding();
+                if(isAdd) {
+                    $.postJSON(deviceServiceUrl + "/camerGl", data, function(data) {
+                        $.hide_overall_loding();
+                        if(data.code == 0) {
+                            layer.close(myLayer);
+                            layer.msg("成功", {
+                                icon: 1
+                            });
+                            $('#myTable').bootstrapTable('refresh');
+                            return true;
+                        } else {
+                            $('#myTable').bootstrapTable('refresh');
+                            if (data.code == 401000) {
+                                parent.layer.msg(data.message, {
+                                    icon: 5
+                                });
+                            } else if (data.messages != null) {
+                                parent.layer.msg(data.messages[0].error, {
+                                    icon: 5
+                                });
+                            } else {
+                                parent.layer.msg(data.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    $.putJSON(deviceServiceUrl + "/camerGl", data, function(data) {
+                        $.hide_overall_loding();
+                        if(data.code == 0) {
+                            layer.close(myLayer);
+                            layer.msg("成功", {
+                                icon: 1
+                            });
+                            $('#myTable').bootstrapTable('refresh');
+                            return true;
+                        } else {
+                            $('#myTable').bootstrapTable('refresh');
+                            if (data.code == 401000) {
+                                parent.layer.msg(data.message, {
+                                    icon: 5
+                                });
+                            } else if (data.messages != null) {
+                                parent.layer.msg(data.messages[0].error, {
+                                    icon: 5
+                                });
+                            } else {
+                                parent.layer.msg(data.message, {
+                                    icon: 5
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+
+    //
+	// /*组织树*/
+    // var organizationData = "";
+    // function get_o_TreeData(data) {
+    //     var rdata = [];
+    //     for(var i = 0; i < data.length; i++) {
+    //         var node = data[i];
+    //         var one = {};
+    //         one.text = node.organizationName;
+    //         one.id = node.id;
+    //         if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+    //             one.nodes = get_o_TreeData(node.childrens);
+    //         }
+    //         rdata.push(one);
+    //     }
+    //     return rdata;
+    // }
+    //
+    // function init_o_Tree() {
+    //     if(organizationData == "") {
+    //         $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+    //             organizationData = get_o_TreeData(data.data);
+    //             initTreeData();
+    //         });
+    //         return;
+    //     }
+    //     initTreeData();
+    // }
+    //
+    // function initTreeData() {
+    //     var options = {
+    //         checkedIcon: "glyphicon glyphicon-check",
+    //         nodeIcon: "none", //所有节点的默认图标
+    //         levels: 1,
+    //         data: organizationData,
+    //         // onhoverColor: "rgba(255,255,255,0.9)",
+    //         onhoverColor: "rgba(0,0,0,0.1)",
+    //         onNodeSelected: function(event, data) {
+    //             $("#orangeName").val(data.text);
+    //             $("#orangeId").val(data.id);
+    //             $("#organizationTree").hide();
+    //         }
+    //     };
+    //     $('#organizationTree').treeview(options);
+    // }
+    //
+    // /*位置树*/
+    // var positionData = "";
+    // function get_p_TreeData(data) {
+    //     var rdata = [];
+    //     for(var i = 0; i < data.length; i++) {
+    //         var node = data[i];
+    //         var one = {};
+    //         one.text = node.devicePositionName;
+    //         one.id = node.id;
+    //         if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+    //             one.nodes = get_p_TreeData(node.childrens);
+    //         }
+    //         rdata.push(one);
+    //     }
+    //     return rdata;
+    // }
+    // function init_p_Tree() {
+    //     if(positionData == "") {
+    //         $.sanjiGetJSON(deviceServiceUrl + "/devicess/treeList", {}, function(data) {
+    //             positionData = get_p_TreeData(data.data);
+    //             init_p_TreeData();
+    //         });
+    //         return;
+    //     }
+    //     init_p_TreeData();
+    // }
+    // function init_p_TreeData() {
+    //     var options = {
+    //         checkedIcon: "glyphicon glyphicon-check",
+    //         nodeIcon: "none", //所有节点的默认图标
+    //         levels: 1,
+    //         data: positionData,
+    //         // onhoverColor: "rgba(255,255,255,0.9)",
+    //         onhoverColor: "rgba(0,0,0,0.1)",
+    //         onNodeSelected: function(event, data) {
+    //             $("#positionName").val(data.text);
+    //             $("#positionId").val(data.id);
+    //             // $("#positionTree").hide();
+    //         }
+    //     };
+    //     $('#positionTree').treeview(options);
+    // }
+    //
+    //
+    // function s_init_o_Tree() {
+    //     if(organizationData == "") {
+    //         $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+    //             organizationData = get_o_TreeData(data.data);
+    //             s_initTreeData();
+    //         });
+    //         return;
+    //     }
+    //     s_initTreeData();
+    // }
+    // function s_initTreeData() {
+    //     var options = {
+    //         checkedIcon: "glyphicon glyphicon-check",
+    //         nodeIcon: "none", //所有节点的默认图标
+    //         levels: 1,
+    //         data: organizationData,
+    //         // onhoverColor: "rgba(255,255,255,0.9)",
+    //         onhoverColor: "rgba(0,0,0,0.1)",
+    //         onNodeSelected: function(event, data) {
+    //             $("#s_orangeName").val(data.text);
+    //             $("#s_orangeId").val(data.id);
+    //             $("#s_organizationTree").hide();
+    //         }
+    //     };
+    //     $('#s_organizationTree').treeview(options);
+    // }
+    // s_init_o_Tree();
+    //
+    //
+    //
+    // function s_init_p_Tree() {
+    //     if(positionData == "") {
+    //         $.sanjiGetJSON(deviceServiceUrl + "/devicess/treeList", {}, function(data) {
+    //             positionData = get_p_TreeData(data.data);
+    //             s_init_p_TreeData();
+    //         });
+    //         return;
+    //     }
+    //     s_init_p_TreeData();
+    // }
+    // function s_init_p_TreeData() {
+    //     var options = {
+    //         checkedIcon: "glyphicon glyphicon-check",
+    //         nodeIcon: "none", //所有节点的默认图标
+    //         levels: 1,
+    //         data: positionData,
+    //         // onhoverColor: "rgba(255,255,255,0.9)",
+    //         onhoverColor: "rgba(0,0,0,0.1)",
+    //         onNodeSelected: function(event, data) {
+    //             $("#s_positionName").val(data.text);
+    //             $("#s_positionId").val(data.id);
+    //             $("#s_positionTree").hide();
+    //         }
+    //     };
+    //     $('#s_positionTree').treeview(options);
+    // }
+    // s_init_p_Tree();
+
+
+</script>
+
+<!--新增摄像头-->
+<script type="text/html" id="modelCamera">
+	<section class="openDetail" style="width: 100%;">
+		<div class="panel-body">
+			<form id="modelCameraForm">
+				<div class="row">
+					<div class="col-lg-12" style="margin: 10px 0">
+						<label class="layui-form-label">摄像名称：</label>
+						<div class="layui-input-block">
+							<input class="form-control eventDisabled" id="cameraName" name="cameraName" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0">
+						<label class="layui-form-label">组织机构:</label>
+						<div class="layui-input-block">
+							<input class="form-control organizationInput position-box" id="orangeName" name="orangeName" type="text" onclick="$('#organizationTree').show();" readonly="readonly" style="cursor: pointer">
+							<input type="hidden" id="orangeId" name="orangeId" value="">
+						</div>
+						<div id="organizationTree" style="display: none; width: 250px;margin-left: 110px; position: absolute;z-index: 999;background-color: #FFF;"></div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0">
+						<label class="layui-form-label">设备位置:</label>
+						<div class="layui-input-block">
+							<input class="form-control organizationInput position-box" id="positionName" name="positionName" type="text" onclick="$('#positionTree').show();" readonly="readonly" style="cursor: pointer">
+							<input type="hidden" id="positionId" name="positionId" value="">
+						</div>
+						<div id="positionTree" style="display: none; width: 250px;margin-left: 110px; position: absolute;z-index: 999;background-color: #FFF;"></div>
+					</div>
+					<div class="col-lg-12" style="margin: 10px 0">
+						<label class="layui-form-label">截图地址：</label>
+						<div class="layui-input-block">
+							<textarea rows="4"  class="form-control eventDisabled" id="cameraJt" name="cameraJt" type="text" placeholder="截图地址"></textarea>
+						</div>
+					</div>
+					<div class="col-lg-12" style="margin: 10px 0">
+						<label class="layui-form-label">视频地址：</label>
+						<div class="layui-input-block">
+							<textarea rows="4"  class="form-control eventDisabled" id="cameraVideo" name="cameraVideo" type="text" placeholder="视频地址"></textarea>
+						</div>
+					</div>
+					<input type="hidden" id="id" name="id" />
+				</div>
+			</form>
+		</div>
+	</section>
+</script>
+
+<script>
+    $(document).bind("click", function (e) {
+        var con_one = $(".position-box");// 设置目标区域
+        // console.info(con_one);
+        var f = 'expand-icon';	//点击treeView的加号图标不隐藏
+        if (!con_one.is(e.target) && con_one.has(e.target).length === 0 && !e.target.classList.contains(f)) {
+            $("#positionTree").hide();//需要隐藏的元素
+            $("#organizationTree").hide();//需要隐藏的元素
+            $("#s_positionTree").hide();//需要隐藏的元素
+            $("#s_organizationTree").hide();//需要隐藏的元素
+        }
+    });
+</script>
+
+</html>

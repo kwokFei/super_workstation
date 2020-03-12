@@ -1,0 +1,225 @@
+@font-face {
+	font-family: orbitronBold;
+	src: url('../fonts/orbitron-bold-webfont.ttf');
+}
+
+@font-face {
+	font-family: MFLIHEIFont;
+	src: url('../fonts/MFLIHEI_NONCOMMERCIAL-REGULAR.OTF');
+}
+
+@font-face {
+	font-family: arialFont;
+	src: url('../fonts/arial_0.ttf');
+}
+
+html,div {
+	/*隐藏滚动条*/
+	scrollbar-width: none;
+	/*火狐*/
+	overflow: -moz-scrollbars-none;
+	/*IE兼容*/
+	-ms-scroll-chaining: chained;
+	-ms-overflow-style: none;
+	-ms-content-zooming: zoom;
+	-ms-scroll-rails: none;
+	-ms-content-zoom-limit-min: 100%;
+	-ms-content-zoom-limit-max: 500%;
+	-ms-scroll-snap-type: proximity;
+	-ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+	-ms-overflow-style: none;
+	scrollbar-base-color: white;
+	scrollbar-3dlight-color: white;
+	scrollbar-highlight-color: white;
+	scrollbar-track-color: white;
+	scrollbar-arrow-color: white;
+	scrollbar-shadow-color: white;
+	scrollbar-dark-shadow-color: white;
+
+	-ms-scroll-chaining: chained;
+	-ms-overflow-style: none;
+	-ms-content-zooming: zoom;
+	-ms-scroll-rails: none;
+	-ms-content-zoom-limit-min: 100%;
+	-ms-content-zoom-limit-max: 500%;
+	-ms-scroll-snap-type: proximity;
+	-ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+	-ms-overflow-style: none;
+}
+
+html,
+body {
+	width: 100%;
+	font-size: calc(100vw * 100 / 1920);
+	color: rgba(255, 255, 255, 0.8);
+	box-sizing: border-box;
+	background-color: #08112D;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+li {
+	margin: 0rem;
+	padding: 0rem;
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+}
+
+iframe {
+	border: none;
+}
+
+body {
+	background-color: #08112D;
+}
+
+*{
+	box-sizing: border-box;
+}
+
+/* scrollbar */
+
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+
+::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 0.05rem;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/*layui swicth*/
+.layui-form-switch {
+	position: relative;
+	height: 0.16rem;
+	line-height: 0.14rem;
+	min-width: 0.24rem;
+	width: 0.39rem!important;
+	border: 0.01rem solid #fe9d01;
+	border-radius: 0.2rem;
+	cursor: pointer;
+	background-color: #b06e00;
+	-webkit-transition: .1s linear;
+	transition: .1s linear;
+	margin-top: -0.03rem;
+	padding: 0 0.05rem;
+}
+
+.layui-form-switch em {
+	margin-left: 0.13rem;
+	color: #FE9D01!important;
+	width: 0.25rem;
+	font-size: 0.12rem;
+	top: 0;
+}
+
+.layui-form-onswitch {
+	background-color: #26537d;
+	border: 0.01rem solid #4da7fd;
+}
+
+.layui-form-onswitch em {
+	margin-left: -0.01rem;
+	color: #4aa8ff!important;
+}
+
+.layui-form-switch i {
+	position: absolute;
+	left: 0.01rem;
+	top: -0.01rem;
+	width: 0.16rem;
+	height: 0.16rem;
+	border-radius: 0.2rem;
+	background-color: #d2d2d2;
+	-webkit-transition: .1s linear;
+	transition: .1s linear;
+}
+
+.layui-form-onswitch i {
+	left: 0.48rem;
+	margin-left: -21px;
+	background-color: #fff;
+}
+
+
+/*字体颜色*/
+
+.font-red{
+	color: #CA0821 !important;
+}
+
+.font-yellow{
+	color:#E6A600 !important;
+}
+
+.font-blue{
+	color: #00A2FF !important;
+}
+
+.font-green{
+	color: #4AFEA3 !important;
+}
+
+.bac-red{
+	background-color: #CA0821 !important;
+}
+
+.bac-yellow{
+	background-color:#E6A600 !important;
+}
+
+.bac-blue{
+	background-color: #00A2FF !important;
+}
+
+.bac-green{
+	background-color: #4AFEA3 !important;
+}
+
+.bac-green-light{
+	background-color: #4AFEA3;
+}
+
+.bac-blue-light{
+	background-color: #00FDF2;
+}
+
+.bac-blue-dark{
+	background-color: #0082FD;
+}
+
+.bac-green-linear{
+	background-image: linear-gradient(to right, rgba(108,254,130,1) 0%, rgba(247,236,64,1) 100%);
+}
+
+.bac-red{
+	background-color: red !important;
+}
+
+.bac-red-linear{
+	background-image: linear-gradient(to right, red 0%, red 100%) !important;
+}
+
+.none{
+	display: none !important;
+}

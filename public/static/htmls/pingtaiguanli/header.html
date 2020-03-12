@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/elementUI.css">
+    <link rel="stylesheet" href="../../css/basicStyle.css">
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/elementUI.js"></script>
+</head>
+<style>
+    #nav{
+        height: 58px;
+        margin: 0 22px 2px;
+    }
+    #nav>ul{
+
+        height: 100%;
+        display: flex;
+        /*justify-content: space-around;*/
+        align-items: center;
+    }
+    #nav>ul>li{
+        margin-right: 15px;
+    }
+    ul>li>a{
+        font-size: 0.24rem;
+        color: #868daa;
+        cursor: pointer;
+        height: 60px;
+        box-sizing: content-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 0.8rem;
+        padding: 0 0.1rem;
+    }
+    ul>li:hover>a{
+        color: #868daa;
+        border-bottom: 2px solid #868daa;
+    }
+    .navactive{
+        color: #4E5983;
+        border-bottom: 2px solid #4E5983;
+    }
+
+    iframe{
+        width: 100%;
+        height: calc(100% - 64px);
+        background: #F1F1F1;
+    }
+
+</style>
+<body>
+<div id="app">
+
+    <div id="nav">
+        <ul>
+            <li v-for="(item,index) in navData">
+                <a @click="navClick(index,item.url)"
+                         :class=" numClick=== index ? 'navactive':''">
+                    {{item.item}}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <iframe :src="iframeSrc" frameborder="0"></iframe>
+</div>
+</body>
+
+<script>
+    let navVue = new Vue({
+        el: '#app',
+        data() {
+            return {
+                //导航栏数据
+                navData:[
+                    {
+                        "url" : "../../tradeunion-ui/html/classify.html",
+                        "item" : "BCCA分类管理"
+                    },
+                    {
+                        "url" : "../../tradeunion-ui/html/platform.html",
+                        "item" : "BCCA平台管理"
+                    },
+                    {
+                        "url" : "../../tradeunion-ui/html/subscribe.html",
+                        "item" : "BCCA账号管理"
+                    },
+                ],
+
+                //默认第一个被选中
+                numClick:0,
+
+                //iframe src地址动态变化变量
+                iframeSrc:"../../tradeunion-ui/html/classify.html",
+            }
+        },
+
+        methods:{
+
+            navClick (i,url)
+            {
+                this.numClick = i;
+                this.iframeSrc = url;
+            }
+
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+
+		<link rel="stylesheet" href="../css/bootstrap-select.css" />
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/bootstrap-select.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+		<!--时间选择插件-->
+		<script src="../js/laydate/laydate.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+
+		<style type="text/css">
+			.MarginPx {
+				margin-top: 30px;
+			}
+			
+			.layui-form-label {
+				width: 130px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>会议室预约管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">办公室名称：</label>
+											<input class="form-control" name="s_orderRoomName" id="s_orderRoomName" placeholder="会议室名称" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">预约用户名称：</label>
+											<input class="form-control" name="s_orderUserName" id="s_orderUserName" placeholder="预约用户名称" type="text">
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-success" id="search"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--Start-->
+								<!--平台设备位置列表-->
+								<div class="ibox-content">
+									<div id="buttons">
+										<button type="button" class="btn btn-info" id="add_office"><i class="fa fa-plus"></i> 预约会议</button>
+									</div>
+									<div id="myTable">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<div id="loadDiv"></div>
+	</body>
+	<script type="text/javascript">
+		var html;
+		$("#loadDiv").html(loadHtml);
+		var url = "";
+
+		$(".selectpickers").selectpicker('refresh');
+		$(function() {
+			$.show_overall_loding();
+			$('#myTable').bootstrapTable({
+				url: deviceServiceUrl + "/officeRoomOrder/list", //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var result = data.data;
+					rdata = result.list;
+					var res = [];
+					res.push({
+						total: result.total,
+						rows: result.list
+					});
+					return res[0];
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					checkbox: true
+				}, {
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'orderUserName',
+					title: '申请人',
+					width: 300
+				}, {
+					field: 'orderUserOrganizationName',
+					title: '部门',
+					width: 300
+				}, {
+					field: 'orderRoomName',
+					title: '会议室名称',
+					width: 300
+				}, {
+					field: 'orderStartTime',
+					title: '预计开始时间',
+					width: 300
+				}, {
+					field: 'orderLongTime',
+					title: '预计时长（MIN）',
+					width: 300
+				}, {
+					field: 'orderStartTime',
+					title: '距会议开始时长（MIN）',
+					width: 300,
+					formatter: function(value, row, index) {
+						console.log(value)
+						return TimeDifference(curentTime(), value);
+					}
+				}, {
+					field: 'createDate',
+					title: '创建时间',
+					width: 300
+				}, {
+					title: "操作",
+					width: 200,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>' +
+							'<button data-toggle="tooltip" title="删除" type="button" onclick="del(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-window-close-o"> </i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					orderUserName: $("#s_orderUserName").val(),
+					orderRoomName: $("#s_orderRoomName").val(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber
+				};
+			}
+		});
+
+		$("#search").click(function() {
+			$.show_overall_loding();
+			$('#myTable').bootstrapTable('refresh');
+		});
+
+		function detail(obj) {
+			//var data = $("#myTable").bootstrapTable('getData')[obj];
+			var area = ['750px', '440px'];
+			var btn = ['确认'];
+			//showInfo
+			//console.log(data);
+			html = template("showInfo", {
+				title: "123"
+			});
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: ["会议详情", ""],
+				area: area, //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: btn,
+				yes: function(index, layero) {
+					layer.close(myLayer);
+				},
+				success: function(layero) {
+					$("#deviceForm input").attr("disabled", "disabled");
+					var data = $("#myTable").bootstrapTable('getData')[obj];
+					$("#deviceForm").setForm(data);
+					$("#showUser").click(function(){
+							var sshtml = template("selectShowUserDiv", {
+							title: "123"
+						});
+						var btn = ['确认'];
+						mode_Layer = layer.open({
+							skin: 'card',
+							type: 1,
+							title: "参加会议人员",
+							area: ['750px', '550px'], //宽高
+							resize: true, //是否拉升
+							offset: 'auto', //居中
+							content: sshtml,
+							btn:btn,
+							maxmin: true, //开启最大化最小化按钮
+							yes: function(index, layero) {
+							
+								layer.close(mode_Layer);
+							},
+							success: function(layero) {
+								var tables = new table_show_user(data.id);
+								tables.init();
+								tables.bindCreate();
+							}
+						})
+					});
+				}
+			});
+		}
+		
+		function del(obj) {
+			var data = $("#myTable").bootstrapTable('getData');
+			var id = data[obj].id;
+			var conlayer = layer.confirm("未开始的会议才可以删除,您是否删除此次会议？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.deleteJSON(deviceServiceUrl + "/officeRoomOrder?id=" + id, {}, function(data) {
+					$.show_overall_loding();
+					if(data.code == 0) {
+						layer.close(conlayer);
+						layer.msg("成功", {
+							icon: 1
+						});
+						$.show_overall_loding();
+						$('#myTable').bootstrapTable('refresh');
+						return true;
+					}
+					$.hide_overall_loding();
+					layer.msg(data.message, {
+						icon: 2
+					});
+						
+				})
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+
+		$("#clean").click(function() {
+			$("#s_orderRoomName").val("");
+			$("#s_orderUserName").val("");
+			$("#search").trigger("click");
+		});
+		$("#add_office").on("click", function() {
+			var area = ['750px', '440px'];
+			var btn = ['提交', '取消'];
+			html = template("modelWin", {
+				title: "123"
+			});
+			userList=[];
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: ["预约会议", ""],
+				area: area, //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: btn,
+				yes: function(index, layero) {
+					$("#deviceForm").submit();
+				},
+				success: function(layero) {
+					laydate.render({
+						elem: '#orderStartTime',
+						type: 'datetime'
+					});
+					$(".layui-layer-title").addClass("card-header");
+					$("#selectUser").click(function() {
+						var sshtml = template("selectUserDiv", {
+							title: "123"
+						});
+						var btn = ['确认'];
+						mode_Layer = layer.open({
+							skin: 'card',
+							type: 1,
+							title: "选择会议人员",
+							area: ['950px', '550px'], //宽高
+							resize: true, //是否拉升
+							offset: 'auto', //居中
+							content: sshtml,
+							btn:btn,
+							maxmin: true, //开启最大化最小化按钮
+							yes: function(index, layero) {
+								console.log(userList);
+						
+								if(userList.length<1){
+									layer.msg("请至少选择一名参加会议的人员", {
+										icon: 1
+									});
+									return;
+								}
+								$("#selectUser").html("已经选择过人员");
+								layer.close(mode_Layer);
+							},
+							success: function(layero) {
+								var tables = new table_user();
+								tables.init();
+								tables.bindCreate();
+							}
+						})
+					})
+					$("#selectRoom").click(function() {
+						var sshtml = template("selectRoomDiv", {
+							title: "123"
+						});
+						mode_Layer = layer.open({
+							skin: 'card',
+							type: 1,
+							title: "选择会议室",
+							area: ['950px', '550px'], //宽高
+							resize: true, //是否拉升
+							offset: 'auto', //居中
+							content: sshtml,
+							maxmin: true, //开启最大化最小化按钮
+							yes: function(index, layero) {},
+							success: function(layero) {
+								var tables = new table_room();
+								tables.init();
+								tables.bindCreate();
+								$(".selectpickers").selectpicker('refresh');
+							}
+						})
+					})
+
+				}
+			});
+			var validate = $("#deviceForm").validate({
+				rules: {},
+				messages: {},
+				submitHandler: function(form) {
+					var data = $("#deviceForm").serializeJson();
+					$.show_overall_loding();
+					data.userIds=userList;
+					$.postJSON(deviceServiceUrl + "/officeRoomOrder", data, function(data) {
+						$.hide_overall_loding();
+						if(data.code == 0) {
+							layer.close(myLayer);
+							layer.msg("成功", {
+								icon: 1
+							});
+							$('#myTable').bootstrapTable('refresh');
+							return true;
+						}
+						layer.msg(data.message==null?"操作失败,请先校验参数后再试":data.message, {
+							icon: 2
+						});
+					});
+				}
+			});
+		});
+
+		var table_room = function() {
+			return {
+				node: $("#tableRoom"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/officeRoom/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 5, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						onDblClickRow: function(row) {
+							console.info(row);
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'roomName',
+							title: '会议室名称',
+							width: 300
+						}, {
+							field: 'roomType',
+							title: '会议室类型',
+							width: 300,
+							formatter: function(value, row, index) {
+								var state = "";
+								if(value == 1) {
+									state = '<span style="color:orange">大会议室</span>'
+								} else if(value == 2) {
+									state = '<span style="color:green">小会议室</span>'
+								}
+								return state;
+							}
+						}, {
+							field: 'roomOpenTime',
+							title: '会议室开放时间',
+							width: 300
+						}, {
+							field: 'roomCloseTime',
+							title: '会议室关闭时间',
+							width: 300
+						}, {
+							title: "操作",
+							width: 100,
+							clickToSelect: false,
+							formatter: function(i1, i2, i3) {
+								var str =
+									'<button data-toggle="tooltip" title="选择此会议室" type="button" onclick="setModeOp(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-puzzle-piece"> </i></button>';
+								return str;
+							},
+							cellStyle: function() {
+								return {
+									classes: "",
+									css: {
+										"text-align": "center"
+									}
+								}
+							}
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						roomName: $("#s_roomName").val(),
+						roomType: $("#s_roomType").val()
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_modeTable").on("click", function() {
+						that.refresh();
+					});
+
+				}
+			}
+		}
+
+		function setModeOp(obj) {
+			var one = $("#tableRoom").bootstrapTable('getData')[obj];
+			$("#orderRoomId").val(one.id);
+			$("#selectRoom").html("已关联：" + one.roomName);
+			layer.close(mode_Layer);
+		}
+
+		function TimeDifference(time1, time2) {
+			//判断开始时间是否大于结束日期
+			if(time1 > time2) {
+				return 0;
+			}
+			//截取字符串，得到日期部分"2009-12-02",用split把字符串分隔成数组
+			var begin1 = time1.substr(0, 10).split("-");
+			var end1 = time2.substr(0, 10).split("-");
+			//将拆分的数组重新组合，并实例成化新的日期对象
+			var date1 = new Date(begin1[1] + - +begin1[2] + - +begin1[0]);
+			var date2 = new Date(end1[1] + - +end1[2] + - +end1[0]);
+			//得到两个日期之间的差值m，以分钟为单位
+			//Math.abs(date2-date1)计算出以毫秒为单位的差值
+			//Math.abs(date2-date1)/1000得到以秒为单位的差值
+			//Math.abs(date2-date1)/1000/60得到以分钟为单位的差值
+			var m = parseInt(Math.abs(date2 - date1) / 1000 / 60);
+			//小时数和分钟数相加得到总的分钟数
+			//time1.substr(11,2)截取字符串得到时间的小时数
+			//parseInt(time1.substr(11,2))*60把小时数转化成为分钟
+			var min1 = parseInt(time1.substr(11, 2)) * 60 + parseInt(time1.substr(14, 2));
+			var min2 = parseInt(time2.substr(11, 2)) * 60 + parseInt(time2.substr(14, 2));
+			//两个分钟数相减得到时间部分的差值，以分钟为单位
+			var n = min2 - min1;
+			//将日期和时间两个部分计算出来的差值相加，即得到两个时间相减后的分钟数
+			var minutes = m + n;
+			return minutes;
+		}
+
+		function curentTime() {
+			var now = new Date();
+			var year = now.getFullYear(); //年  
+			var month = now.getMonth() + 1; //月  
+			var day = now.getDate(); //日  
+			var hh = now.getHours(); //时  
+			var mm = now.getMinutes(); //分  
+			var ss = now.getSeconds(); //秒  
+			var clock = year + "-";
+			if(month < 10) clock += "0";
+			clock += month + "-";
+			if(day < 10) clock += "0";
+			clock += day + " ";
+			if(hh < 10) clock += "0";
+			clock += hh + ":";
+			if(mm < 10) clock += '0';
+			clock += mm + ":";
+			if(ss < 10) clock += '0';
+			clock += ss;
+			return(clock);
+		}
+	
+		var userList=[];
+		var table_user = function() {
+			return {
+				node: $("#tableUser"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: userServiceUrl + "/user/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 5, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						onDblClickRow: function(row) {
+							console.info(row);
+						},
+						onClickRow: function(row, tr,flied){
+							if(userList.indexOf(row.id)<0){
+								userList.push(row.id);
+							}else{
+								userList.splice(userList.indexOf(row.id),1);
+							}
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							checkbox: true,
+							formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+								if(userList.indexOf(row.id)!=-1){
+									return {
+										checked: true
+									};
+								}
+							}
+						},{
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'userName',
+							title: '用户名称',
+							width: 300
+						}, {
+							field: 'userMobile',
+							title: '用户手机',
+							width: 300
+						}, {
+							field: 'organizationName',
+							title: '所属部门',
+							width: 300
+						}
+						]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						userName: $("#s_userName").val(),
+						userMobile: $("#s_userMobile").val()
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_userTable").on("click", function() {
+						that.refresh();
+					});
+
+				}
+			}
+		}
+	
+	
+	
+		var table_show_user = function(orderId) {
+			return {
+				node: $("#tableShowUser"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/officeRoomOrder/user_list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 5, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						onDblClickRow: function(row) {
+							console.info(row);
+						},
+						onClickRow: function(row, tr,flied){
+							if(userList.indexOf(row.id)<0){
+								userList.push(row.id);
+							}else{
+								userList.splice(userList.indexOf(row.id),1);
+							}
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							checkbox: true,
+							formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+								if(userList.indexOf(row.id)!=-1){
+									return {
+										checked: true
+									};
+								}
+							}
+						},{
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'orderUserName',
+							title: '用户名称',
+							width: 300
+						}, {
+							field: 'orderUserOrganizationName',
+							title: '所属部门',
+							width: 300
+						}
+						]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						orderId:orderId,
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						orderUserName: $("#s_orderUserNamess").val(),
+						orderUserOrganizationName: $("#s_orderUserOrganizationNamess").val()
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_userTable").on("click", function() {
+						that.refresh();
+					});
+
+				}
+			}
+		}
+	
+	</script>
+
+	<script type="text/html" id="selectRoomDiv">
+		<div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;margin-top: 20px;">
+			<div class="card-body">
+				<div class="ibox-content row">
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">会议室名称：</label>
+							<input class="form-control" name="s_roomName" id="s_roomName" placeholder="会议室名称" type="text">
+						</div>
+					</div>
+
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">会议室类型：</label>
+							<select class="form-control selectpickers" style="max-height: 500px;" name="s_roomType" id="s_roomType" data-live-search="true">
+								<option value="">请选择类型</option>
+								<option value="1">大会议室</option>
+								<option value="2">小会议室</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div id="buttons" style="margin-top: 24px;">
+								<button type="button" class="btn btn-success" id="search_modeTable"><i class="fa fa-search"></i> 查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--平台设备位置列表-->
+				<div id="tableRoom"></div>
+			</div>
+		</div>
+	</script>
+	
+	
+	<script type="text/html" id="selectUserDiv">
+		<div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;margin-top: 20px;">
+			<div class="card-body">
+				<div class="ibox-content row">
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">用户名称：</label>
+							<input class="form-control" name="s_userName" id="s_userName" placeholder="用户名称" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">用户手机：</label>
+							<input class="form-control" name="s_userMobile" id="s_userMobile" placeholder="用户手机" type="text">
+						</div>
+					</div>
+
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div id="buttons" style="margin-top: 24px;">
+								<button type="button" class="btn btn-success" id="search_userTable"><i class="fa fa-search"></i> 查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--平台设备位置列表-->
+				<div id="tableUser"></div>
+			</div>
+		</div>
+	</script>
+	
+	
+	<script type="text/html" id="selectShowUserDiv">
+		<div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;">
+			<div class="card-body">
+				<div class="ibox-content row">
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">用户名称：</label>
+							<input class="form-control" name="s_orderUserNamess" id="s_orderUserNamess" placeholder="用户名称" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">用户部门：</label>
+							<input class="form-control" name="s_orderUserOrganizationNamess" id="s_orderUserOrganizationNamess" placeholder="用户部门" type="text">
+						</div>
+					</div>
+
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div id="buttons" style="margin-top: 24px;">
+								<button type="button" class="btn btn-success" id="search_userTable"><i class="fa fa-search"></i> 查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--平台设备位置列表-->
+				<div id="tableShowUser"></div>
+			</div>
+		</div>
+	</script>
+	
+	<script type="text/html" id="modelWin">
+		<section class="openDetail" style="width: 95%; margin-top: 20px;">
+			<div class="panel-body">
+				<form id="deviceForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">开始时间:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderStartTime" name="orderStartTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx isShow">
+							<label class="layui-form-label">会议时长:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderLongTime" name="orderLongTime" type="number">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">所用会议室:</label>
+							<div class="layui-input-block">
+								<input type="hidden" name="orderRoomId" id="orderRoomId" />
+								<button type="button" class="btn btn-success" style="width: 225px;" id="selectRoom">请选择会议室</button>
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">会议人员:</label>
+							<div class="layui-input-block">
+								<input type="hidden" name="orderUserIds" id="orderUserIds" />
+								<button type="button" class="btn btn-success" style="width: 225px;" id="selectUser">请选择人员</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+	
+	
+	<script type="text/html" id="showInfo">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="deviceForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">所属办公室:</label>
+								<div class="layui-input-block">
+								<input class="form-control" id="orderRoomName" name="orderRoomName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">申请用户:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderUserName" name="orderUserName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">所属部门:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderUserOrganizationName" name="orderUserOrganizationName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">开始时间:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderStartTime" name="orderStartTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx isShow">
+							<label class="layui-form-label">会议时长:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderLongTime" name="orderLongTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">实际开始:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderActualStartTime" name="orderActualStartTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">实际结束:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderActualEndTime" name="orderActualEndTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">实际使用:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="orderUseingTime" name="orderUseingTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">会议人员:</label>
+							<div class="layui-input-block">
+								<button type="button" class="btn btn-success" style="width: 225px;" id="showUser">查看会议人员</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+</html>

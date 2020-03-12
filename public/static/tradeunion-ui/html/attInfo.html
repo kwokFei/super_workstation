@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>中国工业互联网研究院测试中心</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="../css/style.min.css" rel="stylesheet">
+	<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+	<link href="../css/commonStyle.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/layui.css" />
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../plus/layer/layer.js"></script>
+	<script src="../js/template-web.js"></script>
+	<script src="../plus/validate/jquery.validate.min.js"></script>
+	<script src="../plus/validate/messages_zh.min.js"></script>
+	<script src="../js/bootstrap-treeview.js"></script>
+
+	<script src="../js/httpUtils.js"></script>
+	<script src="../js/Md5.js"></script>
+
+	<script src="../js/laydate/laydate.js"></script>
+	<style>
+		.col-lg-3{
+			float: left;
+			width: 25%;
+		}
+		.MarginPx {
+			margin: 10px 0;
+		}
+	</style>
+</head>
+
+<body>
+<div id="hander">
+	<script>
+        $(function() {
+            $("#hander").load("handMenu.html");
+        });
+	</script>
+</div>
+<main class="lyear-layout-content" style="display: none">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4>考勤信息管理</h4>
+					</div>
+					<div class="card-body">
+						<div class="ibox-content row">
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_userName">用户名称：</label>
+									<input class="form-control" name="s_userName" id="s_userName" placeholder="用户名称" type="text">
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">组织名称：</label>
+									<input class="form-control organizationInput position-box" id="s_organizationName" name="s_organizationName" type="text" onclick="$('#s_organizationTree').show();" placeholder="所属机构" readonly="readonly" style="cursor: pointer">
+									<input type="hidden" id="s_organizationId" name="s_organizationId" value="">
+									<div id="s_organizationTree" class="organization_height"></div>
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">日期类型：</label>
+									<select class="form-control" name="s_isHoliday" id="s_isHoliday">
+										<option value="">全部</option>
+										<option value="1">工作日期</option>
+										<option value="2">法定假期</option>
+										<option value="3">周末双休</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">上班状态：</label>
+									<select class="form-control" name="s_startStaus" id="s_startStaus">
+										<option value="">全部</option>
+										<option value="1">未打卡</option>
+										<option value="2">正常</option>
+										<option value="3">迟到</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="ibox-content row">
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_startDate">起始日期：</label>
+									<input class="form-control" name="s_startDate" id="s_startDate" placeholder="起始时间" type="text">
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_endDate">结束日期：</label>
+									<input class="form-control" name="s_endDate" id="s_endDate" placeholder="结束时间" type="text">
+								</div>
+							</div>
+
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label">下班状态：</label>
+									<select class="form-control" name="s_endStaus" id="s_endStaus">
+										<option value="">全部</option>
+										<option value="1">未打卡</option>
+										<option value="2">正常</option>
+										<option value="3">早退</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<div id="buttons" style="margin-top: 24px;">
+										<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+										<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="ibox-content">
+							<table id="myTable">
+
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<div id="loadDiv"></div>
+</body>
+
+<script>
+    var html;
+    var userIdd = $.getCookie("userId");
+    var url = "";
+
+
+    $('#s_startDate').mouseenter(function() {
+        laydate.render({
+            elem: '#s_startDate',
+            calendar: true
+        });
+    });
+    $('#s_endDate').mouseenter(function() {
+        laydate.render({
+            elem: '#s_endDate',
+            calendar: true
+        });
+    });
+
+    $("#loadDiv").html(loadHtml);
+    $(function() {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: deviceServiceUrl + "/attInfo/list", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function(data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function(row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function(value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'attDay',
+                title: '考勤日期',
+                width: 120
+            }, {
+                field: 'userName',
+                title: '用户名称',
+                width: 80
+            }, {
+                field: 'organizationName',
+                title: '组织名称',
+                width: 150
+            }, {
+                field: 'startTime',
+                title: '上班时间',
+                width: 100
+            }, {
+                field: 'endTime',
+                title: '下班时间',
+                width: 100
+            }, {
+                field: 'isHoliday',
+                title: '日期类型',
+                width: 80,
+                formatter: function(value, row, index) {
+                    var state = "";
+                    if(value == 1) {
+                        state = '<span style="color:green">工作日期</span>'
+                    } else if(value == 2) {
+                        state = '<span style="color:green">法定假期</span>'
+                    } else if(value == 3) {
+                        state = '<span style="color:green">周末双休</span>'
+                    }
+                    return state;
+                }
+            }, {
+                field: 'startStaus',
+                title: '上班状态',
+                width: 80,
+                formatter: function(value, row, index) {
+                    var state = "";
+                    if(value == 1) {
+                        state = '<span style="color:green">未打卡</span>'
+                    } else if(value == 2) {
+                        state = '<span style="color:green">正常</span>'
+                    } else if(value == 3) {
+                        state = '<span style="color:green">迟到</span>'
+                    }
+                    return state;
+                }
+            }, {
+                field: 'endStaus',
+                title: '下班状态',
+                width: 80,
+                formatter: function(value, row, index) {
+                    var state = "";
+                    if(value == 1) {
+                        state = '<span style="color:green">未打卡</span>'
+                    } else if(value == 2) {
+                        state = '<span style="color:green">正常</span>'
+                    } else if(value == 3) {
+                        state = '<span style="color:green">早退</span>'
+                    }
+                    return state;
+                }
+            }, {
+                title: "操作",
+                width: 100,
+                clickToSelect: false,
+                formatter: function(i1, i2, i3) {
+                    var str =
+                        '<button data-toggle="tooltip" title="详情" type="button"  class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>'
+                    return str;
+                },
+                cellStyle: function() {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            $.show_overall_loding();
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                loginUserId: userIdd,
+                selectType: 1,
+                startDate: $("#s_startDate").val(),
+                endDate: $("#s_endDate").val(),
+                userName: $("#s_userName").val(),
+                organizationName: $("#s_organizationName").val(),
+                isHoliday: $("#s_isHoliday").val(),
+                startStaus: $("#s_startStaus").val(),
+                endStaus: $("#s_endStaus").val(),
+
+            };
+        }
+
+        $("#search").click(function() {
+            $.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function() {
+            $("#s_userName").val(""),
+            $("#s_organizationName").val(""),
+            $("#s_isHoliday").val(""),
+            $("#s_startStaus").val(""),
+			$("#s_startDate").val(""),
+			$("#s_endDate").val(""),
+            $("#s_endStaus").val(""),
+            $("#search").trigger("click");
+        });
+    });
+
+    /*详情*/
+    function detail(obj){
+        url = "";
+        // showModelDetails("事件详情", obj);
+    }
+    function showModelDetails(title, index) {
+        var html = template("modelAttInfoDetails", {
+            title: "123"
+        });
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: '事件详情',
+            area: ['700px', '383px'], //宽高
+            resize: true, //是否拉升
+            offset: 'auto', //居中
+            content: html,
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                // var data = $("#myTable").bootstrapTable('getData')[index];
+                // if (data != null) {
+                //     // $("#attInfoDetailsForm").setForm(data);
+                // }
+                // $(".attInfoDisabled").attr("disabled", "disabled");
+            }
+        });
+    }
+
+
+
+    var organizationData = "";
+    function get_o_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.organizationName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_o_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+    function s_init_o_Tree() {
+        if(organizationData == "") {
+            $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+                organizationData = get_o_TreeData(data.data);
+                s_initTreeData();
+            });
+            return;
+        }
+        s_initTreeData();
+    }
+    function s_initTreeData() {
+        var options = {
+            checkedIcon: "glyphicon glyphicon-check",
+            nodeIcon: "none", //所有节点的默认图标
+            levels: 1,
+            data: organizationData,
+            // onhoverColor: "rgba(255,255,255,0.9)",
+            onhoverColor: "rgba(0,0,0,0.1)",
+            onNodeSelected: function(event, data) {
+                $("#s_organizationName").val(data.text);
+                $("#s_organizationId").val(data.id);
+                $("#s_organizationTree").hide();
+            }
+        };
+        $('#s_organizationTree').treeview(options);
+    }
+    s_init_o_Tree();
+
+</script>
+<!-- 详情模板 -->
+<script type="text/html" id="modelAttInfoDetails">
+	<section class="openDetail" style="width: 100%;">
+		<div class="panel-body">
+			<form id="attInfoDetailsForm">
+				<div class="row">
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">考勤日期：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="attDay" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">用户名称：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="userName" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">组织名称：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="organizationName" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">上班时间：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="startTime" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">下班时间：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="endTime" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label">时间类型：</label>
+						<div class="layui-input-block">
+							<select class="form-control attInfoDisabled" name="isHoliday">
+								<option value="0">--请选择时间类型--</option>
+								<option value="1">工作日期</option>
+								<option value="2">法定假期</option>
+								<option value="3">周末双休</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label">上班状态：</label>
+						<div class="layui-input-block">
+							<select class="form-control attInfoDisabled" name="startStaus">
+								<option value="0">--请选择上班状态--</option>
+								<option value="1">未打卡</option>
+								<option value="2">正常</option>
+								<option value="3">迟到</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label">下班状态：</label>
+						<div class="layui-input-block">
+							<select class="form-control attInfoDisabled" name="endStaus">
+								<option value="0">--请选择事下班状态--</option>
+								<option value="1">未打卡</option>
+								<option value="2">正常</option>
+								<option value="3">早退</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
+</script>
+
+<script>
+    $(document).bind("click", function (e) {
+        var con_one = $(".position-box");// 设置目标区域
+        // console.info(con_one);
+        var f = 'expand-icon';	//点击treeView的加号图标不隐藏
+        if (!con_one.is(e.target) && con_one.has(e.target).length === 0 && !e.target.classList.contains(f)) {
+            $("#s_organizationTree").hide();//需要隐藏的元素
+        }
+    });
+</script>
+
+</html>

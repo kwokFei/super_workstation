@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../../office-ui/images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>海克斯后台管理系统</title>
+    <link href="../../office-ui/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../office-ui/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../office-ui/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../../office-ui/css/style.min.css" rel="stylesheet">
+    <link href="../../office-ui/plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../../office-ui/css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../../office-ui/css/commonStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../office-ui/css/layui.css"/>
+
+    <script src="../../office-ui/js/jquery.min.js"></script>
+    <script src="../../office-ui/js/bootstrap.min.js"></script>
+    <script src="../../office-ui/plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../../office-ui/plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../../office-ui/plus/layer/layer.js"></script>
+    <script src="../../office-ui/js/template-web.js"></script>
+    <script src="../../office-ui/plus/validate/jquery.validate.min.js"></script>
+    <script src="../../office-ui/plus/validate/messages_zh.min.js"></script>
+    <script src="../../office-ui/js/bootstrap-treeview.js"></script>
+
+    <!--		<script src="../js/httpUtils.js"></script>-->
+    <!--<script src="../js/Md5.js"></script>-->
+    <style>
+        .plaFooter {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>BCCA平台参数配置</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox-content">
+                            <form id="platformBCCAForm">
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceId">service_id：</label>
+                                    <input class="form-control" name="serviceId" id="serviceId" placeholder="service_id"
+                                           type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceKey">service_key：</label>
+                                    <input class="form-control" name="serviceKey" id="serviceKey"
+                                           placeholder="service_key" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="Url">url：</label>
+                                    <input class="form-control" name="Url" id="Url" placeholder="url" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="callBackUrl">call_back_url：</label>
+                                    <input class="form-control" name="callBackUrl" id="callBackUrl"
+                                           placeholder="call_back_url" type="text">
+                                </div>
+                                <input type="hidden" name="id" id="bccaId"/>
+                                <button type="submit" class="btn btn-info">确 认</button>
+                            </form>
+                            <!--<button class="bccaSubmit" class="btn btn-info">确 认</button>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 20px">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>大管家平台参数配置</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox-content">
+                            <form id="platformBigForm">
+                                <div class="form-group">
+                                    <label class="form-label" for="urlBig">url：</label>
+                                    <input class="form-control" name="urlBig" id="urlBig" placeholder="url" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="appId">app_id：</label>
+                                    <input class="form-control" name="appId" id="appId" placeholder="app_id"
+                                           type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="appKey">app_key：</label>
+                                    <input class="form-control" name="appKey" id="appKey" placeholder="app_key"
+                                           type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="apId">ap_id：</label>
+                                    <input class="form-control" name="apId" id="apId" placeholder="ap_id：" type="text">
+                                </div>
+                                <input type="hidden" name="id" id="bigId"/>
+                                <button type="submit" class="btn btn-info">确 认</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 20px">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>开发者社区平台参数配置</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox-content">
+                            <form id="platformDevelopmentForm">
+                                <div class="form-group">
+                                    <label class="form-label" for="urlDevelopment">url：</label>
+                                    <input class="form-control" name="urlDevelopment" id="urlDevelopment"
+                                           placeholder="url" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceIdDevelopment">service_id：</label>
+                                    <input class="form-control" name="serviceIdDevelopment" id="serviceIdDevelopment"
+                                           placeholder="service_id" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="serviceKeyDevelopment">service_key：</label>
+                                    <input class="form-control" name="serviceKeyDevelopment" id="serviceKeyDevelopment"
+                                           placeholder="service_key" type="text">
+                                </div>
+                                <input type="hidden" name="id" id="developmentId"/>
+                                <button type="submit" class="btn btn-info">确 认</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="margin-top: 20px">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>3D组织机构组成信息</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox-content">
+                            <form id="platformDevelopmentForm_3D">
+                                <div class="form-group">
+                                    <label class="form-label" for="back_3D">3D回调URL：</label>
+                                    <input class="form-control" name="back_3D" id="back_3D"
+                                           placeholder="3D回调URL" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="url_3D">3D URL地址：</label>
+                                    <input class="form-control" name="url_3D" id="url_3D"
+                                           placeholder="3D URL地址" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="organization_3D">组织账户：</label>
+                                    <input class="form-control" name="organization_3D" id="organization_3D"
+                                           placeholder="组织账户" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="organizationName_3D">组织名称：</label>
+                                    <input class="form-control" name="organizationName_3D" id="organizationName_3D"
+                                           placeholder="组织名称" type="text">
+                                </div>
+                                <input type="hidden" name="id_3D" id="id_3D" value=""/>
+                                <button type="submit" class="btn btn-info">确 认</button>
+                                <button type="button" onclick="edit()" class="btn btn-info">修 改</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div id="loadDiv"></div>
+</body>
+<!--<script>-->
+<!--    // 用于新增组织机构，增加组织机构后才能绑定用户-->
+<!--    var urlAddResquest_3D = "http://113.204.9.70:9080/3dwebgl/otheAPI/registerOrg";-->
+<!--    var urlUpdateResquest_3D = "http://113.204.9.70:9080/3dwebgl/otheAPI/updateOrg";-->
+<!--    var bccaId = "";-->
+<!--    var bigId = "";-->
+<!--    var developmentId = "";-->
+<!--    var platformType;-->
+<!--    $(function () {-->
+<!--        fromBCCALoad();-->
+<!--        fromBigLoad();-->
+<!--        fromDevelopmentLoad();-->
+<!--        from3DLoad();-->
+<!--    });-->
+<!--    /*BCCA平台参数配置*/-->
+<!--    var validate = $("#platformBCCAForm").validate({-->
+<!--        rules: {-->
+<!--            serviceId: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            serviceKey: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            Url: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            callBackUrl: {-->
+<!--                required: true-->
+<!--            }-->
+<!--        },-->
+<!--        messages: {-->
+<!--            serviceId: {-->
+<!--                required: "请输入第三方唯一标识"-->
+<!--            },-->
+<!--            serviceKey: {-->
+<!--                required: "请输入唯一标识对应的 key"-->
+<!--            },-->
+<!--            Url: {-->
+<!--                required: "请输入URI"-->
+<!--            },-->
+<!--            callBackUrl: {-->
+<!--                required: "请输入回调 URI"-->
+<!--            }-->
+<!--        },-->
+<!--        submitHandler: function (form) {-->
+<!--            var url = $("#Url").val();-->
+<!--            var serviceId = $("#serviceId").val();-->
+<!--            var serviceKey = $("#serviceKey").val();-->
+<!--            var callBackUrl = $("#callBackUrl").val();-->
+<!--            var Url = $("#Url").val();-->
+<!--            //$.hide_overall_loding();-->
+<!--            $.putJSON(deviceServiceUrl + "/platformparam", {-->
+<!--                "id": bccaId,-->
+<!--                "url": url,-->
+<!--                "serviceId": serviceId,-->
+<!--                "serviceKey": serviceKey,-->
+<!--                "callBackUrl": callBackUrl,-->
+<!--                "platformType": 1-->
+<!--            }, function (data) {-->
+<!--                $.hide_overall_loding();-->
+<!--                if (data.code == 0) {-->
+<!--                    parent.layer.msg("操作成功", {-->
+<!--                        icon: 6-->
+<!--                    });-->
+<!--                    fromBCCALoad();-->
+<!--                    return true;-->
+<!--                } else {-->
+<!--                    if (data.code == 401000) {-->
+<!--                        parent.layer.msg(data.message, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    } else if (data.messages != null) {-->
+<!--                        parent.layer.msg(data.messages[0].error, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    } else {-->
+<!--                        parent.layer.msg(data.message, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    }-->
+<!--                }-->
+
+<!--            })-->
+
+<!--        }-->
+<!--    });-->
+
+<!--    /*大管家平台参数配置*/-->
+<!--    var validate = $("#platformBigForm").validate({-->
+<!--        rules: {-->
+<!--            urlBig: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            appId: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            appKey: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            apId: {-->
+<!--                required: true-->
+<!--            }-->
+<!--        },-->
+<!--        messages: {-->
+<!--            urlBig: {-->
+<!--                required: "请输入URI"-->
+<!--            },-->
+<!--            appId: {-->
+<!--                required: "请输入第三方唯一标识"-->
+<!--            },-->
+<!--            appKey: {-->
+<!--                required: "请输入唯一标识对应的 key"-->
+<!--            },-->
+<!--            apId: {-->
+<!--                required: "请输入apId"-->
+<!--            }-->
+<!--        },-->
+<!--        submitHandler: function (form) {-->
+<!--            var serviceId = $("#appId").val();-->
+<!--            var serviceKey = $("#appKey").val();-->
+<!--            var Url = $("#urlBig").val();-->
+<!--            var apId = $("#apId").val();-->
+<!--            //$.hide_overall_loding();-->
+<!--            $.putJSON(deviceServiceUrl + "/platformparam", {-->
+<!--                "id": bigId,-->
+<!--                "url": Url,-->
+<!--                "serviceId": serviceId,-->
+<!--                "serviceKey": serviceKey,-->
+<!--                "apId": apId,-->
+<!--                "platformType": 2-->
+<!--            }, function (data) {-->
+<!--                $.hide_overall_loding();-->
+<!--                if (data.code == 0) {-->
+<!--                    parent.layer.msg("操作成功", {-->
+<!--                        icon: 6-->
+<!--                    });-->
+<!--                    fromBigLoad();-->
+<!--                    return true;-->
+<!--                } else {-->
+<!--                    if (data.code == 401000) {-->
+<!--                        parent.layer.msg(data.message, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    } else if (data.messages != null) {-->
+<!--                        parent.layer.msg(data.messages[0].error, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    } else {-->
+<!--                        parent.layer.msg(data.message, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    }-->
+<!--                }-->
+
+<!--            })-->
+
+<!--        }-->
+<!--    });-->
+
+<!--    /*开发者平台参数配置*/-->
+<!--    var validate = $("#platformDevelopmentForm").validate({-->
+<!--        rules: {-->
+<!--            urlDevelopment: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            serviceIdDevelopment: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            serviceKeyDevelopment: {-->
+<!--                required: true-->
+<!--            }-->
+<!--        },-->
+<!--        messages: {-->
+<!--            urlDevelopment: {-->
+<!--                required: "请输入URI"-->
+<!--            },-->
+<!--            serviceIdDevelopment: {-->
+<!--                required: "请输入第三方唯一标识"-->
+<!--            },-->
+<!--            serviceKeyDevelopment: {-->
+<!--                required: "请输入唯一标识对应的 key"-->
+<!--            },-->
+<!--        },-->
+<!--        submitHandler: function (form) {-->
+<!--            var serviceId = $("#serviceIdDevelopment").val();-->
+<!--            var serviceKey = $("#serviceKeyDevelopment").val();-->
+<!--            var Url = $("#urlDevelopment").val();-->
+<!--            //$.hide_overall_loding();-->
+<!--            $.putJSON(deviceServiceUrl + "/platformparam", {-->
+<!--                "id": developmentId,-->
+<!--                "url": Url,-->
+<!--                "serviceId": serviceId,-->
+<!--                "serviceKey": serviceKey,-->
+<!--                "platformType": 3-->
+<!--            }, function (data) {-->
+<!--                $.hide_overall_loding();-->
+<!--                if (data.code == 0) {-->
+<!--                    parent.layer.msg("操作成功", {-->
+<!--                        icon: 6-->
+<!--                    });-->
+<!--                    fromDevelopmentLoad();-->
+<!--                    return true;-->
+<!--                } else {-->
+<!--                    if (data.code == 401000) {-->
+<!--                        parent.layer.msg(data.message, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    } else if (data.messages != null) {-->
+<!--                        parent.layer.msg(data.messages[0].error, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    } else {-->
+<!--                        parent.layer.msg(data.message, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    }-->
+<!--                }-->
+
+<!--            })-->
+
+<!--        }-->
+<!--    });-->
+
+<!--    /*3D平台参数配置*/-->
+<!--    var validate = $("#platformDevelopmentForm_3D").validate({-->
+<!--        rules: {-->
+<!--            back_3D: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            url_3D: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            organization_3D: {-->
+<!--                required: true-->
+<!--            },-->
+<!--            organizationName_3D: {-->
+<!--                required: true-->
+<!--            }-->
+<!--        },-->
+<!--        messages: {-->
+<!--            back_3D: {-->
+<!--                required: "请输入3D回调URL"-->
+<!--            },-->
+<!--            url_3D: {-->
+<!--                required: "请输入3D URL地址"-->
+<!--            },-->
+<!--            organization_3D: {-->
+<!--                required: "组织账户"-->
+<!--            },-->
+<!--            organizationName_3D: {-->
+<!--                required: "组织名称"-->
+<!--            }-->
+<!--        },-->
+<!--        submitHandler: function (form) {-->
+<!--            var back_3D = $("#back_3D").val();-->
+<!--            var url_3D = $("#url_3D").val();-->
+<!--            var organization_3D = $("#organization_3D").val();-->
+<!--            var organizationName_3D = $("#organizationName_3D").val();-->
+<!--            //$.hide_overall_loding();-->
+
+<!--            var data = {-->
+<!--                "service_id": service_id,-->
+<!--                "service_key": service_key,-->
+<!--                "call_project_url": back_3D,-->
+<!--                "call_back_url": url_3D,-->
+<!--                "org_name": organizationName_3D,-->
+<!--                "account": organization_3D-->
+<!--            };-->
+<!--            if($("#id_3D").val() == ""){-->
+<!--                $.postJSONs(urlAddResquest_3D, data, function (res) {-->
+<!--                    console.info(res);-->
+<!--                    if (res.status == 200) {-->
+<!--                        var url = addToUrlToken(deviceServiceUrl + "/platformparam/addRedis");-->
+<!--                        url += "&back_3D=" + back_3D + "&url_3D=" + url_3D + "&organization_3D=" + organization_3D + "&organizationName_3D=" + organizationName_3D + "&org_id=" + res.data.org_id;-->
+<!--                        $.ajax({-->
+<!--                            url: url,-->
+<!--                            type: "get",-->
+<!--                            contentType: "application/json",-->
+<!--                            dataType: "json",-->
+<!--                            timeout: 10000,-->
+<!--                            success: function (r) {-->
+
+<!--                            }-->
+<!--                        });-->
+<!--                        parent.layer.msg("操作成功", {-->
+<!--                            icon: 6-->
+<!--                        });-->
+<!--                        return true;-->
+<!--                    } else {-->
+<!--                        parent.layer.msg(res.msg, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    }-->
+<!--                });-->
+<!--            }else{-->
+<!--                data.org_id = $("#id_3D").val();-->
+<!--                $.postJSONs(urlUpdateResquest_3D, data, function (res) {-->
+<!--                    console.info(res);-->
+<!--                    if (res.status == 200) {-->
+<!--                        console.info(data);-->
+<!--                        var url = addToUrlToken(deviceServiceUrl + "/platformparam/addRedis");-->
+<!--                        url += "&back_3D=" + back_3D + "&url_3D=" + url_3D + "&organization_3D=" + organization_3D + "&organizationName_3D=" + organizationName_3D + "&org_id=" + data.org_id;-->
+<!--                        $.ajax({-->
+<!--                            url: url,-->
+<!--                            type: "get",-->
+<!--                            contentType: "application/json",-->
+<!--                            dataType: "json",-->
+<!--                            timeout: 10000,-->
+<!--                            success: function (r) {-->
+
+<!--                            }-->
+<!--                        });-->
+<!--                        parent.layer.msg("操作成功", {-->
+<!--                            icon: 6-->
+<!--                        });-->
+<!--                        return true;-->
+<!--                    } else {-->
+<!--                        parent.layer.msg(res.msg, {-->
+<!--                            icon: 5-->
+<!--                        });-->
+<!--                    }-->
+<!--                });-->
+<!--            }-->
+
+<!--        }-->
+<!--    });-->
+
+
+<!--    function fromBCCALoad() {-->
+<!--        //$.hide_overall_loding();-->
+<!--        $.sanjiGetJSON(deviceServiceUrl + "/platformparam/list", {-->
+<!--            "platformType": 1-->
+<!--        }, function (data) {-->
+<!--            $.hide_overall_loding();-->
+<!--            if (data.code == 0) {-->
+<!--                if (data.data.length > 0) {-->
+<!--                    var serviceId = data.data[0].serviceId;-->
+<!--                    var serviceKey = data.data[0].serviceKey;-->
+<!--                    var callBackUrl = data.data[0].callBackUrl;-->
+<!--                    var Url = data.data[0].url;-->
+<!--                    bccaId = data.data[0].id;-->
+<!--                    $('#serviceId').val(serviceId);-->
+<!--                    $('#serviceKey').val(serviceKey);-->
+<!--                    $('#callBackUrl').val(callBackUrl);-->
+<!--                    $('#Url').val(Url);-->
+<!--                }-->
+<!--                return true;-->
+<!--            } else {-->
+<!--                if (data.code == 401000) {-->
+<!--                    parent.layer.msg(data.message, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                } else if (data.messages != null) {-->
+<!--                    parent.layer.msg(data.messages[0].error, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                } else {-->
+<!--                    parent.layer.msg(data.message, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                }-->
+<!--            }-->
+
+<!--        })-->
+<!--    }-->
+
+<!--    function fromBigLoad() {-->
+<!--        //$.hide_overall_loding();-->
+<!--        $.sanjiGetJSON(deviceServiceUrl + "/platformparam/list", {-->
+<!--            "platformType": 2-->
+<!--        }, function (data) {-->
+<!--            $.hide_overall_loding();-->
+<!--            if (data.code == 0) {-->
+<!--                if (data.data.length > 0) {-->
+<!--                    var url = data.data[0].url;-->
+<!--                    var appId = data.data[0].serviceId;-->
+<!--                    var appKey = data.data[0].serviceKey;-->
+<!--                    var apId = data.data[0].apId;-->
+<!--                    bigId = data.data[0].id;-->
+<!--                    $('#urlBig').val(url);-->
+<!--                    $('#appId').val(appId);-->
+<!--                    $('#appKey').val(appKey);-->
+<!--                    $('#apId').val(apId);-->
+<!--                }-->
+<!--                return true;-->
+<!--            } else {-->
+<!--                if (data.code == 401000) {-->
+<!--                    parent.layer.msg(data.message, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                } else if (data.messages != null) {-->
+<!--                    parent.layer.msg(data.messages[0].error, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                } else {-->
+<!--                    parent.layer.msg(data.message, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                }-->
+<!--            }-->
+<!--        })-->
+<!--    }-->
+
+<!--    function fromDevelopmentLoad() {-->
+<!--        //$.hide_overall_loding();-->
+<!--        $.sanjiGetJSON(deviceServiceUrl + "/platformparam/list", {-->
+<!--            "platformType": 3-->
+<!--        }, function (data) {-->
+<!--            $.hide_overall_loding();-->
+<!--            if (data.code == 0) {-->
+<!--                if (data.data.length > 0) {-->
+<!--                    var serviceIdDevelopment = data.data[0].serviceId;-->
+<!--                    var serviceKeyDevelopment = data.data[0].serviceKey;-->
+<!--                    var urlDevelopment = data.data[0].url;-->
+<!--                    developmentId = data.data[0].id;-->
+<!--                    $('#serviceIdDevelopment').val(serviceIdDevelopment);-->
+<!--                    $('#serviceKeyDevelopment').val(serviceKeyDevelopment);-->
+<!--                    $('#urlDevelopment').val(urlDevelopment);-->
+<!--                }-->
+<!--                return true;-->
+<!--            } else {-->
+<!--                if (data.code == 401000) {-->
+<!--                    parent.layer.msg(data.message, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                } else if (data.messages != null) {-->
+<!--                    parent.layer.msg(data.messages[0].error, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                } else {-->
+<!--                    parent.layer.msg(data.message, {-->
+<!--                        icon: 5-->
+<!--                    });-->
+<!--                }-->
+<!--            }-->
+
+<!--        })-->
+<!--    }-->
+
+<!--    function from3DLoad() {-->
+<!--        //$.hide_overall_loding();-->
+<!--        $.sanjiGetJSON(deviceServiceUrl + "/platformparam/getRedis", {}, function (r) {-->
+<!--            $.hide_overall_loding();-->
+<!--            console.info(r);-->
+<!--            $("#back_3D").val(r.data[0]);-->
+<!--            $("#url_3D").val(r.data[1]);-->
+<!--            $("#organization_3D").val(r.data[2]);-->
+<!--            $("#organizationName_3D").val(r.data[3]);-->
+<!--            $("#id_3D").val(r.data[4]);-->
+<!--        });-->
+<!--        /*$.ajax({-->
+<!--            url: deviceServiceUrl + "/platformparam/getRedis",-->
+<!--            type: "get",-->
+<!--            contentType: "application/json",-->
+<!--            async: false,-->
+<!--            success: function (r) {-->
+<!--                $.hide_overall_loding();-->
+<!--                console.info(r);-->
+<!--                $("#back_3D").val(r.data[0]);-->
+<!--                $("#url_3D").val(r.data[1]);-->
+<!--                $("#organization_3D").val(r.data[2]);-->
+<!--                $("#organizationName_3D").val(r.data[3]);-->
+<!--                $("#id_3D").val(r.data[4]);-->
+<!--            },-->
+<!--        });*/-->
+<!--    }-->
+<!--</script>-->
+
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link href="../css/layui.css" rel="stylesheet"/>
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../plus/iview/iview.css"/>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+<!--    <script src="../js/httpUtils.js"></script>-->
+    <script src="../plus/iview/vue.min.js"></script>
+    <script src="../plus/iview/iview.min.js"></script>
+
+    <style>
+        .panel-body .list-group {
+            height: 100%;
+            overflow: auto;
+        }
+
+        .layui-form-label {
+            width: 100px !important;
+        }
+    </style>
+</head>
+
+<body style="background: #f5f6fa;">
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>模型3D管理</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+
+                                <!--<div style="width: 80%;text-align: center;">
+                                    <div>七牛云文件上传</div>
+                                    <br/>
+                                    <input type="file"/>
+                                    <button id="sub">确定上传</button>
+                                    <img id="mypic" width="200px" height="200px" src=""/>
+                                    <div style="margin-left: auto;margin-top:100px;">图片地址:<input type="text" id="imgUrl"
+                                                                                                 style="width:300px;height: 40px;">
+                                    </div>
+                                </div>-->
+
+                                <!--页面内容部分-->
+                                <select id="eleType" class="form-control" 
+                                        style="width: 200px;display: inline-block">
+                                    <option value="">全部元件类型</option>
+                                </select>
+                                <button type="button" class="btn btn-primary" >
+                                    <i class="fa fa-plus"></i> 添加3D场景
+                                </button>
+                                <button type="button" class="btn btn-primary" >
+                                    <i class="fa fa-edit"></i> 修改3D场景
+                                </button>
+                                <button type="button" class="btn btn-primary" >
+                                    <i class="fa fa-eye"></i> 预览3D场景
+                                </button>
+                                <!--<input type="file" id="fff">-->
+                                <!--<button type="button" class="btn btn-primary" onclick="upl()">预览3D场景</button>-->
+                            </div>
+                        </div>
+                        <div class="ibox-content row" id="app" style="margin-top: 30px">
+                            <div class="col-md-3" style="margin-bottom: 20px;" v-for="v in list" v-if="total != 0">
+                                <div class="form-group" style="text-align: center">
+                                    <label class="form-label" v-text="v.yj_mc"></label>
+                                    <div style="background-color: #f8f8f9;" @click="showModel(v)">
+                                        <img :src="v.fjtp" alt="v.fjmc">
+                                    </div>
+                                    <div id="btns" style="margin-top: 10px;letter-spacing: 100px;">
+                                        <button class="btn btn-success" >绑定</button>
+                                        <button class="btn btn-warning" >解绑</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="total == 0">
+                                <div style="font-size: 24px;text-align: center;padding: 20px">暂无元件</div>
+                            </div>
+                            <div class="col-lg-12" style="width: 100%;text-align: right;float: right;"
+                                 v-if="total != 0">
+                                <Page :total="total" :page-size="pageSize"  show-elevator/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="loadDiv"></div>
+</body>
+<script>
+
+    var app;
+    var plan_3D_url = "http://113.204.9.70:9080/3dwebgl";
+    var user_id = "551b62dcf931496288573a46c9df4440";
+    var service_id = "Nlr7kTDM4dOXQnaXw9h";   // 平台参数配置BCCA参数的serviceId
+    var service_key = "3be8052d90f24b94afa383028a0254ba";   // 平台参数配置BCCA参数的serviceKey
+    var call_back_url = "http://222.182.202.100:7777/device/api/platformparam/callback_operation";   // 平台参数配置BCCA参数的serviceKey
+
+
+
+    //元件类型
+    var eleType = "";
+
+    app = new Vue({
+        el: "#app",
+        data: {
+            token: "",
+            value1: 1,
+            list: [],
+            total: 20,
+            pageSize: 8,
+            pageNumber: 1,
+        },
+        methods: {
+            getToken: function () {
+                var token = "";
+                var getTokenData = {service_id: service_id, user_id: user_id};
+                $.ajax({
+                    url: plan_3D_url + "/otheAPI/getUserToken",
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(getTokenData),
+                    async: false,
+                    success: function (res) {
+                        //console.info(res);
+                        if (res.status == 200) {
+                            app.token = res.data.userToken;
+                            token = res.data.userToken;
+                        }
+                        else if (res.status == 401) {    // 未注册的账户
+                            var _data = {
+                                service_id: service_id,
+                                dept_id: $.getCookie("userOrg"),
+                                user_id: $.getCookie("userId"),
+                                user_name: $.getCookie("userName")
+                            };
+                            $.ajax({
+                                url: plan_3D_url + "/otheAPI/registerUser",
+                                type: "post",
+                                contentType: "application/json",
+                                dataType: "json",
+                                data: JSON.stringify(_data),
+                                async: false,
+                                success: function (res1) {
+                                    if (res1.status == 200) {
+                                        app.token = res1.data.userToken;
+                                        token = res.data.userToken;
+                                    }
+                                },
+                            });
+                        }
+                    }
+                });
+                return token;
+            },
+            getList: function (pageNumber, eleType) {
+                if (pageNumber != 0) app.pageNumber = pageNumber;
+                var data = {
+                    user_token: app.token,
+                    pageNo: app.pageNumber,
+                    pageSize: app.pageSize,
+                    yjlx_id: eleType,
+                    only_bond: ""
+                };
+                $.ajax({
+                    url: plan_3D_url + "/otheAPI/getYJInfo",
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(data),
+                    success: function (res) {
+                        //console.info(res);
+                        if (res.status == 200) {
+                            app.list = res.data.list;
+                            app.total = res.data.totalRecords;
+                        } else if (res.status == 401) {
+                            app.getToken();
+                            app.getList(0, eleType);
+                        }
+                    }
+                });
+            },
+            change: function (pageNumber) {
+                app.getList(pageNumber, eleType);
+            },
+            // 绑定/解绑设备到元件上面（index = 1：绑定，2：解绑）
+            deviceList: function (id, index) {
+                var html = template("listModel", {title: "123"});
+                var myLayer = layer.open({
+                    skin: 'card', //自定义样式winning-class
+                    type: 1,
+                    title: ["设备列表", ""],
+                    area: ['1050px', '680px'], //宽高
+                    maxHeight: '500px',
+                    resize: true, //是否拉升
+                    offset: 'auto', //居中
+                    content: html,
+                    success: function (layero) {
+                        if (index == 1) {
+                            initTbale(id, 1);
+                            $("#bangding").on("click", function () {
+                                //console.info($('#deviceTable').bootstrapTable('getData'));
+                                var bond_list = [];
+                                var arr = $('#deviceTable').bootstrapTable('getData');
+                                for (var i in arr) {
+                                    if (arr[i][0]) {
+                                        //console.info(arr[i]);
+                                        var _data = {yj_id: id};
+                                        _data.serial_num = arr[i].serialNum;
+                                        _data.equip_name = arr[i].deviceAlias;
+                                        bond_list.push(_data);
+                                    }
+                                }
+
+                                if (bond_list.length == 0) {
+                                    layer.msg("请选择设备！", {icon: 2});
+                                    return;
+                                }
+                                var data = {
+                                    user_token: app.token,
+                                    service_id: service_id,
+                                    bond_list: bond_list
+                                }
+                                $.ajax({
+                                    url: plan_3D_url + "/otheAPI/bondDevToEle",
+                                    type: "post",
+                                    contentType: "application/json",
+                                    dataType: "json",
+                                    data: JSON.stringify(data),
+                                    success: function (res) {
+                                        //console.info(res);
+                                        if (res.status == 200) {
+                                            layer.msg("绑定成功", {icon: 1});
+                                        } else {
+                                            layer.msg(res.msg, {icon: 2});
+                                        }
+                                    }
+                                });
+                            });
+                        } else {
+                            initTbale(id, 2);
+                            $("#bangding").hide();
+                            $("#buttons").append('<button class="btn btn-danger" id="jiebang">解绑</button>');
+                            $("#jiebang").on("click", function () {
+                                var bond_list = {};
+                                var arr = $('#deviceTable').bootstrapTable('getData');
+                                for (var i in arr) {
+                                    if (arr[i][0]) {
+                                        //console.info(arr[i]);
+                                        bond_list[arr[i].serialNum] = id;
+                                    }
+                                }
+
+                                if (bond_list.length == 0) {
+                                    layer.msg("请选择设备！", {icon: 2});
+                                    return;
+                                }
+                                var data = {
+                                    user_token: app.token,
+                                    service_id: service_id,
+                                    bond_list: bond_list
+                                }
+                                $.ajax({
+                                    url: plan_3D_url + "/otheAPI/unbondDevFromEle",
+                                    type: "post",
+                                    contentType: "application/json",
+                                    dataType: "json",
+                                    data: JSON.stringify(data),
+                                    success: function (res) {
+                                        //console.info(res);
+                                        if (res.status == 200) {
+                                            layer.msg("解绑成功", {icon: 1});
+                                        } else {
+                                            layer.msg(res.msg, {icon: 2});
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+            },
+            showModel: function (obj) {
+                //console.info(obj);
+                // return;
+                var data = {url: obj.fjdz};
+                $.ajax({
+                    url: plan_3D_url + "/otheAPI/viewYJ",
+                    type: "post",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify({url: encodeURI(encodeURI(JSON.stringify(obj.fjdz)))}),
+                    async: false,
+                    success: function (res) {
+                        //console.info(res);
+                        if (res.status == 200) {
+                            var url = plan_3D_url + res.data.viewurl;
+                            var myLayer = layer.open({
+                                skin: 'card', //自定义样式winning-class
+                                type: 1,
+                                title: ["元件预览"],
+                                area: ['700px', '600px'], //宽高
+                                maxHeight: '500px',
+                                offset: 'auto', //居中
+                                content: '<iframe src="' + url + '" id="ifr" frameborder="0" scrolling="no"' +
+                                ' style="min-height: 400px;width: 100%;height: 99%;"></iframe>',
+                            });
+                        }
+                    }
+                });
+            }
+        },
+    });
+
+
+        $('#deviceTable').bootstrapTable({
+            url: '../../json/3DManager.json', //请求后台的URL（*）
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                //console.info(data);
+                if (data.code == 0) {
+                    var result = data.data;
+                    var tempList = [];
+                    if (index == 2) {
+                        for (var i in result.list) {
+                            if (arr.indexOf(result.list[i].serialNum) > -1) {
+                                tempList.push(result.list[i]);
+                            }
+                        }
+                        result.list = tempList;
+                    }
+                    var res = [];
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                }
+            },
+            onLoadSuccess: function () {
+                $.hide_overall_loding();
+                if (index == 2) {
+                    $(".fixed-table-pagination").hide();
+                }
+            },
+            columns: [
+                {
+                    checkbox: true
+                }, {
+                    width: 50,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        var pageSize = $('#deviceTable').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+                        var pageNumber = $('#deviceTable').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1;
+                    }
+                }, {
+                    field: 'deviceAlias',
+                    title: '设备名称',
+                }, {
+                    field: 'serialNum',
+                    title: '设备序列号',
+                }, {
+                    field: 'deviceSubscriberNumber',
+                    title: '所属订阅账号',
+                }, {
+                    field: 'deviceMac',
+                    title: '设备mac地址',
+                }
+            ]
+        });
+
+
+        var getToken = function () {
+        var token = "";
+        var getTokenData = {service_id: service_id, user_id: user_id};
+        $.ajax({
+            url: plan_3D_url + "/otheAPI/getUserToken",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(getTokenData),
+            async: false,
+            success: function (res) {
+                //console.info(res);
+                if (res.status == 200) {
+                    app.token = res.data.userToken;
+                    token = res.data.userToken;
+                }
+                else if (res.status == 401) {    // 未注册的账户
+                    var _data = {
+                        service_id: service_id,
+                        dept_id: $.getCookie("userOrg"),
+                        user_id: $.getCookie("userId"),
+                        user_name: $.getCookie("userName")
+                    };
+                    $.ajax({
+                        url: plan_3D_url + "/otheAPI/registerUser",
+                        type: "post",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: JSON.stringify(_data),
+                        async: false,
+                        success: function (res1) {
+                            if (res1.status == 200) {
+                                app.token = res1.data.userToken;
+                                token = res.data.userToken;
+                            }
+                        },
+                    });
+                }
+            }
+        });
+        return token;
+    };
+    //
+        function queryParams(params) {
+            return {
+                token: getToken(),
+                pageSize: index == 1 ? params.pageSize : 9999,
+                pageNum: params.pageNumber,
+                deviceName: $("#s_deviceAlias").val(),
+                serialNum: $("#s_serialNum").val(),
+                deviceSubscriberNumber: $("#s_subscriber").val(),
+            };
+        }
+    // }
+    //
+   
+
+    $(function () {
+        var token = getToken();
+        app.token = token;
+        app.getList(0, eleType);
+        // 加载所有元件类型
+        $.ajax({
+            url: plan_3D_url + "/otheAPI/getYJLXInfo",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({user_token: token}),
+            success: function (res) {
+                //console.info(res);
+                if (res.status == 200) {
+                    for (var i in res.data) {
+                        $("#eleType").append("<option value='" + res.data[i].yjlx_id + "'>" + res.data[i].yjlx_mc + "</option>");
+                    }
+                }
+            }
+        });
+    });
+
+    // // 选择元件类型
+    // function getEle() {
+    //     eleType = $("#eleType").val();
+    //     app.pageNumber = 1;
+    //     app.getList(0, eleType);
+    // }
+    //
+    // var orgId;
+    //
+    // var modeId;
+    //
+    // function show3D(type) {
+    //     orgId = "";
+    //     modeId = "";
+    //     var myLayer = layer.open({
+    //         skin: 'card', //自定义样式winning-class
+    //         type: 1,
+    //         title: ["选择组织机构"],
+    //         area: ['400px', '500px'], //宽高
+    //         maxHeight: '500px',
+    //         resize: false, //是否拉升
+    //         offset: 'auto', //居中
+    //         content: template("orgMode", {title: "123"}),
+    //         btn: ['确认', '取消'],
+    //         yes: function (index) {
+    //             // //console.info(index);
+    //             var token = getToken();
+    //             var url = "";
+    //             if (type == 1) {
+    //                 url = plan_3D_url + "/otheAPI/openEditScene" + "?user_token=" + token + "&ext_parmas=" + orgId;
+    //             } else {
+    //                 if (orgId == "") {
+    //                     layer.msg("请选择组织机构！", {icon: 5});
+    //                     return;
+    //                 }
+    //                 if (modeId == null || modeId == "") {
+    //                     layer.msg("该机构暂无3D场景！", {icon: 5});
+    //                     return;
+    //                 }
+    //                 // //console.info(type);
+    //                 if (type == 2) {
+    //                     url = plan_3D_url + "/otheAPI/openEditScene" + "?user_token=" + token + "&id=" + modeId;
+    //                 } else {
+    //                     url = plan_3D_url + "/Scene?" + modeId;
+    //                 }
+    //             }
+    //             // //console.info(url);
+    //             var eleLayer = layer.open({
+    //                 type: 1,
+    //                 skin: 'card', //自定义样式winning-class
+    //                 title: "3D场景",
+    //                 area: ['1000px', '650px'],
+    //                 maxmin: true,
+    //                 resize: true, //是否拉升
+    //                 offset: 'auto', //居中
+    //                 content: '<iframe id="myIframe" src="' + url + '" scrolling="no" frameborder="0" ' +
+    //                 'style="min-height: 400px;width: 100%;height: 99%;"></iframe>',
+    //             });
+    //             layer.full(eleLayer);
+    //             layer.close(myLayer);
+    //         },
+    //         success: function (layero) {
+    //             $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {isScreenOrganization: 1}, function (data) {
+    //                 // //console.info(data);
+    //                 if (data.code == 0) {
+    //                     var datas = handleData(data.data);
+    //                     var options = {
+    //                         checkedIcon: "glyphicon glyphicon-check",
+    //                         nodeIcon: "none", //所有节点的默认图标
+    //                         levels: 5,
+    //                         data: datas,
+    //                         onhoverColor: "rgba(0,0,0,0.1)",
+    //                         onNodeSelected: function (event, data) {
+    //                             orgId = data.id;
+    //                             modeId = data.modeId;
+    //                         }
+    //                     };
+    //                     $("#myTree").treeview(options);
+    //                 } else {
+    //                     layer.msg("获取组织机构失败！", {icon: 5});
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
+    //
+    // function handleData(data) {
+    //     var rdata = [];
+    //     if (data == null) {
+    //         return rdata;
+    //     }
+    //     for (var i = 0; i < data.length; i++) {
+    //         var node = data[i];
+    //         var one = {};
+    //         one.text = node.organizationName;
+    //         one.parentIds = node.parentId;
+    //         one.organizationName = node.organizationName;
+    //         one.organizationDescription = node.organizationDescription;
+    //         one.id = node.id;
+    //         one.modeId = node.modeId;
+    //         if (typeof (node.childrens) != undefined && node.childrens != null && node.childrens != '') {
+    //             one.nodes = handleData(node.childrens);
+    //         }
+    //         rdata.push(one);
+    //     }
+    //     return rdata;
+    // }
+    //
+    // //监听3D模型
+    // window.addEventListener('message', function (e) {
+    //     //console.info("=============================");
+    //     //console.info(e);
+    //     var data = e.data;
+    //     if (data.type == "sceneId") {
+    //         save3DMode(data.ext_parmas, data.scene_id);
+    //     } else if (data.type == "model_info") {
+    //         if (typeof (data.showControl) != "undefined") {
+    //             //获取元件（设备）的序列号
+    //             var serial_num = data.element_data.serial_num;
+    //             showDeviceControlPage(serial_num);
+    //         }
+    //     }
+    // });
+    //
+    // //保存3D模型到组织机构上面
+    // function save3DMode(orgId, modeId) {
+    //     $.sanjiGetJSON(userServiceUrl + "/organization/bind3D", {orgId: orgId, modeId: modeId}, function (res) {
+    //         //console.info(res);
+    //     });
+    // }
+    //
+    // //点击元件显示设备信息
+    // function showDeviceControlPage(serial_num) {
+    //     var deviceInfo;
+    //     var json = {};
+    //     var layer3D = layer.open({
+    //         type: 1,
+    //         skin: 'card', //自定义样式winning-class
+    //         title: "设备信息",
+    //         area: ['800px', '350px'],
+    //         offset: 'auto', //居中
+    //         zIndex: layer.zIndex,
+    //         content: template("deviceInfoMode", {title: ""}),
+    //         success: function () {
+    //             $.sanjiGetJSON(deviceServiceUrl + "/devicemanger/list", {
+    //                 isScreenOrganization: 1,
+    //                 serialNum: serial_num
+    //             }, function (res) {
+    //                 if (res.code == 0) {
+    //                     deviceInfo = res.data.list[0];
+    //                     //console.info(deviceInfo);
+    //                     $("#deviceForm").setForm(deviceInfo);
+    //                     if (deviceInfo.deviceState == 1) $('#deviceState').val("正常");
+    //                     if (deviceInfo.deviceState == 2) $('#deviceState').val("离线");
+    //                     if (deviceInfo.deviceState == 3) $('#deviceState').val("报警");
+    //                     if (deviceInfo.deviceState == 4) $('#deviceState').val("故障");
+    //                     if (deviceInfo.deviceState == 5) $('#deviceState').val("过流");
+    //                     if (deviceInfo.deviceState == 6) $('#deviceState').val("过压");
+    //                     json = {
+    //                         "account": deviceInfo.deviceSubscriberNumber,
+    //                         "productId": deviceSubscriberNumber.productCode,
+    //                         "serial_num": deviceSubscriberNumber.serialNum,
+    //                         "token": $.getToken(),
+    //                         "operation": "",
+    //                         "controlParams": ""
+    //                     }
+    //                 } else {
+    //                     layer.msg("获取设备信息失败！", {icon: 5});
+    //                 }
+    //             });
+    //             $('#openControlBtn').click(function () {
+    //                 var url = deviceServiceUrl + "/typeTemplate/getTemplate?mac=" + serial_num + "&templateType=3";
+    //                 $.ajax({
+    //                     url: url,
+    //                     type: "get",
+    //                     contentType: "application/json",
+    //                     dataType: "json",
+    //                     timeout: 10000,
+    //                     success: function (res) {
+    //                         //console.info(res);
+    //                         if (res.code == 0 && res.data.templateCode != null) {
+    //                             var array = [];
+    //                             $.ajax({
+    //                                 url: addToUrlToken(deviceServiceUrl + "/templateconfig/list"),
+    //                                 type: "get",
+    //                                 contentType: "application/json",
+    //                                 dataType: "json",
+    //                                 timeout: 10000,
+    //                                 async: false,
+    //                                 data: {templateId: res.data.id},
+    //                                 success: function (data) {
+    //                                     if (data.code == 0) {
+    //                                         for (var i = 0; i < data.data.list.length; i++) {
+    //                                             array.push(data.data.list[i].tcValue);
+    //                                         }
+    //                                     } else {
+    //                                         layer.msg("获取数据失败！", {icon: 5});
+    //                                     }
+    //                                 }
+    //                             });
+    //                             layer.open({
+    //                                 type: 1,
+    //                                 skin: 'card', //自定义样式winning-class
+    //                                 title: "控制",
+    //                                 area: ['800px', '600px'],
+    //                                 offset: 'auto', //居中
+    //                                 zIndex: layer.zIndex,
+    //                                 content: '<iframe src="" id="modeIfr" name="modeIfr" frameborder="0" scrolling="no"' +
+    //                                 ' style="min-height: 400px;width: 100%;height: 99%;"></iframe>',
+    //                                 success: function () {
+    //                                     document.getElementById("modeIfr").srcdoc = res.data.templateCode;
+    //                                     $("#modeIfr").load(function () {
+    //                                         $("#modeIfr")[0].contentWindow.getField("false", array, json);
+    //                                         /*$("#modeIfr").contents().find(".sendControlBtn").unbind();
+    //                                         $("#modeIfr").contents().find(".sendControlBtn").on("click", function () {
+    //                                             var datas = $("#modeIfr")[0].contentWindow.getCmdParams($(this));
+    //                                             // //console.info(datas);
+    //                                             if (!datas) {
+    //                                                 layer.msg("操作失败", {icon: 2});
+    //                                                 return false;
+    //                                             }
+    //                                             if (datas.controlParams) {
+    //                                                 datas.controlParams = JSON.stringify(datas.controlParams);
+    //                                             }
+    //                                             if (!datas.operation) {
+    //                                                 layer.msg("操作失败", {icon: 2});
+    //                                                 return false;
+    //                                             }
+    //                                             // //console.info(datas);
+    //                                             var _data = {
+    //                                                 account: deviceInfo.deviceSubscriberNumber,
+    //                                                 serial_num: deviceInfo.serialNum,
+    //                                                 serial_mac: deviceInfo.serialNum,
+    //                                                 operation: datas.operation,
+    //                                                 controlParams: datas.controlParams,
+    //                                                 productId: deviceInfo.productCode
+    //                                             };
+    //                                             $.postJSON(deviceServiceUrl + "/device/controlDervice", _data, function (res) {
+    //                                                 // //console.info(res);
+    //                                                 if (res.code == 0) {
+    //                                                     layer.msg("控制成功！", {icon: 1});
+    //                                                 } else {
+    //                                                     layer.msg("控制失败", {icon: 2});
+    //                                                 }
+    //                                             });
+    //
+    //                                             // modeControlData[data.serial_num] = datas;
+    //                                             /!*$.extend(datas, {
+    //                                                 account: one.deviceSubscriberNumber,
+    //                                                 serial_num: one.deviceMac,
+    //                                                 productId: one.productCode
+    //                                             })*!/
+    //                                         });*/
+    //                                     });
+    //                                 }
+    //                             });
+    //                         } else {
+    //                             layer.msg("获取模板失败！", {icon: 5});
+    //                         }
+    //                     }
+    //                 });
+    //             });
+    //         }
+    //     });
+    // }
+</script>
+
+<!-- 设备列表模板 -->
+<script type="text/html" id="listModel">
+    <section class="openDetail" style="width: 95%;">
+        <div class="panel-body">
+            <div>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-label">设备名称：</label>
+                        <input class="form-control" id="s_deviceAlias" placeholder="设备名称" type="text">
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-label">设备序列号：</label>
+                        <input class="form-control" id="s_serialNum" placeholder="设备序列号" type="text">
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-label">订阅账号：</label>
+                        <input class="form-control" id="s_subscriber" placeholder="订阅账号" type="text">
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <div style="margin-top: 22px;letter-spacing: 15px" id="buttons">
+                            <button class="btn btn-info" onclick="search()">查询</button>
+                            <button class="btn btn-info" onclick="reset()">重置</button>
+                            <button class="btn btn-danger" id="bangding">绑定</button>
+                        </div>
+                    </div>
+                </div>
+                <table id="deviceTable"></table>
+            </div>
+        </div>
+    </section>
+</script>
+
+<!-- 组织机构模板 -->
+<script type="text/html" id="orgMode">
+    <section class="openDetail" style="width: 95%;">
+        <div class="panel-body">
+            <div id="myTree"></div>
+        </div>
+    </section>
+</script>
+
+<!--设备信息模板-->
+<script type="text/html" id="deviceInfoMode">
+    <section>
+        <div class="panel-body">
+            <form id="deviceForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <input type="hidden" name="id" id="id"/>
+                    <div class="col-lg-6">
+                        <label class="layui-form-label">设备名称：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="deviceAlias" name="deviceAlias" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="layui-form-label">设备类型：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="typeName" name="typeName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="layui-form-label">设备状态：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="deviceState" name="deviceState" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="layui-form-label">组织机构：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="organizationName" name="organizationName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="layui-form-label">设备序列号：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="serialNum" name="serialNum" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="layui-form-label">所属订阅号：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="deviceSubscriberNumber" name="deviceSubscriberNumber"
+                                   type="text">
+                        </div>
+                    </div>
+                    <div style="width: 200px;margin: 0 auto;text-align: center;">
+                        <button type="button" id="openControlBtn" class="btn btn-info"
+                                style="width: 80px;height: 80px;border-radius: 80px">打开控制
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+</html>

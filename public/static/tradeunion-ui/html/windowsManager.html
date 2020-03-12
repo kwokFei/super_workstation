@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content" style="display: none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>windows管理</h4>
+                            </div>
+                            <div class="card-body">
+								 <div class="ibox-content row">
+                                        <div class="col-lg-3">
+											<div class="form-group">
+												<label class="form-label">设备名称：</label>
+												<input class="form-control" name="s_deviceAlias" id="s_deviceAlias" placeholder="设备名称" type="text">
+											</div>
+										</div>
+                                         <div class="col-lg-3">
+                                             <div class="form-group">
+                                                 <div style="margin-top: 24px;">
+                                                     <button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+                                                     <button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                 </div>
+
+                                    
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                        <!--<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i>
+                                            设备维保录入
+                                        </button>-->
+                                        <button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 批量关机
+                                        </button>
+                                        <!--<button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 删除
+                                        </button>-->
+                                        
+                                    </div>
+
+                                    <div id="myTable">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<!--加载底部-->
+		<div id="footer" class="Pos_footer">
+			<script type="text/javascript">
+				$(function(){
+					$("#footer").load("footer.html");
+				});
+			</script>
+		</div>
+        <div id="loadDiv"></div>
+</body>
+
+<script>
+    var html;
+    var rdata = {};
+    $("#loadDiv").html(loadHtml);
+    $(function () {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: deviceServiceUrl + "/windowscontrol/list", //请求后台的URL（*）
+            method: 'get',                         //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '',                            //工具按钮用哪个容器
+            striped: true,                          //是否显示行间隔色
+            cache: false,                           //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                       //是否显示分页（*）
+            sortable: false,                        //是否启用排序
+            sidePagination: "server",               //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                          //初始化加载第一页，默认第一页
+            pageSize: 10,                           //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],            //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams,               //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                         //每一行的唯一标识，一般为主键列
+            cardView: false,                        //是否显示详细视图
+            detailView: false,                      //是否显示父子表
+            clickToSelect: true,                    //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [
+                {
+                    checkbox: true
+                }, {
+                    width: 100,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                }, {
+                    field: 'deviceAlias',
+                    title: '设备名称',
+                    width: 400
+                },  {
+                    field: 'deviceMac',
+                    title: '设备Mac',
+                    width: 400
+                }, {
+					field: 'organizationName',
+					title: '所属机构',
+					width: 400
+				},{
+					title: "操作",
+					width: 250,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+//							'<button data-toggle="tooltip" title="绑定" type="button" onclick="tabEidt(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-pencil-square"></i></button>'
+//							+'<button data-toggle="tooltip" title="开机" type="button" onclick="op(' + i3 + ');" class="btn btn-success  tableButton"><i class="fa fa-puzzle-piece"> </i></button>'
+//							+
+							'<button data-toggle="tooltip" title="关机" type="button" onclick="closed(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-puzzle-piece"></i></button>'
+//							+'<button data-toggle="tooltip" title="解绑" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}
+            ]
+        });
+
+        function queryParams(params) {
+        	$.show_overall_loding();
+            return {
+            	token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                productCode:"00046301",
+                deviceAlias: $("#s_deviceAlias").val()
+            };
+        }
+		$("#edit").on("click", function() {
+			var data = $("#myTable").bootstrapTable('getSelections');
+			var conlayer = layer.confirm("确定批量控制？", {
+				btn: ['确定', '取消']
+			}, function() {
+				if(data.length != 0){
+					var agrs;
+					for (var i = 0; i < data.length; i++) {
+						agrs = {
+				            "account":data[i].deviceSubscriberNumber,
+				            "productId":data[i].productCode,
+				            "serial_num":data[i].serialNum,
+				            "operation":"PC OFF",
+				            "controlParams":"{p1:00}",
+				        };
+						$.ajax({
+				            url: addToUrlToken(deviceServiceUrl + "/device/controlDervice_s"),
+				            type: "POST",
+				            dataType : "json",
+				            contentType : "application/json",
+				            data: JSON.stringify(agrs),
+				            success: function(msg){
+				            	if(msg.r1 == "00"){
+				            		layer.msg("成功", {icon: 1});
+				            	}
+				            },
+				            error: function (msg) {
+				                /*错误信息处理*/
+				                console.log(msg);
+				            }
+				        });
+						
+					}
+					
+					
+	//				showModel("批量修改分辨率", 3);
+				}else{
+					layer.msg("请选择数据", {icon: 2});
+					return;
+				}
+			}, function() {
+				layer.close(conlayer);
+			});
+			
+			
+		});
+		
+        var serchaData = {};
+        $("#search").click(function() {
+            $.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function() {
+            $("#s_deviceAlias").val("");
+            $("#search").trigger("click");
+        });
+
+        
+
+    });
+    
+	function tabEidt(obj) {
+		url = "";
+		showModel("绑定曼顿空开", 3, obj);
+	}
+
+	function closed(obj) {
+		var pcData = $("#myTable").bootstrapTable('getData')[obj];
+//		var agrs = {
+//          "account":pcData.deviceSubscriberNumber,
+//			"account":'1565000000001210',
+//          "productId":pcData.productCode,
+//          "serial_num":pcData.serialNum,
+//          "operation":"PC OFF",
+//          "controlParams":"{p1:00}",
+//      };
+        
+        var pdata = {
+			"typeId":pcData.productCode,
+			"templateType":1
+		}
+        
+        var templateCode;
+    	var templateId;
+		$.ajax({//查询控制模板
+			url: addToUrlToken(deviceServiceUrl + "/typeTemplate/getDefaultTemp"),
+			type: "get",
+			contentType: "application/json",
+			dataType: "json",
+			timeout: 10000,
+			async: false,
+			data: pdata,
+			success: function(data) {
+				if(data.code == 0) {
+					templateCode = data.data.templateCode
+					templateId = data.data.id
+
+					console.info(pcData);
+					var json = {
+                        "account": pcData.deviceSubscriberNumber,
+                        "productId": pcData.productCode,
+                        "serial_num": pcData.serialNum,
+                        "token": $.getToken(),
+                        "url": deviceServiceUrl + "/device/controlDervice_s",
+                        "operation": "",
+                        "controlParams": ""
+                    }
+					var array = [];
+					$.ajax({//查询模板配置
+						url: addToUrlToken(deviceServiceUrl + "/templateconfig/list"),
+						type: "get",
+						contentType: "application/json",
+						dataType: "json",
+						timeout: 10000,
+						async: false,
+						data: {templateId: templateId},
+						success: function(data) {
+						    // console.info(data);
+							if(data.code == 0) {
+								for (var i = 0; i < data.data.list.length; i++) {
+									array.push(data.data.list[i].tcValue)
+								}
+							}
+							
+						},
+						error: function() {
+							$.hide_overall_loding();
+						}
+					});
+					
+					var area1;
+					if(data.data.typeId == "00046301"){
+						area1 = ['600px', '600px']
+					}else{
+						area1 = ['1150px', '620px']
+					}
+					
+					var lay = layer.open({
+				            title:"控制",
+				            type: 1,
+				            area: area1,
+				            fixed: true, //不固定
+				            maxmin: true,
+				            content: '<iframe id="Example1" style="width: 100%;height: 100%;" title="Example2"  frameborder="0" src=""></iframe>',
+				            success:function(){
+				            	document.getElementById("Example1").srcdoc = templateCode
+				            	$("#Example1").load(function () {
+				            		$("#Example1")[0].contentWindow.getField("false",array,json);
+			                	});
+				            	
+				            }
+				        });
+				}else{
+					layer.msg("没有对应的控制模版，需要去分类管理去设置模版！", {
+						icon: 2
+					});
+					$.hide_overall_loding();
+					return;
+				}
+			},
+			error: function() {
+				$.hide_overall_loding();
+			}
+		});
+        
+//		var conlayer = layer.confirm("确定关机？", {
+//			btn: ['确定', '取消']
+//		}, function() {
+//			$.ajax({
+//	            url: addToUrlToken(deviceServiceUrl + "/device/controlDervice_s"),
+//	            type: "POST",
+//	            dataType : "json",
+//	            contentType : "application/json",
+//	            data: JSON.stringify(agrs),
+//	            success: function(msg){
+//	            	if(msg.r1 == "00"){
+//	            		layer.msg("成功", {icon: 1});
+//	            	}
+//	            },
+//	            error: function (msg) {
+//	                /*错误信息处理*/
+//	                console.log(msg);
+//	            }
+//	        });
+//		}, function() {
+//			layer.close(conlayer);
+//		});
+	}
+	
+	function tabRemove(obj) {
+		var data = $("#myTable").bootstrapTable('getData')[obj];
+		var conlayer = layer.confirm("确定解绑？", {
+			btn: ['确定', '取消']
+		}, function() {
+			$.show_overall_loding();
+			$.deleteJSON(addToUrlToken(deviceServiceUrl + "/windowscontrol")+"&id=" + data.id, {}, function(data) {
+				$.hide_overall_loding();
+				if(data.code == 0) {
+					layer.close(conlayer);
+					layer.msg("成功", {
+						icon: 1
+					});
+					$.show_overall_loding();
+					$('#myTable').bootstrapTable('refresh');
+					return true;
+				}
+				layer.msg("操作失败", {
+					icon: 2
+				});
+			})
+		}, function() {
+			layer.close(conlayer);
+		});
+	}
+	
+    function showModel(title, flag, index) {
+    	var WindowsData;
+		html = template("devicemodeList", {
+			title: "123"
+		});
+		var modeLayer = layer.open({
+			skin: 'card', //自定义样式winning-class
+			type: 1,
+			title: [title, ""],
+			area: ['680px', '450px'], //宽高
+			resize: true, //是否拉升
+			offset: 'auto', //居中
+			content: html,
+			btn: ['设置', '取消'],
+			yes: function(index, layero) {
+				var list = $("#devicemodeTable").bootstrapTable('getSelections');
+				if(list.length < 1) {
+					layer.msg("请先选择要绑定的设备", {
+						icon: 2
+					});
+					return;
+				}
+				var data = {
+					"deviceId": WindowsData.deviceId,
+					"openId": list[0].openId
+				}
+				
+				$.postJSON(deviceServiceUrl + "/windowscontrol", data, function (data) {
+                    $.hide_overall_loding();
+                    if (data.code == 0) {
+                        layer.msg("成功", {
+                            icon: 1
+                        });
+                        $.show_overall_loding();
+                        $('#myTable').bootstrapTable('refresh');
+                        return true;
+                    }
+                    layer.msg("操作失败", {
+                        icon: 2
+                    });
+                });
+				
+				layer.close(modeLayer);
+				
+				
+				
+			},
+			success: function(layero) {
+				WindowsData = $("#myTable").bootstrapTable('getData')[index];
+				
+				dModeId = WindowsData.openId;
+				var showModes = new showDeviceMode();
+				showModes.init();
+				showModes.bindCreate();
+			}
+		});
+	}
+
+	var dModeId = "";
+	var showDeviceMode = function() {
+		return {
+			node: $("#devicemodeTable"), //渲染节点
+			init: function() {
+				$.show_overall_loding();
+				var that = this;
+				this.node.bootstrapTable({
+					url: deviceServiceUrl + "/windowscontrol/mlist", //请求后台的URL（*）
+					method: 'get', //请求方式（*）
+					contentType: "application/x-www-form-urlencoded",
+					toolbar: '', //工具按钮用哪个容器
+					striped: true, //是否显示行间隔色
+					cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+					pagination: true, //是否显示分页（*）
+					singleSelect: true,
+					sortable: false, //是否启用排序
+					sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+					pageNumber: 1, //初始化加载第一页，默认第一页
+					pageSize: 3, //每页的记录行数（*）
+					pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+					queryParamsType: '',
+					queryParams: that.queryParams, //传递参数（*）
+					strictSearch: true,
+					uniqueId: "id", //每一行的唯一标识，一般为主键列
+					cardView: false, //是否显示详细视图
+					detailView: false, //是否显示父子表
+					clickToSelect: true, //点击行是否选中
+					responseHandler: function(data) {
+						var res = [];
+						if(data.code == 0) {
+							var result = data.data;
+							res.push({
+								total: result.total,
+								rows: result.list
+							});
+							return res[0];
+						} else {
+							res.push({
+								total: 0,
+								rows: null
+							});
+							return res[0];
+						}
+					},
+					//单击行选中的操作
+					onClickRow: function(row) {
+						dModeId = row.openId;
+					},
+					//双击行选中的操作
+					onDblClickRow: function(row) {
+						dModeId = row.openId;
+					},
+					onLoadSuccess: function() {
+						$.hide_overall_loding();
+					},
+					columns: [{
+						checkbox: true,
+						formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+							if(row.openId == dModeId) { // 因为 判断数组里有没有这个 id
+								// 存在则选中
+								return {
+									checked: true
+								};
+							}
+						}
+					}, {
+						width: 50,
+						title: '序号',
+						formatter: function(value, row, index) {
+							return index + 1;
+						}
+					}, {
+						field: 'openName',
+						title: '设备名称',
+						width: 300
+					},  {
+						field: 'organizationName',
+						title: '组织机构名称',
+						width: 300
+					}]
+				});
+
+			},
+			queryParams: function(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					productCode:"00000a01",
+					openName: $("#s_openName").val()
+				}
+			},
+			refresh: function() {
+				$.show_overall_loding();
+				this.node.bootstrapTable('refresh')
+			},
+			bindCreate: function() {
+				var that = this;
+				$("#search_deviceTable").on("click", function() {
+					that.refresh();
+				});
+			}
+		}
+	}
+	
+</script>
+
+<script type="text/html" id="devicemodeList">
+	<section class="openDetail" style="width: 100%; ">
+		<div class="panel-body">
+			<div class="ibox-content row">
+				<div class="col-lg-6">
+					<div class="form-group">
+						<label class="form-label">设备名称：</label>
+						<input class="form-control" name="s_openName" id="s_openName" placeholder="设备名称" type="text">
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="form-group">
+						<div id="buttons" style="margin-top: 24px;">
+							<button type="button" class="btn btn-success" id="search_deviceTable"><i class="fa fa-search"></i> 查询</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="devicemodeTable"></div>
+		</div>
+	</section>
+</script>
+
+
+
+
+</html>

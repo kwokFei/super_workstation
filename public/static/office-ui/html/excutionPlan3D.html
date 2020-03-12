@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>海克斯后台管理系统</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/layui.css"/>
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <!--时间选择插件-->
+    <link href="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datetimepicker/moment.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="../plus/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+    <!--日期选择插件-->
+    <link href="../plus/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet">
+    <script src="../plus/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="../plus/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+
+    <!--		<script src="../js/httpUtils.js"></script>-->
+    <!--<script src="../js/Md5.js"></script>-->
+    <script src="../plus/iview/vue.min.js"></script>
+</head>
+<body style="overflow:hidden">
+
+<iframe src="" id="ifr" width="100%" frameborder="0" scrolling="no"></iframe>
+
+<script>
+    var token = getToken();
+    var url = plan_3D_url + "/otheAPI/openDesign1";
+    url += "?user_token=" + token;
+    $("#ifr").attr("src", url);
+    $("#ifr").height();
+
+    function changeFrameHeight() {
+        var ifm = document.getElementById("ifr");
+        ifm.height = document.documentElement.clientHeight;
+    }
+
+    window.onresize = function () {
+        changeFrameHeight();
+    }
+
+    $(function () {
+        changeFrameHeight();
+    });
+
+    function getToken() {
+        var token = "";
+        var getTokenData = {service_id: service_id, user_id: $.getCookie("userId")};
+        $.ajax({
+            url: plan_3D_url + "/otheAPI/getUserToken",
+            type: "post",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(getTokenData),
+            async: false,
+            success: function (res) {
+                console.info(res);
+                if (res.status == 200) {
+                    token = res.data.userToken;
+                } else if (res.status == 401) {    // 未注册的账户
+                    var _data = {
+                        service_id: service_id,
+                        dept_id: $.getCookie("userOrg"),
+                        user_id: $.getCookie("userId"),
+                        user_name: $.getCookie("userName")
+                    };
+                    $.ajax({
+                        url: plan_3D_url + "/otheAPI/registerUser",
+                        type: "post",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: JSON.stringify(_data),
+                        async: false,
+                        success: function (res1) {
+                            if (res1.status == 200) {
+                                token = res.data.userToken;
+                            }
+                        },
+                    });
+                }
+            }
+        });
+        return token;
+    }
+</script>
+</body>
+</html>

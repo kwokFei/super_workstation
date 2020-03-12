@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="../images/title_icon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>首页</title>
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/header2.css">
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/index_all.css">
+		<script src="./js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src='http://api.map.baidu.com/api?v=2.0&ak=1pSTowk3vMReXCQA08ypPGfGoOaZI0qk'></script>
+		<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+		<script src="../js/httpUtils.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="js/base.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script src="./js/index_all.js"></script>
+		<script src="../js/template-web.js"></script>
+		<style>
+			.layui-layer-dialog .layui-layer-content {
+				font-size: 0.16rem !important;
+				color: rgba(255, 255, 255, 0.8) !important;
+				background-color: #0c1e46 !important;
+			}
+			
+			.layui-layer-title {
+				font-size: 0.16rem !important;
+				color: rgba(255, 255, 255, 0.8) !important;
+				background-color: #08112D !important;
+				border-bottom: none !important;
+			}
+			
+			.layui-layer-btn {
+				height: 0.8rem;
+				background-color: #0c1e46 !important;
+			}
+			
+			.layui-layer-btn a {
+				font-size: 0.16rem !important;
+			}
+			
+			.layui-layer-page .layui-layer-content {
+				height: auto !important;
+				color: rgba(255, 255, 255, 0.8) !important;
+				background-color: #0c1e46 !important;
+				font-size: 0.16rem;
+			}
+			
+			body {
+				position: relative;
+			}
+			
+			.template {
+				display: none;
+				width: 600px;
+				height: 400px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				background-color: rgba(8, 17, 45);
+				border-radius: 0.1rem;
+			}
+			
+			.header {
+				height: .5rem;
+				line-height: .5rem;
+				text-align: center;
+				position: relative;
+				border-bottom: 1px solid rgba(62, 62, 79, 0.5);
+			}
+			
+			.header span {
+				color: white;
+				font-size: 0.3rem;
+			}
+			
+			.header img {
+				position: absolute;
+				top: 0.15rem;
+				right: 0.2rem;
+				width: 0.2rem;
+				height: 0.2rem;
+			}
+			
+			.template textarea {
+				border: none;
+				outline: none;
+				width: 92%;
+				margin-left: 4%;
+				margin-top: 2%;
+				height: 90%;
+				color: black;
+				font-size: 0.26rem;
+			}
+			
+			#p_title {
+				padding: 0 10px;
+				padding-bottom: 3%;
+			}
+			
+			#p_title li {
+				display: flex;
+				margin-top: 3%;
+			}
+			
+			#p_title span {
+				text-align: center;
+				width: 25%;
+			}
+			
+			#planList>li {
+				display: flex;
+				align-items: center;
+			}
+			
+			#planList>li span {
+				width: 25%;
+				height: 20px;
+				text-align: center;
+			}
+			
+			#planList .list-item-title {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			/*web推送消息样式*/
+			.info_alert {
+				display: none;
+				width: 19.6rem;
+				height: 2.3rem;
+				position: fixed;
+				top: 50%;
+				margin-top: -1.25rem;
+			}
+
+			.info_messages {
+				width: 19.6rem;
+				height: 1.8rem;
+				background: url(../images/info_bg.png);
+				text-align: center;
+				font-size: 0.5rem;
+				line-height: 1.8rem;
+			}
+
+			.info_op {
+				position: fixed;
+				height: 0.5rem;
+				min-width: 2.2rem;
+				left: 50%;
+				margin-left: -1.2rem;
+				margin-top: 0.1rem;
+			}
+
+			.info_op .info_button {
+				text-align: center;
+				cursor: pointer;
+				font-size: 0.12rem;
+				float: left;
+				border-radius: 0.15rem;
+				height: 0.4rem;
+				line-height: 0.4rem;
+				padding: 0 0.15rem;
+				background-color: #C30D23;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div>
+
+			<!--头部-->
+			<div id="header">
+				<script type="text/javascript">
+					$("#header").load("header2.html");
+					if($.getCookie("orgLv") == "0") {
+
+					} else {
+						window.location.href = "./../html/Login/login.html";
+					}
+				</script>
+				<div></div>
+			</div>
+			<!--        内容-->
+			<div id="contentBox">
+				<div class="leftContent">
+					<!--                接入产品-->
+					<div class="box">
+						<!--                    标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>接入产品</span>
+						</div>
+						<!--                    内容-->
+						<div class="littleBox">
+							<div>
+								<div class="iconLine">
+									<img src="./img/index_left/u.png" alt="">
+									<div>
+										<span>接入产品（个）</span>
+										<span class="iconValue numberTetxt" style="color: #ff9900;" id="sendsp2"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--                接入品牌-->
+					<div class="box">
+						<!--                    标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>接入品牌</span>
+						</div>
+						<!--                    内容-->
+						<div class="brandBox">
+							<div>
+								<ul id="dataUl"></ul>
+							</div>
+						</div>
+					</div>
+					<!--                项目统计-->
+					<div class="box" style="margin-bottom: 0;">
+						<!--                    标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>项目统计</span>
+						</div>
+						<!--                    内容-->
+						<div class="littleBox">
+							<!--                        统计总数-->
+							<div class="census">
+								<div>
+									<span>总项目</span>
+									<span class="numberTetxt" style="font-size: 0.3rem;color: #00ffff;">2000</span>
+								</div>
+
+								<div>
+									<span>建造中</span>
+									<span class="numberTetxt" style="font-size: 0.3rem;color:#ff9900;;">88</span>
+								</div>
+							</div>
+							<!--                        echarts-->
+							<div class="echartsBox">
+								<div id="project"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="centerContent">
+					<div class="mark-box">
+						<div class="active" show="all">全部</div>
+						<div class="active" show="project">
+							<span class="icon-project"></span>
+							<span>项目</span>
+						</div>
+						<div class="active" show="room">
+							<span class="icon-center"></span>
+							<span>测试中心</span>
+						</div>
+					</div>
+					<!--                地图-->
+					<div class="map">
+						<div id="ec_map" style="width: 9.72rem;height: 7rem;"></div>
+					</div>
+					<!--                项目管理 测试中心管理 企业管理-->
+					<ul class="nav-box">
+						<li onclick="window.location.href='projectManagement.html'">项目管理</li>
+						<li onclick="window.location.href='exhibitionIndex.html'">测试中心</li>
+						<li onclick="window.location.href='enterpriseIndex.html'">公司管理</li>
+					</ul>
+				</div>
+				<div class="rightContent">
+					<div class="box">
+						<!--                    标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>政策支持</span>
+						</div>
+						<!--                    内容-->
+						<div class="littleBox littleBox001 ">
+							<div class="side">
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<div>
+									<span>国务院、多部委、各省市出台政策文件</span>
+								</div>
+								<div id="policySupport"></div>
+							</div>
+						</div>
+					</div>
+					<!--体系建设-->
+					<div class="box">
+						<!--                    标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>体系建设</span>
+						</div>
+						<!--                    内容-->
+						<div class="littleBox">
+							<div class="side">
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<span></span>
+								<div>
+									<span>国家、省市、企业三级检测体系</span>
+								</div>
+								<div>
+									<div class="contentText">
+										<span>互联网资产</span>
+										<br>
+										<span>
+                                        <span class="numberTetxt">17222</span>
+										<span>个</span>
+										</span>
+									</div>
+									<div class="contentText">
+										<span>企业数量</span>
+										<br>
+										<span>
+                                        <span class="numberTetxt">35</span>
+										<span>个</span>
+										</span>
+									</div>
+									<div class="contentText">
+										<span>平台数量</span>
+										<br>
+										<span>
+                                        <span class="numberTetxt">5</span>
+										<span>个</span>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--                测试中心统计-->
+
+					<div class="box" style="margin-bottom: 0;">
+						<!--标题-->
+						<div class="title">
+							<img src="./img/public/dot.png" alt="">
+							<span>测试中心统计</span>
+						</div>
+						<!--  内容-->
+						<div class="littleBox">
+							<div>全球测试中心总计数量</div>
+							<div>
+								<!-- 数量-->
+								<div class="roomNumber"></div>
+								<!-- 城市列表-->
+								<div class="cityList">
+									<ul id="distributionUl">
+										<li v-for="(v,k) in list" class="cityListLi" :data="v.name">
+											<span>
+												<span></span>
+												<span></span>
+												<span></span>
+												<span></span>
+												<span></span>
+												<span></span>
+												<span></span>
+												<span></span>
+												<img src='./img/index_left/beijing.png' alt=''>
+											</span>
+											<span>
+												<span>
+													<span v-text="v.name"></span>
+													<span v-text="v.num+'个测试中心'"></span>
+												</span>
+												<span>
+													<span>
+														<span :style="'width:80%'"></span>
+													</span>
+													<span v-text="v.countDeviceNum+'台设备'"></span>
+												</span>
+											</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--弹框-->
+		<script type="text/html" id="newEventWindow">
+			<div class="layui-row layui-col-space10 layui-form-item" style="height: 95%;">
+				<div class="col-lg-12 MarginPx" style="margin-top: 2%;">
+					<label class="layui-form-label">标题：</label>
+					<span>{{title}}</span>
+				</div>
+				<div class="col-lg-12 MarginPx" style="margin-top: 2%;">
+					<label class="layui-form-label">副标题：</label>
+					<span>{{subtitle}}</span>
+				</div>
+				<div class="col-lg-12 MarginPx" style="margin-top: 2%;">
+					<label class="layui-form-label">名称：</label>
+					<span>{{name}}</span>
+				</div>
+				<div class="col-lg-12 MarginPx" style="margin-top: 2%;">
+					<label class="layui-form-label" for="n_type">类型：</label> {{if type==1}}
+					<span class="font-red">国务院</span> {{else if type==2}}
+					<span class="font-green">多部委</span> {{else if type==3}}
+					<span class="font-yellow">各省公开</span> {{/if}}
+				</div>
+				<div class="col-lg-12 MarginPx" style="margin-top: 2%;">
+					<a href="{{filePath}}" download="政策文件">下载文件</a>
+				</div>
+				<div class="col-lg-12 MarginPx" style="margin-top: 2%;">
+					<label class="layui-form-label">内容：</label>
+					<div id="i_content" style="border: 1px solid #3e3e4f;margin-bottom:30px;overflow-y: auto;height: 3rem;padding: 0 10px;"></div>
+				</div>
+			</div>
+		</script>
+		<div class="template">
+			<div class="header">
+				<span>政策支持</span>
+				<img class="outBtn" src="img/remove.png" alt="" style="cursor: pointer;">
+			</div>
+			<div class="info-box" style="border-bottom:1px solid #3e3e4f;padding-bottom: 2%;">
+				<ul class="device-list" id="p_title">
+					<li>
+						<span>标题</span>
+						<span>类型</span>
+						<span>时间</span>
+						<span>操作</span>
+					</li>
+				</ul>
+			</div>
+			<div class="info-box" id="policySupportInfo" style="overflow-y: auto;padding:0 10px; height: 70%;">
+				<ul class="device-list" id="planList">
+				</ul>
+			</div>
+		</div>
+		<div class="info_alert">
+			<button></button>
+			<div class="info_messages">
+				设备出现故障需要维修！请立即处理
+			</div>
+			<div class="info_op">
+				<div id="info_button1" class="info_button">立即处理</div>
+				<div id="info_button" class="info_button" style="background-color: #9FA0A0;float: right;">关闭</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		function getUrlParam(paramname) {
+			var reg = new RegExp("(^|&)" + paramname + "=([^&]*)(&|$)");
+			// 查询匹配 substr(1)删除? match()匹配
+			var s = window.location.search.substr(1).match(reg);
+			if(s != null) {
+				return unescape(s[2]); // unescape() 函数可对通过 escape() 编码的字符串进行解码。
+			}
+			return null;
+		}
+		//设备状态
+		let z_orgId = getUrlParam("z_orgId")
+
+		const url = deviceServiceUrl + "/devicemanger/getDeviceAllCount?token=" + $.getToken() + '&organizationId=' + z_orgId;
+		$.ajax({
+			type: "GET", //提交方式
+			url: encodeURI(url), //路径
+			datatype: 'json',
+			contentType: "application/json",
+			success: function(data) { //返回数据根据结果进行相应的处理
+				console.log('列表---tttttttttt', data)
+				if(data.code === 0) {
+					document.getElementById("sendsp2").innerText = data.data[0].count / 1000 + "K";
+				} else {
+					console.log('请求错误')
+				}
+			},
+			error: function() {
+				console.log('请求错误')
+			}
+		});
+	</script>
+	<script>
+		$(function() {
+			$(".outBtn").on("click", function() {
+				$(".template").hide();
+			});
+		});
+	</script>
+
+	<script>
+        var organizationId = $.getCookie("organizationId");
+        var rmadId = "";
+        var socket;
+        var msgData = [];
+        /*存放消息数据*/
+        if (typeof(WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        } else {
+            console.log("您的浏览器支持WebSocket");
+            //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+            console.log("**********Socket开始连接**********");
+            socket = new WebSocket(webSocketUrl + "/" + organizationId);
+            console.log(socket);
+            //打开事件
+            socket.onopen = function () {
+                console.log("**********Socket已打开**********");
+                //socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
+            //获得消息事件
+            socket.onmessage = function (msg) {
+                console.log(msg.data + "+++++++++++++++++++");
+
+
+                if (msg.data == '连接成功') {
+                    return true;
+                }
+                msgData.push(msg.data);
+                if (msgData.length == 1) {
+                    showMessage();
+                }
+            };
+            //关闭事件
+            socket.onclose = function () {
+                console.log("**********Socket已关闭**********");
+            };
+            //发生了错误事件
+            socket.onerror = function () {
+                console.log("**********Socket发生错误**********");
+                //此时可以尝试刷新页面
+            }
+
+            //离开页面时，关闭socket
+            //jquery1.8中已经被废弃，3.0中已经移除
+            $(window).unload(function () {
+                socket.close();
+            });
+        }
+
+        var seconds = "";
+
+        function showMessage() {
+            console.log(msgData);
+            var index = 1;
+            var id = "";
+            seconds = setInterval(function () {
+                if (index <= msgData.length) {
+                    var msgRm = JSON.parse(msgData[index - 1]);
+                    var dataMesages = "名称" + ":" + msgRm.deviceAlias + " " + "编码" + ":" + msgRm.deviceCode + " " + "内容" + ":" + msgRm.eventContent;
+                    $(".info_messages").html(dataMesages);
+                    $(".info_alert").show();
+                    $("#seconds").html(10);
+                    index += 1;
+                    id = msgRm.id;
+                } else {
+                    $(".info_alert").hide();
+                    clearInterval(seconds);
+                }
+            }, 6000);
+            $("#info_button1").click(function () {
+                var conlayer = layer.confirm("是否处理当前设备？？", {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.putJSON(deviceServiceUrl + "/RmController/updateState", {
+                        "id": id,
+                        "isProcess": 1,
+                    }, function (data) {
+                        if (data.code == 0) {
+                            layer.close(conlayer);
+                            layer.msg("处理成功", {
+                                icon: 1
+                            });
+                            id = "";
+                            $(".info_alert").hide();
+                            return true;
+                        }
+                        layer.msg("处理失败", {
+                            icon: 2
+                        });
+                    })
+                }, function () {
+                    $(".info_alert").hide();
+                    layer.close(conlayer);
+                });
+            });
+
+        }
+
+        $("#info_button").click(function () {
+            $(".info_alert").hide();
+        });
+
+
+	</script>
+
+</html>

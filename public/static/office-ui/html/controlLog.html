@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<style>
+
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>操作日志管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="s_controlType">操作类型：</label>
+											<input class="form-control" name="s_controlType" id="s_controlType" placeholder="操作类型" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="s_controlComment">操作内容：</label>
+											<input class="form-control" name="s_controlComment" id="s_controlComment" placeholder="操作内容" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="s_controlName">操作人：</label>
+											<input class="form-control" name="s_controlName" id="s_controlName" placeholder="操作人" type="text">
+										</div>
+									</div>
+									<div class="col-lg-">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+												<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="ibox float-e-margins">
+									<div class="ibox-content">
+										<!--页面内容部分-->
+										<!-- 这里写内容 -->
+										<div id="buttons">
+											<!--<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i> 录入</button>-->
+											<!--<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 编辑</button>-->
+											<!--<button type="button" class="btn btn-success" id="recover"><i class="fa fa-reply"></i> 启用</button>-->
+											<!--<button type="button" class="btn btn-warning" id="lock"><i class="fa fa-warning"></i> 禁用</button>-->
+											<!--<button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 删除</button>-->
+										</div>
+
+										<div id="myTable">
+
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+	</body>
+
+	<script>
+		// var html;
+		var url = "";
+		// $("#loadDiv").html(loadHtml);
+		$(function() {
+			// $.show_overall_loding();
+			$('#myTable').bootstrapTable({
+				url:"../../json/controlLol.json", //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				onLoadSuccess: function() {
+					// $.hide_overall_loding();
+				},
+				columns: [{
+						width: 50,
+						title: '序号',
+						formatter: function(value, row, index) {
+							return index + 1;
+						}
+					}, {
+						field: 'controlType',
+						title: '操作类型',
+						width: 400
+					}, {
+						field: 'controlComment',
+						title: '操作内容',
+						width: 400
+					}, {
+						field: 'controlName',
+						title: '操作人',
+						width: 400
+					}, {
+						field: 'createDate',
+						title: '创建时间',
+						width: 400
+					}
+					/*, {
+					                    title: "操作",
+					                    width: 200,
+					                    clickToSelect: false,
+					                    formatter: function (i1, i2, i3) {
+					                        var str = '<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+					                        return str;
+					                    },
+					                    cellStyle: function () {
+					                        return {
+					                            classes: "",
+					                            css: {
+					                                "text-align": "center"
+					                            }
+					                        }
+					                    }
+					                }*/
+				]
+			});
+
+			function queryParams(params) {
+				// $.show_overall_loding();
+				return {
+					//token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					controlName: $("#s_controlName").val(),
+					controlComment: $("#s_controlComment").val(),
+					controlType: $("#s_controlType").val()
+				};
+			}
+
+			$("#search").click(function() {
+				// $.show_overall_loding();
+				$('#myTable').bootstrapTable('refresh');
+			});
+			$("#clean").click(function() {
+				$("#s_controlType").val("");
+				$("#s_controlComment").val("");
+				$("#s_controlName").val("");
+				$("#search").trigger("click");
+			});
+
+			$("#remove").on("click", function() {
+				var data = $("#myTable").bootstrapTable('getSelections');
+				if(data.length == 1) {
+					var conlayer = parent.layer.confirm("确定删除？", {
+						btn: ['确定', '取消']
+					}, function() {
+						$.ajax({
+							url: "",
+							type: "post",
+							dataType: "json",
+							success: function(res) {
+								parent.layer.msg("成功", {
+									icon: 1
+								});
+								$('#myTable').bootstrapTable('refresh');
+							}
+						});
+					}, function() {
+						parent.layer.close(conlayer);
+					});
+				} else {
+					parent.layer.msg("请选择一条数据", {
+						icon: 5
+					});
+				}
+			});
+
+		});
+
+		function tabRemove(obj) {
+			var data = $("#myTable").bootstrapTable('getData');
+			var id = data[obj].id;
+			var conlayer = parent.layer.confirm("确定删除？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.ajax({
+					url: "",
+					type: "post",
+					dataType: "json",
+					success: function(res) {
+						parent.layer.msg("成功", {
+							icon: 1
+						});
+						$('#myTable').bootstrapTable('refresh');
+					}
+				});
+			}, function() {
+				parent.layer.close(conlayer);
+			});
+		}
+	</script>
+
+</html>

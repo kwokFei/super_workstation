@@ -1,0 +1,89 @@
+{
+  "code": 0,
+  "message": "成功",
+  "currentTimeMillis": 1575352714628,
+  "messages": null,
+  "data": {
+    "total": 4,
+    "list": [
+      {
+        "id": "72dd6054bba0476fbd2960b0b921475b",
+        "userName": "测试3",
+        "loginName": "11111111111",
+        "userMobile": "18888888886",
+        "userEmail": "hex@hex.com",
+        "disableFlag": 0,
+        "createDate": "2019-11-27 09:59:40",
+        "roleId": "ca9e4cf7512a4765b2cbafc470fd9a8a",
+        "roleName": "测试角色",
+        "organizationId": "75a05bf094c946318657ed77d92a3906",
+        "organizationName": "测试部门",
+        "userImage": "http://222.182.202.100:7788/file/888/2019/1127/1b6f7ea92b5a4b99b92f0bdaeddfa01d.png",
+        "userType": 2
+      },
+      {
+        "id": "eaf295e157f247a7acc64dd3d7411626",
+        "userName": "测试数据",
+        "loginName": "18888888887",
+        "userMobile": "18888888887",
+        "userEmail": "hex@hex.com",
+        "disableFlag": 0,
+        "createDate": "2019-11-26 16:08:02",
+        "roleId": "3449d1b8ee2a4866a33d1e8a73587ed5",
+        "roleName": "管理员",
+        "organizationId": "57d81ffce1b94a2f8d87fd7ea9d55c37",
+        "organizationName": "台迪智慧办公",
+        "userImage": "http://222.182.202.100:7788/file/888/2019/1126/901e5a437a25435bbd3a46bb48cdfe92.png",
+        "userType": 1
+      },
+      {
+        "id": "378da84249ed4a829df0580566ab84c3",
+        "userName": "测试2",
+        "loginName": "qweqw",
+        "userMobile": "13594591228",
+        "userEmail": "5034234@qq.com",
+        "disableFlag": 0,
+        "createDate": "2019-11-21 16:50:09",
+        "roleId": "3449d1b8ee2a4866a33d1e8a73587ed5",
+        "roleName": "管理员",
+        "organizationId": "57d81ffce1b94a2f8d87fd7ea9d55c37",
+        "organizationName": "台迪智慧办公",
+        "userImage": "http://img4.imgtn.bdimg.com/it/u=3136075639,3338708347&fm=26&gp=0.jpg",
+        "userType": 1
+      },
+      {
+        "id": "3fbb0db167dd4809a381c6c9a00afbda",
+        "userName": "测试",
+        "loginName": "18888888886",
+        "userMobile": "13594591229",
+        "userEmail": "5034234@qq.com",
+        "disableFlag": 0,
+        "createDate": "2019-11-21 16:46:58",
+        "roleId": "3449d1b8ee2a4866a33d1e8a73587ed5",
+        "roleName": "管理员",
+        "organizationId": "57d81ffce1b94a2f8d87fd7ea9d55c37",
+        "organizationName": "台迪智慧办公",
+        "userImage": "",
+        "userType": 2
+      }
+    ],
+    "pageNum": 1,
+    "pageSize": 10,
+    "size": 4,
+    "startRow": 1,
+    "endRow": 4,
+    "pages": 1,
+    "prePage": 0,
+    "nextPage": 0,
+    "isFirstPage": true,
+    "isLastPage": true,
+    "hasPreviousPage": false,
+    "hasNextPage": false,
+    "navigatePages": 8,
+    "navigatepageNums": [
+      1
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 1
+  }
+}

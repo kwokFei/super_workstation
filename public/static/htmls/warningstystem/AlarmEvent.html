@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>alarmEvent</title>
+    <link rel="stylesheet" href="../../css/elementUI.css">
+    <link rel="stylesheet" href="../../css/basicStyle.css">
+    <script src="../../js/vue.min.js"></script>
+    <script src="../../js/elementUI.js"></script>
+    <style>
+
+        [v-cloak] {
+            display: none;
+        }
+
+        #alarmEvent {
+            display: flex;
+            justify-content: center;
+            /*flex-direction: column;*/
+        }
+
+        #alarmEvent:before {
+            display: table;
+            content: "";
+        }
+
+        .contentBox {
+            width: 100%;
+            /*height: 89%;*/
+            background-color: #ffffff;
+            margin: 0.2rem;
+            padding: 2%;
+            position: relative;
+            /*overflow: auto;*/
+        }
+
+        .line, .table {
+            width: 100%;
+            margin-bottom: 0.6rem;
+        }
+
+        .line > ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        /*三角形按钮旋转*/
+        .ulChecked {
+            transform: rotate(90deg) !important;
+        }
+
+        .textHidden {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /*订阅账号*/
+
+        .line > ul:first-child {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .contentBox > .line > ul > li {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            /*width: 270px;*/
+            margin-bottom: 1.5%;
+        }
+
+
+        .contentBox > .line:first-child {
+            margin-bottom: 0;
+        }
+
+
+        .line > ul > li > span:first-child {
+            display: inline-block;
+            /*width: 32%;*/
+            width: 0.9rem;
+            text-align: right;
+            font-size: 0.16rem;
+            /*font-size: 16px;*/
+            position: relative;
+            min-width: 60px;
+        }
+
+
+        .line > ul > li > span:nth-child(2),
+        .line > ul > li > input {
+            width: 200px;
+            height: 26px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            border: solid 1px #bfbfbf;
+            line-height: 26px;
+            position: relative;
+            margin-left: 3%;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+        }
+
+        .line > ul > li > span:nth-child(2) > span,
+        .line > ul > li > input {
+            font-size: 0.16rem;
+        }
+
+        .line > ul > li > span:nth-child(2) > img {
+            width: 0.08rem;
+            height: 0.16rem;
+        }
+
+        /*!*设备正品码*!*/
+        .contentBox > .line:nth-child(2) {
+            display: flex;
+            align-items: center;
+            margin: 0 0 1.5% 0;
+        }
+
+        .contentBox > .line > ul > .btns {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+        }
+
+        .contentBox > .line > ul > li > .btn,
+        .table > ul > li > span > button {
+            /*width: 26%;*/
+            width: 70px;
+            height: 26px;
+            background-color: #333399;
+            border-radius: 4px;
+            color: #ffffff;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            line-height: 26px;
+            /*margin-right: 0.1rem;*/
+            cursor: pointer;
+        }
+
+        .contentBox > .line > ul > .btns > button:first-child {
+            margin-right: 0.1rem;
+        }
+
+
+        /*添加 按钮行*/
+        .line > .btns {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+
+        }
+
+        .line > .btns > button {
+            /*width: 6%;*/
+            width: 70px;
+            height: 26px;
+            line-height: 26px;
+            background-color: #333399;
+            border-radius: 0.04rem;
+            color: #ffffff;
+            margin-right: 0.7%;
+        }
+
+        .line > .btns > button:last-child {
+            background-color: #999999;
+        }
+
+        /*表格*/
+        /*.table {*/
+        /*height: 386px;*/
+        /*overflow-y: hidden;*/
+        /*}*/
+
+        .table > ul > li {
+            text-align: left;
+            height: 35px;
+            margin-left: 1px;
+        }
+
+        .table > ul > li > span {
+            display: inline-block;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            border: solid 1px #cccccc;
+            margin: 0px 0px -1px -1px;
+            color: #333333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+
+        }
+
+        .table > ul > li > span > span {
+            display: inline-block;
+            width: 0.4rem;
+            height: 0.2rem;
+            /*background: red;*/
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-0.2rem, -0.1rem);
+        }
+
+
+        .table > ul > li:first-child > span {
+            background-color: #EAEAF5;
+
+        }
+
+        .table > ul > li > span:first-child {
+            width: 4.2%;
+        }
+
+        .table > ul > li > span:nth-child(2) {
+            width: 3.9%;
+        }
+
+        .table > ul > li > span:nth-child(3) {
+            width: 14.7%;
+        }
+
+        .table > ul > li > span:nth-child(4) {
+            width: 11.9%;
+        }
+
+        .table > ul > li > span:nth-child(5) {
+            width: 19.94%;
+        }
+
+        .table > ul > li > span:nth-child(6) {
+            width: 24.1%;
+        }
+
+        .table > ul > li > span:nth-child(7) {
+            width: 21.5%;
+        }
+
+
+        .table > ul > li > span > button {
+            height: 20px;
+            line-height: 20px;
+            width: 18%;
+            margin: 0 0.1rem;
+            min-width: 60px;
+        }
+
+        .table > ul > li > span > button:first-child {
+            width: 18%;
+            min-width: 60px;
+        }
+
+        .table > ul > li > span > button:nth-child(2) {
+            background: #3366CC;
+        }
+
+        .table > ul > li > span > button:last-child {
+            background: #FF3333;
+        }
+
+        .paging {
+            width: 100%;
+            /*height: 0.24rem;*/
+            min-height: 24px;
+            position: absolute;
+            bottom: 2%;
+            left: 0;
+            padding: 0 2%;
+        }
+
+        .paging > div {
+            width: 100%;
+            height: 100%;
+            /*background: blue;*/
+        }
+
+        /*蒙版*/
+        .mask {
+            width: calc(100%);
+            height: calc(100%);
+            background-color: rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-width: 1000px;
+        }
+
+        .maskBox {
+            width: 6.43rem;
+            /*height: 41.8%;*/
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 1%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            min-width: 371px;
+        }
+
+        .maskBox > .line {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5.9%;
+        }
+
+        .maskBox > .line:first-child {
+            justify-content: space-between;
+        }
+
+        .maskBox > .line:first-child > span {
+            font-size: 0.18rem;
+        }
+
+        .maskBox > .line:first-child > img {
+            width: 4.5%;
+            cursor: pointer;
+        }
+
+        .maskBox .line > span {
+            display: inline-block;
+        }
+
+        .maskBox .line > span:first-child {
+            width: 1.68rem;
+            text-align: left;
+            min-width: 145px;
+            margin-right: 0.1rem;
+        }
+
+        .maskBox .line > span:nth-child(2),
+        .maskBox .line > input {
+            width: 49%;
+            height: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+            position: relative;
+            cursor: pointer;
+            background-color: #ffffff;
+            border-radius: 0.04rem;
+            border: solid 0.01rem #a0a0a0;
+        }
+
+        .maskBox .line > span:nth-child(2) > span,
+        .maskBox .line > input {
+            color: #333333;
+        }
+
+        .maskBox .line > span > ul,
+        .line > ul > li > span:nth-child(2) > ul {
+            position: absolute;
+            left: 0;
+            top: 24px;
+            z-index: 100;
+            width: 100%;
+            max-height: 80px;
+            overflow-y: auto;
+            background: #d7d4d4;
+        }
+
+        .line > ul > li > span:nth-child(2) > ul {
+            max-height: 100px;
+        }
+
+        .maskBox .line > span > ul > li {
+            height: 20px;
+            line-height: 20px;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        .line > ul > li > span:nth-child(2) > ul > li {
+            height: 25px;
+            line-height: 25px;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        .maskBox .line > span > ul > li:hover,
+        .line > ul > li > span:nth-child(2) > ul > li:hover {
+            background: #333399;
+            color: #FFFFFF;
+        }
+
+        .maskBox .line > button {
+            width: 21.5%;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            margin: 0 8.5%;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 0.14rem;
+        }
+
+        .maskBox .line > button:last-child {
+            background-color: #333399;
+        }
+
+        .import > .line:nth-child(2) {
+            padding: 5%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .import > .line:nth-child(2) > p {
+            font-size: 0.18rem;
+        }
+
+        .import > .line:nth-child(2) > img {
+            width: 30%;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .maskBox > .line > .close {
+            width: 0.5rem !important;
+            display: flex !important;
+            justify-content: center !important;
+            border: none !important;
+        }
+
+        .maskBox > .line > p {
+            width: 88%;
+            text-align: left;
+            font-size: 0.1rem;
+            color: #f62323;
+        }
+
+        .maskBox > .line > .block {
+            width: 49%;
+            height: 24px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .promptBox {
+            width: 25.7% !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="alarmEventApp" v-cloak>
+
+    <div id="alarmEvent">
+
+        <!--主要显示内容-->
+        <div class="contentBox">
+
+            <div class="line">
+            </div>
+
+            <!--添加 按钮行-->
+            <div class="line">
+
+                <div class="btns">
+                    <button @click="handlMask('add')">添加</button>
+                    <button>修改</button>
+                    <button @click="handlMask('delAll')">删除全部</button>
+                </div>
+
+            </div>
+
+            <!--表格-->
+            <div class="table">
+                <ul>
+                    <li>
+                        <span>选择</span>
+                        <span>序号</span>
+                        <span>报警事件名称</span>
+                        <span>报送优先等级</span>
+                        <span>报警事件代表色</span>
+                        <span>报警信息接收时间段</span>
+                        <span>操作</span>
+                    </li>
+                    <li v-for="(item,i) in  data">
+                        <span>
+                            <el-radio v-model="deviceChoose" :label="i"></el-radio>
+                        </span>
+                        <span>{{i + 1}}</span>
+                        <span>{{item.name}}</span>
+                        <span>{{item.level}}</span>
+                        <span><span :style="{background:item.color}"></span></span>
+                        <span>{{item.time}}</span>
+                        <span>
+                            <button>修改</button>
+                            <button @click="handlDel(i)">删除</button>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!--分页-->
+            <div class="paging">
+                <Pagination @func="getPageNum" :pageData="pageData"/>
+            </div>
+
+        </div>
+
+
+        <!--蒙版-->
+        <div class="mask"
+             v-show=" mask === 'add' ||
+             mask === 'prompt'">
+
+
+            <!--添加-->
+            <div class="maskBox add" v-show="mask === 'add'">
+                <div class="line">
+                    <span>添加</span>
+                    <span class="close" @click="handlCancel">
+                        <img src="../../img/public/close.png" alt="">
+                    </span>
+                </div>
+                <div class="line">
+                    <span>请选择报警事件名称</span>
+                    <span @click="handleAddSelect('warnName')">
+                    <span class="textHidden">{{warnName}}</span>
+                    <img src="../../img/public/triangle.png" alt=""
+                         @click="handleAddSelect('warnName')"
+                         :class=" ulOptionChecked === 'warnName' ? 'ulChecked' : ''">
+                    <ul v-show="showAddUl === 'warnName'">
+                        <li class="textHidden"
+                            @click.stop="handleAddSelectOption('warnName','DYZH123456')">DYZH123456</li>
+
+                    </ul>
+                </span>
+                </div>
+                <div class="line">
+                    <span>请选择报送优先等级</span>
+                    <span @click="handleAddSelect('warnLevel')">
+                    <span class="textHidden">{{warnLevel}}</span>
+                    <img src="../../img/public/triangle.png" alt=""
+                         @click="handleAddSelect('warnLevel')"
+                         :class=" ulOptionChecked === 'warnLevel' ? 'ulChecked' : ''">
+                    <ul v-show=" showAddUl === 'warnLevel'">
+                        <li class="textHidden"
+                            @click.stop="handleAddSelectOption('warnLevel','博世XXX型号报警主机')">博世XXX型号报警主机</li>
+
+                    </ul>
+                </span>
+                </div>
+                <div class="line">
+                    <span>请选择报警信息接收时间段</span>
+                    <div class="block">
+                        <el-time-picker
+                                is-range
+                                value-format='HH:mm:ss'
+                                v-model="timeValue"
+                                range-separator="-"
+                                start-placeholder="开始时间"
+                                end-placeholder="结束时间"
+                                placeholder="选择时间范围">
+                        </el-time-picker>
+                    </div>
+
+                </div>
+                <div class="line">
+                    <p>备注：不选择时间默认为所有时间点都接收</p>
+                </div>
+                <div class="line">
+                    <button @click="handlCancel">取消</button>
+                    <button @click="handlAdd"> 确定</button>
+                </div>
+            </div>
+
+
+            <!--提示框-->
+            <div class="maskBox promptBox" v-show="mask === 'prompt'">
+                <PromptBox @funcChoose="promptChoose" :prompt="prompt"/>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+
+<script>
+
+    let alarmEventVue = new Vue({
+        el: '#alarmEventApp',
+
+        data() {
+            return {
+
+
+                data: [
+
+
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+
+
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+                    {
+                        name: "燃气泄漏报警",
+                        level: "3",
+                        color: "red",
+                        time: "01:00:00-06:00:00",
+                    },
+
+                ],         // 表格数据
+
+
+                deviceChoose: null, //选择框选项
+                pageNumber: "", // 分页查询页数
+
+                pageData: {
+
+                    url: "报警事件配置后台查询接口",
+                    total: 100,                        //当前总条数
+
+                },   // 传递给分页组件的数据
+
+                ulOptionChecked: null, // 下拉菜单三角形变化
+                showAddUl: "",               //添加下
+
+                //弹框页面
+                mask: null,
+
+
+                // 添加页面
+                warnName: "燃气泄漏报警",       //报警事件名称
+                warnLevel: "1",                 //报送优先等级
+                timeValue: null,                //时间
+
+                //提示框
+                prompt: null,               //提示框组件内容
+
+
+            }
+        },
+
+        methods: {
+
+            // 获取分页查询页数
+            getPageNum(data) {
+
+                if (data.url === this.pageData.url) {
+
+                    this.pageNumber = data.page;
+
+                    // console.log(this.pageNumber);
+
+                }
+
+            },
+
+            //蒙版展开
+            handlMask(data) {
+
+                // 删除全部
+                if (data === "delAll") {
+
+                    this.data = [];
+                }
+                // 删除一个
+                else if (data === "delOne") {
+                    this.prompt = data;
+                    this.mask = "prompt";
+                    return;
+                } else if (data === "err") {
+                    this.prompt = data;
+                    this.mask = "prompt";
+                    return;
+                }
+
+                this.mask = data;
+            },
+
+            //取消蒙版
+            handlCancel() {
+
+                this.mask = null;
+                this.showAddUl = null;
+                this.ulOptionChecked = null;
+            },
+
+
+            // 删除全部删除某一个
+            promptChoose(data) {
+                // 确定
+
+                if (data.choose === "confirm") {
+                    if (data.title === "delAll") {
+                        this.data = [];
+                    } else if (data.title === "delOne") {
+
+                        this.data.splice(this.deviceChoose, 1);
+                    }
+
+                }
+
+                this.handlCancel();
+                // console.log(data);
+            },
+
+            // 表格操作
+            // 删除
+            handlDel(index) {
+
+                this.data.splice(index, 1)
+
+
+            },
+
+
+            // 添加页面
+            //下拉框展开
+            handleAddSelect(data) {
+                this.showAddUl = data;
+                this.ulOptionChecked = data;
+            },
+
+            // 下拉菜单  选项
+            handleAddSelectOption(name, data) {
+                // console.log(this[name]);
+                this[name] = data;
+
+                // 关闭下拉框
+                this.showAddUl = null;
+                this.ulOptionChecked = null;
+            },
+
+
+            // 确定按钮
+            handlAdd() {
+
+                let time = this.timeValue[0] + '-' + this.timeValue[1];
+
+
+                let obj = {
+                    name: this.warnName,
+                    level: this.warnLevel,
+                    color: "red",
+                    time: time,
+                };
+
+                console.log(obj);
+
+                this.data.push(obj);
+                console.log(this.data);
+                this.handlCancel();
+            },
+
+
+        },
+    });
+</script>
+</html>

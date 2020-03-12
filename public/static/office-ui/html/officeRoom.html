@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+
+		<link rel="stylesheet" href="../css/bootstrap-select.css" />
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/bootstrap-select.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+		<!--时间选择插件-->
+		 <script src="../js/laydate/laydate.js"></script>
+	 
+<!--				<script src="../js/httpUtils.js"></script>-->
+<!--		<script src="../js/Md5.js"></script>-->
+
+		<style type="text/css">
+			.MarginPx {
+				margin-top: 30px;
+			}
+			
+			.layui-form-label {
+				width: 130px;
+			}
+			body{
+				padding: 1rem 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>会议室管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">会议室名称：</label>
+											<input class="form-control" name="s_roomName" id="s_roomName" placeholder="会议室名称" type="text">
+										</div>
+									</div>
+
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">会议室类型：</label>
+											<select class="form-control selectpickers" style="max-height: 500px;" name="s_roomType" id="s_roomType" data-live-search="true">
+												<option value="">请选择类型</option>
+												<option value="1">大会议室</option>
+												<option value="2">小会议室</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-success" id="search"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--Start-->
+								<!--平台设备位置列表-->
+								<div class="ibox-content">
+									<div id="buttons">
+										<button type="button" class="btn btn-info" id="add_office"><i class="fa fa-plus"></i> 添加会议室</button>
+									</div>
+									<div id="myTable">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<div id="loadDiv"></div>
+	</body>
+	<script src="../../js/data.js"></script>
+	<script type="text/javascript">
+		// let html;
+		let url = "";
+		// $(".selectpickers").selectpicker('refresh');
+		$(function() {
+			$('#myTable').bootstrapTable({
+				url: '../../json/test.json', //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,  //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var result = data.data;
+					rdata = result.list;
+					var res = [];
+					res.push({
+						total: result.total,
+						rows: result.list
+					});
+					return res[0];
+				},
+				columns: [{
+					checkbox: true
+				}, {
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'roomName',
+					title: '会议室名称',
+					width: 300
+				}, {
+					field: 'roomType',
+					title: '会议室类型',
+					width: 300,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 1) {
+							state = '<span style="color:orange">大会议室</span>'
+						} else if(value == 2) {
+							state = '<span style="color:green">小会议室</span>'
+						}
+						return state;
+					}
+				}, {
+					field: 'roomState',
+					title: '会议室状态',
+					width: 300,
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 1) {
+							state = '<span style="color:blue">使用中</span>'
+						} else if(value == 2) {
+							state = '<span >空闲中</span>'
+						}
+						return state;
+					}
+				}, {
+					field: 'roomDesc',
+					title: '会议室描述',
+					width: 400
+				}, {
+					field: 'roomOpenTime',
+					title: '会议室开放时间',
+					width: 300
+				}, {
+					field: 'roomCloseTime',
+					title: '会议室关闭时间',
+					width: 300
+				}, {
+					title: "操作",
+					width: 200,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+								'<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>' +
+								'<button data-toggle="tooltip" title="编辑" type="button" onclick="updata(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>' +
+								'<button data-toggle="tooltip" title="删除" type="button" onclick="del(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-window-close-o"> </i></button>';
+						return str;
+					},
+
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				// $.show_overall_loding();
+				return {
+					// token: $.getToken(),
+					roomName: $("#s_roomName").val(),
+					roomType: $("#s_roomType").val(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber
+				};
+			}
+
+			html = template("modelWin", {
+				title: "123"
+			});
+		});
+
+		$("#search").click(function() {
+			// $.show_overall_loding();
+			$('#myTable').bootstrapTable('refresh');
+		});
+
+		$("#clean").click(function() {
+			$("#s_roomName").val("");
+			$(".selectpickers").val("");
+			$(".selectpickers").selectpicker('refresh');
+			$("#search").trigger("click");
+		});
+
+		function detail(obj) {
+			showModel("办公室详情", 1, obj);
+		}
+
+		function updata(obj) {
+			showModel("办公室编辑", 2, obj);
+		}
+
+		$("#add_office").on("click", function() {
+			showModel("会议室添加", 0);
+		});
+
+		var isAdd = true;
+		var mode_Layer=null; 
+		function showModel(title, flag, index) {
+			var area = ['750px', '440px'];
+			var btn = ['提交', '取消'];
+			if(flag == 1) {
+				area = ['750px', '440px'];
+				btn = ['确认'];
+			}
+			isAdd = false;
+			if(flag == 0) {
+				isAdd = true;
+			}
+
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: area, //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: btn,
+				yes: function(index, layero) {
+					if(flag == 1) {
+						layer.close(myLayer);
+						return;
+					}
+					$("#deviceForm").submit();
+				},
+				success: function(layero) {
+					if(flag == 1) {
+						$("#roomType").attr("disabled", "disabled");
+						$("#deviceForm input").attr("disabled", "disabled");
+					} else {
+						$("#deviceForm input").removeAttr("disable");
+						$("#roomType").removeAttr("disable");
+//						$('#roomCloseTime').datetimepicker({
+//							format: 'hh:mm'
+//						});
+//						$('#roomOpenTime').datetimepicker({
+//							format: 'hh:mm'
+//						});
+						 laydate.render({
+				            elem: '#roomCloseTime',
+				            type: 'time',
+				            format :"HH:mm"
+				        });
+				         laydate.render({
+				            elem: '#roomOpenTime',
+				            type: 'time',
+				            format :"HH:mm"
+				        });
+						$("#selectMode").click(function() {
+							var sshtml = template("selectModeDiv", {
+								title: "123"
+							});
+							mode_Layer = layer.open({
+								skin: 'card',
+								type: 1,
+								title: "绑定模式",
+								area: ['950px', '550px'], //宽高
+								resize: true, //是否拉升
+								offset: 'auto', //居中
+								content: sshtml,
+								maxmin: true, //开启最大化最小化按钮
+								yes: function(index, layero) {},
+								success: function(layero) {
+									var modeTable = new mode_option();
+									modeTable.init();
+									modeTable.bindCreate();
+								}
+							});
+						});
+					}
+				
+					$(".layui-layer-title").addClass("card-header");
+					if(flag != 0) {
+						var data = $("#myTable").bootstrapTable('getData')[index];
+						if(data != null) {
+							$("#deviceForm").setForm(data);
+							$("#selectMode").html(data.orderModeName == null ? "暂时没有设置模式" : "已关联："+data.orderModeName);
+						}
+					}
+					$("#roomType").selectpicker('refresh');
+				}
+			});
+			var validate = $("#deviceForm").validate({
+				rules: {},
+				messages: {},
+				submitHandler: function(form) {
+					var data = $("#deviceForm").serializeJson();
+					$.show_overall_loding();
+					if(isAdd) {
+						$.postJSON(deviceServiceUrl + "/officeRoom", data, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					} else {
+						$.putJSON(deviceServiceUrl + "/officeRoom", data, function(data) {
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#myTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					}
+				}
+			});
+		}
+
+		function del(obj) {
+			var data = $("#myTable").bootstrapTable('getData');
+			var id = data[obj].id;
+			var conlayer = layer.confirm("确定删除？请三思而后行", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.deleteJSON(deviceServiceUrl + "/officeRoom?id=" + id, {}, function(data) {
+					$.show_overall_loding();
+					if(data.code == 0) {
+						layer.close(conlayer);
+						layer.msg("成功", {
+							icon: 1
+						});
+						$.show_overall_loding();
+						$('#myTable').bootstrapTable('refresh');
+						return true;
+					}
+					layer.msg("操作失败", {
+						icon: 2
+					});
+				})
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+
+		var mode_option = function() {
+			return {
+				node: $("#modeTable"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/mode/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 5, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						onDblClickRow: function(row) {
+							console.info(row);
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'modeName',
+							title: '模式名称',
+							width: 400
+						}, {
+							field: 'modeReadme',
+							title: '模式说明',
+							width: 400
+						}, {
+							field: 'createDate',
+							title: '创建时间',
+							width: 400
+						}, {
+							title: "操作",
+							width: 100,
+							clickToSelect: false,
+							formatter: function(i1, i2, i3) {
+								var str =
+									'<button data-toggle="tooltip" title="绑定模式" type="button" onclick="setModeOp(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-puzzle-piece"> </i></button>';
+								return str;
+							},
+							cellStyle: function() {
+								return {
+									classes: "",
+									css: {
+										"text-align": "center"
+									}
+								}
+							}
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						modeName: $("#s_modeName").val(),
+						modeReadme: $("#s_modeReadme").val()
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_modeTable").on("click", function() {
+						that.refresh();
+					});
+
+				}
+			}
+		}
+
+		function setModeOp(obj) {
+			var one = $("#modeTable").bootstrapTable('getData')[obj];
+			$("#orderModeId").val(one.id);
+			$("#selectMode").html("已关联："+one.modeName);
+			layer.close(mode_Layer);
+		}
+	</script>
+
+	<!--模式新增修改模板-->
+
+	<script type="text/html" id="selectModeDiv">
+		<div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;">
+			<div class="card-body">
+				<div class="ibox-content row">
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">模式名称：</label>
+							<input class="form-control" name="s_modeName" id="s_modeName" placeholder="模式名称" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">模式说明：</label>
+							<input class="form-control" name="s_modeReadme" id="s_modeReadme" placeholder="模式说明" type="text">
+						</div>
+					</div>
+
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div id="buttons" style="margin-top: 24px;">
+								<button type="button" class="btn btn-success" id="search_modeTable"><i class="fa fa-search"></i> 查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Start-->
+				<!--平台设备位置列表-->
+				<div id="modeTable"></div>
+			</div>
+		</div>
+	</script>
+	<script type="text/html" id="modelWin">
+		<section class="openDetail" style="width: 95%; margin-top: 20px;">
+			<div class="panel-body">
+				<form id="deviceForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<input type="hidden" name="id" id="id" />
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">会议室名称:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="roomName" name="roomName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">会议室描述:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="roomDesc" name="roomDesc" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">会议室类型:</label>
+							<div class="layui-input-block">
+								<select class="form-control selectpickers" style="max-height: 500px;" name="roomType" id="roomType" data-live-search="true">
+									<option value="">请选择类型</option>
+									<option value="1">大会议室</option>
+									<option value="2">小会议室</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">关联模式:</label>
+							<div class="layui-input-block">
+								<input type="hidden" name="orderModeId" id="orderModeId" />
+								<button type="button" class="btn btn-success" style="width: 225px;" id="selectMode">请选择模式</button>
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">开放时间:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="roomOpenTime" name="roomOpenTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">关闭时间:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="roomCloseTime" name="roomCloseTime" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">预约间隔(min):</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="roomIntervalTime" name="roomIntervalTime" type="number">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+</html>

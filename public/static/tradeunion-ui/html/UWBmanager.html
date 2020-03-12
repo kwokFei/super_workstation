@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/title_icon.png" type="image/icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content" style="display: none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>UWB管理</h4>
+                            </div>
+                            <div class="card-body">
+								 <div class="ibox-content row">
+                                        <div class="col-lg-3">
+											<div class="form-group">
+												<label class="form-label">楼层名称：</label>
+												<input class="form-control" name="s_name" id="s_name" placeholder="楼层名称" type="text">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="form-label">展厅名称：</label>
+												<input class="form-control" name="s_organizationName" id="s_organizationName" placeholder="展厅名称" type="text">
+											</div>
+										</div>
+                                         <div class="col-lg-3">
+                                             <div class="form-group">
+                                                 <div style="margin-top: 24px;">
+                                                     <button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+                                                     <button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                 </div>
+
+                                    
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                        <!--<button type="button" class="btn btn-primary" id="addSlibings"><i class="fa fa-plus"></i>
+                                            设备维保录入
+                                        </button>-->
+                                        <!--<button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 批量关机
+                                        </button>-->
+                                        <!--<button type="button" class="btn btn-danger" id="remove"><i class="fa fa-trash-o"></i> 删除
+                                        </button>-->
+                                        
+                                    </div>
+
+                                    <div id="myTable">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<!--加载底部-->
+		<div id="footer" class="Pos_footer">
+			<script type="text/javascript">
+				$(function(){
+					$("#footer").load("footer.html");
+				});
+			</script>
+		</div>
+        <div id="loadDiv"></div>
+</body>
+
+<script>
+    var html;
+    var rdata = {};
+    $("#loadDiv").html(loadHtml);
+    $(function () {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: userServiceUrl + "/organizationFloor/allList", //请求后台的URL（*）
+            method: 'get',                         //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '',                            //工具按钮用哪个容器
+            striped: true,                          //是否显示行间隔色
+            cache: false,                           //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                       //是否显示分页（*）
+            sortable: false,                        //是否启用排序
+            sidePagination: "server",               //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                          //初始化加载第一页，默认第一页
+            pageSize: 10,                           //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],            //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams,               //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id",                         //每一行的唯一标识，一般为主键列
+            cardView: false,                        //是否显示详细视图
+            detailView: false,                      //是否显示父子表
+            clickToSelect: true,                    //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [
+                {
+                    checkbox: true
+                }, {
+                    width: 50,
+                    title: '序号',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },  {
+                    field: 'name',
+                    title: '楼层名称',
+                    width: 200
+                },{
+					field: 'organizationName',
+					title: '所属机构',
+					width: 300
+				}, {
+					field: 'createDate',
+					title: '创建时间',
+					width: 300
+				},{
+                    field: 'imgSvg',
+                    title: '楼层svg',
+                    width: 300
+                },{
+                    field: 'proportion',
+                    title: '楼层比例（图/px：实际/m）',
+                    width: 300
+                },{
+					title: "操作",
+					width: 250,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="修改图示比例" type="button" onclick="tabEidt(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-pencil-square"></i></button>'
+							+'<button data-toggle="tooltip" title="定点" type="button" onclick="Location(' + i3 + ');" class="btn btn-success  tableButton"><i class="fa fa-puzzle-piece"> </i></button>'
+//							+
+//							'<button data-toggle="tooltip" title="关机" type="button" onclick="closed(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-puzzle-piece"></i></button>'
+//							+'<button data-toggle="tooltip" title="解绑" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}
+            ]
+        });
+
+        function queryParams(params) {
+        	$.show_overall_loding();
+            return {
+            	token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                name: $("#s_name").val(),
+                organizationName: $("#s_organizationName").val()
+            };
+        }
+        var serchaData = {};
+        $("#search").click(function() {
+            $.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function() {
+            $("#s_name").val("");
+            $("#s_organizationName").val("")
+            $("#search").trigger("click");
+        });
+
+        
+
+    });
+    
+    function tabEidt(obj) {
+		url = "";
+		showProportionModel("修改比例", 3, obj);
+	}
+    
+	function Location(obj) {
+		var data = $("#myTable").bootstrapTable('getData')[obj];
+		if(data.proportion == null){
+			layer.msg("请先设置图/真实比例", {
+					icon: 2
+				});
+		}else{
+			showModel("定点", 3, obj);
+		}
+		
+	}
+
+	function tabRemove(obj) {
+		var data = $("#myTable").bootstrapTable('getData')[obj];
+		var conlayer = layer.confirm("确定解绑？", {
+			btn: ['确定', '取消']
+		}, function() {
+			$.show_overall_loding();
+			$.deleteJSON(addToUrlToken(deviceServiceUrl + "/windowscontrol")+"&id=" + data.id, {}, function(data) {
+				$.hide_overall_loding();
+				if(data.code == 0) {
+					layer.close(conlayer);
+					layer.msg("成功", {
+						icon: 1
+					});
+					$.show_overall_loding();
+					$('#myTable').bootstrapTable('refresh');
+					return true;
+				}
+				layer.msg("操作失败", {
+					icon: 2
+				});
+			})
+		}, function() {
+			layer.close(conlayer);
+		});
+	}
+	
+	function showProportionModel(title, flag, index){
+		html = template("mapProportion", {
+            title: "123"
+        });
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: title,
+            area: ['500px', '250px'],	//宽高
+            resize: true,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                $("#proportionForm").submit();
+            },
+        	success: function (layero) {
+        		var data = $("#myTable").bootstrapTable('getData')[index];
+        		$("#floorId").val(data.id)
+        		console.info(data)
+        		if(data.proportion != null){
+        			var proportions = data.proportion.split(":");
+	        		$("#pDistance").val(proportions[0]);
+	        		$("#aDistance").val(proportions[1]);
+	        		$("#aWidth").val(data.width);
+	        		$("#aHeight").val(data.height);
+        		}
+        		
+        	}
+        })
+        var validate = $("#proportionForm").validate({
+        	rules: {
+            	pDistance: {
+                		required: true,
+                		number:true
+            		},
+            	aDistance: {
+                		required: true,
+                		number:true
+            		},
+            	aWidth: {
+                		required: true,
+                		number:true
+            		},
+            	aHeight: {
+                		required: true,
+                		number:true
+            		}
+            },
+            messages: {
+                pDistance: {
+                		required: "请输入图示距离",
+                		number: "只能输入数字"
+            		},
+            	aDistance: {
+                		required: "请输入实际距离",
+                		number: "只能输入数字"
+            		},
+            	aWidth: {
+                		required: "请输入实际距离",
+                		number: "只能输入数字"
+            		},
+            	aHeight: {
+                		required: "请输入实际距离",
+                		number: "只能输入数字"
+            		}
+            },
+            submitHandler: function (form) {
+            	$.show_overall_loding();
+        		var pDistance = $("#pDistance").val();
+                var aDistance = $("#aDistance").val();
+                var width = $("#aWidth").val();
+                var height = $("#aHeight").val();
+                var floorId = $("#floorId").val();
+                var proportion = pDistance + ":" + aDistance;
+                console.info(proportion)
+                $.putJSON(userServiceUrl + "/organizationFloor", {
+                    id: floorId,
+                    proportion: proportion,
+                    width:width,
+                    height:height
+                }, function (resData) {
+                    if (resData.code == 0) {
+                        layer.close(myLayer);
+                        layer.msg("成功", {icon: 1});
+                        $.hide_overall_loding();
+                        $('#myTable').bootstrapTable('refresh');
+                        return true;
+                    } else {
+                        layer.msg("操作失败", {icon: 2});
+                        $.hide_overall_loding();
+                    }
+                })
+            }
+        })
+	}
+	
+	function showModel(title, flag, index) {
+        html = template("modelWin", {
+            title: "123"
+        });
+        var myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: title,
+            area: ['1000px', '800px'],	//宽高
+            resize: true,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交', '取消'],
+            yes: function (index, layero) {
+                $("#repairForm").submit();
+            },
+            success: function (layero) {
+            	var data = $("#myTable").bootstrapTable('getData')[index];
+//				var scale = data.proportion
+				$("#proportion").val(data.proportion)
+				var proportion1s = $("#proportion").val().split(":");
+				var proportion1 = proportion1s[0]/proportion1s[1]
+				
+				$("#floorId").val(data.id)
+				$("#floorSvg").html(data.imgSvg)
+				$("#floorSvg svg").css("border","1px solid #3e3e4f")
+				$("#floorSvg svg").css("height",(data.height*proportion1) + "px")
+				$("#floorSvg svg").css("width",(data.width*proportion1) + "px")
+				$("#floorSvg svg").css("position","absolute")
+				getAllUWB(data.id)
+				
+				$("#fixManager").click(function() {
+					if($("#deviceFloorId").val() == ""){
+	                	layer.msg("请选择设备", {icon: 2});
+	                    return;
+	                }
+						
+					html = template("fixList", {
+						title: "123"
+					});
+					var modeLayer = layer.open({
+						skin: 'card', //自定义样式winning-class
+						type: 1,
+						title: ["删除触发点", ""],
+						area: ['680px', '450px'], //宽高
+						resize: true, //是否拉升
+						offset: 'auto', //居中
+						content: html,
+						success: function(layero) {
+							var showFixModes = new showFixMode($("#deviceFloorId").val());
+							showFixModes.init();
+							showFixModes.bindCreate();
+						}
+					});
+				})
+				
+				$("#selectMode").click(function() {
+					html = template("modeList", {
+						title: "123"
+					});
+					var modeLayer = layer.open({
+						skin: 'card', //自定义样式winning-class
+						type: 1,
+						title: ["选择设备", ""],
+						area: ['680px', '450px'], //宽高
+						resize: true, //是否拉升
+						offset: 'auto', //居中
+						content: html,
+						btn: ['设置', '取消'],
+						yes: function(index, layero) {
+							var list = $("#modeTable").bootstrapTable('getSelections');
+							console.info(list[0].deviceName)
+							if(list.length < 1) {
+								layer.msg("请先选择要设置的模式", {
+									icon: 2
+								});
+								return;
+							}
+							var one=list[0];
+							$("#modeId").val(one.id);
+							$("#modeName").val(one.modeName);
+							layer.close(modeLayer);
+						},
+						success: function(layero) {
+							var showModes = new showMode();
+							showModes.init();
+							showModes.bindCreate();
+						}
+					});
+				})
+				
+				$("#selectCloseMode").click(function() {
+					html = template("modeList", {
+						title: "123"
+					});
+					var modeLayer = layer.open({
+						skin: 'card', //自定义样式winning-class
+						type: 1,
+						title: ["选择设备", ""],
+						area: ['680px', '450px'], //宽高
+						resize: true, //是否拉升
+						offset: 'auto', //居中
+						content: html,
+						btn: ['设置', '取消'],
+						yes: function(index, layero) {
+							var list = $("#modeTable").bootstrapTable('getSelections');
+							console.info(list[0].deviceName)
+							if(list.length < 1) {
+								layer.msg("请先选择要设置的模式", {
+									icon: 2
+								});
+								return;
+							}
+							var one=list[0];
+							$("#closeModeId").val(one.id);
+							$("#closeModeName").val(one.modeName);
+							layer.close(modeLayer);
+						},
+						success: function(layero) {
+							var showModes = new showMode();
+							showModes.init();
+							showModes.bindCreate();
+						}
+					});
+				})
+				
+				
+				
+				$("#floorSvg").click(function(e) {
+					$("#radius").attr("disabled",false)
+					$("#radius").val("");
+					$("#radius").attr("placeholder","请输入半径值")
+					let positionX = e.pageX - $(this).offset().left; //获取当前鼠标相对img的X坐标
+					let positionY = e.pageY - $(this).offset().top; //获取当前鼠标相对img的Y坐标
+					positionX = positionX.toFixed(1);
+					positionY = positionY.toFixed(1);
+					$("#deviceX").val(positionX/proportion1);
+					$("#deviceY").val(positionY/proportion1);
+					$("#deviceAnchor").css("left",positionX + "px");
+					$("#deviceAnchor").css("top", positionY + "px");
+					$("#deviceAnchor").css("display", "block");
+				});
+				
+				var cav1 = document.createElement('canvas');
+					$(cav1).css("position","absolute")
+					$(cav1).attr("width","1000px")
+					$(cav1).attr("height","1000px")
+					
+				var cav = cav1.getContext('2d');
+					cav.strokeStyle="green";
+				    
+				$(document).on("input propertychange","#radius",function(){
+				     var radius = $("#radius").val();
+				     var pRadius = parseFloat(radius)*proportion1
+					
+					console.info(proportion1)
+
+					cav.clearRect(0,0,1000,1000); 
+					
+					cav.beginPath();
+					
+					cav.arc(parseFloat($("#deviceX").val()*proportion1),parseFloat($("#deviceY").val()*proportion1),pRadius,0,2*Math.PI,true);
+					cav.closePath();
+					cav.stroke();
+					$(cav1).appendTo("#floorSvg")
+				});
+            }
+        });
+        var validate = $("#repairForm").validate({
+            rules: {
+            	x: {
+                        required: true
+                   },
+                y: {
+                		required: true
+            		},
+            	triggerRadius: {
+                		required: true,
+                		number: true
+            		},
+            	modeName: {
+                		required: true
+            		},
+            	closeModeName: {
+                		required: true
+            		},
+            	name: {
+                		required: true
+            		}
+            },
+            messages: {
+            	x: {
+                        required: "请选择设备坐标"
+                    },
+                y: {
+                        required: "请选择设备坐标"
+                    },
+                triggerRadius: {
+                		required: "请输入半径",
+                		number: "只能输入数字"
+            		},
+            	modeName: {
+                		required: "请选择触发模式"
+            		},
+            	closeModeName: {
+                		required: "请选择离开模式"
+            		},
+            	name: {
+                		required: "请输入名称"
+            		}
+            },
+            submitHandler: function (form) {
+                $.show_overall_loding();
+                var data = $("#repairForm").serializeJson()
+                var proportions = data.proportion.split(":");
+			    var mapRate = proportions[0]/proportions[1]
+			    
+			    data.mapRate = mapRate
+//			    data.triggerRadius = data.triggerRadius
+                data.error = 0.5
+				data.z = 0
+//				data.x = data.x
+//				data.y = data.y
+				
+				
+                console.info(data)
+                if(data.uwbtagMac == ""){
+                	layer.msg("请选择设备", {
+                        icon: 2
+                    });
+                    return;
+                }
+                $.show_overall_loding();
+                $.postJSON(deviceServiceUrl + "/fixexeconf", data, function (data) {
+                   
+                    if (data.code == 0) {
+                        layer.close(myLayer);
+                        layer.msg("成功", {
+                            icon: 1
+                        });
+                        $.show_overall_loding();
+                        $('#myTable').bootstrapTable('refresh');
+                        return true;
+                    }
+                    layer.msg("操作失败", {
+                        icon: 2
+                    });
+                });
+            }
+        });
+    }
+
+	//异步获取当前楼层UWB设备
+    function getAllUWB(floorId) {
+        $("#deviceFloorId").html('<option value=""> 选择设备</option>');
+        $.ajax({
+            type: "get",
+            url: deviceServiceUrl + "/devicemanger/list",
+            async:false,
+            data: {
+                token: $.getToken(),
+                productCode: "0004ab01",
+                deviceFloor: floorId
+            },
+            success: function (resData) {
+                $('#deviceFloorId').change(function () {
+                	$("#floorSvg canvas").remove();
+                	$("#floorSvg i").remove();
+                	$("#deviceAnchor").css("display", "none");
+                	$("#deviceX").val("");
+					$("#deviceY").val("");
+					$("#radius").val("");
+					$("#radius").attr("disabled",true)
+					$("#radius").attr("placeholder","请先选择触发点")
+                    var serialNum = this.value;
+                    if(serialNum == ""){
+                    	
+                    }else{
+                    	getAllFix(serialNum);
+                    }
+                    
+                });
+                let UWBList = resData.data.list;
+                if (UWBList.length > 0) {
+                    let htmls = '<option value=""> 选择设备</option>';
+                    for (let i = 0; i < UWBList.length; i++) {
+                        let UWB = UWBList[i];
+                        htmls += '<option value="' + UWB.serialNum + '">' + UWB.deviceAlias + '</option>';
+                    }
+                    $("#deviceFloorId").html(htmls);
+
+                }
+            },
+            fail: function (resData) {
+
+            }
+        })
+    }
+    
+    //获取点 并且渲染到svg
+    function getAllFix(serialNum){
+    	
+    	$.ajax({
+			cache: true,
+			type: "get",
+			url: deviceServiceUrl + "/fixexeconf/list?token=" + $.getToken(),
+			async: false,
+			data:{
+				uwbtagMac:serialNum
+			},
+			success: function(data) {
+				if(data.code === 0) {
+					var res = data.data.list;
+					var canvas;
+					var canv;
+					var icon;
+					var scales;
+					var scale;
+					for (var i = 0; i < res.length; i++) {
+						
+//						scales = res[i].mapRate.split(":");
+//						scale = scales[0]/scales[1]
+						scale = res[i].mapRate
+						
+						canvas = document.createElement('canvas');
+						$(canvas).css("position","absolute");
+						$(canvas).attr("width","2000px");
+						$(canvas).attr("height","2000px");
+						
+						canv = canvas.getContext('2d');
+						canv.strokeStyle='red';
+						canv.beginPath();
+						canv.arc(res[i].x*scale,res[i].y*scale,res[i].triggerRadius*scale,0,2*Math.PI,true);
+						canv.closePath();
+						canv.stroke();
+						$(canvas).appendTo("#floorSvg")
+						
+						icon = document.createElement("i");
+						$(icon).css("position","absolute");
+						$(icon).css("color","#FF9900")
+						$(icon).html(res[i].name)
+						$(icon).appendTo("#floorSvg")
+						$(icon).css("left", (res[i].x)*scale + "px");
+						$(icon).css("top", (res[i].y)*scale + "px");
+					}
+				}
+			},
+			error: function(errorMsg) {
+				console.info("请求出错!");
+			}
+		});
+    }
+
+	var showMode = function() {
+			return {
+				node: $("#modeTable"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/mode/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						singleSelect: true,
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 3, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						//单击行选中的操作
+						onClickRow: function(row) {
+							dModeId = row.id;
+						},
+						//双击行选中的操作
+						onDblClickRow: function(row) {
+							dModeId = row.id;
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							checkbox: true
+						}, {
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'modeName',
+							title: '模式名称',
+							width: 300
+						}, {
+							field: 'modeReadme',
+							title: '模式说明',
+							width: 300
+						},{
+							field: 'enableMode',
+							title: '激活模式',
+							width: 400,
+							formatter: function(value, row, index) {
+								var state = "";
+								if(value == 0) {
+									state = '<span style="color:red">未激活</span>'
+								} else if(value == 1) {
+									state = '<span style="color:green">已激活</span>'
+								}
+								return state;
+							}
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						modeName: $("#s_modeName").val()
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_deviceTable").on("click", function() {
+						that.refresh();
+					});
+				}
+			}
+		}
+		
+	var showFixMode = function(serialNum) {
+			return {
+				node: $("#fixTable"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/fixexeconf/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						singleSelect: true,
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 3, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						//单击行选中的操作
+						onClickRow: function(row) {
+							dModeId = row.id;
+						},
+						//双击行选中的操作
+						onDblClickRow: function(row) {
+							dModeId = row.id;
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							checkbox: true
+						}, {
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'name',
+							title: '触发点名称',
+							width: 200
+						}, {
+							field: 'x',
+							title: '触发点X轴',
+							width: 200
+						}, {
+							field: 'y',
+							title: '触发点Y轴',
+							width: 200
+						}, {
+							field: 'triggerRadius',
+							title: '半径',
+							width: 200
+						}, {
+							title: "操作",
+							width: 100,
+							clickToSelect: false,
+							formatter: function(i1, i2, i3) {
+								var str =
+									'<button data-toggle="tooltip" title="删除" type="button" onclick="del(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+								return str;
+							},
+							cellStyle: function() {
+								return {
+									classes: "",
+									css: {
+										"text-align": "center"
+									}
+								}
+							}
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						uwbtagMac:serialNum,
+						modeName: $("#s_name").val()
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_deviceTable").on("click", function() {
+						that.refresh();
+					});
+				}
+			}
+		}
+	
+	function del(obj) {
+			var data = $("#fixTable").bootstrapTable('getData')[obj];
+			var conlayer = layer.confirm("确定删除？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.deleteJSON(deviceServiceUrl + "/fixexeconf/del?id=" + data.id, {}, function(data) {
+					$.hide_overall_loding();
+					if(data.code == 0) {
+						layer.close(conlayer);
+						layer.msg("成功", {
+							icon: 1
+						});
+						$('#fixTable').bootstrapTable('refresh');
+						$("#floorSvg canvas").remove();
+						$("#floorSvg i").remove();
+						$("#deviceAnchor").css("display", "none");
+						getAllFix($("#deviceFloorId").val())
+						$("#deviceX").val("");
+						$("#deviceY").val("");
+						$("#radius").val("");
+						$("#radius").attr("disabled",true)
+						$("#radius").attr("placeholder","请先选择触发点")
+						return true;
+					}
+					layer.msg("操作失败", {
+						icon: 2
+					});
+				})
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+
+</script>
+
+<script type="text/html" id="modeList">
+	<section class="openDetail" style="width: 100%; ">
+		<div class="panel-body">
+			<div class="ibox-content row">
+				<div class="col-lg-6">
+					<div class="form-group">
+						<label class="form-label">模式名称：</label>
+						<input class="form-control" name="modeName" id="s_modeName" placeholder="模式名称" type="text">
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="form-group">
+						<div id="buttons" style="margin-top: 24px;">
+							<button type="button" class="btn btn-success" id="search_deviceTable"><i class="fa fa-search"></i> 查询</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="modeTable"></div>
+		</div>
+	</section>
+</script>
+
+<script type="text/html" id="fixList">
+	<section class="openDetail" style="width: 100%; ">
+		<div class="panel-body">
+			<div class="ibox-content row">
+				<div class="col-lg-6">
+					<div class="form-group">
+						<label class="form-label">触发点名称：</label>
+						<input class="form-control" name="name" id="s_name" placeholder="触发点名称" type="text">
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="form-group">
+						<div id="buttons" style="margin-top: 24px;">
+							<button type="button" class="btn btn-success" id="search_deviceTable"><i class="fa fa-search"></i> 查询</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="fixTable"></div>
+		</div>
+	</section>
+</script>
+
+<!--新增修改模板-->
+<script type="text/html" id="modelWin">
+    <section class="openDetail" style="width: 100%;">
+        <div class="panel-body">
+            <form id="repairForm">
+				<div class="layui-row layui-col-space10 layui-form-item">
+					<input type="hidden" name="orgFloorId" id="floorId" />
+					<div class="col-lg-12 MarginPx" style="overflow: hidden">
+						<label class="layui-form-label" style="width: 20%;">图/px：实际比例/m：</label>
+						<div class="layui-input-block" style="margin-left: 20%;">
+							<input class="form-control" id="proportion" name="proportion" type="text" readonly>
+						</div>
+					</div>
+					<div class="col-lg-8 MarginPx">
+                        <label class="layui-form-label" style="width: 29%;">楼层UWB设备：</label>
+                        <div class="layui-input-block" style="margin-left: 30%;">
+                            <select class="form-control selectpickers" style="max-height: 50px;"
+                                    id="deviceFloorId" name="uwbtagMac" data-live-search="true">
+                                <option value="">请选择设备</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 MarginPx">
+						<button type="button" class="btn btn-success form-control" id="fixManager"><i class="fa fa-refresh"></i> <span id="showTitle">删除已有触发点</span></button>
+					</div>
+                    <div class="col-lg-8 MarginPx">
+						<label class="layui-form-label" style="width: 28%;">选择触发模式：</label>
+						<div class="layui-input-block" style="margin-left: 30%;">
+							<input class="form-control" id="modeId" name="openModeId" type="hidden">
+							<input class="form-control" id="modeName" name="modeName" type="text" readonly="readonly">
+						</div>
+					</div>
+					<div class="col-lg-4 MarginPx">
+						<button type="button" class="btn btn-success form-control" id="selectMode"><i class="fa fa-refresh"></i> <span id="showTitle">选择模式</span></button>
+					</div>
+					<div class="col-lg-8 MarginPx">
+						<label class="layui-form-label" style="width: 28%;">选择离开模式：</label>
+						<div class="layui-input-block" style="margin-left: 30%;">
+							<input class="form-control" id="closeModeId" name="closeModeId" type="hidden">
+							<input class="form-control" id="closeModeName" name="closeModeName" type="text" readonly="readonly">
+						</div>
+					</div>
+					<div class="col-lg-4 MarginPx">
+						<button type="button" class="btn btn-success form-control" id="selectCloseMode"><i class="fa fa-refresh"></i> <span id="showTitle">选择模式</span></button>
+					</div>
+                    <div class="col-lg-6 MarginPx">
+						<label class="layui-form-label" style="width: 38%;">点位X坐标/m：</label>
+						<div class="layui-input-block" style="margin-left: 40%;">
+							<input class="form-control" id="deviceX" name="x" type="text" readonly="readonly">
+						</div>
+					</div>
+					<div class="col-lg-6 MarginPx">
+						<label class="layui-form-label" style="width: 38%;">点位Y坐标/m：</label>
+						<div class="layui-input-block" style="margin-left: 40%;">
+							<input class="form-control" id="deviceY" name="y" type="text" readonly="readonly">
+						</div>
+					</div>
+					<div class="col-lg-6 MarginPx isShow">
+						<label class="layui-form-label" style="width: 38%;">半径/m：</label>
+						<div class="layui-input-block" style="margin-left: 40%;">
+							<input class="form-control" id="radius" name="triggerRadius" type="text" placeholder="请先选择触发点" disabled="disabled">
+						</div>
+					</div>
+					<div class="col-lg-6 MarginPx">
+						<label class="layui-form-label" style="width: 38%;">触发点名称：</label>
+						<div class="layui-input-block" style="margin-left: 40%;">
+							<input class="form-control" id="name" name="name" type="text" placeholder="请输入名称">
+						</div>
+					</div>
+					<div class="col-lg-12" id="fixDiv" style="text-align: center;width: 700px;height: 500px;position: relative;overflow:overlay;margin-left: 150px;">
+						<div id="floorSvg" style="position:absolute;"></div>
+						<i class="fa fa-plus" id="deviceAnchor" style="position: absolute;display: none;color: red"></i>
+					</div>
+				</div>
+			</form>
+        </div>
+    </section>
+</script>
+
+<!--地图显示比例-->
+<script type="text/html" id="mapProportion">
+    <section class="openDetail" style="width: 100%;text-align: center">
+        <div class="panel-body">
+            <form class="form-horizontal" id="proportionForm">
+            	<input type="hidden" name="id" id="floorId"/>
+            	<div class="col-lg-6 MarginPx">
+                    <label class="layui-form-label" style="width: 50%;">图片距离/px：</label>
+                    <div class="layui-input-block">
+                        <input class="form-control" id="pDistance" name="pDistance" type="text">
+                    </div>
+                </div>
+                <div class="col-lg-6 MarginPx">
+                    <label class="layui-form-label " style="width: 50%;">实际距离/m：</label>
+                    <div class="layui-input-block">
+                        <input class="form-control" id="aDistance" name="aDistance" type="text">
+                    </div>
+                </div>
+                <div class="col-lg-12 MarginPx" style="height: 10px;">
+                    <div style="height: 2px;background: gray;margin-top: 8px;"></div>
+                </div>
+                <div class="col-lg-6 MarginPx" style="margin-top: 15px;">
+                    <label class="layui-form-label " style="width: 50%;">实际图宽/m：</label>
+                    <div class="layui-input-block">
+                        <input class="form-control" id="aWidth" name="aWidth" type="text">
+                    </div>
+                </div>
+                <div class="col-lg-6 MarginPx" style="margin-top: 15px;">
+                    <label class="layui-form-label " style="width: 50%;">实际图高/m：</label>
+                    <div class="layui-input-block">
+                        <input class="form-control" id="aHeight" name="aHeight" type="text">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>海克斯后台管理系统</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+	<link href="../css/style.min.css" rel="stylesheet">
+	<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+	<link href="../css/commonStyle.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/layui.css" />
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../plus/layer/layer.js"></script>
+	<script src="../js/template-web.js"></script>
+	<script src="../plus/validate/jquery.validate.min.js"></script>
+	<script src="../plus/validate/messages_zh.min.js"></script>
+	<script src="../js/bootstrap-treeview.js"></script>
+
+	<!--		<script src="../js/httpUtils.js"></script>-->
+	<!--<script src="../js/Md5.js"></script>-->
+
+	<script src="../js/laydate/laydate.js"></script>
+	<style>
+		.col-lg-3{
+			float: left;
+			width: 25%;
+		}
+		.MarginPx {
+			margin: 10px 0;
+		}
+	</style>
+</head>
+
+<body>
+<main>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h4>打开记录管理</h4>
+					</div>
+					<div class="card-body">
+						<div class="ibox-content row">
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_userName">用户名称：</label>
+									<input class="form-control" name="s_userName" id="s_userName" placeholder="用户名称" type="text">
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_startDate">起始日期：</label>
+									<input class="form-control" name="s_startDate" id="s_startDate" placeholder="起始时间" type="text">
+								</div>
+							</div>
+
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_endDate">结束日期：</label>
+									<input class="form-control" name="s_endDate" id="s_endDate" placeholder="结束时间" type="text">
+								</div>
+							</div>
+						</div>
+						<div class="ibox-content row">
+							<div class="col-lg-3">
+								<div class="form-group">
+									<label class="form-label" for="s_deviceAlias">设备名称：</label>
+									<input class="form-control" name="s_deviceAlias" id="s_deviceAlias" placeholder="设备名称" type="text">
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="form-group">
+									<div id="buttons" style="margin-top: 24px;">
+										<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+										<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="ibox-content">
+							<table id="myTable">
+
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<div id="loadDiv"></div>
+</body>
+
+<script>
+
+    $('#s_startDate').mouseenter(function() {
+        laydate.render({
+            elem: '#s_startDate',
+            type: 'datetime'
+        });
+    });
+    $('#s_endDate').mouseenter(function() {
+        laydate.render({
+            elem: '#s_endDate',
+            type: 'datetime'
+        });
+    });
+
+    var html;
+    var userIdd = $.getCookie("userId");
+    var url = "";
+    $("#loadDiv").html(loadHtml);
+    $(function() {
+        $.show_overall_loding();
+        $('#myTable').bootstrapTable({
+            url: deviceServiceUrl + "/amtCon/list", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function(data) {
+                var res = [];
+                if(data.code == 0) {
+                    var result = data.data;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: null
+                    });
+                    return res[0];
+                }
+            },
+            onDblClickRow: function(row) {
+                console.info(row);
+            },
+            onLoadSuccess: function() {
+                $.hide_overall_loding();
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function(value, row, index) {
+                    return index + 1;
+                }
+            }, {
+                field: 'userName',
+                title: '用户名称',
+                width: 100
+            }, {
+                field: 'organizationName',
+                title: '组织名称',
+                width: 150
+            }, {
+                field: 'userMobile',
+                title: '用户电话',
+                width: 80
+            }, {
+                field: 'deviceAlias',
+                title: '设备名称',
+                width: 150
+            }, {
+                field: 'dkTime',
+                title: '打卡时间',
+                width: 100
+            }]
+        });
+
+        function queryParams(params) {
+            $.show_overall_loding();
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                loginUserId: userIdd,
+                selectType: 2,
+                startDate: $("#s_startDate").val(),
+                endDate: $("#s_endDate").val(),
+                userName: $("#s_userName").val(),
+                organizationName: $("#s_organizationName").val(),
+                isHoliday: $("#s_isHoliday").val(),
+                startStaus: $("#s_startStaus").val(),
+                endStaus: $("#s_endStaus").val(),
+
+            };
+        }
+
+        $("#search").click(function() {
+            $.show_overall_loding();
+            $('#myTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function() {
+            $("#s_userName").val(""),
+                $("#s_organizationName").val(""),
+                $("#s_isHoliday").val(""),
+                $("#s_startDate").val(""),
+                $("#s_endDate").val(""),
+                $("#s_startStaus").val(""),
+                $("#s_endStaus").val(""),
+                $("#search").trigger("click");
+        });
+    });
+
+
+    var organizationData = "";
+    function get_o_TreeData(data) {
+        var rdata = [];
+        for(var i = 0; i < data.length; i++) {
+            var node = data[i];
+            var one = {};
+            one.text = node.organizationName;
+            one.id = node.id;
+            if(node.childrens != undefined && node.childrens != null && node.childrens != '') {
+                one.nodes = get_o_TreeData(node.childrens);
+            }
+            rdata.push(one);
+        }
+        return rdata;
+    }
+    function s_init_o_Tree() {
+        if(organizationData == "") {
+            $.sanjiGetJSON(userServiceUrl + "/organization/treeList", {}, function(data) {
+                organizationData = get_o_TreeData(data.data);
+                s_initTreeData();
+            });
+            return;
+        }
+        s_initTreeData();
+    }
+    function s_initTreeData() {
+        var options = {
+            checkedIcon: "glyphicon glyphicon-check",
+            nodeIcon: "none", //所有节点的默认图标
+            levels: 1,
+            data: organizationData,
+            // onhoverColor: "rgba(255,255,255,0.9)",
+            onhoverColor: "rgba(0,0,0,0.1)",
+            onNodeSelected: function(event, data) {
+                $("#s_organizationName").val(data.text);
+                $("#s_organizationId").val(data.id);
+                $("#s_organizationTree").hide();
+            }
+        };
+        $('#s_organizationTree').treeview(options);
+    }
+    s_init_o_Tree();
+
+</script>
+
+<script type="text/html" id="modelAttInfoDetails">
+	<section class="openDetail" style="width: 100%;">
+		<div class="panel-body">
+			<form id="attInfoDetailsForm">
+				<div class="row">
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">考勤日期：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="attDay" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">用户名称：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="userName" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">组织名称：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="organizationName" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">上班时间：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="startTime" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label" style="width: 100px">下班时间：</label>
+						<div class="layui-input-block">
+							<input class="form-control attInfoDisabled" name="endTime" type="text">
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label">时间类型：</label>
+						<div class="layui-input-block">
+							<select class="form-control attInfoDisabled" name="isHoliday">
+								<option value="0">--请选择时间类型--</option>
+								<option value="1">工作日期</option>
+								<option value="2">法定假期</option>
+								<option value="3">周末双休</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label">上班状态：</label>
+						<div class="layui-input-block">
+							<select class="form-control attInfoDisabled" name="startStaus">
+								<option value="0">--请选择上班状态--</option>
+								<option value="1">未打卡</option>
+								<option value="2">正常</option>
+								<option value="3">迟到</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6" style="margin: 10px 0;">
+						<label class="layui-form-label">下班状态：</label>
+						<div class="layui-input-block">
+							<select class="form-control attInfoDisabled" name="endStaus">
+								<option value="0">--请选择事下班状态--</option>
+								<option value="1">未打卡</option>
+								<option value="2">正常</option>
+								<option value="3">早退</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
+</script>
+
+<script>
+    $(document).bind("click", function (e) {
+        var con_one = $(".position-box");// 设置目标区域
+        // console.info(con_one);
+        var f = 'expand-icon';	//点击treeView的加号图标不隐藏
+        if (!con_one.is(e.target) && con_one.has(e.target).length === 0 && !e.target.classList.contains(f)) {
+            $("#s_organizationTree").hide();//需要隐藏的元素
+        }
+    });
+</script>
+
+</html>

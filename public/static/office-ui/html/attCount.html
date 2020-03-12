@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8">
+		<!--<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>台迪智慧办公系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+		<link href="../css/style.min.css" rel="stylesheet">
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+		<script src="../plus/layui/layui.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<!--title-->
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header"><span class="icon-index-sprite3 icon-att-count"></span><span>考勤统计</span></div>
+							<div class="Switch">
+								<form class="layui-form">
+									<input type="checkbox" id="attSwitch" name="attSwitch" lay-filter="attSwitch" lay-skin="switch" lay-text="周|月">
+								</form>
+							</div>
+							<ul class="count-value">
+								<li>
+									<span>迟到总数：</span>
+									<span id="beLateAllNum">44</span>
+									<span>次</span>
+								</li>
+								<li>
+									<span>早退总数：</span>
+									<span id="leaveEarlyAllNum">35</span>
+									<span>次</span>
+								</li>
+								<li>
+									<span>矿工总数：</span>
+									<span id="minerNumAllNum">35</span>
+									<span>次</span>
+								</li>
+								<li>
+									<span>正常总数：</span>
+									<span id="normalNumAllNum">35</span>
+									<span>次</span>
+								</li>
+							</ul>
+							<div id="echarts1" class="echart-box"></div>
+						</div>
+					</div>
+				</div>
+				<div class="row att" style="margin-top: 10px;">
+					<div class="col-md-6">
+						<div class="card" style="padding-bottom: 20px;">
+							<div class="card-header"><span class="icon-index-sprite3 icon-department-count"></span><span>部门统计</span></div>
+							<div class="echart-select">
+								<span class="select-icon"></span>
+								<select name="select_echart" id="select_echart">
+									<option value="0">迟到统计</option>
+									<option value="1">早退统计</option>
+									<option value="2">矿工统计</option>
+									<option value="3">正常统计</option>
+								</select>
+							</div>
+							<div class="Switch">
+								<form class="layui-form">
+									<input type="checkbox" id="departmentSwitch" name="departmentSwitch" lay-filter="departmentSwitch" lay-skin="switch" lay-text="周|月">
+								</form>
+							</div>
+							<div id="echarts2" class="echart-box"></div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="card" style="padding-bottom: 20px;">
+							<div class="card-header"><span class="icon-index-sprite3 icon-leave-count"></span><span>请假统计</span></div>
+							<div class="echart-select">
+								<span class="select-icon"></span>
+								<select name="select_echart2" id="select_echart2">
+									<option value="0">公休</option>
+									<option value="1">调休</option>
+									<option value="2">事假</option>
+									<option value="3">病假</option>
+								</select>
+							</div>
+							<div class="Switch">
+								<form class="layui-form">
+									<input type="checkbox" id="leaveSwitch" name="leaveSwitch" lay-filter="leaveSwitch" lay-skin="switch" lay-text="周|月">
+								</form>
+							</div>
+							<div id="echarts3" class="echart-box"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</main>
+	</body>
+	<script type="text/javascript">
+        var userIdd = $.getCookie("userId");
+        var echarData1 = [];
+        var echarData2 = [];
+        var echarData3 = [];
+        var echarData4 = [];
+        var beLateAllNum = 0;
+        var leaveEarlyAllNum = 0;
+        var minerNumAllNum = 0;
+        var normalNumAllNum = 0;
+        /*查询类型 1：查询本周总数 2：查询本月总数*/
+        var selectType = 2;
+        /*统计当前人/本周/本月数据*/
+        function oneStaticNum(selectType) {
+            echarData1 = [];
+            echarData2 = [];
+            echarData3 = [];
+            echarData4 = [];
+            beLateAllNum = 0;
+            leaveEarlyAllNum = 0;
+            minerNumAllNum = 0;
+            normalNumAllNum = 0;
+            $.ajax({
+                url: addToUrlToken(deviceServiceUrl + "/attInfo/oneStaticNum"),
+                type: "get",
+                contentType: "application/json",
+                dataType: "json",
+                timeout: 10000,
+                data: {
+                    "selectType": selectType,
+                    "userId": userIdd,
+                },
+                async: false,
+                success: function(res) {
+                    if(res.code == 0) {
+                        console.log(res.data.list.length + " " + "==========");
+                        if(res.data.list.length == 0){
+                            echarData1.push(0);
+                            echarData2.push(0);
+                            echarData3.push(0);
+                            echarData4.push(0);
+						} else {
+                            if(selectType == 1 && parseInt(res.data.list[0].weekDay) > 1){
+                                for(var i = 1; i< parseInt(res.data.list[0].weekDay); i ++){
+                                    echarData1.push(0);
+                                    echarData2.push(0);
+                                    echarData3.push(0);
+                                    echarData4.push(0);
+                                }
+                            }
+                            if(selectType == 2 && parseInt(res.data.list[0].dataTime.substring(8,10)) > 1){
+                                for(var i = 1; i< parseInt(res.data.list[0].dataTime.substring(8,10)); i ++){
+                                    echarData1.push(0);
+                                    echarData2.push(0);
+                                    echarData3.push(0);
+                                    echarData4.push(0);
+                                }
+                            }
+						}
+                        for(var i in res.data.list) {
+                            var obj = res.data.list[i];
+                            beLateAllNum += parseInt(obj.beLate);
+                            leaveEarlyAllNum += parseInt(obj.leaveEarly);
+                            minerNumAllNum += parseInt(obj.minerNum);
+                            normalNumAllNum += parseInt(obj.normalNum);
+                            echarData1.push(obj.beLate); //迟到
+                            echarData2.push(obj.leaveEarly); //早退
+                            echarData3.push(obj.minerNum); //迟到
+                            echarData4.push(obj.normalNum); //早退
+                        }
+                        $("#beLateAllNum").html(beLateAllNum);
+                        $("#leaveEarlyAllNum").html(leaveEarlyAllNum);
+                        $("#minerNumAllNum").html(minerNumAllNum);
+                        $("#normalNumAllNum").html(normalNumAllNum);
+                    }
+                }
+            });
+        }
+        oneStaticNum(selectType);
+        var EcharDefault1 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+        var EcharDefault2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31];
+        var oneStaticNumList = "";
+		// 基于准备好的dom，初始化echarts实例
+		//会议分析
+		initLineCharts1('echarts1', echarData1, echarData2, echarData3, echarData4, EcharDefault2);
+		function initLineCharts1(id, dataList1, dataList2, dataList3, dataList4, dataX) {
+			var myChart = echarts.init(document.getElementById(id));
+
+			// 指定图表的配置项和数据
+			option = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						label: {
+							backgroundColor: '#E1EEF6'
+						}
+					},
+					backgroundColor: '#E1EEF6',
+					borderColor: '#45ADF4',
+					borderWidth: 1,
+					textStyle: {
+						color: '#4E5983'
+					}
+				},
+				grid: { // 设置图形大小
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					top: '20%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					data: dataX,
+					axisLine: {
+						show: false
+					},
+					axisTick: {
+						show: false
+					},
+					axisLabel: {
+						fontSize: 14,
+						textStyle: {
+							color: '#868DAA' //坐标值得具体的颜色
+						}
+					}
+				}],
+				yAxis: [{
+					type: 'value',
+					name: '数量',
+					nameTextStyle: {
+						color: '#868DAA',
+						fontSize: 12
+					},
+					splitNumber: '4',
+					axisLine: {
+						show: false
+					},
+					axisTick: {
+						show: false
+					},
+					axisLabel: {
+						fontSize: 14,
+						textStyle: {
+							color: '#868DAA'
+						}
+					},
+					splitLine: {
+						show: true,
+						//  改变轴线颜色
+						lineStyle: {
+							type: 'dashed', //设置网格线类型 dotted：虚线   solid:实线
+							// 使用深浅的间隔色
+							color: ['#E1EEF6']
+						}
+					}
+				}],
+				series: [{
+						name: '早退',
+						type: 'line',
+						color: "#0492F2",
+						smooth: true,
+						areaStyle: {
+							color: '#E1EEF6'
+						},
+						data: dataList1
+					},
+					{
+						name: '迟到',
+						type: 'line',
+						color: "#19C8BA",
+						smooth: true,
+						areaStyle: {
+							color: '#DDF2F0'
+						},
+						data: dataList2
+					},
+                    {
+                        name: '矿工',
+                        type: 'line',
+                        color: "#f26522",
+                        smooth: true,
+                        areaStyle: {
+                            color: '#694d9f'
+                        },
+                        data: dataList3
+                    },
+                    {
+                        name: '正常',
+                        type: 'line',
+                        color: "#905a3d",
+                        smooth: true,
+                        areaStyle: {
+                            color: '#2a5caa'
+                        },
+                        data: dataList4
+                    }
+				]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+		}
+		layui.use('form', function() {
+			var form = layui.form;
+			form.render();
+
+			//实时能耗
+			form.on('switch(attSwitch)', function(data) {
+
+				if(this.checked) {
+                    oneStaticNum(1);
+                    initLineCharts1('echarts1', echarData1, echarData2, echarData3, echarData4, EcharDefault1);
+				} else {
+                    oneStaticNum(2);
+					initLineCharts1('echarts1', echarData1, echarData2, echarData3, echarData4, EcharDefault2);
+				}
+			});
+		});
+
+
+
+		/*考勤类型 1：迟到类型 2：早退类型 3：矿工类型 4：正常类型*/
+        var attType = 1;
+        function loadOneColumn(attType,selectType) {
+            var myChart = echarts.init(document.getElementById('echarts2'));
+            // 显示标题，图例和空的坐标轴
+            myChart.setOption({
+                color: ['#ef5b9c', '#deab8a', '#817936', '#444693',"#f391a9","#fab27b" ,"#b2d235","#181d4b","#9b95c9","#411445"],//饼图颜色
+                title: {
+                    text: '',
+                    subtext: '',
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data: []
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: { show: true },
+                        dataView: { show: true, readOnly: false },
+                        magicType: {
+                            show: true,
+                            type: ['pie', 'funnel'],
+                            option: {
+                                funnel: {
+                                    x: '25%',
+                                    width: '50%',
+                                    funnelAlign: 'center',
+                                    max: 1548
+                                }
+                            }
+                        },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                calculable: true,
+                series: [{
+                    name: '发布排行',
+                    type: 'pie',
+                    radius: ['50%', '70%'],  //设置环形的空间大小            
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true
+                            },
+                            labelLine: {
+                                show: false
+                            }
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                position: 'center',
+                                textStyle: {
+                                    fontSize: '20',
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    data: []
+                }]
+            });
+            myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
+            $.ajax({
+                url: addToUrlToken(deviceServiceUrl + "/attInfo/oneStaticOrgNum"),
+                type: "get",
+                contentType: "application/json",
+                dataType: "json",
+                timeout: 10000,
+                data: {
+                    "selectType": selectType,
+                },
+                async: false,
+                success: function(res) {
+                    names = [];
+                    brower = [];
+                    if(res.code == 0) {
+                        $.each(res.data.list, function (index, item) {
+                            names.push(item.organizationName);    //挨个取出类别并填入类别数组 
+                            if(attType == 1){
+                                names.push(item.organizationName);
+                                brower.push({
+                                    value: item.beLate == 0?null:item.beLate,
+                                    name: item.organizationName
+                                });
+                            }
+                            if(attType == 2){
+                                names.push(item.organizationName);
+                                brower.push({
+                                    value: item.leaveEarly == 0?null:item.leaveEarly,
+                                    name: item.organizationName
+                                });
+                            }
+                            if(attType == 3){
+                                names.push(item.organizationName);
+                                brower.push({
+                                    value: item.minerNum == 0?null:item.minerNum,
+                                    name: item.organizationName
+                                });
+                            }
+                            if(attType == 4){
+                                names.push(item.organizationName);
+                                brower.push({
+                                    value: item.normalNum == 0?null:item.normalNum,
+                                    name: item.organizationName
+                                });
+                            }
+                        });
+                        myChart.hideLoading();    //隐藏加载动画
+                        myChart.setOption({        //加载数据图表                
+                            legend: {
+                                data: names
+                            },
+                            series: [{
+                                data: brower
+                            }]
+                        });
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    myChart.hideLoading();
+                }
+            });
+            console.log(brower + "---------");
+        };
+
+        var departmentSwitch = false;
+        layui.use('form', function() {
+            var form = layui.form;
+            form.render();
+
+            //实时能耗
+            form.on('switch(departmentSwitch)', function(data) {
+                /*周 - 迟到情况*/
+                if(this.checked) {
+                    departmentSwitch = true;
+                    if($('#select_echart').val() == 0) {
+                        loadOneColumn(1,1);
+                    } else if($('#select_echart').val() == 1){
+                        loadOneColumn(2,1);
+                    } else if($('#select_echart').val() == 2){
+                        loadOneColumn(3,1);
+                    } else {
+                        loadOneColumn(4,1);
+					}
+                } else {
+                    departmentSwitch = false;
+                    if($('#select_echart').val() == 0) {
+                        loadOneColumn(1,2);
+                    } else if($('#select_echart').val() == 1){
+                        loadOneColumn(2,2);
+                    } else if($('#select_echart').val() == 2){
+                        loadOneColumn(3,2);
+                    } else {
+                        loadOneColumn(4,2);
+					}
+                }
+
+            });
+        });
+
+        $('#select_echart').change(function() {
+            console.log(departmentSwitch);
+            if(departmentSwitch == true) {
+                if($(this).val() == 0) {
+                    loadOneColumn(1,1);
+                } else if($(this).val() == 1){
+                    loadOneColumn(2,1);
+				} else if($(this).val() == 2){
+                    loadOneColumn(3,1);
+                } else {
+                    loadOneColumn(4,1);
+				}
+            }else {
+                if($(this).val() == 0) {
+                    loadOneColumn(1,2);
+                } else if($(this).val() == 1){
+                    loadOneColumn(2,2);
+                } else if($(this).val() == 2){
+                    loadOneColumn(3,2);
+                } else {
+                    loadOneColumn(4,2);
+				}
+			}
+		});
+
+        loadOneColumn(attType,selectType);
+
+
+		/*部门统计*/
+
+        /*function oneStaticOrgNum(selectType){
+            $.ajax({
+                url: addToUrlToken(deviceServiceUrl + "/attInfo/oneStaticOrgNum"),
+                type: "get",
+                contentType: "application/json",
+                dataType: "json",
+                timeout: 10000,
+                data: {
+                    "selectType": selectType,
+                },
+                async: false,
+                success: function(res) {
+                    if(res.code == 0) {
+                        for(var i in res.data.list) {
+                            var obj = res.data.list[i];
+                        }
+                    }
+                }
+            });
+		}
+
+        oneStaticOrgNum(selectType)
+
+
+        let dataList3 = [{
+			value: 7,
+			name: "产品中心",
+			itemStyle: {
+				color: "#FD9D02"
+			}
+		}, {
+			value: 8,
+			name: "企划部",
+			itemStyle: {
+				color: "#FF6F79"
+			}
+		}, {
+			value: 3,
+			name: "行政部",
+			itemStyle: {
+				color: "#0492F2"
+			}
+		}, {
+			value: 2,
+			name: "财务部",
+			itemStyle: {
+				color: "#00C3B3"
+			}
+		}];
+
+        let eventTotal = 20;
+		initPieCharts0('echarts2', eventTotal, dataList3);
+
+		function initPieCharts0(id, total, dataList) {
+			let myChart = echarts.init(document.getElementById(id));
+			var option = {
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				legend: {
+					show: true,
+					orient: 'vertical',
+					top: '40%',
+					right: 0,
+					icon: 'circle'
+				},
+				calculable: true,
+				series: [{
+					name: '部门统计',
+					type: 'pie',
+					radius: [50, 100],
+					center: ['50%', '50%'],
+					roseType: 'radius',
+					label: {
+						normal: {
+							show: true
+						},
+						emphasis: {
+							show: true
+						}
+					},
+					lableLine: {
+						normal: {
+							show: true
+						},
+						emphasis: {
+							show: true
+						}
+					},
+					data: dataList
+				}]
+			};
+			myChart.setOption(option);
+		}
+
+		var departmentSwitch = false;
+		layui.use('form', function() {
+			var form = layui.form;
+			form.render();
+
+			//实时能耗
+			form.on('switch(departmentSwitch)', function(data) {
+
+				if(this.checked) {
+					departmentSwitch = true;
+					if($('#select_echart').val() == 0) {
+						let dataList3 = [{
+							value: 1,
+							name: "产品中心",
+							itemStyle: {
+								color: "#FD9D02"
+							}
+						}, {
+							value: 2,
+							name: "企划部",
+							itemStyle: {
+								color: "#FF6F79"
+							}
+						}, {
+							value: 1,
+							name: "行政部",
+							itemStyle: {
+								color: "#0492F2"
+							}
+						}, {
+							value: 4,
+							name: "财务部",
+							itemStyle: {
+								color: "#00C3B3"
+							}
+						}];
+						let eventTotal = 8;
+						initPieCharts0('echarts2', eventTotal, dataList3);
+					} else {
+						let dataList3 = [{
+							value: 0,
+							name: "产品中心",
+							itemStyle: {
+								color: "#FD9D02"
+							}
+						}, {
+							value: 1,
+							name: "企划部",
+							itemStyle: {
+								color: "#FF6F79"
+							}
+						}, {
+							value: 1,
+							name: "行政部",
+							itemStyle: {
+								color: "#0492F2"
+							}
+						}, {
+							value: 3,
+							name: "财务部",
+							itemStyle: {
+								color: "#00C3B3"
+							}
+						}];
+						let eventTotal = 3;
+						initPieCharts0('echarts2', eventTotal, dataList3);
+					}
+				} else {
+					departmentSwitch = false;
+					if($('#select_echart').val() == 0) {
+						let dataList3 = [{
+							value: 4,
+							name: "产品中心",
+							itemStyle: {
+								color: "#FD9D02"
+							}
+						}, {
+							value: 6,
+							name: "企划部",
+							itemStyle: {
+								color: "#FF6F79"
+							}
+						}, {
+							value: 7,
+							name: "行政部",
+							itemStyle: {
+								color: "#0492F2"
+							}
+						}, {
+							value: 7,
+							name: "财务部",
+							itemStyle: {
+								color: "#00C3B3"
+							}
+						}];
+						let eventTotal = 24;
+						initPieCharts0('echarts2', eventTotal, dataList3);
+					} else {
+						let dataList3 = [{
+							value: 3,
+							name: "产品中心",
+							itemStyle: {
+								color: "#FD9D02"
+							}
+						}, {
+							value: 5,
+							name: "企划部",
+							itemStyle: {
+								color: "#FF6F79"
+							}
+						}, {
+							value: 1,
+							name: "行政部",
+							itemStyle: {
+								color: "#0492F2"
+							}
+						}, {
+							value: 3,
+							name: "财务部",
+							itemStyle: {
+								color: "#00C3B3"
+							}
+						}];
+						let eventTotal = 12;
+						initPieCharts0('echarts2', eventTotal, dataList3);
+					}
+				}
+
+			});
+		});
+
+		$('#select_echart').change(function() {
+			if(departmentSwitch == true) {
+				if($(this).val() == 0) {
+					let dataList3 = [{
+						value: 1,
+						name: "产品中心",
+						itemStyle: {
+							color: "#FD9D02"
+						}
+					}, {
+						value: 2,
+						name: "企划部",
+						itemStyle: {
+							color: "#FF6F79"
+						}
+					}, {
+						value: 1,
+						name: "行政部",
+						itemStyle: {
+							color: "#0492F2"
+						}
+					}, {
+						value: 4,
+						name: "财务部",
+						itemStyle: {
+							color: "#00C3B3"
+						}
+					}];
+					let eventTotal = 8;
+					initPieCharts0('echarts2', eventTotal, dataList3);
+				} else {
+					let dataList3 = [{
+						value: 0,
+						name: "产品中心",
+						itemStyle: {
+							color: "#FD9D02"
+						}
+					}, {
+						value: 1,
+						name: "企划部",
+						itemStyle: {
+							color: "#FF6F79"
+						}
+					}, {
+						value: 1,
+						name: "行政部",
+						itemStyle: {
+							color: "#0492F2"
+						}
+					}, {
+						value: 3,
+						name: "财务部",
+						itemStyle: {
+							color: "#00C3B3"
+						}
+					}];
+					let eventTotal = 3;
+					initPieCharts0('echarts2', eventTotal, dataList3);
+				}
+			} else {
+				if($(this).val() == 0) {
+					let dataList3 = [{
+						value: 4,
+						name: "产品中心",
+						itemStyle: {
+							color: "#FD9D02"
+						}
+					}, {
+						value: 6,
+						name: "企划部",
+						itemStyle: {
+							color: "#FF6F79"
+						}
+					}, {
+						value: 7,
+						name: "行政部",
+						itemStyle: {
+							color: "#0492F2"
+						}
+					}, {
+						value: 7,
+						name: "财务部",
+						itemStyle: {
+							color: "#00C3B3"
+						}
+					}];
+					let eventTotal = 24;
+					initPieCharts0('echarts2', eventTotal, dataList3);
+				} else {
+					let dataList3 = [{
+						value: 3,
+						name: "产品中心",
+						itemStyle: {
+							color: "#FD9D02"
+						}
+					}, {
+						value: 5,
+						name: "企划部",
+						itemStyle: {
+							color: "#FF6F79"
+						}
+					}, {
+						value: 1,
+						name: "行政部",
+						itemStyle: {
+							color: "#0492F2"
+						}
+					}, {
+						value: 3,
+						name: "财务部",
+						itemStyle: {
+							color: "#00C3B3"
+						}
+					}];
+					let eventTotal = 12;
+					initPieCharts0('echarts2', eventTotal, dataList3);
+				}
+			}
+
+		});*/
+
+		//请假统计
+		let dataList4 = ['3', '4', '2', '7', '12', '11', '8', '10', '16', '12', '2', '5'];
+		let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+		let name4 = '公休';
+		initLineCharts2('echarts3', name4, dataList4, dataX4);
+
+		function initLineCharts2(id, name, dataList, dataX) {
+			var myChart = echarts.init(document.getElementById(id));
+
+			// 指定图表的配置项和数据
+			option = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						label: {
+							backgroundColor: '#E1EEF6'
+						}
+					},
+					backgroundColor: '#E1EEF6',
+					borderColor: '#45ADF4',
+					borderWidth: 1,
+					textStyle: {
+						color: '#4E5983'
+					}
+				},
+				grid: { // 设置图形大小
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					top: '20%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					data: dataX,
+					axisLine: {
+						show: false
+					},
+					axisTick: {
+						show: false
+					},
+					axisLabel: {
+						fontSize: 14,
+						textStyle: {
+							color: '#868DAA' //坐标值得具体的颜色
+						}
+					}
+				}],
+				yAxis: [{
+					type: 'value',
+					name: '数量',
+					nameTextStyle: {
+						color: '#868DAA',
+						fontSize: 12
+					},
+					splitNumber: '4',
+					axisLine: {
+						show: false
+					},
+					axisTick: {
+						show: false
+					},
+					axisLabel: {
+						fontSize: 14,
+						textStyle: {
+							color: '#868DAA'
+						}
+					},
+					splitLine: {
+						show: true,
+						//  改变轴线颜色
+						lineStyle: {
+							type: 'dashed', //设置网格线类型 dotted：虚线   solid:实线
+							// 使用深浅的间隔色
+							color: ['#E1EEF6']
+						}
+					}
+				}],
+				series: [{
+					name: name,
+					type: 'line',
+					color: "#0492F2",
+					smooth: true,
+					stack: '数量',
+					areaStyle: {
+						color: '#E1EEF6'
+					},
+					data: dataList
+				}]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+		}
+
+		var leaveSwitch = false;
+		layui.use('form', function() {
+			var form = layui.form;
+			form.render();
+
+			//实时能耗
+			form.on('switch(leaveSwitch)', function(data) {
+
+				if(this.checked) {
+					leaveSwitch = true;
+					if($('#select_echart2').val() == 0) {
+						leaveSwitch = true;
+						let dataList4 = [0, 0, 0, 3, 1, 2, 2];
+						let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+						let name4 = '公休';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					} else if($('#select_echart2').val() == 1) {
+						leaveSwitch = true;
+						let dataList4 = [1, 2, 1, 4, 3, 2, 2];
+						let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+						let name4 = '调休';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					} else if($('#select_echart2').val() == 2) {
+						leaveSwitch = true;
+						let dataList4 = [0, 2, 1, 4, 3, 0, 0];
+						let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+						let name4 = '事假';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					} else {
+						leaveSwitch = true;
+						let dataList4 = [0, 0, 0, 1, 2, 0, 0];
+						let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+						let name4 = '病假';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					}
+				} else {
+					leaveSwitch = false;
+					if($('#select_echart2').val() == 0) {
+						leaveSwitch = false;
+						let dataList4 = ['1', '4', '2', '3', '6', '5', '8', '10', '11', '12', '12', '5'];
+						let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+						let name4 = '公休';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					} else if($('#select_echart2').val() == 1) {
+						leaveSwitch = false;
+						let dataList4 = ['2', '4', '2', '7', '2', '1', '5', '0', '6', '1', '2', '5'];
+						let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+						let name4 = '调休';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					} else if($('#select_echart2').val() == 2) {
+						leaveSwitch = false;
+						let dataList4 = ['1', '3', '3', '5', '7', '3', '4', '9', '0', '8', '3', '5'];
+						let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+						let name4 = '事假';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					} else {
+						leaveSwitch = false;
+						let dataList4 = ['1', '0', '1', '1', '2', '3', '3', '1', '2', '4', '5', '8'];
+						let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+						let name4 = '病假';
+						initLineCharts2('echarts3', name4, dataList4, dataX4);
+					}
+				}
+
+			});
+		});
+
+		$('#select_echart2').change(function() {
+			if(departmentSwitch == true) {
+				if($(this).val() == 0) {
+					leaveSwitch = true;
+					let dataList4 = [0, 0, 0, 3, 1, 2, 2];
+					let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+					let name4 = '公休';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				} else if($(this).val() == 1) {
+					leaveSwitch = true;
+					let dataList4 = [1, 2, 1, 4, 3, 2, 2];
+					let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+					let name4 = '调休';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				} else if($(this).val() == 2) {
+					leaveSwitch = true;
+					let dataList4 = [0, 2, 1, 4, 3, 0, 0];
+					let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+					let name4 = '事假';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				} else {
+					leaveSwitch = true;
+					let dataList4 = [0, 0, 0, 1, 2, 0, 0];
+					let dataX4 = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+					let name4 = '病假';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				}
+			} else {
+				if($(this).val() == 0) {
+					leaveSwitch = false;
+					let dataList4 = ['1', '4', '2', '3', '6', '5', '8', '10', '11', '12', '12', '5'];
+					let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+					let name4 = '公休';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				} else if($(this).val() == 1) {
+					leaveSwitch = false;
+					let dataList4 = ['2', '4', '2', '7', '2', '1', '5', '0', '6', '1', '2', '5'];
+					let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+					let name4 = '调休';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				} else if($(this).val() == 2) {
+					leaveSwitch = false;
+					let dataList4 = ['1', '3', '3', '5', '7', '3', '4', '9', '0', '8', '3', '5'];
+					let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+					let name4 = '事假';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				} else {
+					leaveSwitch = false;
+					let dataList4 = ['1', '0', '1', '1', '2', '3', '3', '1', '2', '4', '5', '8'];
+					let dataX4 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+					let name4 = '病假';
+					initLineCharts2('echarts3', name4, dataList4, dataX4);
+				}
+			}
+
+		});
+	</script>
+
+</html>

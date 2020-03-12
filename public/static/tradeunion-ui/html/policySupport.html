@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+    <link href="../plus/summernote/summernote.css" rel="stylesheet">
+    
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../plus/summernote/summernote.js"></script>
+    <script src="../plus/summernote/lang/summernote-zh-CN.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+    <script src="../js/httpUtils.js"></script>
+    <script src="../js/Md5.js"></script>
+    <script src="../plus/iview/vue.min.js"></script>
+    <style type="text/css">
+        .simButton {
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--加载头部和菜单栏-->
+        <div id="hander">
+            <script>
+                $(function () {
+                    $("#hander").load("handMenu.html");
+                });
+            </script>
+        </div>
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>政策支持</h4>
+                            </div>
+                            <div class="card-body">
+                                <!--<div class="ibox-content row">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label" for="s_title">标题：</label>
+                                            <input class="form-control" name="title" id="s_title" placeholder="标题" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div style="margin-top: 24px;">
+                                                <button type="button" class="btn btn-purple" id="clean"><i
+                                                        class="fa fa-eraser"></i> 清空
+                                                </button>
+                                                <button type="button" class="btn btn-success" id="search"
+                                                        style="margin-left: 10px"><i class="fa fa-search"></i> 查询
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!--Start-->
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                    	<button type="button" class="btn btn-primary" id="addSlibings" onclick="newEvent()"><i class="fa fa-plus"></i>
+                                            新增
+                                        </button>
+                                    </div>
+
+                                    <div id="myTable">
+
+                                    </div>
+                                </div>
+                                <table id="policyTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+
+    </div>
+</div>
+<!--加载底部-->
+<div id="footer" class="classifyFooter">
+    <script type="text/javascript">
+        $(function () {
+            $("#footer").load("footer.html");
+        });
+    </script>
+</div>
+<div id="loadDiv"></div>
+</body>
+<script type="text/javascript">
+    $("#loadDiv").html(loadHtml);
+    let html;
+    $(function () {
+        $('#policyTable').bootstrapTable({
+            url: userServiceUrl + "/policySupport/list", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if (data.code == 0) {
+                    var result = data.data;
+                    rdata = result.list;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    $.hide_overall_loding();
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: []
+                    });
+                    layer.msg("获取数据失败！", {icon: 2});
+                    $.hide_overall_loding();
+                    return res[0];
+                }
+            },
+            onLoadSuccess: function () {
+                $.hide_overall_loding();
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function (value, row, index) {
+                    let pageSize = $('#policyTable').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                    let pageNumber = $('#policyTable').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                    return pageSize * (pageNumber - 1) + index + 1;
+                }
+            }, {
+                field: 'name',
+                title: '名称',
+                width: 100
+            }, {
+                field: 'title',
+                title: '标题',
+                width: 100
+            },{
+                field: 'type',
+                title: '类型',
+                width: 100,
+                formatter:function(value, row, index){
+                    if(value == 2){
+                        return '<span >多部委</span>';
+                    }else if(value == 3){
+                        return '<span >各省公开</span>';
+                    }else{
+                        return '<span >国务院</span>';
+                    }
+                }
+            }, {
+                field: 'filePath',
+                title: '文件路径',
+                width: 100
+            },{
+                title: "操作",
+                width: 100,
+                clickToSelect: false,
+                formatter: function (i1, i2, i3) {
+                    var str = '' +
+                        '<button data-toggle="tooltip" title="详情" type="button" onclick="getDetail(' + i3 +
+                        ');" class="btn btn-primary tableButton"><i class="fa fa-info-circle"> </i></button>' 
+                        +
+                        '<button data-toggle="tooltip" title="编辑" type="button" onclick="editEvent(' + i3 +
+                        ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"> </i></button>' +
+                        '<button data-toggle="tooltip" title="编辑" type="button" onclick="delMsg(' + i3 +
+                        ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"> </i></button>';
+                    return str;
+                },
+                cellStyle: function () {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            return {
+                token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber
+//              title:$("#s_title").val()
+            };
+        }
+
+        $("#search").on("click", function () {
+            $('#policyTable').bootstrapTable('refresh');
+        });
+
+        $("#clean").click(function () {
+//          $("#s_title").val("");
+            $("#search").trigger("click");
+        });
+    });
+
+    //获取事件详情
+    function getDetail(id){
+        let dataList = $("#policyTable").bootstrapTable("getData");
+        html = template("detailWindow",{title:"政策详情 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "政策详情 ",
+            area: ['700px','550px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定'],
+            yes: function (index, layero) {
+                layer.close(myLayer);
+            },
+            success: function (layero) {
+                $("#i_title").val(dataList[id].title);
+                $("#i_content").html(dataList[id].content) ;
+                $("#i_createDate").val(dataList[id].createDate);
+                $("#i_type").val(dataList[id].type);
+                $("#i_subtitle").val(dataList[id].subtitle);
+                $("#i_filePath").val(dataList[id].filePath);
+                $("#i_name").val(dataList[id].name);
+            }
+        });
+    }
+    //获取事件详情结束
+
+    //修改事件开始
+    function editEvent(id){
+        let dataList = $("#policyTable").bootstrapTable("getData");
+        html = template("editWindow",{title:"事件编辑 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "事件编辑",
+            area: ['700px','550px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['提交','取消'],
+            yes: function (index, layero) {
+                
+                var data = $("#eventEditForm").serializeJson();
+            	$.extend(data, {
+					"content": $("#e_content").summernote("code")
+				});
+                $.putJSON(userServiceUrl + "/policySupport",data,function (updateRes) {
+                    if(updateRes.code == 0){
+                        layer.close(myLayer);
+                        $('#policyTable').bootstrapTable('refresh');
+                    }else{
+                        layer.msg("修改失败！", {
+                            icon: 2
+                        });
+                        layer.close(myLayer);
+                    }
+                });
+                
+            },
+            success: function (layero) {
+            	$('#e_content').summernote({
+			        height : '220px',
+			        lang : 'zh-CN',
+			        placeholder: '请在此输入内容...',
+			        onImageUpload: function(files, editor, $editable) {
+                        data = new FormData();  
+                        data.append("file", files[0]);  
+                     	$.ajax({  
+	                         data : data,  
+	                         type : "POST",  
+	                         url : "http://39.98.137.198:7788/api/file/upload?appId=168254",   
+	                         cache : false,  
+	                         contentType : false,  
+	                         processData : false,  
+	                         dataType : "json",  
+	                         success: function(data) {  
+	                             //[服务器所在文件所在目录位置]一般为"http://119.23.216.181/RoboBlogs/Upload_File/default_show.png"
+	                             $('#n_content').summernote('insertImage', data.filePath);  
+	                         },
+	                         error:function(){  
+	                             alert("上传失败");  
+	                        }  
+	                     });  
+                    }
+			    });
+            	$("#eventEditForm").setForm(dataList[id]);
+                $("#e_content").summernote("code",dataList[id].content);
+            }
+        });
+    }
+    //修改事件结束
+
+    //删除信息
+    function delMsg(id){
+        $.show_overall_loding();
+        let dataList = $("#policyTable").bootstrapTable("getData");
+        $.deleteJSON(userServiceUrl + "/policySupport?id="+dataList[id].id,{},function (delRes) {
+            $.hide_overall_loding();
+            if(delRes.code == 0){
+                $('#policyTable').bootstrapTable('refresh');
+            }else{
+                layer.msg("修改失败！", {
+                    icon: 2
+                });
+            }
+        });
+    }
+
+    //新增事件开始
+    function newEvent(){
+        html = template("newEventWindow",{title:"新增通知 "});
+        let myLayer = layer.open({
+            skin: 'card',
+            type: 1,
+            title: "新增通知",
+            area: ['700px','500px'],	        //宽高
+            resize: false,				//是否拉升
+            offset: 'auto',				//居中
+            content: html,
+            btn: ['确定','取消'],
+            yes: function (index, layero) {
+                $.show_overall_loding();
+                $("#newEventForm").submit();
+            },
+            success: function (layero) {
+            	$('#n_content').summernote({
+//          		toolbar:[['style',['bold','italic','underline','clear']],['font',['strikethrough','superscript','subscript']],['fontsize',['fontsize']],['color',['color']],['para',['ul','ol','paragraph']],['height',['height']]],
+			        height : '220px',
+			        lang : 'zh-CN',
+			        placeholder: '请在此输入内容...',
+			        onImageUpload: function(files, editor, $editable) {
+                        data = new FormData();  
+                        data.append("file", files[0]);  
+                     	$.ajax({  
+	                         data : data,  
+	                         type : "POST",  
+	                         url : "http://39.98.137.198:7788/api/file/upload?appId=168254",   
+	                         cache : false,  
+	                         contentType : false,  
+	                         processData : false,  
+	                         dataType : "json",  
+	                         success: function(data) {  
+	                             //[服务器所在文件所在目录位置]一般为"http://119.23.216.181/RoboBlogs/Upload_File/default_show.png"
+	                             $('#n_content').summernote('insertImage', data.filePath);  
+	                         },
+	                         error:function(){  
+	                             alert("上传失败");  
+	                        }  
+	                     });  
+                    }
+
+//			        callbacks:{//回调函数，重写onImageUpload方法，用于图片上传
+//			            onImageUpload: function(files, editor, welEditable) {
+//			                sendFile(files,editor,welEditable);
+//			            }
+//			        }
+			    });
+            }
+        });
+        //validata开始
+        var validate = $("#newEventForm").validate({
+            rules: {
+            },
+            messages: {
+            },
+            submitHandler:function (form) {
+            	var data = $("#newEventForm").serializeJson();
+            	$.extend(data, {
+					"content": $("#n_content").summernote("code")
+				});
+            	console.info(data)
+                $.postJSON(userServiceUrl+"/policySupport",data,function (addRes) {
+                        $.hide_overall_loding();
+                        if(addRes.code == 0){
+                            layer.close(myLayer);
+                            $("#policyTable").bootstrapTable("refresh");
+                        }else{
+                            layer.msg("添加失败",{icon:2});
+                        }
+                    }
+                );
+            }
+        });
+        //validata结束
+    }
+    //新增事件结束
+
+	function sendFile(files,editor,welEditable) {
+        var data = new FormData();
+        data.append("file", files[0]);
+//      data.append("type", "img");
+
+        $.ajax({
+            data : data,
+            type : "POST",
+            url : "http://39.98.137.198:7788/api/file/upload?appId=168254",    // 图片上传出来的url，返回的是图片上传后的路径，http格式
+            cache : false,
+            contentType : false,
+            processData : false,
+            //dataType : "json",
+            success: function(data) {//data是返回的hash,key之类的值，key是定义的文件名
+                $('#n_content').summernote('insertImage', data.filePath);
+            },
+            error:function(){
+                alert("上传失败");
+            }
+        });
+    }
+</script>
+
+<!--详情弹框-->
+<script type="text/html" id="detailWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventDetailForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_title">标题：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_title" name="i_title" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_subtitle">副标题：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_subtitle" name="i_subtitle" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_name">名称：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_name" name="i_name" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_type">类型：</label>
+                        <div class="layui-input-block">
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="i_type" id="i_type" data-live-search="true">
+                                <option value="">请选择设备状态</option>
+                                <option value="1">国务院</option>
+                                <option value="2">多部委</option>
+                                <option value="3">各省公开</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_filePath">资源地址：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_filePath" name="i_filePath" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="i_createDate">创建时间：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="i_createDate" name="i_createDate" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">内容：</label>
+                        <div class="layui-input-block">
+                        	<div id="i_content"></div>
+                        	<!--<textarea  class="form-control" rows="8" name="i_content" id="i_content"  readonly></textarea>-->
+                            <!--<textarea class="form-control" id="i_content" name="i_content" readonly></textarea>-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--详情弹框结束-->
+<!--编辑弹框-->
+<script type="text/html" id="editWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventEditForm">
+            	<input type="hidden" id="poId" name="id" />
+            	<input type="hidden" id="fileUrls" name="filePath" />
+                <div class="col-lg-6 MarginPx">
+                    <label class="layui-form-label">标题：</label>
+                    <div class="layui-input-block">
+                        <input class="form-control" id="e_title" name="title" type="text" required >
+                    </div>
+                </div>
+                <div class="col-lg-6 MarginPx">
+                    <label class="layui-form-label">副标题：</label>
+                    <div class="layui-input-block">
+                        <input class="form-control" id="e_subtitle" name="subtitle" type="text" required >
+                    </div>
+                </div>
+                <div class="col-lg-6 MarginPx">
+                    <label class="layui-form-label">名称：</label>
+                    <div class="layui-input-block">
+                        <input class="form-control" id="e_name" name="name" type="text" required >
+                    </div>
+                </div>
+                <div class="col-lg-6 MarginPx">
+                    <label class="layui-form-label" for="e_type">类型：</label>
+                    <div class="layui-input-block">
+                        <select class="form-control selectpickers" style="max-height: 50px;" name="type" id="e_type" data-live-search="true">
+                            <option value="">请选择设备状态</option>
+                            <option value="1">国务院</option>
+                            <option value="2">多部委</option>
+                            <option value="3">各省公开</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="onlyH5">
+                    <label  class="col-sm-3 control-label" style="font-weight: 100;">文件上传：</label>
+                    <button style="width: 90px;margin-left: 1%;" onclick="uplode()" type="button" class="btn btn-success">选择文件</button>
+                    <input type="file"  id="filePath" onchange="selectFile()" value="" style="display: none" />
+                </div>
+                <div class="col-lg-12 MarginPx">
+                    <label class="layui-form-label">内容：</label>
+                    <div class="layui-input-block">
+                    	<textarea  class="form-control" rows="15" name="content" id="e_content"  readonly style="display: none"></textarea>
+                        <!--<textarea class="form-control" id="n_content" name="content" rows="15"></textarea>-->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--编辑弹框结束-->
+<!--添加弹框-->
+<script type="text/html" id="newEventWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="newEventForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                	<input type="hidden" id="fileUrls" name="filePath" />
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">标题：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_title" name="title" type="text" required >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">副标题：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_subtitle" name="subtitle" type="text" required >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">名称：</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_name" name="name" type="text" required >
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" for="n_type">类型：</label>
+                        <div class="layui-input-block">
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="type" id="n_type" data-live-search="true">
+                                <option value="">请选择设备状态</option>
+                                <option value="1">国务院</option>
+                                <option value="2">多部委</option>
+                                <option value="3">各省公开</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx" >
+		                <label  class="col-sm-3 control-label" style="font-weight: 100;">文件上传：</label>
+		                <button style="width: 90px;margin-left: 1%;" onclick="uplode()" type="button" class="btn btn-success">选择文件</button>
+		                <input type="file"  id="filePath" onchange="selectFile()" value="" style="display: none" />
+		            </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">内容：</label>
+                        <div class="layui-input-block">
+                        	<textarea  class="form-control" rows="15" name="content" id="n_content"  readonly></textarea>
+                            <!--<textarea class="form-control" id="n_content" name="content" rows="15"></textarea>-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--添加弹框结束-->
+
+<script>
+	function uplode() {
+        $("#filePath").click();
+    }
+    function selectFile() {
+        let imagePath = $("#filePath").val();
+        if(imagePath == ""){
+        }else {
+            let reader = new FileReader();
+            reader.readAsDataURL(document.getElementById("filePath").files[0]);
+            reader.onload = function(){
+            }
+            
+            let formData = new FormData();
+            formData.append("file",$("#filePath")[0].files[0]);
+	           $.ajax({
+	                type:"post",
+	                url:"http://39.98.137.198:7788/api/file/upload?appId=168254",
+	                data:formData,
+	                contentType:false,
+	                processData:false,
+	                success:function (res) {
+	                    $.hide_overall_loding();
+	                    if(res.code == 0){
+	                    	$("#fileUrls").val(res.data.filePath)
+	                    	layer.msg("上传成功", {icon: 1});
+	                    }else{
+	                        layer.msg("操作失败", {icon: 2});
+	                    }
+	                },
+	                fail:function () {
+	                    layer.msg("操作失败", {icon: 2});
+	                }
+	            })
+        }
+    }
+	
+	
+</script>
+</html>

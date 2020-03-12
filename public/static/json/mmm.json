@@ -1,0 +1,36 @@
+{
+  "code": 0,
+  "message": "成功",
+  "currentTimeMillis": 1577084555892,
+  "messages": null,
+  "data": {
+    "total": 1,
+    "list": [
+      {
+        "id": "e540ea6e06af4bbbae44ff5803537488",
+        "roleName": "管理员",
+        "roleDescription": "管理员",
+        "organizationId": "67356151912d45ca952ddbf0c15b8959",
+        "createDate": "2019-12-20 09:31:47"
+      }
+    ],
+    "pageNum": 1,
+    "pageSize": 10,
+    "size": 1,
+    "startRow": 1,
+    "endRow": 1,
+    "pages": 1,
+    "prePage": 0,
+    "nextPage": 0,
+    "isFirstPage": true,
+    "isLastPage": true,
+    "hasPreviousPage": false,
+    "hasNextPage": false,
+    "navigatePages": 8,
+    "navigatepageNums": [
+      1
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 1
+  }
+}

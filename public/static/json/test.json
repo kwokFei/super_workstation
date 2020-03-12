@@ -1,0 +1,94 @@
+{
+    "code": 0,
+    "message": "成功",
+    "currentTimeMillis": 1575271523673,
+    "messages": null,
+    "data": {
+        "total": 5,
+        "list": [
+            {
+                "id": "25f0fbed3ae94b5eb949ad9437a472b5",
+                "roomName": "会议室三",
+                "roomDesc": "会议室三",
+                "roomType": 1,
+                "roomState": 2,
+                "roomOpenTime": "08:03",
+                "roomCloseTime": "22:00",
+                "roomIntervalTime": 22,
+                "createDate": "2019-11-20 19:37:26",
+                "orderModeId": "0fd3a263a6de429fa044274169800be8",
+                "orderModeName": "EEEEEEEE"
+            },
+            {
+                "id": "0b32e6cb0a964f169c443daa4c81d249",
+                "roomName": "会议室二",
+                "roomDesc": "会议室二",
+                "roomType": 2,
+                "roomState": 2,
+                "roomOpenTime": "12:00",
+                "roomCloseTime": "08:00",
+                "roomIntervalTime": 29,
+                "createDate": "2019-11-20 19:36:47",
+                "orderModeId": "b0d1277776bd4668b5685e1d5961b5e0",
+                "orderModeName": "test"
+            },
+            {
+                "id": "721a9c17d5d349beb245b1fe9ea24a85",
+                "roomName": "VVVVVV",
+                "roomDesc": "vvvvvv",
+                "roomType": 1,
+                "roomState": 2,
+                "roomOpenTime": "02:55",
+                "roomCloseTime": "212",
+                "roomIntervalTime": null,
+                "createDate": "2019-11-20 17:54:35",
+                "orderModeId": "",
+                "orderModeName": null
+            },
+            {
+                "id": "e2e07a9f5b1e496498eadf6292b0c472",
+                "roomName": "2",
+                "roomDesc": "2",
+                "roomType": 2,
+                "roomState": 2,
+                "roomOpenTime": "02:55",
+                "roomCloseTime": "05:55",
+                "roomIntervalTime": 3,
+                "createDate": "2019-11-20 17:06:55",
+                "orderModeId": "",
+                "orderModeName": null
+            },
+            {
+                "id": "1",
+                "roomName": "会议室一",
+                "roomDesc": "门口第一间",
+                "roomType": 2,
+                "roomState": 2,
+                "roomOpenTime": "16:29",
+                "roomCloseTime": "16:29",
+                "roomIntervalTime": 2,
+                "createDate": null,
+                "orderModeId": "65ec961c7bc640698c821b3c9c006259",
+                "orderModeName": "123"
+            }
+        ],
+        "pageNum": 1,
+        "pageSize": 10,
+        "size": 5,
+        "startRow": 1,
+        "endRow": 5,
+        "pages": 1,
+        "prePage": 0,
+        "nextPage": 0,
+        "isFirstPage": true,
+        "isLastPage": true,
+        "hasPreviousPage": false,
+        "hasNextPage": false,
+        "navigatePages": 8,
+        "navigatepageNums": [
+            1
+        ],
+        "navigateFirstPage": 1,
+        "navigateLastPage": 1
+    }
+}

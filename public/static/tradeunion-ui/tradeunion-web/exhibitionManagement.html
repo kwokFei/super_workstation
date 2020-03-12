@@ -1,0 +1,1417 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="../images/title_icon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>工业互联网研究院展厅</title>
+		<link rel="stylesheet" type="text/css" href="../plus/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/header2.css">
+		<link rel="stylesheet" type="text/css" href="css/selectStyle.css" />
+		<link rel="stylesheet" type="text/css" href="css/exhibitionManagement.css" />
+		<link rel="stylesheet" type="text/css" href="../css/display-screen.css" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/httpUtils.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+	</head>
+
+	<body>
+		<div id="main">
+			<div id="header">
+				<script type="text/javascript">
+					$("#header").load("header2.html");
+					if($.getCookie("orgLv") == "1" || $.getCookie("orgLv") == "0") {
+
+					} else {
+						window.location.href = "./../html/Login/login.html";
+					}
+				</script>
+			</div>
+			<div class="section">
+				<div id="left">
+					<div class="left-one">
+						<p class="exhibition-name"></p>
+						<p id="info" class="exhibition-addr font-14-bold"></p>
+						<div class="box-foot">
+							<a style="background-color: #000019;cursor: default;"></a>
+						</div>
+					</div>
+					<div class="left-two">
+						<div class="company-info">
+							<ul id="ulData">
+							</ul>
+						</div>
+						<div class="box-foot">
+							<a style="background-color: #000019;cursor: default;"></a>
+						</div>
+					</div>
+					<div class="left-three">
+						<div class="air-box">
+							<!--<div class="echart-box">
+								<div id="echarts1"></div>
+							</div>-->
+							<div class="right-box">
+								<div class="air-item">
+									<div class="item-text">
+										<span>PM2.5</span>
+										<span id="pm25"></span>
+									</div>
+									<span class="bac-yellow"></span>
+								</div>
+								<div class="air-item">
+									<div class="item-text">
+										<span>温度</span>
+										<span id="temperature"></span>
+									</div>
+									<span class="bac-blue"></span>
+								</div>
+								<div class="air-item">
+									<div class="item-text">
+										<span>湿度</span>
+										<span id="humidity"></span>
+									</div>
+									<span class="bac-green"></span>
+								</div>
+								<div class="air-item">
+									<div class="item-text">
+										<span>co2</span>
+										<span id="co2"></span>
+									</div>
+									<span class="bac-yellow"></span>
+								</div>
+								<div class="air-item">
+									<div class="item-text">
+										<span>甲醛</span>
+										<span id="formaldehyde"></span>
+									</div>
+									<span class="bac-blue"></span>
+								</div>
+								<div class="air-item">
+									<div class="item-text">
+										<span>TVOC</span>
+										<span id="voc"></span>
+									</div>
+									<span class="bac-green"></span>
+								</div>
+							</div>
+						</div>
+						<div class="box-foot">
+							<a style="background-color: #000019;cursor: default;"></a>
+						</div>
+					</div>
+					<div class="left-four">
+						<div class="box-head">
+							<div class="box-item-coloum">
+								<div class="text-content">
+									<span :title="consumeTotal" v-text="consumeTotal.toFixed(2)"></span>
+								</div>
+								<span>月用电（kW·h）</span>
+							</div>
+							<div class="Switch">
+								<form class="layui-form">
+									<input type="checkbox" id="energySwitch" name="energySwitch" lay-filter="energySwitch" lay-skin="switch" lay-text="天|月">
+								</form>
+							</div>
+						</div>
+						<div class="box-body">
+							<div id="echarts2"></div>
+						</div>
+						<div class="box-foot">
+							<a style="background-color: #000019;cursor: default;"></a>
+						</div>
+					</div>
+				</div>
+				<div id="center">
+					<div class="select-box">
+						<div class="select-bar">
+							<select id="cd-dropdown" name="cd-dropdown" class="cd-select">
+								<option value="-1">全部</option>
+								<option value="0" class="icon-small-sprite" data-bac-uri="background: url(img/exhibition/all.png) no-repeat;background-position: center;" selected="selected"> 全部</option>
+								<!--<option value="1" class="icon-small-sprite"> 智能空开</option>
+								<option value="2" class="icon-small-sprite"> 智能烟感</option>
+								<option value="3" class="icon-small-sprite"> 智能水浸</option>
+								<option value="4" class="icon-small-sprite"> LED屏</option>
+								<option value="5" class="icon-small-sprite"> 空调控制器</option>
+								<option value="6" class="icon-small-sprite"> 无线开关</option>
+								<option value="7" class="icon-small-sprite"> 新风系统</option>
+								<option value="8" class="icon-small-sprite"> 摄像头</option>--><br />
+							</select>
+						</div>
+						<!--<ul class="device-type-tip">
+							<li>
+								<span class="bac-blue-light"></span>
+								<span>安防类</span>
+							</li>
+							<li>
+								<span class="bac-yellow"></span>
+								<span>感应类</span>
+							</li>
+							<li>
+								<span class="bac-green"></span>
+								<span>控制类</span>
+							</li>
+							<li>
+								<span class="bac-red"></span>
+								<span>报警</span>
+							</li>
+						</ul>-->
+						<div class="floor-select">
+							<select id="cd-dropdown2" name="cd-dropdown2" class="cd-select">
+							</select>
+						</div>
+					</div>
+					<div id="floor-box" style="height: 7rem;">
+						<div id="floor-item" style="position: relative;"></div>
+					</div>
+					<div id="3D-box" style="width: 100%;height: 7rem;display: none">
+						<!--<iframe id="myIframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" srcdoc=''></iframe>-->
+						<iframe src="" id="myIframe" width="100%" height="99%" frameborder="0" scrolling="no"></iframe>
+					</div>
+
+					<!--2D、3D按钮切换-->
+					<div class="buttonChange" style="text-align: right">
+						<label class="radio-inline" style="font-size: 20px">
+                            <input type="radio" name="inlineRadioOptions" value="2" checked onclick="change()"> 2D
+                        </label>
+						<label class="radio-inline" style="font-size: 20px;margin-left: 0.1rem">
+                            <input type="radio" name="inlineRadioOptions" value="3" onclick="change()"> 3D
+                        </label>
+					</div>
+					<script>
+						function change() {
+							var type = $("input[type=radio]:checked").val();
+							console.info(type);
+							if(type == 3) {
+								$('#floor-box').hide();
+								$('#3D-box').show();
+								$.sanjiGetJSON(userServiceUrl + "/organization/get3DIdByOrgId", {
+									id: getQueryVariable("z_orgId")
+								}, function(data) {
+									console.info(data);
+									if(data.code == 0) {
+										var modeId = data.data;
+										if(modeId != null && modeId != "") {
+											console.info(modeId);
+											var url = plan_3D_url + "/Scene?" + modeId;
+											$('#myIframe').attr('src', url);
+										} else {
+											layer.msg("没有3D数据！", {
+												icon: 5
+											});
+										}
+									} else {
+										layer.msg("获取3D数据失败！", {
+											icon: 5
+										});
+									}
+								});
+							} else {
+								$('#floor-box').show();
+								$('#3D-box').hide();
+							}
+						}
+					</script>
+
+					<div class="center-one">
+						<div class="device-box">
+							<div class="device-list-box device-list-box1">
+								<ul class="device-list" id="new_list_device2">
+
+								</ul>
+							</div>
+							<span class="left-btn"></span>
+							<span class="right-btn"></span>
+						</div>
+					</div>
+					<div class="box-foot">
+						<a onclick="deviceMode('device')"></a>
+					</div>
+				</div>
+				<div id="right">
+					<div class="right-one">
+						<div class="echart-box">
+							<div class="item">
+								<div id="echarts3"></div>
+								<span>在线</span>
+							</div>
+							<!--<div class="item">-->
+							<!--<div id="echarts4"></div>-->
+							<!--<span>离线</span>-->
+							<!--</div>-->
+							<div class="item">
+								<div id="echarts5"></div>
+								<span>正常</span>
+							</div>
+							<div class="item">
+								<div id="echarts6"></div>
+								<span>报警</span>
+							</div>
+							<div class="item">
+								<div id="echarts7"></div>
+								<span>故障</span>
+							</div>
+						</div>
+						<div class="box-foot">
+							<a style="background-color: #000019;cursor: default;"></a>
+						</div>
+					</div>
+					<div class="right-two">
+						<div class="device-box">
+							<div class="device-list-box device-list-box2">
+								<ul class="device-list" id="new_list_mode2">
+
+								</ul>
+							</div>
+							<span class="icon-branch left-btn"></span>
+							<span class="icon-branch right-btn"></span>
+						</div>
+						<div class="box-foot">
+							<a onclick="deviceMode('mode')"></a>
+						</div>
+					</div>
+					<div class="right-three">
+						<div class="box-head">
+							<div class="box-head-item">
+								<span class="icon-alert"></span>
+								<div class="text-content">
+									<span>今日报警</span>
+									<span class="font-red" v-text="totalEvents.deviceTypeThree"></span>
+								</div>
+							</div>
+							<div class="box-head-item">
+								<span class="icon-error"></span>
+								<div class="text-content">
+									<span>故障</span>
+									<span class="font-yellow" v-text="totalEvents.deviceTypeFour"></span>
+								</div>
+							</div>
+						</div>
+						<div class="box-list">
+							<div class="list-title">
+								<span>设备名称</span>
+								<span>状态</span>
+								<span>时间</span>
+								<span>操作</span>
+							</div>
+							<div class="list-box">
+								<div class="item" v-for="(item,i) in deviceEvent">
+									<span v-text="item.deviceName"></span>
+									<template v-if="item.deviceType">
+										<span v-if="item.deviceType == 2" class="font-red">离线</span>
+										<span v-if="item.deviceType == 3" class="font-red">报警</span>
+										<span v-if="item.deviceType == 4" class="font-yellow">故障</span>
+										<span v-if="item.deviceType == 5" class="font-red">过流</span>
+										<span v-if="item.deviceType == 6" class="font-red">过压</span>
+									</template>
+									<span v-text="item.createDate"></span>
+									<div>
+										<span class="detail" @click="deviceInfo(i)"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="box-foot">
+							<a style="background-color: #000019;cursor: default;"></a>
+						</div>
+					</div>
+					<div class="right-four">
+						<div class="layui-carousel video-box" id="imgDiv">
+							<div carousel-item>
+								<img src="http://222.182.202.100:7788/file/888/2019/0929/180f6de8bcdb4539b0c5c3f9936802df.jpg" width="90%" height="90%">
+								<img src="http://222.182.202.100:7788/file/888/2019/0929/e22408c8d00e4ccda805f6044ef68b81.png" width="90%" height="90%">
+								<img src="http://222.182.202.100:7788/file/888/2019/0929/2e6560a7dfab4be08e08265b4641c19b.png" width="90%" height="90%">
+							</div>
+						</div>
+						<div class="box-foot">
+							<a style="background-color: #000019;cursor: default;"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--视频弹框-->
+			<div class="videos" id="videos">
+			</div>
+		</div>
+
+		<!--展馆区域设置-->
+		<!--<div id="putIn" >-->
+		<!--<script type="text/javascript">-->
+		<!--$("#putIn").load("putInControl.html");-->
+		<!--</script>-->
+		<!--</div>-->
+
+		<!--设备信息、企业信息弹框-->
+		<!--<script type="text/html" id="device_info_tip">-->
+		<!--<div class="device-info-tip">
+				<p class="tip-head-name font-red">电量过压！请处理</p>
+				<div class="tip-operate">
+					<div class="tip-operate-item">
+						处理(<span>10</span>)
+					</div>
+					<div class="tip-operate-item">不处理</div>
+					<div class="tip-operate-item">误报警</div>
+				</div>
+				<div class="device-info-list">
+					<div class="list-item">
+						<span class="item-value font-red">699.0</span>
+						<span>电压(V)</span>
+					</div>
+					<div class="list-item">
+						<span class="item-value">0.4</span>
+						<span>漏电流(mA)</span>
+					</div>
+					<div class="list-item">
+						<span class="item-value">0.0</span>
+						<span>功率(W)</span>
+					</div>
+					<div class="list-item">
+						<span class="item-value">43.4</span>
+						<span>温度(℃)</span>
+					</div>
+					<div class="list-item">
+						<span class="item-value">270.8</span>
+						<span>用电量(kW·h)</span>
+					</div>
+				</div>
+				<div class="position-info">
+					<div class="info-item">
+						<span class="icon-branch icon-name"></span>
+						<span>智能空开001</span>
+					</div>
+					<div class="info-item">
+						<span class="icon-branch icon-site"></span>
+						<span>低柜区</span>
+					</div>
+					<div class="info-item">
+						<span class="icon-branch icon-state"></span>
+						<span>合闸</span>
+					</div>
+				</div>
+			</div>-->
+		<!--</script>-->
+
+		<script type="text/html" id="company_area_tip">
+			<a id="tipPos" class="company-info-tip" href="enterpriseManagement.html?boothImage={{boothImage}}&parentId={{z_orgId}}&floorId={{floorId}}&z_orgId={{enterpriseId}}">
+				<p>{{organizationName}}</p>
+				<div class="company-area">
+					<p>展示区面积：{{area}}m²</p>
+					<p>设备管理 ：{{deviceNum}} 台</p>
+					<!--<p>月用电量 ：134.21（kw/h）</p>-->
+				</div>
+			</a>
+		</script>
+
+		<!--设备控制弹框-->
+		<!--LED屏-->
+		<!--<script type="text/html" id="device_control_LED">-->
+		<!--<div class="mask">
+				<div class="device-led-box">
+					<div class="tip-box-head">
+						<span>设备控制</span>
+						<span class="tip-box-close"></span>
+					</div>
+					<div class="tip-box-body">
+						<div class="box-head">
+							<span class="tip-device-name">LED屏控制器</span>
+							<span class="exit-net">退网</span>
+						</div>
+						<div class="layui-form box-body">
+							<div class="body-left">
+								<div class="switch-box">
+									<span class="led-switch-off"></span>
+									<span>LED屏控制器</span>
+								</div>
+								<span class="switch-addr">位置：*******</span>
+							</div>
+							<ul class="body-right">
+								<li class="body-right-item">
+									<div class="right-item-head">
+										<span>LED屏字幕内容</span>
+										<span class="btn-confirm">确定</span>
+									</div>
+									<div class="item-textarea-box">
+										<textarea name="" rows="" cols=""></textarea>
+									</div>
+								</li>
+								<li class="body-right-item">
+									<div class="right-item-head">
+										<span>LED屏特效</span>
+										<span class="btn-confirm">确定</span>
+									</div>
+									<div class="item-input-box">
+										<div class="item-input">
+											<span>特效类别</span>
+											<select name="effect_type">
+												<option value="0">字幕不动</option>
+												<option value="1">字幕动</option>
+											</select>
+										</div>
+										<div class="item-input">
+											<span>特效类别</span>
+											<input class="input-width-more" type="number" placeholder="数字越小速度越快" />
+										</div>
+									</div>
+								</li>
+								<li class="body-right-item">
+									<div class="right-item-head">
+										<span>设置心跳周期</span>
+										<span class="btn-confirm">确定</span>
+									</div>
+									<div class="item-input-box">
+										<div class="item-input">
+											<span></span>
+											<input type="number" placeholder="请输入时间" />
+											<span class="unit">S</span>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>-->
+		<!--</script>-->
+
+		<!--智控平台-->
+		<script type="text/html" id="company_info_tip">
+			<div class="mask">
+				<div class="intelligent-control-platform control-tip-box">
+					<div class="control-platform-head">
+						<p id="orgName"></p>
+						<span class="screen-full icon-full-screen" onclick="fullScreen(this)"></span>
+						<span class="icon-exit-out" onclick="closeMask(this)"></span>
+					</div>
+					<div class="control-platform-body">
+						<div class="platform-body-left">
+							<ul class="operate-list">
+								<li class="operate-list-item modeControl">
+									<div class="operate-item-name">
+										<span>执行模式</span>
+										<span class="operate-item-arrow"></span>
+									</div>
+									<div class="mode-list-box">
+										<ul id="modeList" class="mode-list"></ul>
+									</div>
+								</li>
+								<li class="operate-list-item deviceControl">
+									<div class="operate-item-name">
+										<span>设备控制</span>
+										<span class="operate-item-arrow"></span>
+									</div>
+									<div class="mode-list-box">
+										<ul id="deviceList" class="mode-list"></ul>
+									</div>
+								</li>
+								<li class="operate-list-item infoPub">
+									<div class="operate-item-name">
+										<span>信息发布</span>
+										<span class="operate-item-arrow"></span>
+									</div>
+									<div class="mode-list-box">
+										<ul id="infoList" class="mode-list"></ul>
+									</div>
+								</li>
+								<li class="operate-list-item pcControl">
+									<div class="operate-item-name">
+										<span>PC电脑关机控制</span>
+										<span class="operate-item-arrow"></span>
+									</div>
+									<div class="mode-list-box">
+										<ul id="pcList" class="mode-list"></ul>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="platform-body-right">
+							<!--<ul class="state-list">
+								<li>当前模式：<span class="font-18-bold font-blue">开馆</span></li>
+								<li class="state-item">
+									<ul class="state-value">
+										<li class="state-value-item">设备状态：<span class="font-18-bold font-blue">128</span>台（总数）</li>
+										<li>在线：<span class="font-18-bold font-green">126</span>（台）</li>
+										<li>离线：<span class="font-18-bold font-red">2</span>（台）</li>
+									</ul>
+								</li>
+							</ul>-->
+							<ul id="content_list" class="company-control-list"></ul>
+							<div class="company-control-item"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</script>
+
+		<!--执行模式样板-->
+		<script type="text/html" id="mode_template">
+			{{if modeList.length > 0}} {{each modeList}}
+			<li class="mode-list-item" title="{{$value.modeName}}" data-id="{{$value.modeId}}" onclick="ope('{{$value.modeId}}')">
+				<span class="mode-item mode-off">
+					<img class="mode-off" src="img/exhibition/open-exhibition2.png"/>
+				</span>
+				<span>{{$value.modeName}}</span>
+			</li>
+			{{/each}} {{else}} {{/if}}
+		</script>
+
+		<!--设备控制列表样板-->
+		<script type="text/html" id="device_list_template">
+			{{if deviceList.length > 0}} {{each deviceList}}
+			<li class="mode-list-item" title="{{$value.deviceName}}" data-id="{{$value.id}}" onclick="openDevice('{{$value.productCode}},{{$value.deviceSubscriberNumber}},{{$value.serialNum}}')">
+				<span class="mode-item mode-off">
+					<img class="mode-off" src="img/exhibition/open-exhibition2.png"/>
+				</span>
+				<span>{{$value.deviceName}}</span>
+			</li>
+			{{/each}} {{else}} {{/if}}
+		</script>
+
+		<!--设备信息发布列表样板-->
+		<script type="text/html" id="info_list_template">
+			{{if infoList.length > 0}} {{each infoList}}
+			<li class="mode-list-item" data-value="{{$value}}" title="{{$value.deviceName}}" onclick="picVideoPub(this)">
+				<span class="mode-item mode-off">
+					<img class="mode-off" src="img/exhibition/open-exhibition2.png"/>
+				</span>
+				<span>{{$value.deviceName}}</span>
+			</li>
+			{{/each}} {{else}} {{/if}}
+		</script>
+
+		<!--pc列表样板-->
+		<script type="text/html" id="pc_list_template">
+			{{if pcList.length > 0}} {{each pcList}}
+			<li class="mode-list-item" title="{{$value.deviceName}}" data-id="{{$value.deviceId}}" onclick="openDevice('{{$value.productCode}},{{$value.deviceSubscriberNumber}},{{$value.serialNum}}')">
+				<span class="mode-item mode-off">
+					<img class="mode-off" src="img/exhibition/open-exhibition2.png"/>
+				</span>
+				<span>{{$value.deviceName}}</span>
+			</li>
+			{{/each}} {{else}} {{/if}}
+		</script>
+
+		<!--执行模式右侧内容样板-->
+		<script type="text/html" id="rightMode_template">
+			{{if modeList.length > 0}} {{each modeList}}
+			<li class="control-list-item">
+				<div class="control-item-title">
+					<span class="title" title="{{$value.name}}">{{$value.name}}</span>
+					<!--<span class="open-all">一键开启</span>-->
+				</div>
+				<div class="control-item-body">
+					<div class="control-list-box">
+						<div>
+							<ul class="mode-control-list">
+								{{if $value.modeList != null && $value.modeList.length > 0}} {{each $value.modeList}}
+								<li class="mode-control-item" title="{{$value.modeName}}" data-id="{{$value.id}}" onclick="ope('{{$value.modeId}}')">
+									<span class="mode-item-text">{{$value.modeName}}</span>
+									<span class="mode-img-box">
+											<img src="img/exhibition/city.png" alt="" />
+										</span>
+								</li>
+								{{/each}} {{else}} {{/if}}
+							</ul>
+						</div>
+						<!--<span class="left-btn"></span>
+							<span class="right-btn"></span>-->
+					</div>
+					<span class="open-control-item" data-value='{{$value}}' data-name='{{$value.name}}'>更多>></span>
+				</div>
+			</li>
+			{{/each}} {{/if}}
+		</script>
+
+		<!--设备控制右侧内容样板-->
+		<script type="text/html" id="rightDevice_template">
+			{{if deviceArr.length > 0}} {{each deviceArr}}
+			<li class="control-list-item">
+				<div class="control-item-title">
+					<span class="title" title="{{$value.name}}">{{$value.name}}</span>
+					<!--<span class="open-all">一键开启</span>-->
+				</div>
+				<div class="control-item-body">
+					<div class="control-list-box">
+						<div>
+							<ul class="mode-control-list">
+								{{if $value.device.length > 0}} {{each $value.device}}
+								<li class="mode-control-item" title="{{$value.deviceName}}" data-id="{{$value.id}}" onclick="openDevice('{{$value.productCode}},{{$value.deviceSubscriberNumber}},{{$value.serialNum}}')">
+									<span class="mode-item-text">{{$value.deviceName}}</span>
+									<span class="mode-img-box">
+											<img src="img/exhibition/city.png" alt="" />
+										</span>
+								</li>
+								{{/each}} {{else}} {{/if}}
+							</ul>
+						</div>
+						<!--<span class="left-btn"></span>
+							<span class="right-btn"></span>-->
+					</div>
+					<span class="open-control-item" data-value='{{$value}}'>更多>></span>
+				</div>
+			</li>
+			{{/each}} {{/if}}
+		</script>
+
+		<!--信息发布右侧内容样板-->
+		<script type="text/html" id="rightInfo_template">
+			{{if infoArr.length > 0}} {{each infoArr}}
+			<li class="control-list-item">
+				<div class="control-item-title">
+					<span class="title" title="{{$value.name}}">{{$value.name}}</span>
+					<!--<span class="open-all">一键开启</span>-->
+				</div>
+				<div class="control-item-body">
+					<div class="control-list-box">
+						<div>
+							<ul class="mode-control-list">
+								{{if $value.device.length > 0}} {{each $value.device}}
+								<li class="mode-control-item" data-value="{{$value}}" title="{{$value.deviceName}}" onclick="picVideoPub(this)">
+									<span class="mode-item-text">{{$value.deviceName}}</span>
+									<span class="mode-img-box">
+											<img src="img/exhibition/city.png" alt="" />
+										</span>
+								</li>
+								{{/each}} {{else}} {{/if}}
+							</ul>
+						</div>
+						<!--<span class="left-btn"></span>
+							<span class="right-btn"></span>-->
+					</div>
+					<span class="open-control-item" data-value='{{$value}}'>更多>></span>
+				</div>
+			</li>
+			{{/each}} {{/if}}
+		</script>
+
+		<!--电脑关机控制右侧内容样板-->
+		<script type="text/html" id="rightWin_template">
+			{{if winArr.length > 0}} {{each winArr}}
+			<li class="control-list-item">
+				<div class="control-item-title">
+					<span class="title" title="{{$value.name}}">{{$value.name}}</span>
+					<!--<span class="open-all">一键开启</span>-->
+				</div>
+				<div class="control-item-body">
+					<div class="control-list-box">
+						<div>
+							<ul class="mode-control-list">
+								{{if $value.device.length > 0}} {{each $value.device}}
+								<li class="mode-control-item" data-value="{{$value}}" title="{{$value.deviceName}}" onclick="openDevice('{{$value.productCode}},{{$value.deviceSubscriberNumber}},{{$value.serialNum}}')">
+									<span class="mode-item-text">{{$value.deviceName}}</span>
+									<span class="mode-img-box">
+											<img src="img/exhibition/city.png" alt="" />
+										</span>
+								</li>
+								{{/each}} {{else}} {{/if}}
+							</ul>
+						</div>
+						<!--<span class="left-btn"></span>
+							<span class="right-btn"></span>-->
+					</div>
+					<span class="open-control-item" data-name="{{$value.name}}" data-value='{{$value}}'>更多>></span>
+				</div>
+			</li>
+			{{/each}} {{/if}}
+		</script>
+
+		<!--执行模式更多弹框列表模板-->
+		<script type="text/html" id="modal_mode_template">
+			<div class="company-control-head">
+				<p class="company-name">{{name}}</p>
+				<span class="control-item-exit icon-exit-out"></span>
+			</div>
+			<div class="company-control-body">
+				<ul class="modal-control-list">
+					{{if modalValue.length > 0}} {{each modalValue}}
+					<li class="modal-control-item" title="{{$value.modeName}}" onclick="ope('{{$value.modeId}}')">
+						<span class="modal-item-text">{{$value.modeName}}</span>
+						<span class="modal-img-box">
+							<img src="img/exhibition/city.png" alt="" />
+						</span>
+					</li>
+					{{/each}} {{else}} {{/if}}
+				</ul>
+			</div>
+		</script>
+
+		<!--设备更多弹框列表模板-->
+		<script type="text/html" id="modal_device_template">
+			<div class="company-control-head">
+				<p class="company-name">{{name}}</p>
+				<span class="control-item-exit icon-exit-out"></span>
+			</div>
+			<div class="company-control-body">
+				<ul class="modal-control-list">
+					{{if device.length > 0}} {{each device}}
+					<li class="modal-control-item" title="{{$value.deviceName}}" onclick="openDevice('{{$value.productCode}},{{$value.deviceSubscriberNumber}},{{$value.serialNum}}')">
+						<span class="modal-item-text">{{$value.deviceName}}</span>
+						<span class="modal-img-box">
+							<img src="img/exhibition/city.png" alt="" />
+						</span>
+					</li>
+					{{/each}} {{else}} {{/if}}
+				</ul>
+			</div>
+		</script>
+
+		<!--信息发布更多弹框列表模板-->
+		<script type="text/html" id="modal_info_template">
+			<div class="company-control-head">
+				<p class="company-name">{{name}}</p>
+				<span class="control-item-exit icon-exit-out"></span>
+			</div>
+			<div class="company-control-body">
+				<ul class="modal-control-list">
+					{{if device.length > 0}} {{each device}}
+					<li class="modal-control-item" data-value="{{$value}}" title="{{$value.deviceName}}" onclick="picVideoPub(this)">
+						<span class="modal-item-text">{{$value.deviceName}}</span>
+						<span class="modal-img-box">
+							<img src="img/exhibition/city.png" alt="" />
+						</span>
+					</li>
+					{{/each}} {{else}} {{/if}}
+				</ul>
+			</div>
+		</script>
+
+		<!--windows更多弹框列表模板-->
+		<script type="text/html" id="win_info_template">
+			<div class="company-control-head">
+				<p class="company-name">{{name}}</p>
+				<span class="control-item-exit icon-exit-out"></span>
+			</div>
+			<div class="company-control-body">
+				<ul class="modal-control-list">
+					{{if device.length > 0}} {{each device}}
+					<li class="modal-control-item" title="{{$value.deviceName}}" onclick="openDevice('{{$value.productCode}},{{$value.deviceSubscriberNumber}},{{$value.serialNum}}')">
+						<span class="modal-item-text">{{$value.deviceName}}</span>
+						<span class="modal-img-box">
+							<img src="img/exhibition/city.png" alt="" />
+						</span>
+					</li>
+					{{/each}} {{else}} {{/if}}
+				</ul>
+			</div>
+		</script>
+
+		<!--图片视频管理-->
+		<script type="text/html" id="picVideoPub">
+			<section id="picVideoPubBox" class="openDetail" style="width: 100%; ">
+				<input type="hidden" name="deviceId" id="deviceId" />
+				<div class="panel-body">
+					<div class="manage-item pic-item">
+						<div class="manage-item-head">
+							<span class="item-head-text">图片管理</span>
+							<div class="item-head-btn">
+								<span class="item-btn item-btn-success" id="picPub" style="margin-right: 10px;" onclick="pubMethod(this,1)">发布</span>
+								<span class="item-btn item-btn-primary" onclick="upMethod(1,'上传图片')">上传</span>
+							</div>
+						</div>
+						<div class="manage-item-body">
+							<ul class="manage-item-list"></ul>
+							<div class="view-more">
+								<span class="more-btn">查看更多</span>
+							</div>
+						</div>
+					</div>
+					<div class="manage-item video-item">
+						<div class="manage-item-head">
+							<span class="item-head-text">视频管理</span>
+							<div class="item-head-btn">
+								<span class="item-btn item-btn-success" id="videoPub" style="margin-right: 10px;" onclick="pubMethod(this,2)">发布</span>
+								<span class="item-btn item-btn-primary" onclick="upMethod(2,'上传视频')">上传</span>
+							</div>
+						</div>
+						<div class="manage-item-body">
+							<ul class="manage-item-list"></ul>
+							<div class="view-more">
+								<span class="more-btn">查看更多</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</script>
+
+		<!--上传图片视频内容弹框-->
+		<script type="text/html" id="picTip">
+			<section class="openDetail" style="width: 100%; ">
+				<div class="panel-body">
+					<form id="picVideoForm">
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<div class="form-group">
+									<label class="layui-col-sm3 layui-form-label">文件名称：</label>
+									<div class="layui-input-block">
+										<input class="layui-input" type="text" id="vireName" name="vireName" placeholder="请输入文件名称" style="margin-left: 41px;width: 220px;" required="required" />
+									</div>
+								</div>
+							</div>
+							<div class="layui-col-lg12">
+								<div class="form-group">
+									<label class="layui-col-sm3 layui-form-label">文件描述：</label>
+									<div class="layui-input-block">
+										<input class="layui-input" type="text" id="vireDepict" name="vireDepict" placeholder="请输入文件描述" style="margin-left: 41px;width: 220px;" />
+									</div>
+								</div>
+							</div>
+							<div class="layui-col-lg12">
+								<div class="form-group">
+									<label class="layui-col-sm3 layui-form-label">上传图片：</label>
+									<div class="up-content-box">
+										<div class="upfile-box">
+											<img src="" />
+										</div>
+										<div class="flie-up">
+											<button onclick="upFile(1)" type="button" class="layui-btn layui-btn-success" style="margin-left: 0.3rem;width: 1.4rem;">选择图片</button>
+											<input type="file" id="picUp" accept="image/jpg,image/jpeg,image/png,image/PNG" onchange="upLoadImgFile(this)" value="" style="display: none" />
+											<div class='progress-container'>
+												<span id="progress"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</section>
+		</script>
+
+		<script type="text/html" id="videoTip">
+			<section class="openDetail" style="width: 100%; ">
+				<div class="panel-body">
+					<form id="picVideoForm">
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<div class="form-group">
+									<label class="layui-col-sm3 layui-form-label">文件名称：</label>
+									<div class="layui-input-block">
+										<input class="layui-input" type="text" id="vireName" name="vireName" placeholder="请输入文件名称" style="margin-left: 41px;width: 220px;" required="required" />
+									</div>
+								</div>
+							</div>
+							<div class="layui-col-lg12">
+								<div class="form-group">
+									<label class="layui-col-sm3 layui-form-label">文件描述：</label>
+									<div class="layui-input-block">
+										<input class="layui-input" type="text" id="vireDepict" name="vireDepict" placeholder="请输入文件描述" style="margin-left: 41px;width: 220px;" />
+									</div>
+								</div>
+							</div>
+							<div class="layui-col-lg12">
+								<div class="form-group">
+									<label class="layui-col-sm3 layui-form-label">上传视频：</label>
+									<div class="up-content-box">
+										<div class="videolist upfile-box" vpath="" ipath="">
+											<span class="video-play"></span>
+										</div>
+										<div class="flie-up">
+											<button onclick="upFile(2)" type="button" class="layui-btn layui-btn-success" style="margin-left: 0.3rem;width: 1.4rem;">选择视频</button>
+											<input type="file" id="videoUp" accept="video/*" onchange="upLoadVideoFile(this)" value="" style="display: none" />
+											<div class='progress-container'>
+												<span id="progress"></span>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</section>
+		</script>
+
+		<!--多张图发布时时间间隔设置-->
+		<script type="text/html" id="picTimeTip">
+			<section class="openDetail" style="width: 100%; ">
+				<div class="panel-body">
+					<form id="picTimeForm">
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<div class="form-group">
+									<label class="layui-col-sm4 layui-form-label">间隔时间/秒：</label>
+									<div class="layui-input-block">
+										<input class="layui-input" type="text" id="switchTime2" name="switchTime" placeholder="请输入时间间隔" style="margin-left: 41px;width: 220px;" required="required" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</section>
+		</script>
+
+		<!--展馆区域设置-->
+		<!--<<script type="text/html" id="exhibition_area_tip">-->
+		<!--<div class="mask">
+			<div class="exhibition-area-tip control-tip-box">
+				<div class="control-platform-head">
+					<p>展馆区域设置</p>
+					<span class="screen-full icon-full-screen" onclick="fullScreen(this)"></span>
+					<span class="icon-exit-out" onclick="closeMask(this)"></span>
+				</div>
+				<div class="exhibition-area-body">
+					<div class="area-body-left">
+						<ul class="view-mode">
+							<li>3D展示</li>
+							<li>2D展示</li>
+						</ul>
+						<div class="area-img-box">
+							<ul class="area-img-list">
+								<li class="area-img-item">
+									<img src="img/exhibition/example1.png" alt="" />
+								</li>
+								<li class="area-img-item">
+									<img src="img/exhibition/example1.png" alt="" />
+								</li>
+								<li class="area-img-item">
+									<img src="img/exhibition/example1.png" alt="" />
+								</li>
+							</ul>
+							<span class="left-btn icon-left-arrow"></span>
+							<span class="right-btn icon-right-arrow"></span>
+						</div>
+						<ul class="area-info-list">
+							<li>
+								区域分布：
+								<span>1号区域</span>
+							</li>
+							<li>
+								区域面积：
+								<span>523㎡</span>
+							</li>
+							<li>
+								企业配置：
+								<span>华为技术</span>
+							</li>
+						</ul>
+					</div>
+					<div class="area-body-right">
+						<div class="right-item">
+							<p>区域管理</p>
+							<div class="area-manage">
+								<ul class="area-form">
+									<li class="area-form-item">
+										<span>区域分布：</span>
+										<input type="text" />
+									</li>
+									<li class="area-form-item">
+										<span>区域面积：</span>
+										<input type="text" />
+									</li>
+								</ul>
+								<div class="manage-edit area-edit-btn">
+									<i></i>
+									<span>修改</span>
+								</div>
+							</div>
+						</div>
+						<div class="right-item">
+							<p>企业配置</p>
+							<div class="company-configuration">
+								<ul class="area-form">
+									<li class="area-form-item">
+										<span>企业名称：</span>
+										<input type="text" />
+									</li>
+									<li class="area-form-item">
+										<span>管理账号：</span>
+										<input type="text" />
+										<span class="form-tip-text">还没专属账号，<span>立即注册</span></span>
+									</li>
+									<li class="area-form-item">
+										<span>管理权限：</span>
+										<input type="text" />
+										<span class="form-tip-text">默认为区域管理权限</span>
+									</li>
+									<li class="area-form-item">
+										<span>所属角色：</span>
+										<input type="text" />
+									</li>
+									<li class="area-form-item">
+										<span>联系人：</span>
+										<input type="text" />
+										<input type="text" />
+									</li>
+									<li class="area-form-item">
+										<span>邮箱：</span>
+										<input type="text" />
+									</li>
+								</ul>
+								<div class="configuratio-edit area-edit-btn">
+									<i></i>
+									<span>修改</span>
+								</div>
+							</div>
+						</div>
+						<div class="right-item">
+							<p>区域设备</p>
+							<div class="area-device">
+								<div class="area-device-left">
+									<p>数量统计</p>
+									<div class="area-device-val">
+										<span>235</span>台
+									</div>
+									<p>设备总数</p>
+								</div>
+								<div class="area-device-right">
+									<p>运行状态</p>
+									<ul class="device-echart-list">
+										<li class="device-echart-item">
+											<div id="echarts8"></div>
+											<span>在线</span>
+										</li>
+										<li class="device-echart-item">
+											<div id="echarts9"></div>
+											<span>离线</span>
+										</li>
+										<li class="device-echart-item">
+											<div id="echarts10"></div>
+											<span>正常</span>
+										</li>
+										<li class="device-echart-item">
+											<div id="echarts11"></div>
+											<span>报警</span>
+										</li>
+										<li class="device-echart-item">
+											<div id="echarts12"></div>
+											<span>故障</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>-->
+		<!--</script>!-->
+
+		<script src="../plus/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/modernizr.custom.63321.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.dropdown.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/template-web.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/exhibitionManagement.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+	<!--安防通知详情弹框-->
+	<script type="text/html" id="device_info_box">
+		<div class="info-box">
+			<ul class="info-list">
+				<li>
+					<span>设备名称：</span>
+					<span>{{deviceName}}</span>
+				</li>
+				<li>
+					<span>事件名称：</span>
+					<span>{{eventName}}</span>
+				</li>
+				<li>
+					<span>事件状态：</span> {{if eventState==1}}
+					<span class="font-red">待处理</span> {{else if eventState==2}}
+					<span class="font-green">已处理</span> {{else if eventState==3}}
+					<span class="font-yellow">误报警</span> {{/if}}
+				</li>
+				<li>
+					<span>处理人：</span>
+					<span>{{processingUserName}}</span>
+				</li>
+				<li>
+					<span>电话：</span>
+					<span>{{processingUserPhone}}</span>
+				</li>
+			</ul>
+		</div>
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		function getUrlParam(paramname) {
+			var reg = new RegExp("(^|&)" + paramname + "=([^&]*)(&|$)");
+			// 查询匹配 substr(1)删除? match()匹配
+			var s = window.location.search.substr(1).match(reg);
+			if(s != null) {
+				return unescape(s[2]); // unescape() 函数可对通过 escape() 编码的字符串进行解码。
+			}
+			return null;
+		}
+
+		//设备状态
+		let z_orgId = getUrlParam("z_orgId")
+		$(function() {
+			vueBegin();
+			setInterval(function() {
+				vm.getAllEvents();
+			}, 1000 * 60 * 2)
+		})
+		/*** vue开始》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》*/
+		let vm;
+
+		function vueBegin() {
+			vm = new Vue({
+				el: "#right",
+				data: {
+					errorTotal: {
+						name: "本月故障",
+						total: 0
+					},
+					consumeTotal: 0,
+					topMessage: [],
+					message: [],
+					deviceEvent: [],
+					totalEvents: {
+						deviceTypeTwo: 0,
+						deviceTypeThree: 0,
+						deviceTypeFour: 0,
+						deviceTypeFive: 0,
+						deviceTypeSix: 0,
+						total: 0
+					}
+				},
+				methods: {
+					getAllEvents: function() {
+						$.get(deviceServiceUrl + "/deviceevent/list?token=" + $.getToken() + '&organizationId=' + z_orgId, function(eventRes) {
+							if(eventRes.code == 0) {
+								if(eventRes.data.total >= 4) { //只获取当前最新4个事件
+									for(let i = 0; i < 4; i++) {
+										vm.deviceEvent.push(eventRes.data.list[i]);
+									}
+								} else {
+									vm.deviceEvent = eventRes.data.list;
+								}
+							}
+						});
+					},
+					//获取当日各类事件总数
+					getTotal: function() {
+						$.get(deviceServiceUrl + "/deviceevent/getEventTypeTotal?token=" + $.getToken() + '&organizationId=' + z_orgId, function(totalRes) {
+							if(totalRes.code == 0) {
+								//vm.totalEvents = totalRes.data;
+								for(let i = 0; i < totalRes.data.length; i++) {
+									if(totalRes.data[i].deviceType == 2) {
+										vm.totalEvents.deviceTypeTwo = totalRes.data[i].count;
+									} else if(totalRes.data[i].deviceType == 3) {
+										vm.totalEvents.deviceTypeThree = totalRes.data[i].count;
+									} else if(totalRes.data[i].deviceType == 4) {
+										vm.totalEvents.deviceTypeFour = totalRes.data[i].count;
+									} else if(totalRes.data[i].deviceType == 5) {
+										vm.totalEvents.deviceTypeFive = totalRes.data[i].count;
+									} else if(totalRes.data[i].deviceType == 6) {
+										vm.totalEvents.deviceTypeSix = totalRes.data[i].count;
+									}
+								}
+							}
+						});
+					},
+					//安防通知详情
+					deviceInfo: function(index) {
+						var data = this.deviceEvent[index];
+						var infoData = {
+							deviceName: data.deviceName,
+							eventName: data.eventName,
+							eventState: data.eventState,
+							processingUserName: data.processingUserName,
+							organizationName: data.organizationName,
+							processingUserPhone: data.processingUserPhone
+						};
+						var infoHtml = template("device_info_box", infoData);
+						var infoLayer = layer.open({
+							type: 1,
+							title: '详情',
+							area: ['6.5rem', 'auto'],
+							resize: false,
+							offset: 'auto',
+							content: infoHtml
+						});
+					}
+
+				},
+				mounted: function() {
+					this.getAllEvents();
+					this.getTotal();
+				}
+			});
+		}
+		/*** vue结束》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》*/
+	</script>
+
+	<script>
+		var UWBList = [];
+		var rmadId = "";
+		var socket;
+		var msgData = [];
+		/*存放消息数据*/
+		if(typeof(WebSocket) == "undefined") {
+			console.log("您的浏览器不支持WebSocket");
+		} else {
+			console.log("您的浏览器支持WebSocket");
+			//实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+			console.log("**********Socket开始连接**********");
+			socket = new WebSocket(webSocketUrl + "/123233");
+			console.log(socket);
+			//打开事件
+			socket.onopen = function() {
+				console.log("**********Socket已打开**********");
+				//socket.send("这是来自客户端的消息" + location.href + new Date());
+			};
+			//获得消息事件
+			socket.onmessage = function(msg) {
+//								console.log(msg.data + "+++++++++++++++++++");
+
+				var data = JSON.parse(msg.data)
+				console.info(proportion)
+				movePoint(data.mac, data.r5, data.r6);
+				//				data = {"r6":"33","mac":"123124123","r5":"22"}
+			};
+			//关闭事件
+			socket.onclose = function() {
+				console.log("**********Socket已关闭**********");
+			};
+			//发生了错误事件
+			socket.onerror = function() {
+				console.log("**********Socket发生错误**********");
+				//此时可以尝试刷新页面
+			}
+
+			//离开页面时，关闭socket
+			//jquery1.8中已经被废弃，3.0中已经移除
+			$(window).unload(function() {
+				socket.close();
+			});
+		}
+
+		function movePoint(serialNum, x, y) {
+			console.info(x)
+			console.info(y)
+			console.info(proportion)
+			var dX = parseFloat(x/proportion)
+			var dY = parseFloat(y/proportion)
+			for(var i = 0; i < UWBList.length; i++) {
+				if(serialNum == UWBList[i]) {
+					var uwbserialNum = "#uwb" + serialNum
+					$(uwbserialNum).css("left", dX + "px");
+					$(uwbserialNum).css("top", dY + "px");
+					return;
+				}
+
+			}
+		}
+
+//		var t1 = window.setInterval(function() {
+//
+//			console.log('1秒钟之后执行了')
+//			$("#uwb000000251169b6ba").css("left", 100 + "px");
+//			$("#uwb000000251169b6ba").css("top", 100 + "px");
+//
+//		},1000)
+	</script>
+
+	<script type="text/html" id="eachDevice">
+		{{if list.length > 0}} {{each list}}
+		<li style="cursor: pointer;" onclick="openDevice('{{$value.productCode}},{{$value.deviceSubscriberNumber}},{{$value.serialNum}}')">
+			<!--<span class="icon-device icon-bulb-big"></span>-->
+			<div class="icon-box icon-device-blue" title="{{$value.deviceAlias}}">
+				<img src="img/exhibition/device_eg.png" alt="" />
+			</div>
+			<span title="{{$value.deviceAlias}}">{{$value.deviceAlias}}</span>
+		</li>
+		{{/each}} {{else}} {{/if}}
+	</script>
+
+	<script type="text/html" id="eachMode">
+		{{if list.length > 0}} {{each list}}
+		<li onclick="ope('{{$value.id}}')">
+			<div class="icon-box" title="{{$value.modeName}}">
+				<!--<img src="img/exhibition/mode_eg.png"/>-->
+				<img src="{{$value.modeIcon}}" />
+			</div>
+			<span title="{{$value.modeName}}">{{$value.modeName}}</span>
+		</li>
+		{{/each}} {{else}} {{/if}}
+	</script>
+	
+	<script type="text/html" id="deviceInfo">
+		<div class="info-box">
+			<ul class="info-list">
+				<li>
+					<span>设备名称：</span>
+					<span>{{deviceAlias}}</span>
+				</li>
+				<li>
+					<span>设备类型：</span>
+					<span>{{typeName}}</span>
+				</li>
+				<li>
+					<span>设备状态：</span> {{if deviceState==1}}
+					<span class="font-green">正常</span> {{else if deviceState==2}}
+					<span class="font-green">在线</span> {{else if deviceState==3}}
+					<span class="font-yellow">离线</span> {{else if deviceState==4}}
+					<span class="font-red">报警</span> {{else if deviceState==5}}
+					<span class="font-red">故障</span> {{else if deviceState==6}}
+					<span class="font-red">过流</span> {{else if deviceState==7}}
+					<span class="font-yellow">过压</span> {{/if}}
+				</li>
+				<li>
+					<span>设备MAC：</span>
+					<span>{{deviceMac}}</span>
+				</li>
+			</ul>
+		</div>
+	</script>
+
+</html>
+
+<script>
+	// 选择设备类型事件（下拉事件）
+    function loadDataByDeviceTypeAndFloor(productCode, floorId) {
+        var _data = {
+            deviceFloor: floorId,
+            productCode: productCode,
+            pageSize: 9999999
+        };
+        $.sanjiGetJSON(deviceServiceUrl + "/devicemanger/list", _data,function (res) {
+            appendToFloor(res.data.list);
+        });
+    }
+    
+    function appendToFloor(data){
+    	var proportion1 = 1/proportion
+		if(data.length > 0) {
+			for(var k = 0; k < data.length; k++) {
+				if(data[k].typeIcon == null) {
+					data[k].typeIcon = "img/exhibition/device_eg.png"
+				}
+				var typeClass = "controlShowa" + data[k].productCode
+				let parm = data[k].deviceAlias + "|" + data[k].typeName + "|" + data[k].deviceState + "|" + data[k].deviceMac
+				$('<img class="controlNone ' + typeClass + '"  style="width: 0.22rem;height: 0.22rem;position: absolute;left: ' + (data[k].devicex)*proportion1 + 'px;top: ' + (data[k].devicey)*proportion1 + 'px" src="' + data[k].typeIcon + '"' + "onclick='openTip(\"" + parm + "\")'/>").appendTo("#floor-item");
+			}
+
+		}
+	}
+    
+    function openTip(parm) {
+		var data1 = parm.split("|")
+		var infoData = {
+			deviceAlias: data1[0],
+			typeName: data1[1],
+			deviceState: data1[2],
+			deviceMac: data1[3]
+		};
+
+		var infoHtml = template("deviceInfo", infoData);
+		var infoLayer = layer.open({
+			type: 1,
+			title: '详情',
+			area: ['6.5rem', 'auto'],
+			resize: false,
+			offset: 'auto',
+			content: infoHtml
+		});
+	}
+</script>

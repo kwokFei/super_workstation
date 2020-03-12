@@ -1,0 +1,106 @@
+{
+  "code": 0,
+  "message": "成功",
+  "currentTimeMillis": 1577085555651,
+  "messages": null,
+  "data": {
+    "total": 11380,
+    "list": [
+      {
+        "id": "129734ef4f5941f69a63f7d01df6029f",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"code\\\":\\\"0\\\",\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:49"
+      },
+      {
+        "id": "98c9216031b24bd7842855fca643d338",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:49"
+      },
+      {
+        "id": "637d311705604dbead14a0afe8b627b5",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:44"
+      },
+      {
+        "id": "7859df8e495542d19633021b8ca5f28b",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"code\\\":\\\"0\\\",\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:44"
+      },
+      {
+        "id": "9c436180a1324a3a8b733da6eab6a432",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"code\\\":\\\"0\\\",\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:28"
+      },
+      {
+        "id": "ffe1734de21b4f9b912d77491a2286ce",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:28"
+      },
+      {
+        "id": "01f648a9d6704fe594dbaa9eb6c42a89",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"code\\\":\\\"0\\\",\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:25"
+      },
+      {
+        "id": "41790b997ce645feabeda8cd969ce214",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"r1\\\":\\\"01 00 04\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400000013\",\"account\":\"1565000000001385\",\"cmd_id\":\"1931\",\"cmd_name\":\"batch switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:18:25"
+      },
+      {
+        "id": "2f62002d2ffa4d23b9c6c404369e159a",
+        "logType": "create",
+        "logComment": "重庆展厅批量添加了安卓设备控制,数量为:1",
+        "controlName": "重庆展厅",
+        "createDate": "2019-12-23 15:17:57"
+      },
+      {
+        "id": "bb26aaf499fd4852830386ad1c83cc31",
+        "logType": "设备上报信息",
+        "logComment": "{\"reportMessage\":\"{\\\"r2\\\":\\\"ff 00\\\",\\\"r1\\\":\\\"02\\\"}\",\"product_code\":\"00000a04\",\"serial_num\":\"00000a0400004124\",\"account\":\"1561100000001346\",\"cmd_id\":\"1937\",\"cmd_name\":\"Return switch state\"}",
+        "controlName": "bcca网关",
+        "createDate": "2019-12-23 15:17:41"
+      }
+    ],
+    "pageNum": 1,
+    "pageSize": 10,
+    "size": 10,
+    "startRow": 1,
+    "endRow": 10,
+    "pages": 1138,
+    "prePage": 0,
+    "nextPage": 2,
+    "isFirstPage": true,
+    "isLastPage": false,
+    "hasPreviousPage": false,
+    "hasNextPage": true,
+    "navigatePages": 8,
+    "navigatepageNums": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 8
+  }
+}

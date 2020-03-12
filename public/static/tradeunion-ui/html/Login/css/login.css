@@ -1,0 +1,97 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body,html{
+    height: 100%;
+    width: 100%;
+    background: url("../img/baImg.png") no-repeat;
+    background-size: 100% 100%;
+    min-width: 750px;
+}
+body{
+    position: relative;
+}
+input{
+    outline: none;
+}
+.loginBox{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 6rem;
+    height: 5rem;
+    background-color: rgba(31,37,67,0.9);
+    border-radius: 10px;
+    padding: 0.55rem 0.5rem;
+}
+.loginBox .loginTitle{
+    font-size: 0.3rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 0.29rem;
+}
+.loginBox .minBox{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.loginBox .minBox input{
+    width: 100%;
+    height: 0.5rem;
+    background-color: #ffffff;
+    border-radius: 0.22rem;
+    border: solid 0.01rem #c7cace;
+    opacity: 0.84;
+    font-size: 0.22rem;
+    padding-left: 0.55rem;
+}
+.loginBox .minBox img{
+    width: 0.36rem;
+    height: 0.36rem;
+}
+.userName{
+    position: absolute;
+    top:30%;
+    left: 0;
+}
+
+.password{
+    position: absolute;
+    top:50%;
+    left: 0;
+}
+
+.loginBtn{
+    width: 100%;
+    height: 0.5rem;
+    font-size: 0.24rem;
+    letter-spacing:15px;
+    color: white;
+    background-color: #40497a;
+    border-radius: 0.23rem;
+    position: absolute;
+    top: 80%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.textBox{
+    padding: 0 0.05rem;
+    position: absolute;
+    top: 65%;
+    width: 100%;
+    color: #999999;
+    font-size: 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.textBox input{
+    width: 0.24rem !important;
+    height: 0.24rem !important;
+}
+

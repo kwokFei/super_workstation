@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<!--时间选择插件-->
+		<link href="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<script src="../plus/bootstrap-datetimepicker/moment.min.js"></script>
+		<script src="../plus/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+		<script src="../plus/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+		<!--日期选择插件-->
+		<link href="../plus/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet">
+		<script src="../plus/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+		<script src="../plus/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<script src="../plus/iview/vue.min.js"></script>
+		<style type="text/css">
+			.btn {
+				padding: 8px;
+			}
+			
+			.layui-form-label {
+				width: 95px !important;
+			}
+			
+			.form-control {
+				width: 99% !important;
+			}
+			
+			.inlineBlock {
+				width: 40%;
+				display: inline-block;
+			}
+			
+			.bootstrap-datetimepicker-widget table td span {
+				width: 40px !important;
+			}
+			.col-lg-3{
+				float: left;
+				width: 25%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>执行计划</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label" for="s_excutionPlanName">执行计划名称：</label>
+											<input class="form-control" name="s_excutionPlanName" id="s_excutionPlanName" placeholder="分类名称" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<div style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+												<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--Start-->
+								<div>
+									<button type="button" class="btn btn-primary" id="addRole">
+                                        <i class="fa fa-plus"></i> 录入
+                                    </button>
+								</div>
+								<table id="planTable"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+	</body>
+	<script type="text/javascript">
+		$("#loadDiv").html(loadHtml);
+		var html;
+		var url = "";
+		var appp;
+		var appp1;
+		var isAdd = true;
+		var _diytTimerCycle = {
+			"MON": "周一",
+			"TUE": "周二",
+			"WED": "周三",
+			"THU": "周四",
+			"FRI": "周五",
+			"SAT": "周六",
+			"SUN": "周日",
+		};
+
+		var tempUser; // 临时存放执行计划的账号
+		var tempPlanID; // 临时存放在平台的执行计划的ID
+		var tempPlanID_local; // 临时存放在本地的执行计划的ID
+		var timeDatas = [];
+		var tiaoJianDatas = [];
+		var processDates = []; // 进程集合
+		var modeList = [];
+
+		$(function() {
+			$('#planTable').bootstrapTable({
+				url: deviceServiceUrl + "/exeutionPlan/list", //请求后台的URL（*）
+				//data: data1,                            //本地数据
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams, //传递参数（*）
+				strictSearch: true,
+				// height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					console.info(data);
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						rdata = result.list;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						$.hide_overall_loding();
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: []
+						});
+						layer.msg("获取数据失败！", {
+							icon: 2
+						});
+						$.hide_overall_loding();
+						return res[0];
+					}
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				onDblClickRow: function(row) {
+					console.info(row);
+				},
+				columns: [{
+					width: "5%",
+					title: '序号',
+					formatter: function(value, row, index) {
+						var pageSize = $('#planTable').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+						var pageNumber = $('#planTable').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+						return pageSize * (pageNumber - 1) + index + 1;
+					}
+				}, {
+					field: 'excutionPlanName',
+					title: '执行计划名称',
+					width: "45%"
+				}, {
+					field: 'createDate',
+					title: '创建时间',
+					width: "20%"
+				}, {
+					field: 'excutionPlanEnable',
+					title: '是否激活',
+					width: "20%",
+					formatter: function(value, row, index) {
+						var state = "";
+						if(value == 1) {
+							state = '<span style="color:red">未激活</span>'
+						} else if(value == 2) {
+							state = '<span style="color:green">已激活</span>'
+						}
+						return state;
+					}
+				}, {
+					title: "操作",
+					width: 300,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>' +
+							'<button data-toggle="tooltip" title="编辑" type="button" onclick="updata(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>' +
+							// '<button data-toggle="tooltip" title="设置" type="button" onclick="set(' + i3 + ');" class="btn btn-success tableButton"><i class="fa fa-cog"> </i></button>' +
+							// '<button data-toggle="tooltip" title="控制" type="button" onclick="op(' + i3 + ');" class="btn btn-primary tableButton"><i class="fa fa-puzzle-piece"> </i></button>' +
+							'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNumber: params.pageNumber,
+					excutionPlanName: $("#s_excutionPlanName").val(),
+				};
+			}
+
+			$("#addRole").on("click", function() {
+				url = "";
+				showModel("添加执行计划", 1, 0);
+			});
+
+			$("#search").click(function() {
+				$.show_overall_loding();
+				$('#planTable').bootstrapTable('refresh');
+			});
+
+			$("#clean").click(function() {
+				$("#s_excutionPlanName").val("");
+				$("#search").trigger("click");
+			});
+		});
+
+		// 修改执行计划
+		function updata(val) {
+			showModel("修改执行计划", 2, val);
+		}
+
+		// 删除执行计划
+		function tabRemove(val) {
+			var data = $("#planTable").bootstrapTable('getData');
+			console.info(data[val]);
+			var id = data[val].id;
+			layer.confirm('确定删除？', {
+				btn: ['确定', '取消'] //按钮
+			}, function() {
+				$.show_overall_loding();
+				$.deleteJSON(deviceServiceUrl + "/exeutionPlan?id=" + id, {}, function(data) {
+					console.info(data);
+					$.hide_overall_loding();
+					if(data.code == 0) {
+						layer.msg('删除成功', {
+							icon: 1
+						});
+						$('#planTable').bootstrapTable('refresh');
+					} else {
+						layer.msg('删除失败', {
+							icon: 2
+						});
+					}
+				});
+			});
+		}
+
+		function showModel(title, flag, index) {
+			html = template("addModel", {
+				title: "123"
+			});
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['350px'], //宽高
+				maxHeight: '500px',
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					$("#addForm").submit();
+				},
+				success: function(layero) {
+					initVue();
+					if(flag == 2) {
+						var data = $("#planTable").bootstrapTable('getData');
+						var obj = data[index];
+						console.info(obj);
+						$("#id").val(obj.id);
+						$("#platformId").val(obj.platformId);
+						$("#excutionPlanName").val(obj.excutionPlanName);
+						$("#excutionPlanEnable").val(obj.excutionPlanEnable);
+						if(obj.excutionPlanEnable == 2) {
+							appp.layuiSwitch = true;
+						} else {
+							appp.layuiSwitch = false;
+						}
+						appp.select = obj.excutionPlanNumber;
+						isAdd = false;
+					} else {
+						isAdd = true;
+					}
+				}
+			});
+			var validate = $("#addForm").validate({
+				rules: {
+					account: {
+						required: true
+					},
+					excutionPlanName: {
+						required: true
+					},
+				},
+				messages: {
+					account: {
+						required: "账号不能为空"
+					},
+					excutionPlanName: {
+						required: "执行计划名称不能为空"
+					},
+				},
+				submitHandler: function(form) {
+					$.show_overall_loding();
+					var data = $("#addForm").serializeJson();
+					console.info(data);
+					if(isAdd) { //添加操作
+						$.postJSON(deviceServiceUrl + "/exeutionPlan", data, function(data) {
+							console.info(data);
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#planTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					} else {
+						$.putJSON(deviceServiceUrl + "/exeutionPlan", data, function(data) {
+							console.info(data);
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#planTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					}
+
+				}
+			});
+		}
+
+		function detail(val) {
+			var data = $("#planTable").bootstrapTable('getData');
+			// console.info(data[val]);
+			tempUser = data[val].excutionPlanNumber;
+			tempPlanID = data[val].platformId;
+			tempPlanID_local = data[val].id;
+			html = template("listModel", {
+				title: "123"
+			});
+			var myLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: ["执行计划详情", ""],
+				area: ['1000px', '550px'], //宽高
+				maxHeight: '500px',
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				success: function(layero) {
+					initProcessTable();
+				}
+			});
+		}
+	</script>
+
+	<!--添加修改执行计划模板-->
+	<script type="text/html" id="addModel">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="addForm">
+					<div class="layui-row layui-col-space10 layui-form-item" id="modelApp">
+						<input type="hidden" name="id" id="id" />
+						<input type="hidden" name="platformId" id="platformId" />
+						<div class="form-group">
+							<label for="account" class="control-label">选择账号：</label>
+							<div>
+								<select v-model="select" class="form-control" name="account" id="account">
+									<option v-for="v in options" :value="v.number" v-text="v.number"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="excutionPlanName" class="control-label">执行计划名称：</label>
+							<div>
+								<input type="text" class="form-control" id="excutionPlanName" name="excutionPlanName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="enableTimer" class="control-label">是否激活：</label>
+							<div>
+								<label class="lyear-switch switch-solid switch-success">
+                                <input type="checkbox" :checked="layuiSwitch" @click="changeSwitch();">
+                                <span></span>
+                            </label>
+							</div>
+							<input type="hidden" id="excutionPlanEnable" name="excutionPlanEnable" value="2" />
+						</div>
+					</div>
+					<div class="clearfix" style="margin-bottom: 15px;"></div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<!--执行计划详情模板-->
+	<script type="text/html" id="listModel">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<div>
+					<button type="button" class="btn btn-primary" id="addProcess">
+                    <i class="fa fa-plus"></i> 添加进程
+                </button>
+					<table id="processTable"></table>
+				</div>
+			</div>
+		</section>
+	</script>
+
+	<!--执行计划进程的添加修改模板-->
+	<script type="text/html" id="ProcessModel">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="addForm">
+					<div class="layui-row layui-col-space10 layui-form-item" id="modelApp1">
+						<input type="hidden" name="id" id="id" />
+						<input type="hidden" name="platformId" id="platformId" />
+						<input type="hidden" name="platformProcessId" id="platformProcessId" />
+						<div class="row">
+							<div class="form-group col-sm-6">
+								<label for="process_name" class="control-label">执行计划进程名称：</label>
+								<div>
+									<input type="text" class="form-control" id="process_name" name="process_name">
+								</div>
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="hasCondition" class="control-label">前置动作：</label>
+								<div>
+									<select v-model="select" class="form-control" name="hasCondition" id="hasCondition">
+										<option v-for="v in dataList" :value="v.platformProcessId" v-text="v.name"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-sm-6">
+								<label for="preTriggerTime" class="control-label">前置时间(秒)：</label>
+								<div>
+									<input type="text" class="form-control" id="preTriggerTime" name="preTriggerTime">
+								</div>
+							</div>
+							<div class="form-group col-sm-6">
+								<label for="delayTriggerTime" class="control-label">延时时间(秒)：</label>
+								<div>
+									<input type="text" class="form-control" id="delayTriggerTime" name="delayTriggerTime">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<button type="button" class="btn btn-primary" id="addShiJianDuan">
+                            <i class="fa fa-plus"></i> 添加时间段
+                        </button>
+							<div>
+								<table id="timeTable"></table>
+							</div>
+						</div>
+						<div class="form-group">
+							<button type="button" class="btn btn-primary" id="addTiaoJian">
+                            <i class="fa fa-plus"></i> 添加条件
+                        </button>
+							<div>
+								<table id="conditionTable"></table>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="delayTriggerTime" class="control-label">选择模式(建议单选):</label>
+							<div>
+								<table id="modeTable"></table>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix" style="margin-bottom: 15px;"></div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<!--添加条件模板-->
+	<script type="text/html" id="tiaoJianModel">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="addTiaoJianForm">
+					<div class="layui-row layui-col-space10 layui-form-item" id="TiaoJianApp">
+						<div class="form-group">
+							<label for="account" class="control-label">选择设备：</label>
+							<div>
+								<select v-model="select" class="form-control" name="changeDevice" id="changeDevice" @change="getAttr()">
+									<option v-for="v in options" v-text="v.deviceName" :value="v"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="account" class="control-label">条件类型：</label>
+							<div>
+								<select v-model="select1" class="form-control" name="tiaoJianType" id="tiaoJianType" @change="getAttr1()">
+									<option v-for="v in options1" v-text="v.propertyName" :value="v"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group" v-if="type == 1">
+							<label for="excutionPlanName" class="control-label">条件触发值：</label>
+							<div>
+								<input type="text" class="form-control" id="tiaoJianValue" name="tiaoJianValue">
+							</div>
+						</div>
+					</div>
+					<div class="clearfix" style="margin-bottom: 15px;"></div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+	<!--添加时间模板-->
+	<script type="text/html" id="timeModel">
+		<section class="openDetail" style="width: 95%;">
+			<div class="panel-body">
+				<form id="addTimeForm">
+					<div class="layui-row layui-col-space10 layui-form-item" id="timeApp">
+						<div class="form-group">
+							<label for="time_type" class="control-label">时间类型：</label>
+							<div>
+								<select v-model="select" class="form-control" name="time_type" id="time_type">
+									<option value="1">日期</option>
+									<option value="2">时间</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group" v-show="select == 1">
+							<label for="start_time" class="control-label">开始时间：</label>
+							<div>
+								<input type="text" class="form-control js-datetimepicker" id="start_time" name="start_time" data-format="YYYY-MM-DD HH:mm:ss">
+							</div>
+						</div>
+						<div class="form-group" v-show="select == 1">
+							<label for="end_time" class="control-label">结束时间：</label>
+							<div>
+								<input type="text" class="form-control js-datetimepicker" id="end_time" name="end_time" data-format="YYYY-MM-DD HH:mm:ss">
+							</div>
+						</div>
+						<div class="form-group" v-show="select == 2">
+							<label for="start_time" class="control-label">开始时间：</label>
+							<div>
+								<input type="text" class="form-control js-datetimepicker" id="start_time1" name="start_time1" data-side-by-side="true" data-locale="zh-cn" data-format="HH:mm:ss">
+							</div>
+						</div>
+						<div class="form-group" v-show="select == 2">
+							<label for="end_time" class="control-label">结束时间：</label>
+							<div style="position: relative">
+								<input type="text" class="form-control js-datetimepicker" id="end_time1" name="end_time1" data-side-by-side="true" data-locale="zh-cn" data-format="HH:mm:ss">
+							</div>
+						</div>
+					</div>
+					<div class="clearfix" style="margin-bottom: 15px;"></div>
+				</form>
+			</div>
+		</section>
+	</script>
+	<script>
+		// 修改进程
+		function updataProcess(val) {
+			showProcessModel("修改执行计划进程", 2, val);
+		}
+
+		//删除进程
+		function tabRemoveProcess(val) {
+			var datas = $("#processTable").bootstrapTable('getData');
+			var data = datas[val];
+			var conlayer = layer.confirm("确定删除？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.deleteJSON(deviceServiceUrl + "/exeutionPlanProcess?id=" + data.platformProcessId + "&account=" + tempUser +
+					"&localId=" + data.id, {},
+					function(data) {
+						$.hide_overall_loding();
+						if(data.code == 0) {
+							layer.msg('删除成功', {
+								icon: 1
+							});
+							$('#processTable').bootstrapTable('refresh');
+						} else {
+							layer.msg('删除失败', {
+								icon: 2
+							});
+						}
+					});
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+
+		// 加载执行计划进程列表
+		function initProcessTable() {
+			$('#processTable').bootstrapTable({
+				url: deviceServiceUrl + "/exeutionPlanProcess/list", //请求后台的URL（*）
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				toolbar: '', //工具按钮用哪个容器
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: true, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 5, //每页的记录行数（*）
+				pageList: [5, 10, 20, 50], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				queryParams: queryParams3, //传递参数（*）
+				strictSearch: true,
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						var pageSize = $('#processTable').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+						var pageNumber = $('#processTable').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+						return pageSize * (pageNumber - 1) + index + 1;
+					}
+				}, {
+					field: 'name',
+					title: '进程名称',
+					width: 100
+				}, {
+					field: 'triggerConditonDesc',
+					title: '触发条件描述',
+					width: 100
+				}, {
+					field: 'modeDesc',
+					title: '触发事件描述',
+					width: 100
+				}, {
+					field: 'preTriggerTime',
+					title: '前置时间(s)',
+					width: 100,
+				}, {
+					field: 'delayTriggerTime',
+					title: '延时时间(s)',
+					width: 100,
+				}, {
+					field: 'createDate',
+					title: '创建时间',
+					width: 100,
+				}, {
+					title: "操作",
+					width: 100,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="编辑" type="button" onclick="updataProcess(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>' +
+							'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemoveProcess(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			function queryParams3(params) {
+				$.show_overall_loding();
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					modeName: $("#s_modeName").val(),
+					excutionPlanId: tempPlanID_local,
+					modeReadme: $("#s_modeReadme").val(),
+					enableMode: $("#s_enableMode").val()
+				};
+			}
+
+			// 添加进程
+			$("#addProcess").on("click", function() {
+				url = "";
+				showProcessModel("添加执行计划进程", 1, 0);
+			});
+		}
+
+		function initConditionTable() {
+
+			$('#timeTable').bootstrapTable({
+				// url: deviceServiceUrl + "/exeutionPlanProcess/list", //请求后台的URL（*）
+				// method: 'get', //请求方式（*）
+				data: timeDatas,
+				contentType: "application/x-www-form-urlencoded",
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: false, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 20, 35, 50], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				height: 200,
+				queryParams: queryParams2, //传递参数（*）
+				strictSearch: true,
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+					width: 50,
+					title: '序号',
+					formatter: function(value, row, index) {
+						return index + 1;
+					}
+				}, {
+					field: 'time_type',
+					title: '类型',
+					width: 100,
+					formatter: function(value) {
+						if(value == "datetime") {
+							return "日期";
+						} else {
+							return "时间";
+						}
+					}
+				}, {
+					field: 'start_time',
+					title: '开始时间',
+					width: 200
+				}, {
+					field: 'end_time',
+					title: '结束时间',
+					width: 100
+				}, {
+					title: "操作",
+					width: 50,
+					clickToSelect: false,
+					formatter: function(i1, i2, i3) {
+						var str =
+							'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemoveTimer(' + i3 +
+							');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+						return str;
+					},
+					cellStyle: function() {
+						return {
+							classes: "",
+							css: {
+								"text-align": "center"
+							}
+						}
+					}
+				}]
+			});
+
+			$('#conditionTable').bootstrapTable({
+				// url: deviceServiceUrl + "/exeutionPlanProcess/list", //请求后台的URL（*）
+				// method: 'get', //请求方式（*）
+				data: tiaoJianDatas,
+				contentType: "application/x-www-form-urlencoded",
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: false, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 10, //每页的记录行数（*）
+				pageList: [10, 20, 35, 50], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				height: 300,
+				queryParams: queryParams2, //传递参数（*）
+				strictSearch: true,
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+						checkbox: true,
+						width: 50,
+						field: 'checked',
+						formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+							// console.info(row);
+							// if (appp.modelList.indexOf(row.id) > -1) {// 因为 判断数组里有没有这个 id
+							if(row.checked) { // 因为 判断数组里有没有这个 id
+								// 存在则选中
+								return {
+									checked: true
+								};
+							}
+						}
+					},
+					{
+						width: 50,
+						title: '序号',
+						formatter: function(value, row, index) {
+							return index + 1;
+						}
+					}, {
+						field: 'product_code',
+						title: '设备类型',
+						width: 100
+					}, {
+						field: 'serial_num',
+						title: '序列号',
+						width: 200
+					}, {
+						field: 'property_name',
+						title: '触发条件',
+						width: 100
+					}, {
+						field: 'param_value',
+						title: '触发值',
+						width: 100,
+					}, {
+						title: "操作",
+						width: 50,
+						clickToSelect: false,
+						formatter: function(i1, i2, i3) {
+							var str =
+								'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemoveTiaojian(' + i3 +
+								');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+							return str;
+						},
+						cellStyle: function() {
+							return {
+								classes: "",
+								css: {
+									"text-align": "center"
+								}
+							}
+						}
+					}, {
+						field: 'product_typename',
+						visible: false
+					}, {
+						field: 'property_id',
+						visible: false
+					}, {
+						field: 'bind_type',
+						visible: false
+					}, {
+						field: 'cmd_id',
+						visible: false
+					}, {
+						field: 'cmd_name',
+						visible: false
+					},
+				]
+			});
+
+			$('#modeTable').bootstrapTable({
+				url: deviceServiceUrl + "/mode/listByAccount", //请求后台的URL（*）
+				method: 'get', //请求方式（*）
+				contentType: "application/x-www-form-urlencoded",
+				striped: true, //是否显示行间隔色
+				cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination: false, //是否显示分页（*）
+				sortable: false, //是否启用排序
+				sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber: 1, //初始化加载第一页，默认第一页
+				pageSize: 5, //每页的记录行数（*）
+				pageList: [5, 10, 20, 50], //可供选择的每页的行数（*）
+				queryParamsType: '',
+				height: 200,
+				queryParams: queryParams2, //传递参数（*）
+				strictSearch: true,
+				uniqueId: "id", //每一行的唯一标识，一般为主键列
+				cardView: false, //是否显示详细视图
+				detailView: false, //是否显示父子表
+				clickToSelect: true, //点击行是否选中
+				responseHandler: function(data) {
+					// console.info(data);
+					var res = [];
+					if(data.code == 0) {
+						var result = data.data;
+						res.push({
+							total: result.total,
+							rows: result.list
+						});
+						return res[0];
+					} else {
+						res.push({
+							total: 0,
+							rows: null
+						});
+						return res[0];
+					}
+				},
+				onLoadSuccess: function() {
+					$.hide_overall_loding();
+				},
+				columns: [{
+						checkbox: true,
+						width: 50,
+						field: 'checked',
+						formatter: function(i, row) { // 每次加载 checkbox 时判断当前 row 的 id 是否已经存在全局 Set() 里
+							// console.info(row);
+							if(modeList.indexOf(row.platformModeId) > -1) { // 因为 判断数组里有没有这个 id
+								// if (false) {// 因为 判断数组里有没有这个 id
+								// 存在则选中
+								return {
+									checked: true
+								};
+							}
+						}
+					},
+					{
+						title: '序号',
+						width: 50,
+						formatter: function(value, row, index) {
+							var pageSize = $('#modeTable').bootstrapTable('getOptions').pageSize; //通过表的#id 可以得到每页多少条
+							var pageNumber = $('#modeTable').bootstrapTable('getOptions').pageNumber; //通过表的#id 可以得到当前第几页
+							return pageSize * (pageNumber - 1) + index + 1;
+						}
+					}, {
+						field: 'modeName',
+						title: '模式名称',
+						// width: 400
+					},
+				]
+			});
+
+			function queryParams2(params) {
+				$.show_overall_loding();
+				console.info(tempUser);
+				return {
+					token: $.getToken(),
+					pageSize: params.pageSize,
+					pageNum: params.pageNumber,
+					account: tempUser
+				};
+			}
+
+			// 添加条件
+			$("#addTiaoJian").on("click", function() {
+				showInfoModel("添加条件", 1, 0);
+			});
+			// 添加时间
+			$("#addShiJianDuan").on("click", function() {
+				showTimeModel("添加时间", 1, 0);
+			});
+		}
+
+		//添加执行计划进程
+		function showProcessModel(title, flag, index) {
+			html = template("ProcessModel", {
+				title: "123"
+			});
+			var myProcessLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['1000px', '500px'], //宽高
+				maxHeight: '500px',
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					$("#addForm").submit();
+				},
+				success: function(layero) {
+					initVue1();
+					var dataList = [];
+					modeList = [];
+					timeDatas = [];
+					tiaoJianDatas = [];
+					var data = $("#processTable").bootstrapTable('getData');
+					if(flag == 2) {
+						var obj = data[index];
+						console.info(data);
+						console.info(obj);
+						for(var i = 0; i < data.length; i++) {
+							if(data[i].id == obj.id) {
+								continue;
+							}
+							var ob = {};
+							ob.id = data[i].id;
+							ob.name = data[i].name;
+							ob.platformProcessId = data[i].platformProcessId;
+							dataList.push(ob);
+						}
+
+						$("#id").val(obj.id);
+						$("#platformId").val(obj.platformId);
+						$("#platformProcessId").val(obj.platformProcessId);
+						$("#process_name").val(obj.name);
+						$("#hasCondition").val(obj.hasCondition);
+						$("#preTriggerTime").val(obj.preTriggerTime);
+						$("#delayTriggerTime").val(obj.delayTriggerTime);
+						var arr = JSON.parse(obj.excutionTimeConditionList);
+						for(var v in arr) {
+							timeDatas.push(arr[v]);
+						}
+						var arr1 = JSON.parse(obj.excutionConditionList);
+						for(var i = 0; i < arr1.length; i++) {
+							var o = arr1[i];
+							if(o.checked == "true") o.checked = true;
+							else o.checked = false;
+							tiaoJianDatas.push(o);
+						}
+						// var arr2 = obj.modeIds.split(",");
+						modeList = obj.modeIds.split(",");
+					} else {
+						for(var i = 0; i < data.length; i++) {
+							var ob = {};
+							ob.id = data[i].id;
+							ob.name = data[i].name;
+							ob.platformProcessId = data[i].platformProcessId;
+							dataList.push(ob);
+						}
+					}
+					appp1.dataList = dataList;
+					initConditionTable();
+				}
+			});
+			var validate = $("#addForm").validate({
+				rules: {
+					process_name: {
+						required: true
+					},
+					preTriggerTime: {
+						number: true
+					},
+					delayTriggerTime: {
+						number: true
+					},
+				},
+				messages: {
+					process_name: {
+						required: "名称不能为空"
+					},
+					preTriggerTime: {
+						number: "请输入有效的数字"
+					},
+					delayTriggerTime: {
+						number: "请输入有效的数字"
+					},
+				},
+				submitHandler: function(form) {
+
+					// $.show_overall_loding();
+					var data = $("#addForm").serializeJson();
+					var timeData = $("#timeTable").bootstrapTable('getData');
+					var conditionData = $("#conditionTable").bootstrapTable('getData');
+					var conditionDataNames = "";
+					var modeData = $("#modeTable").bootstrapTable('getData');
+					// console.info(modeData);
+					var modeDateIDS = "";
+					var modeDateNames = "";
+					for(var v in modeData) {
+						if(modeData[v].checked) {
+							modeDateIDS += "," + modeData[v].platformModeId;
+							modeDateNames += "," + modeData[v].modeName;
+						}
+					}
+					for(var v in conditionData) {
+						if(conditionData[v].checked) {
+							conditionData[v].checked = "true";
+						} else {
+							conditionData[v].checked = "false";
+						}
+						conditionDataNames += "," + conditionData[v].property_name;
+					}
+					modeDateIDS = modeDateIDS.substring(1, modeDateIDS.length);
+					modeDateNames = modeDateNames.substring(1, modeDateNames.length);
+					conditionDataNames = conditionDataNames.substring(1, conditionDataNames.length);
+
+					var obj = {};
+					obj = data;
+					obj.account = tempUser; // 账号
+					obj.ser_order = ""; // 序号
+					obj.plan_id = tempPlanID; // 执行计划id
+					obj.plan_id_local = tempPlanID_local; // 本地执行计划id
+					obj.has_condition = appp1.select; //是否前置动作，其他进程的id
+					obj.pre_trigger_time = data.preTriggerTime; // 前置时间，单位s
+					obj.delay_trigger_time = data.delayTriggerTime; // 延时时间，单位s
+					obj.mode_ids = modeDateIDS; // 模式id字符串，用,隔开
+					obj.mode_desc = modeDateNames; // 所绑定模式的中文描述，用，隔开
+					obj.excutionConditionList = JSON.stringify(conditionData); //触发条件集合
+					// var tt = obj.excutionConditionList;
+					// obj.excutionConditionList = tt.substring(1, tt.length - 1);
+					obj.trigger_conditon_desc = conditionDataNames; //条件描述
+					obj.excutionTimeConditionList = JSON.stringify(timeData); //时间条件集合
+					// tt = obj.excutionTimeConditionList;
+					// obj.excutionTimeConditionList = tt.substring(1, tt.length - 1); //时间条件集合
+
+					console.info(obj);
+
+					if(obj.excutionConditionList.length < 1) {
+						layer.msg("请添加条件！", {
+							icon: 1
+						});
+						return false;
+					}
+					if(modeDateIDS.length < 1) {
+						layer.msg("请选择模式！", {
+							icon: 1
+						});
+						return false;
+					}
+
+					if(flag == 1) { //添加进程操作
+						$.postJSON(deviceServiceUrl + "/exeutionPlanProcess", obj, function(data) {
+							console.info(data);
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myProcessLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#processTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					} else {
+						obj.platform_process_id = data.platformProcessId; // 平台进程id
+						$.putJSON(deviceServiceUrl + "/exeutionPlanProcess", obj, function(data) {
+							console.info(data);
+							$.hide_overall_loding();
+							if(data.code == 0) {
+								layer.close(myProcessLayer);
+								layer.msg("成功", {
+									icon: 1
+								});
+								$('#processTable').bootstrapTable('refresh');
+								return true;
+							}
+							layer.msg("操作失败", {
+								icon: 2
+							});
+						});
+					}
+
+					processDates.push(obj);
+					// $('#processTable').bootstrapTable('load', processDates);
+					// layer.close(myProcessLayer);
+				}
+			});
+
+		}
+
+		function showInfoModel(title, flag, index) {
+			html = template("tiaoJianModel", {
+				title: "123"
+			});
+			var myProcessLayerInfo = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['550px'], //宽高
+				maxHeight: '500px',
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					$("#addTiaoJianForm").submit();
+				},
+				success: function(layero) {
+					initTiaoJianData();
+				}
+			});
+			var validate = $("#addTiaoJianForm").validate({
+				rules: {
+					changeDevice: {
+						required: true
+					},
+					tiaoJianType: {
+						required: true
+					},
+					tiaoJianValue: {
+						required: true,
+						number: true,
+					},
+				},
+				messages: {
+					changeDevice: {
+						required: "请选择设备"
+					},
+					tiaoJianType: {
+						required: "请选择条件"
+					},
+					tiaoJianValue: {
+						required: "请选择条件",
+						number: "请输入有效的数字"
+					},
+				},
+				submitHandler: function(form) {
+					var obj = TiaoJianApp.select1;
+					var obj1 = {};
+					obj1.product_code = obj.productCode;
+					obj1.product_typename = obj.propertyReadme;
+					obj1.serial_num = TiaoJianApp.select11;
+					obj1.property_id = obj.id;
+					obj1.property_name = obj.propertyName;
+					if(obj.propertyModel == 0) {
+						obj1.bind_type = "0";
+						obj1.cmd_id = obj.webPlanInfo[0].cmdId;
+						obj1.cmd_name = "";
+					} else {
+						obj1.bind_type = "1";
+						obj1.param_value = $("#tiaoJianValue").val();
+					}
+					tiaoJianDatas.push(obj1);
+					$('#conditionTable').bootstrapTable('load', tiaoJianDatas);
+					layer.close(myProcessLayerInfo);
+				}
+			});
+
+		}
+
+		function showTimeModel(title, flag, index) {
+			html = template("timeModel", {
+				title: "123"
+			});
+			var myProcessLayer = layer.open({
+				skin: 'card', //自定义样式winning-class
+				type: 1,
+				title: [title, ""],
+				area: ['350px'], //宽高
+				maxHeight: '500px',
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				btn: ['提交', '取消'],
+				yes: function(index, layero) {
+					$("#addTimeForm").submit();
+				},
+				success: function(layero) {
+					initTimeApp();
+				}
+			});
+			var validate = $("#addTimeForm").validate({
+				submitHandler: function(form) {
+					// $.show_overall_loding();
+					var data = $("#addTimeForm").serializeJson();
+					console.info(data);
+					var obj = {};
+					var start_time;
+					var end_time;
+					if(data.time_type == 1) {
+						start_time = data.start_time;
+						end_time = data.end_time;
+						obj.time_type = "datetime";
+					} else {
+						start_time = data.start_time1;
+						end_time = data.end_time1;
+						obj.time_type = "time";
+					}
+					if(start_time == "") {
+						layer.msg("开始时间不能为空！", {
+							icon: 2
+						});
+						return false;
+					}
+					if(end_time == "") {
+						layer.msg("结束时间不能为空！", {
+							icon: 2
+						});
+						return false;
+					}
+					var d1 = new Date(start_time);
+					var d2 = new Date(end_time);
+					if(d2 <= d1) {
+						layer.msg("结束时间不能小于开始时间！", {
+							icon: 2
+						});
+						return false;
+					}
+					obj.start_time = start_time;
+					obj.end_time = end_time;
+					timeDatas.push(obj);
+					// $('#timeTable').bootstrapTable('refresh');
+					$('#timeTable').bootstrapTable('load', timeDatas);
+					layer.close(myProcessLayer);
+				}
+			});
+		}
+
+		var accounts;
+		$.sanjiGetJSON(deviceServiceUrl + "/subscribertable/list", {
+			subscriberState: 2,
+			pageNum: 1,
+			pageSize: 999
+		}, function(res) {
+			console.info(res);
+			if(res.code == 0) {
+				if(res.data.list < 1) {
+					accounts = null;
+					// layer.msg("暂无账号！", {icon: 2});
+					return false;
+				}
+				var list = [];
+				for(var v in res.data.list) {
+					var obj = {};
+					obj.id = res.data.list[v].id;
+					obj.number = res.data.list[v].subscriberNumber;
+					obj.name = res.data.list[v].organizationName;
+					list.push(obj);
+				}
+				accounts = list;
+			} else {
+				accounts = null;
+				// layer.msg("获取账号失败，请重试！", {icon: 2});
+			}
+		});
+
+		// 初始化执行计划账号和启用禁用开关
+		function initVue() {
+			appp = new Vue({
+				el: "#modelApp",
+				data: {
+					select: "",
+					options: [],
+					layuiSwitch: true,
+					dataList: []
+				},
+				methods: {
+					changeSwitch: function(index) {
+						if(this.layuiSwitch) {
+							this.layuiSwitch = false;
+							$("#excutionPlanEnable").val(1);
+						} else {
+							this.layuiSwitch = true;
+							$("#excutionPlanEnable").val(2);
+						}
+					}
+				},
+				mounted: function() {
+					if(accounts == null) {
+						layer.msg("暂无账号！", {
+							icon: 2
+						});
+					} else {
+						this.options = accounts;
+					}
+				},
+			});
+		}
+
+		function initVue1() {
+			appp1 = new Vue({
+				el: "#modelApp1",
+				data: {
+					select: "",
+					dataList: []
+				},
+				methods: {}
+			});
+		}
+
+		function initDatepicker() {
+			// 时间选择
+			jQuery('.js-datetimepicker').each(function() {
+				var $input = jQuery(this);
+				$input.datetimepicker({
+					format: $input.data('format') ? $input.data('format') : false,
+					useCurrent: $input.data('use-current') ? $input.data('use-current') : false,
+					locale: moment.locale('' + ($input.data('locale') ? $input.data('locale') : '') + ''),
+					showTodayButton: $input.data('show-today-button') ? $input.data('show-today-button') : false,
+					showClear: $input.data('show-clear') ? $input.data('show-clear') : false,
+					showClose: $input.data('show-close') ? $input.data('show-close') : false,
+					sideBySide: $input.data('side-by-side') ? $input.data('side-by-side') : false,
+					inline: $input.data('inline') ? $input.data('inline') : false,
+				});
+			});
+
+			// 日期选择
+			jQuery('.js-datepicker').each(function() {
+				var $input = jQuery(this);
+				$input.datepicker({
+					weekStart: 1,
+					autoclose: true,
+					todayHighlight: true,
+					language: 'zh-CN',
+				});
+			});
+		}
+
+		var timeApp;
+
+		function initTimeApp() {
+			timeApp = new Vue({
+				el: "#timeApp",
+				data: {
+					select: 1,
+					options: [],
+					layuiSwitch: true,
+				},
+				methods: {
+					changeTimeType: function(index) {
+						initDatepicker();
+					},
+				},
+				mounted: function() {
+					initDatepicker();
+				},
+			});
+		}
+
+		function inithasConditionApp() {
+			timeApp = new Vue({
+				el: "#timeApp",
+				data: {
+					select: 1,
+					options: [],
+					layuiSwitch: true,
+				},
+				methods: {
+					changeTimeType: function(index) {
+						initDatepicker();
+					},
+				},
+				mounted: function() {
+					initDatepicker();
+				},
+			});
+		}
+
+		function layuiSwitch() {
+			if($("#enableTimer").val() == 0) {
+				$("#enableTimer").val(1);
+			} else {
+				$("#enableTimer").val(0);
+			}
+		}
+
+		var TiaoJianApp;
+
+		// 获取设备分类（条件）
+		function initTiaoJianData() {
+			$.sanjiGetJSON(deviceServiceUrl + "/device/list", {
+				deviceSubscriberNumber: tempUser,
+				pageNum: 1,
+				pageSize: 999
+			}, function(res) {
+				console.info(res);
+				if(res.code == 0) {
+					if(res.data.list < 1) {
+						layer.msg("获取设备失败，请重试！", {
+							icon: 2
+						});
+						return false;
+					}
+					TiaoJianApp = new Vue({
+						el: "#TiaoJianApp",
+						data: {
+							select: "",
+							options: res.data.list,
+							select1: "",
+							select11: "",
+							options1: [],
+							type: 0
+						},
+						methods: {
+							changeSwitch: function(index) {
+								if(this.layuiSwitch) {
+									this.layuiSwitch = false;
+									$("#excutionPlanEnable").val(1);
+								} else {
+									this.layuiSwitch = true;
+									$("#excutionPlanEnable").val(2);
+								}
+							},
+							getAttr: function() {
+								var obj = TiaoJianApp.select;
+								console.info(obj);
+								TiaoJianApp.select11 = obj.serialNum;
+								$.sanjiGetJSON(deviceServiceUrl + "/exeutionPlan/getDriverType", {
+									productCode: obj.productCode
+								}, function(res) {
+									console.info(res);
+									if(res.code == 0) {
+										var json = JSON.parse(res.data);
+										console.info(json);
+										TiaoJianApp.options1 = json;
+									} else {
+										layer.msg("获取设备条件失败！", {
+											icon: 2
+										});
+									}
+								});
+							},
+							getAttr1: function() {
+								var obj = TiaoJianApp.select1;
+								console.info(obj);
+								if(obj.propertyModel == 1) {
+									TiaoJianApp.type = 1;
+								} else {
+									TiaoJianApp.type = 0;
+								}
+							},
+						}
+					});
+				} else {
+					layer.msg("获取设备失败，请重试！", {
+						icon: 2
+					});
+				}
+			});
+		}
+
+		//删除时间
+		function tabRemoveTimer(index) {
+			timeDatas.splice(index, 1);
+			$('#timeTable').bootstrapTable('load', timeDatas);
+		}
+
+		//删除条件
+		function tabRemoveTiaojian(index) {
+			tiaoJianDatas.splice(index, 1);
+			$('#conditionTable').bootstrapTable('load', tiaoJianDatas);
+		}
+	</script>
+
+</html>

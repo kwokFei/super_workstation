@@ -1,0 +1,341 @@
+body{
+    width: 100%;
+    height: 100%;
+    background-color: #131D40;
+    position: relative;
+    font-family: MicrosoftYaHei;
+}
+header{
+    width: 100%;
+    height: 0.48rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    line-height: 0.48rem;
+    background-color: #131D40;
+}
+header img{
+    width: 0.94rem;
+    height: 0.3rem;
+    margin-left: 0.44rem;
+}
+header span{
+    margin-left: 0.1rem;
+    display: inline-block;
+    border-left: 0.02rem solid white;
+    padding-left: 0.1rem;
+    font-family: MicrosoftYaHei;
+    font-size: 0.214rem;
+    line-height: 0.27rem;
+    color: #dcdef4;
+}
+
+.navBox{
+    background-color: white;
+    width: 100%;
+    height: 0.4rem;
+    line-height: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navBox .myProject{
+    width: 0.96rem;
+    height: 100%;
+    line-height: 0.4rem;
+    text-align: center;
+    font-family: MicrosoftYaHeiLight;
+    font-size: 0.167rem;
+    color: #dcdef4;
+    background:linear-gradient(90deg,#0D72FB 0%,#00A5FE 100%);
+}
+.navBox .settingsBox{
+    height: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding-right: 0.2rem;
+}
+.navBox .settingsBox .settItem{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin:0 0.1rem;
+    cursor: pointer;
+}
+.navBox .settingsBox .settItem img{
+    display: inline-block;
+    width: 0.16rem;
+    height: 0.16rem;
+    /*border: 1px solid red;*/
+    margin-right: 0.05rem;
+    background-size: cover;
+}
+.navBox .settingsBox .settItem>span{
+    font-family: SourceHanSansCN-Normal;
+    font-size: 0.14rem;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 0rem;
+    color: #343434;
+}
+
+.contentBox{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    height: calc(100% - 0.88rem);
+    position: relative;
+}
+.contentBox .listBox{
+    width: 100%;
+    height: 90%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    display: flex;
+    padding-left: 0.12rem;
+    justify-content: left;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.contentBox .listBox::-webkit-scrollbar {
+    display: none;
+}
+.contentBox .listBox .itemBox{
+    width: 4.4rem;
+    height: 2.81rem;
+    border-radius: 0.05rem;
+    background-color: #AAB1E5;
+    margin: 0.1rem;
+    position: relative;
+}
+.contentBox .listBox .itemBox .imgBox{
+    width: 100%;
+    height: 2.21rem;
+}
+.contentBox .listBox .itemBox .imgBox img{
+    width: 100%;
+    height: 100%;
+    border-radius: 0.05rem 0.05rem 0 0;
+}
+.contentBox .listBox .itemBox p{
+    height:0.6rem;
+    line-height: 0.6rem;
+    width: 100%;
+    background-color: white;
+    position: relative;
+    border-radius: 0 0 0.05rem 0.05rem;
+}
+.contentBox .listBox .itemBox p i{
+    display: inline-block;
+    width: 0.13rem;
+    height: 0.13rem;
+    border-radius: 50%;
+    margin-left: 0.2rem;
+    background-color: #0C76FB;
+}
+.contentBox .listBox .itemBox p span{
+    font-family: MicrosoftYaHei;
+    font-size: 0.18rem;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 0.27rem;
+    letter-spacing: 0rem;
+    margin-left: 0.07rem;
+    color: #333333;
+}
+.contentBox .listBox .itemBox p img{
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    cursor: pointer;
+}
+.contentBox .listBox .itemBox .setBox{
+    position: absolute;
+    display: none;
+    z-index: 11;
+    padding-top: 0.1rem;
+    bottom:-1.42rem;
+    right: 0.12rem;
+    width: 1.21rem;
+    height: 1.71rem;
+    background: url("../img/setBG.png") no-repeat;
+    background-size: cover;
+}
+.contentBox .listBox .itemBox  .setBox span{
+    display: inline-block;
+    text-align: center;
+    width: 80%;
+    cursor: pointer;
+    margin-left: 10%;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    height: 0.36rem;
+    font-family: MicrosoftYaHeiLight;
+    font-size: 0.16rem;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 0.36rem;
+    letter-spacing: 0rem;
+    color: #ffffff;
+}
+.contentBox .listBox .pageBox{
+    height: 0.6rem;
+    line-height: 0.6rem;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+.contentBox .detailBox{
+    position: absolute;
+    top:0;
+    right: 0;
+    width: 5.21rem;
+    height: 100%;
+    display: none;
+    background-color: #ffffff;
+}
+.detailBox .iconImg{
+    padding: 0.2rem;
+}
+.detailBox .iconImg img{
+    width: 100%;
+    height: 3rem;
+    border-radius: 0.1rem;
+}
+.detailBox .xmDetail{
+    width: 100%;
+    display: flex;
+    padding-left: 0.2rem;
+    align-items: center;
+    font-family: MicrosoftYaHei;
+    font-size: 0.18rem;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 0.27rem;
+    letter-spacing: 0rem;
+    color: #333333;
+}
+.detailBox .xmDetail span{
+    display: inline-block;
+    width: 0.04rem;
+    height: 0.24rem;
+    margin-right: 0.1rem;
+    background-color: #0f6bc7;
+}
+.detailList{
+    width: 100%;
+    padding-left: 0.3rem;
+}
+.detailList p{
+    width: 100%;
+    height: 0.4rem;
+    line-height: 0.4rem;
+}
+.detailList p span {
+    font-family: MicrosoftYaHei;
+    font-size: 0.16rem;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 0.36rem;
+    letter-spacing: 0rem;
+    color: #333333;
+    white-space: nowrap;
+}
+.detailList p span:nth-child(1){
+    width: 0.7rem;
+    display: inline-block;
+    text-align: justify;
+}
+.detailList p span:nth-child(2){
+    width: 80%;
+    margin-left: 0.1rem;
+    display: inline-block;
+}
+
+/*
+   新建弹框
+*/
+.template{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.1);
+    padding-top: 12%;
+    display: none;
+}
+.template .minBox{
+    border-radius: 0.1rem;
+    width: 5rem;
+    margin: auto;
+    background-color: white;
+}
+.template .minBox .titleBox{
+    height: 0.4rem;
+    background-color: #E1EEF6;
+    width: 100%;
+    padding: 0 0.15rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.template .minBox .titleBox span{
+    font-size: 0.2rem;
+}
+.template .minBox .titleBox img{
+    width: 0.2rem;
+    height: 0.2rem;
+}
+
+.template .minBox .infoBox{
+    padding: 0.2rem 0;
+    width:100%;
+}
+.template .minBox .infoBox p{
+    width: 90%;
+    margin:0.05rem auto;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.template .minBox .infoBox p span{
+    font-size: 0.14rem;
+    letter-spacing: 0.01rem;
+}
+.template .minBox .infoBox p input,
+.template .minBox .infoBox p select{
+    width: 80%;
+    border: 1px solid #999;
+    height: 0.4rem;
+    line-height: 0.4rem;
+    margin-right: 0.1rem;
+    padding-left: 0.05rem;
+    font-size: 0.14rem;
+    border-radius: 0.02rem;
+}
+.btns{
+    width: 100%;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    display: flex;justify-content: center;
+    align-items: center;
+}
+.btns button{
+    margin: 0 0.1rem;
+    font-size: 0.16rem;
+    padding: 0.05rem 0.3rem;
+    border-radius: 0.3rem;
+    outline: none;
+}
+.btns .addBtn{
+    background-color: #0f6bc7;
+    color: white;
+}
+.btns .closeBtn{
+    background:none;
+    color: #CCCCCC;
+    border: 1px solid #CCCCCC;
+}

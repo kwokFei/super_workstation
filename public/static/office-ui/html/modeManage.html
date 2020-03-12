@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>海克斯后台管理系统</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/font-awesome.min.css" rel="stylesheet">
+		<link href="../css/materialdesignicons.min.css" rel="stylesheet">
+		<link href="../css/style.min.css" rel="stylesheet">
+		<link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="../css/bootstrap-treeview.css" rel="stylesheet">
+		<link href="../css/commonStyle.css" rel="stylesheet">
+		<link rel="stylesheet" href="../css/layui.css" />
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../plus/layer/layer.js"></script>
+		<script src="../js/template-web.js"></script>
+		<script src="../plus/validate/jquery.validate.min.js"></script>
+		<script src="../plus/validate/messages_zh.min.js"></script>
+		<script src="../js/bootstrap-treeview.js"></script>
+
+		<!--		<script src="../js/httpUtils.js"></script>-->
+		<!--<script src="../js/Md5.js"></script>-->
+		<style>
+			#DemoBox {
+				width: 100%;
+				height: 100%;
+				position: fixed;
+				left: 50%;
+				top: 50%;
+				z-index: 29891015;
+				transform: translate(-50%, -50%);
+				overflow: hidden;
+				background: rgba(0, 0, 0, 0.2);
+			}
+			
+			.ss_cont {
+				background-color: white;
+				width: 700px;
+				height: 600px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				z-index: 9999;
+				transform: translate(-50%, -50%);
+				overflow: hidden;
+				box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3);
+			}
+			
+			#Example2 {
+				/*border: 1px solid red;*/
+				width: 700px;
+				height: 600px;
+			}
+			
+			.goOut {
+				position: relative;
+				/*border: 1px solid red;*/
+				height: 40px;
+				line-height: 40px;
+				border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+				background: #f8f8f8;
+			}
+			
+			.goOut i {
+				height: 20px;
+				width: 20px;
+				/*border: 1px solid red;*/
+				position: absolute;
+				top: 0;
+				right: 35px;
+				cursor: pointer;
+			}
+			
+			.device_row {
+				border: 1px solid rgba(77, 82, 89, 0.05);
+				line-height: 40px;
+				min-height: 40px;
+				margin: 5px 0;
+			}
+			
+			.device_row span {
+				margin-right: 10px;
+			}
+			
+			.device_remove {
+				float: right;
+				cursor: pointer;
+			}
+			.col-lg-3{
+				float: left;
+				width: 25%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>设备模式管理</h4>
+							</div>
+							<div class="card-body">
+								<div class="ibox-content row">
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">模式名称：</label>
+											<input class="form-control" name="s_modeName" id="s_modeName" placeholder="模式名称" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">模式说明：</label>
+											<input class="form-control" name="s_modeReadme" id="s_modeReadme" placeholder="模式说明" type="text">
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<label class="form-label">激活模式：</label>
+											<select class="form-control" name="s_enableMode" id="s_enableMode">
+												<option value="">全部</option>
+												<option value="1">激活</option>
+												<option value="0">未激活</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-lg-3">
+										<div class="form-group">
+											<div id="buttons" style="margin-top: 24px;">
+												<button type="button" class="btn btn-purple" id="clean"><i class="fa fa-eraser"></i> 清空</button>
+												<button type="button" class="btn btn-success" id="search" style="margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="ibox-content">
+									<div id="buttons">
+										<button type="button" class="btn btn-primary" id="addMode"><i class="fa fa-plus"></i> 新增模式</button>
+										<button type="button" class="btn btn-primary" id="pi_room"><i class="fa fa-plus"></i> 配置会议室</button>
+									</div>
+									<div id="myTable">
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<div id="loadDiv"></div>
+		<div id="DemoBox" style="display: none" class="card">
+			<div class="ss_cont">
+				<div class="row goOut" style="text-align: left;padding-left:30px">
+					控制
+					<i class="goOff" aria-hidden="true">
+						<img src="../images/remove.png" alt="">
+					</i>
+				</div>
+				<iframe id="Example2" class="card" title="Example2" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" srcdoc=''>
+				</iframe>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		var html;
+		var url = "";
+
+		var myTable_option = function() {
+			return {
+				node: $("#myTable"), //渲染节点
+				init: function() {
+					var that = this;
+					this.node.bootstrapTable({
+						url: '../../json/test004.json', //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 10, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						onDblClickRow: function(row) {
+							console.info(row);
+						},
+						onLoadSuccess: function() {
+						},
+						columns: [{
+                            checkbox: true
+                        }, {
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'modeName',
+							title: '模式名称',
+							width: 400
+						}, {
+                            field: 'meetRoomName',
+                            title: '所属办公室',
+                            width: 300
+                        }, {
+							field: 'modeReadme',
+							title: '模式说明',
+							width: 400
+						}, {
+							field: 'enableMode',
+							title: '激活模式',
+							width: 400,
+							formatter: function(value, row, index) {
+								var state = "";
+								if(value == 0) {
+									state = '<span style="color:red">未激活</span>'
+								} else if(value == 1) {
+									state = '<span style="color:green">已激活</span>'
+								}
+								return state;
+							}
+						}, {
+							field: 'createDate',
+							title: '创建时间',
+							width: 400
+						}, {
+							title: "操作",
+							width: 400,
+							clickToSelect: false,
+							formatter: function(i1, i2, i3) {
+								var str =
+									'<button data-toggle="tooltip" title="详情" type="button" onclick="detail(' + i3 + ');" class="btn btn-info tableButton"><i class="fa fa-info-circle"></i></button>' +
+									'<button data-toggle="tooltip" title="编辑" type="button" onclick="updata(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"></i></button>' +
+									'<button data-toggle="tooltip" title="设置" type="button" onclick="set(' + i3 + ');" class="btn btn-success tableButton"><i class="fa fa-cog"> </i></button>' +
+									'<button data-toggle="tooltip" title="控制" type="button" onclick="op(' + i3 + ');" class="btn btn-primary tableButton"><i class="fa fa-puzzle-piece"> </i></button>' +
+									'<button data-toggle="tooltip" title="删除" type="button" onclick="tabRemove(' + i3 + ');" class="btn btn-danger tableButton"><i class="fa fa-trash-o"></i></button>';
+								return str;
+							},
+							cellStyle: function() {
+								return {
+									classes: "",
+									css: {
+										"text-align": "center"
+									}
+								}
+							}
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					return {
+						// token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						modeName: $("#s_modeName").val(),
+						modeReadme: $("#s_modeReadme").val(),
+						enableMode: $("#s_enableMode").val()
+					};
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search").on("click", function() {
+						that.refresh();
+					});
+
+					$("#clean").click(function() {
+						$("#s_modeName").val("");
+						$("#s_modeReadme").val("");
+						$("#s_enableMode").val("");
+						$("#search").trigger("click");
+					});
+
+					$("#addMode").on("click", function() {
+						that.showRoleModel("新增模版", 1);
+					});
+				},
+				showRoleModel: function(title, flag, index) {
+					//flag 1添加 2 修改 3 详情
+					var that = this;
+					var isAdd = false; //是否添加
+					var btn = ['提交', '取消'];
+					//flag 1是添加 2是修改
+					if(flag == 1) {
+						isAdd = true;
+					}
+					if(flag == 3) {
+						btn = ['确认'];
+					}
+
+					html = template("modelmode", {
+						title: "123"
+					});
+					var myLayer = layer.open({
+						skin: 'card',
+						type: 1,
+						title: title,
+						area: ['650px', '375px'], //宽高
+						resize: true, //是否拉升
+						offset: 'auto', //居中
+						content: html,
+						btn: btn,
+						yes: function(index, layero) {
+							if(flag == 3) {
+								layer.close(myLayer);
+								return;
+							}
+							$("#modeForm").submit();
+						},
+						success: function(layero) {
+							if(flag == 3) {
+								$("#modeForm input").attr("disabled", "disabled");
+								$("#modeForm select").attr("disabled", "disabled");
+								$(".isShow").show();
+								$(".isShows").hide();
+							} else {
+								$("#modeForm input").removeAttr("disable");
+								$("#modeForm select").removeAttr("disable");
+								$(".isShow").hide();
+								$(".isShows").show();
+							}
+							if(flag != 1) {
+								$(".isShow").show();
+							} else {
+								$(".isShow").hide();
+							}
+							var data = $("#myTable").bootstrapTable('getData')[index];
+							if(data != null) {
+								$("#modeForm").setForm(data);
+							}
+
+						}
+					});
+					var validate = $("#modeForm").validate({
+						rules: {
+							modeName: {
+								required: true
+							},
+							modeReadme: {
+								required: true
+							}
+						},
+						messages: {
+							modeName: {
+								required: "请输入模式名称"
+							},
+							modeReadme: {
+								required: "请输入模式说明"
+							}
+						},
+						submitHandler: function(form) {
+							var data = $("#modeForm").serializeJson();
+							$.show_overall_loding();
+							if(isAdd) {
+								$.postJSON(deviceServiceUrl + "/mode", data, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(myLayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.refresh();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								});
+							} else {
+								$.putJSON(deviceServiceUrl + "/mode", data, function(data) {
+									$.hide_overall_loding();
+									if(data.code == 0) {
+										layer.close(myLayer);
+										layer.msg("成功", {
+											icon: 1
+										});
+										that.refresh();
+										return true;
+									}
+									layer.msg("操作失败", {
+										icon: 2
+									});
+								});
+							}
+						}
+					});
+				}
+			}
+		}
+		var myTable = new myTable_option();
+		myTable.init();
+		myTable.bindCreate();
+
+
+        $("#pi_room").click(function() {
+            var list = $("#myTable").bootstrapTable('getSelections');
+            if(list.length < 1) {
+                layer.msg("请先选择要设置的模式", {
+                    icon: 2
+                });
+                return;
+            }
+            var myLayer = layer.open({
+                skin: 'card', //自定义样式winning-class
+                title: "配置会议室",
+                area: ['500px', '440px'],
+                resize: true, //是否拉升
+                offset: 'auto', //居中
+                content: template("modelRoom", {
+                    title: "123"
+                }),
+                btn: ['提交', '取消'],
+                yes: function(index, layero) {
+                    var ids = [];
+                    for(var i = 0; i < list.length; i++) {
+                        var one = list[i];
+                        ids.push(one.id);
+                    }
+                    var roomId = $("#roomId").val();
+                    $.show_overall_loding();
+                    $.putJSON(deviceServiceUrl + "/mode/batchSetRoom", {
+                        'meetRoomId': roomId,
+                        'modeIds': ids
+                    }, function(data) {
+                        $.hide_overall_loding();
+                        if(data.code == 0) {
+                            layer.close(myLayer);
+                            layer.msg("成功", {
+                                icon: 1
+                            });
+                            $('#myTable').bootstrapTable('refresh');
+                            return true;
+                        }
+                        layer.msg("操作失败", {
+                            icon: 2
+                        });
+                    });
+                },
+                success: function(layero) {
+                    $("#selectRoom").click(function() {
+                        var sshtml = template("selectRoomDiv", {
+                            title: "123"
+                        });
+                        mode_Layer = layer.open({
+                            skin: 'card',
+                            type: 1,
+                            title: "选择会议室",
+                            area: ['950px', '550px'], //宽高
+                            resize: true, //是否拉升
+                            offset: 'auto', //居中
+                            content: sshtml,
+                            maxmin: true, //开启最大化最小化按钮
+                            yes: function(index, layero) {},
+                            success: function(layero) {
+                                var tables = new table_room();
+                                tables.init();
+                                tables.bindCreate();
+                            }
+                        })
+                    })
+                }
+
+            });
+        });
+
+		//mytable按钮操作
+		function detail(obj) {
+			myTable.showRoleModel("模式详情", 3, obj);
+		}
+
+		function updata(obj) {
+			myTable.showRoleModel("模式编辑", 2, obj);
+		}
+
+		function set(obj) {
+			html = template("setDeviceMode", {
+				title: "123"
+			});
+			var myLayer = layer.open({
+				skin: 'card',
+				type: 1,
+				title: "模式设置",
+				area: ['950px', '500px'], //宽高
+				resize: true, //是否拉升
+				offset: 'auto', //居中
+				content: html,
+				maxmin: true, //开启最大化最小化按钮
+				btn: ['设置', '取消'],
+				yes: function(index, layero) {
+					//					layer.close(myLayer);
+					//					layer.msg("设置成功", {
+					//						icon: 1
+					//					});
+					var data = myTable.node.bootstrapTable('getData');
+					var mode = data[obj];
+
+					if(pdatas.length < 1) {
+						layer.msg("操作失败，没有设备被控制", {
+							icon: 2
+						});
+						return;
+					}
+					$.show_overall_loding();
+					$.postJSON(deviceServiceUrl + "/mode/setMode", {
+						id: mode.id,
+						deviceList: pdatas
+					}, function(data) {
+						console.log(data);
+						$.hide_overall_loding();
+						if(data.code == 0) {
+							layer.close(myLayer);
+							layer.msg("成功", {
+								icon: 1
+							});
+							return true;
+						}
+						layer.msg("操作失败", {
+							icon: 2
+						});
+					});
+				},
+				success: function(layero) {
+					var data = myTable.node.bootstrapTable('getData');
+					var mode = data[obj];
+					$.sanjiGetJSON(deviceServiceUrl + "/mode/deviceList?modeId=" + mode.id, {}, function(data) {
+						console.log(data);
+						var list = data.data;
+						pdatas = [];
+						for(var i = 0; i < list.length; i++) {
+							var one = list[i];
+							var row = $('<div class="col-lg-12 device_row" serialNum="' + one.serialNum + '" cmdKey="' + one.cmdKey + '" id="' + one.serialNum + '_' + one.cmdKey.replace(/\s*/g, "") + '"> </div>');
+							$('<label class="form-label">设备信息：</label><span>' + one.deviceName + '(' + one.serialNum + ')</span>').appendTo(row);
+							$('<label class="form-label">类型Code：</label><span>' + one.productCode + '</span>').appendTo(row);
+							$('<label class="form-label">所属订阅：</label><span>' + one.deviceSubscriberNumber + '</span>').appendTo(row);
+							$('<label class="form-label">设备操作：</label><span>' + one.controlparamsValue + '</span>').appendTo(row);
+							$('<div class="device_remove"><i class="fa fa-trash-o"></i></div>').click(function() {
+								var serialNum = $(this).parent().attr("serialNum");
+								var cmdKey = $(this).parent().attr("cmdKey");
+								$(this).parent().remove();
+								var chageCur = -1;
+								for(var i = 0; i < pdatas.length; i++) {
+									if(pdatas[i].cmdKey == cmdKey && pdatas[i].serialNum == serialNum) {
+										chageCur = i;
+										break;
+									}
+								}
+								if(chageCur >= 0) {
+									pdatas.splice(chageCur, 1);
+								}
+							}).appendTo(row);
+							row.appendTo($(".device_control"));
+							pdatas.push(one);
+						}
+						var deviceTable = new deviceTable_option();
+						deviceTable.init();
+						deviceTable.bindCreate();
+
+					});
+
+				}
+			});
+
+		}
+
+		function op(obj) {
+			var data = myTable.node.bootstrapTable('getData');
+			var id = data[obj].id;
+			var conlayer = layer.confirm("是否确认发送控制？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.postJSON(deviceServiceUrl + "/mode/controlMode?id=" + id, {}, function(data) {
+					$.hide_overall_loding();
+					if(data.code == 0) {
+						layer.close(conlayer);
+						layer.msg("成功", {
+							icon: 1
+						});
+						return true;
+					}
+					layer.msg("操作失败", {
+						icon: 2
+					});
+				});
+
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+
+		function tabRemove(obj) {
+			var data = myTable.node.bootstrapTable('getData');
+			var id = data[obj].id;
+			var conlayer = layer.confirm("确定删除？", {
+				btn: ['确定', '取消']
+			}, function() {
+				$.show_overall_loding();
+				$.deleteJSON(deviceServiceUrl + "/mode?id=" + id, {}, function(data) {
+					$.hide_overall_loding();
+					if(data.code == 0) {
+						layer.close(conlayer);
+						layer.msg("成功", {
+							icon: 1
+						});
+						myTable.refresh();
+						return true;
+					}
+					layer.msg("操作失败", {
+						icon: 2
+					});
+				})
+			}, function() {
+				layer.close(conlayer);
+			});
+		}
+
+		///////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////
+		//设备相关js事件
+
+		var deviceTable_option = function() {
+			return {
+				node: $("#deviceTable"), //渲染节点
+				init: function() {
+					$.show_overall_loding();
+					var that = this;
+					this.node.bootstrapTable({
+						url: deviceServiceUrl + "/device/list", //请求后台的URL（*）
+						method: 'get', //请求方式（*）
+						contentType: "application/x-www-form-urlencoded",
+						toolbar: '', //工具按钮用哪个容器
+						striped: true, //是否显示行间隔色
+						cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+						pagination: true, //是否显示分页（*）
+						sortable: false, //是否启用排序
+						sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+						pageNumber: 1, //初始化加载第一页，默认第一页
+						pageSize: 3, //每页的记录行数（*）
+						pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+						queryParamsType: '',
+						queryParams: that.queryParams, //传递参数（*）
+						strictSearch: true,
+						uniqueId: "id", //每一行的唯一标识，一般为主键列
+						cardView: false, //是否显示详细视图
+						detailView: false, //是否显示父子表
+						clickToSelect: true, //点击行是否选中
+						responseHandler: function(data) {
+							var res = [];
+							if(data.code == 0) {
+								var result = data.data;
+								res.push({
+									total: result.total,
+									rows: result.list
+								});
+								return res[0];
+							} else {
+								res.push({
+									total: 0,
+									rows: null
+								});
+								return res[0];
+							}
+						},
+						onDblClickRow: function(row) {
+							console.info(row);
+						},
+						onLoadSuccess: function() {
+							$.hide_overall_loding();
+						},
+						columns: [{
+							width: 50,
+							title: '序号',
+							formatter: function(value, row, index) {
+								return index + 1;
+							}
+						}, {
+							field: 'deviceAlias',
+							title: '设备名称',
+							width: 500
+						}, {
+							field: 'serialNum',
+							title: '序列号',
+							width: 500
+						}, {
+							field: 'deviceSubscriberNumber',
+							title: '所属订阅账号',
+							width: 500
+						}, {
+							field: 'productCodeName',
+							title: '分类名称',
+							width: 500
+						}, {
+							title: "操作",
+							width: 100,
+							clickToSelect: false,
+							formatter: function(i1, i2, i3) {
+								var str =
+									'<button data-toggle="tooltip" title="添加控制" type="button" onclick="setDeviceOp(' + i3 + ');" class="btn btn-primary tableButton"><i class="fa fa-puzzle-piece"> </i></button>';
+								return str;
+							},
+							cellStyle: function() {
+								return {
+									classes: "",
+									css: {
+										"text-align": "center"
+									}
+								}
+							}
+						}]
+					});
+
+				},
+				queryParams: function(params) {
+					$.show_overall_loding();
+					return {
+						token: $.getToken(),
+						pageSize: params.pageSize,
+						pageNum: params.pageNumber,
+						deviceAlias: $("#s_deviceAlias").val(),
+						deviceSubscriberNumber: $("#s_deviceSubscriberNumber").val(),
+						productCodeName: $("#s_productCode").val(),
+					}
+				},
+				refresh: function() {
+					$.show_overall_loding();
+					this.node.bootstrapTable('refresh')
+				},
+				bindCreate: function() {
+					var that = this;
+					$("#search_deviceTable").on("click", function() {
+						that.refresh();
+					});
+
+				}
+			}
+		}
+
+		var pdatas = [];
+
+		function setDeviceOp(obj) {
+			var one = $("#deviceTable").bootstrapTable('getData')[obj];
+			var pdata = {
+				typeId: one.productCode
+			}
+			$.show_overall_loding();
+			$.sanjiGetJSON(deviceServiceUrl + "/typeTemplate/getDefaultTemp", pdata, function(data) {
+				if(!data.data) {
+					$.hide_overall_loding();
+					layer.msg("没有对应的控制模版，需要去分类管理去设置模版！", {
+						icon: 2
+					});
+					return false;
+				}
+				document.getElementById("Example2").srcdoc = data.data.templateCode;
+				$("#Example2").load(function() {
+					$.hide_overall_loding();
+					$("#Example2").contents().find(".sendControlBtn").unbind();
+					$("#Example2").contents().find(".sendControlBtn").on("click", function() {
+						//$.show_overall_loding();
+						var datas = $("#Example2")[0].contentWindow.getCmdParams($(this));
+						if(!datas) {
+							//$.hide_overall_loding();
+							layer.msg("操作失败", {
+								icon: 2
+							});
+							return false;
+						}
+						if(datas.controlParams) {
+							datas.controlParams = JSON.stringify(datas.controlParams);
+						}
+						if(!datas.operation) {
+							//$.hide_overall_loding();
+							layer.msg("操作失败", {
+								icon: 2
+							});
+							return false;
+						}
+						console.log(datas);
+						console.log(eval($("#" + one.serialNum)[0]));
+						if($("#" + one.serialNum + '_' + datas.operation.replace(/\s*/g, ""))[0]) {
+							$("#" + one.serialNum + '_' + datas.operation.replace(/\s*/g, ""))[0].remove();
+						}
+						//.replace(/\s*/g,"")
+						var pone = {};
+						pone.cmdKey = datas.operation;
+						pone.cmdValue = datas.controlParams;
+						pone.controlparamsKey = datas.title;
+						pone.controlparamsValue = datas.title;
+						pone.deviceMac = one.deviceMac;
+						pone.deviceName = one.deviceName;
+						pone.deviceSubscriberId = one.deviceSubscriberId;
+						pone.deviceSubscriberNumber = one.deviceSubscriberNumber;
+						pone.productCode = one.productCode;
+						pone.serialNum = one.serialNum;
+
+						var chageCur = -1;
+						for(var i = 0; i < pdatas.length; i++) {
+							if(pdatas[i].cmdKey == pone.cmdKey && pone.serialNum == pdatas[i].serialNum) {
+								chageCur = i;
+								break;
+							}
+						}
+						if(chageCur >= 0) {
+							pdatas.splice(chageCur, 1, pone);
+						} else {
+							pdatas.push(pone);
+						}
+
+						var row = $('<div class="col-lg-12 device_row" serialNum="' + one.serialNum + '" cmdKey="' + datas.operation + '"  id="' + one.serialNum + '_' + datas.operation.replace(/\s*/g, "") + '"> </div>');
+						$('<label class="form-label">设备信息：</label><span>' + one.deviceAlias + '(' + one.serialNum + ')</span>').appendTo(row);
+						$('<label class="form-label">类型Code：</label><span>' + one.productCode + '</span>').appendTo(row);
+						$('<label class="form-label">所属订阅：</label><span>' + one.deviceSubscriberNumber + '</span>').appendTo(row);
+						$('<label class="form-label">设备操作：</label><span>' + datas.title + '</span>').appendTo(row);
+						$('<div class="device_remove"><i class="fa fa-trash-o"></i></div>').click(function() {
+							var serialNum = $(this).parent().attr("serialNum");
+							var cmdKey = $(this).parent().attr("cmdKey");
+							$(this).parent().remove();
+							var chageCur = -1;
+							for(var i = 0; i < pdatas.length; i++) {
+								if(pdatas[i].cmdKey == cmdKey && pdatas[i].serialNum == serialNum) {
+									chageCur = i;
+									break;
+								}
+							}
+							if(chageCur >= 0) {
+								pdatas.splice(chageCur, 1);
+							}
+						}).appendTo(row);
+						row.appendTo($(".device_control"));
+						$("#DemoBox").hide();
+					})
+				});
+				$("#DemoBox").css('display', "block");
+			});
+
+		}
+
+		$(".goOff").on("click", function() {
+			// alert("你点击了关闭按钮");
+			$("#DemoBox").css({
+				display: "none"
+			});
+		});
+
+
+		/*会议室列表查询*/
+        var table_room = function() {
+            return {
+                node: $("#tableRoom"), //渲染节点
+                init: function() {
+                    $.show_overall_loding();
+                    var that = this;
+                    this.node.bootstrapTable({
+                        url: deviceServiceUrl + "/officeRoom/list", //请求后台的URL（*）
+                        method: 'get', //请求方式（*）
+                        contentType: "application/x-www-form-urlencoded",
+                        toolbar: '', //工具按钮用哪个容器
+                        striped: true, //是否显示行间隔色
+                        cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                        pagination: true, //是否显示分页（*）
+                        sortable: false, //是否启用排序
+                        sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                        pageNumber: 1, //初始化加载第一页，默认第一页
+                        pageSize: 5, //每页的记录行数（*）
+                        pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                        queryParamsType: '',
+                        queryParams: that.queryParams, //传递参数（*）
+                        strictSearch: true,
+                        uniqueId: "id", //每一行的唯一标识，一般为主键列
+                        cardView: false, //是否显示详细视图
+                        detailView: false, //是否显示父子表
+                        clickToSelect: true, //点击行是否选中
+                        responseHandler: function(data) {
+                            var res = [];
+                            if(data.code == 0) {
+                                var result = data.data;
+                                res.push({
+                                    total: result.total,
+                                    rows: result.list
+                                });
+                                return res[0];
+                            } else {
+                                res.push({
+                                    total: 0,
+                                    rows: null
+                                });
+                                return res[0];
+                            }
+                        },
+                        onDblClickRow: function(row) {
+                            console.info(row);
+                        },
+                        onLoadSuccess: function() {
+                            $.hide_overall_loding();
+                        },
+                        columns: [{
+                            width: 50,
+                            title: '序号',
+                            formatter: function(value, row, index) {
+                                return index + 1;
+                            }
+                        }, {
+                            field: 'roomName',
+                            title: '会议室名称',
+                            width: 300
+                        }, {
+                            field: 'roomType',
+                            title: '会议室类型',
+                            width: 300,
+                            formatter: function(value, row, index) {
+                                var state = "";
+                                if(value == 1) {
+                                    state = '<span style="color:orange">大会议室</span>'
+                                } else if(value == 2) {
+                                    state = '<span style="color:green">小会议室</span>'
+                                }
+                                return state;
+                            }
+                        }, {
+                            field: 'roomOpenTime',
+                            title: '会议室开放时间',
+                            width: 300
+                        }, {
+                            field: 'roomCloseTime',
+                            title: '会议室关闭时间',
+                            width: 300
+                        }, {
+                            title: "操作",
+                            width: 100,
+                            clickToSelect: false,
+                            formatter: function(i1, i2, i3) {
+                                var str =
+                                    '<button data-toggle="tooltip" title="选择此会议室" type="button" onclick="setModeOp(' + i3 + ');" class="btn btn-warning tableButton"><i class="fa fa-puzzle-piece"> </i></button>';
+                                return str;
+                            },
+                            cellStyle: function() {
+                                return {
+                                    classes: "",
+                                    css: {
+                                        "text-align": "center"
+                                    }
+                                }
+                            }
+                        }]
+                    });
+
+                },
+                queryParams: function(params) {
+                    $.show_overall_loding();
+                    return {
+                        token: $.getToken(),
+                        pageSize: params.pageSize,
+                        pageNum: params.pageNumber,
+                        roomName: $("#s_roomName").val(),
+                        roomType: $("#s_roomType").val()
+                    }
+                },
+                refresh: function() {
+                    $.show_overall_loding();
+                    this.node.bootstrapTable('refresh')
+                },
+                bindCreate: function() {
+                    var that = this;
+                    $("#search_modeTable").on("click", function() {
+                        that.refresh();
+                    });
+
+                }
+
+
+            }
+        }
+
+        function setModeOp(obj) {
+            var one = $("#tableRoom").bootstrapTable('getData')[obj];
+            $("#roomId").val(one.id);
+            $("#selectRoom").html("已关联：" + one.roomName);
+            layer.close(mode_Layer);
+        }
+	</script>
+	<!--模式新增修改模板-->
+
+	<script type="text/html" id="setDeviceMode">
+		<div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin:20px auto;">
+			<div class="card-header">
+				<h4>控制管理</h4>
+			</div>
+			<div class="card-body">
+				<div class="ibox-content row device_control">
+				</div>
+			</div>
+		</div>
+		<div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;">
+			<div class="card-header">
+				<h4>设备管理</h4>
+			</div>
+			<div class="card-body">
+				<div class="ibox-content row">
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">设备名称：</label>
+							<input class="form-control" name="s_deviceAlias" id="s_deviceAlias" placeholder="设备名称" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">订阅账号：</label>
+							<input class="form-control" name="s_deviceSubscriberNumber" id="s_deviceSubscriberNumber" placeholder="订阅账号" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">设备分类：</label>
+							<input class="form-control" name="s_productCode" id="s_productCode" placeholder="设备分类" type="text">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div id="buttons" style="margin-top: 24px;">
+								<button type="button" class="btn btn-success" id="search_deviceTable"><i class="fa fa-search"></i> 查询</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Start-->
+				<!--平台设备位置列表-->
+				<div id="deviceTable"></div>
+			</div>
+		</div>
+	</script>
+	<script type="text/html" id="modelmode">
+		<section class="openDetail" style="width: 95%; ">
+			<div class="panel-body">
+				<form id="modeForm">
+					<div class="layui-row layui-col-space10 layui-form-item">
+						<input type="hidden" name="id" id="id" />
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">模式名称:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="modeName" name="modeName" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">模式说明:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="modeReadme" name="modeReadme" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx isShow">
+							<label class="layui-form-label">激活模式:</label>
+							<div class="layui-input-block">
+								<select class="form-control" name="enableMode" id="enableMode">
+									<option value="">全部</option>
+									<option value="1">激活</option>
+									<option value="0">未激活</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">前提示语:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="modeExeBeforeSay" name="modeExeBeforeSay" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">后提示语:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="modeExeAfterSay" name="modeExeAfterSay" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">提示播音:</label>
+							<div class="layui-input-block">
+								<input class="form-control" id="modeExeSaySound" name="modeExeSaySound" type="text">
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">提示语速:</label>
+							<div class="layui-input-block">
+								<select class="form-control" name="modeExeSaySpeed" id="modeExeSaySpeed">
+									<option value="">请选择语速</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-6 MarginPx">
+							<label class="layui-form-label">提示音量:</label>
+							<div class="layui-input-block">
+								<select class="form-control" name="modeExeSayVoice" id="modeExeSayVoice">
+									<option value="">请选择音量</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<!--<div class="form-group" style="margin-bottom: 0px;">
+            <label>所属组织机构：</label>
+            <input class="form-control" id="organization" name="organization" type="text"
+                   onclick="$('#myTree').show();" readonly style="cursor: pointer;background-color: #fff;">
+            <input type="hidden" id="organizationId" name="organizationId" value="">
+        </div>
+        <div id="myTree" style="display:none;"></div>-->
+					<div class="clearfix" style="margin-bottom: 15px;"></div>
+				</form>
+			</div>
+		</section>
+	</script>
+
+
+	<!--会议室列表-->
+	<script type="text/html" id="selectRoomDiv">
+		<div class="card" style="border: 1px solid rgba(77,82,89,0.05); width: 95%;margin: auto;margin-top: 20px;">
+			<div class="card-body">
+				<div class="ibox-content row">
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">会议室名称：</label>
+							<input class="form-control" name="s_roomName" id="s_roomName" placeholder="会议室名称" type="text">
+						</div>
+					</div>
+
+					<div class="col-lg-3">
+						<div class="form-group">
+							<label class="form-label">会议室类型：</label>
+							<select class="form-control selectpickers" style="max-height: 500px;" name="s_roomType" id="s_roomType" data-live-search="true">
+								<option value="">请选择类型</option>
+								<option value="1">大会议室</option>
+								<option value="2">小会议室</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="form-group">
+							<div id="buttons" style="margin-top: 24px;">
+								<button type="button" class="btn btn-success" id="search_modeTable"><i class="fa fa-search"></i> 查询</button>
+								<button type="button" class="btn btn-success" id="search1" style="float: right;margin-left: 10px"><i class="fa fa-search"></i> 查询</button>
+								<button type="button" class="btn btn-purple" id="clean1" style="float: right;"><i class="fa fa-eraser"></i> 清空</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--平台设备位置列表-->
+				<div id="tableRoom"></div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/html" id="modelRoom">
+		<section class="openDetail" style="width: 95%; margin-top: 20px;">
+			<div class="panel-body">
+				<div class="layui-row layui-col-space10 layui-form-item">
+					<div class="col-lg-12 MarginPx isShows">
+						<label class="layui-form-label">会议室:</label>
+						<div class="layui-input-block">
+							<input type="hidden" id="roomId" name="roomId" value="">
+							<button type="button" class="btn btn-success" style="width: 225px;" id="selectRoom">请选择会议室</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</script>
+
+</html>

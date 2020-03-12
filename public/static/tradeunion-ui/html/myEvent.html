@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="../images/logoIcon.png" type="image/icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>中国工业互联网研究院测试中心</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../plus/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-treeview.css" rel="stylesheet">
+    <link href="../css/commonStyle.css" rel="stylesheet">
+
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../plus/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../plus/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../plus/layer/layer.js"></script>
+    <script src="../js/template-web.js"></script>
+    <script src="../plus/validate/jquery.validate.min.js"></script>
+    <script src="../plus/validate/messages_zh.min.js"></script>
+    <script src="../js/bootstrap-treeview.js"></script>
+
+<!--    <script src="../js/httpUtils.js"></script>-->
+<!--    <script src="../js/Md5.js"></script>-->
+    <script src="../plus/iview/vue.min.js"></script>
+    <style type="text/css">
+        .simButton {
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--加载头部和菜单栏-->
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+            <div class="container-fluid">
+                <div class="row" style="padding-top: 20px">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>设备事件</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="ibox-content row">
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label class="form-label" for="l_deviceAlias">设备名称：</label>
+                                            <input class="form-control" name="l_deviceAlias" id="l_deviceAlias" placeholder="设备名称" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label class="form-label" for="s_deviceType">设备状态：</label>
+                                            <select class="form-control selectpickers" style="max-height: 50px;" name="s_deviceType" id="s_deviceType" data-live-search="true">
+                                                <option value="">请选择设备状态</option>
+                                                <option value="2">离线</option>
+                                                <option value="3">报警</option>
+                                                <option value="4">故障</option>
+                                                <option value="5">过流</option>
+                                                <option value="6">过压</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="form-group">
+                                            <label class="form-label" for="s_eventState">事件状态：</label>
+                                            <select class="form-control selectpickers" style="max-height: 50px;" name="s_eventState" id="s_eventState" data-live-search="true">
+                                                <option value="">请选择事件状态</option>
+                                                <option value="1">待处理</option>
+                                                <option value="2">已处理</option>
+                                                <option value="3">误报警</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <div style="margin-top: 24px;">
+                                                <button type="button" class="btn btn-purple" id="clean"><i
+                                                        class="fa fa-eraser"></i> 清空
+                                                </button>
+                                                <button type="button" class="btn btn-success" id="search"
+                                                        style="margin-left: 10px"><i class="fa fa-search"></i> 查询
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Start-->
+                                <div class="ibox-content">
+                                    <!--页面内容部分-->
+                                    <!-- 这里写内容 -->
+                                    <div id="buttons">
+                                        <button type="button" class="btn btn-info" id="edit"><i class="fa fa-edit"></i> 批量处理
+                                        </button>
+                                    </div>
+                                </div>
+                                <table id="deviceEventList"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+
+    </div>
+</div>
+<!--加载底部-->
+<div id="footer" class="classifyFooter">
+    <script type="text/javascript">
+        $(function () {
+            $("#footer").load("footer.html");
+        });
+    </script>
+</div>
+<div id="loadDiv"></div>
+</body>
+<script type="text/javascript">
+    // $("#loadDiv").html(loadHtml);
+    let html;
+    $(function () {
+        $('#deviceEventList').bootstrapTable({
+            url: "../../json/test005.json", //请求后台的URL（*）
+            //data: data1,                            //本地数据
+            method: 'get', //请求方式（*）
+            contentType: "application/x-www-form-urlencoded",
+            toolbar: '', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            queryParamsType: '',
+            queryParams: queryParams, //传递参数（*）
+            strictSearch: true,
+            // height: 500,                            //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            clickToSelect: true, //点击行是否选中
+            responseHandler: function (data) {
+                var res = [];
+                if (data.code == 0) {
+                    var result = data.data;
+                    rdata = result.list;
+                    res.push({
+                        total: result.total,
+                        rows: result.list
+                    });
+                    // $.hide_overall_loding();
+                    return res[0];
+                } else {
+                    res.push({
+                        total: 0,
+                        rows: []
+                    });
+                    layer.msg("获取数据失败！", {icon: 2});
+                    $.hide_overall_loding();
+                    return res[0];
+                }
+            },
+            onLoadSuccess: function () {
+                // $.hide_overall_loding();
+            },
+            onDblClickRow: function (row) {
+                console.info(row);
+            },
+            columns: [{
+                checkbox: true
+            }, {
+                width: 50,
+                title: '序号',
+                formatter: function (value, row, index) {
+                    let pageSize = $('#deviceEventList').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                    let pageNumber = $('#deviceEventList').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                    return pageSize * (pageNumber - 1) + index + 1;
+                }
+            }, {
+                field: 'deviceAlias',
+                title: '设备名称',
+                width: 100
+            },  {
+                field: 'deviceMac',
+                title: '设备Mac',
+                width: 100
+            },{
+                field: 'deviceType',
+                title: '设备状态',
+                width: 60,
+                formatter:function(value, row, index){
+                    if(value == 2){
+                        return "离线";
+                    }else if(value == 3){
+                        return "报警";
+                    }else if(value == 4){
+                        return "故障";
+                    }else if(value == 5){
+                        return "过流";
+                    }else if(value == 6){
+                        return "过压";
+                    }else{
+                        return "-";
+                    }
+                }
+            }, {
+                field: 'eventName',
+                title: '事件名称',
+                width: 100
+            }, {
+                field: 'eventState',
+                title: '事件状态',
+                width: 70,
+                formatter:function(value, row, index){
+                    if(value == 1){
+                        return '<span style="color:red">待处理</span>';
+                    }else if(value == 2){
+                        return '<span style="color:green">已处理</span>';
+                    }else if(value == 3){
+                        return '<span style="color:orange">误报警</span>';
+                    }else{
+                        return "-";
+                    }
+                }
+            },{
+                field: 'createDate',
+                title: '创建时间',
+                width: 100
+            },{
+                title: "操作",
+                width: 100,
+                clickToSelect: false,
+                formatter: function (i1, i2, i3) {
+                    var str = '' +
+                        '<button data-toggle="tooltip" title="详情" type="button" onclick="getDetail(' + i3 +
+                        ');" class="btn btn-primary tableButton"><i class="fa fa-info-circle"> </i></button>' +
+                        '<button data-toggle="tooltip" title="处理" type="button" onclick="editEvent(' + i3 +
+                        ');" class="btn btn-warning tableButton"><i class="fa fa-pencil-square"> </i></button>';
+                    return str;
+                },
+                cellStyle: function () {
+                    return {
+                        classes: "",
+                        css: {
+                            "text-align": "center"
+                        }
+                    }
+                }
+            }]
+        });
+
+        function queryParams(params) {
+            return {
+                // token: $.getToken(),
+                pageSize: params.pageSize,
+                pageNum: params.pageNumber,
+                deviceAlias:$("#l_deviceAlias").val(),
+                processingUserName:$("#s_processingUserName").val(),
+                processingUserPhone:$("#s_processingUserPhone").val(),
+                deviceType:$("#s_deviceType").val(),
+                eventState:$("#s_eventState").val()
+            };
+        }
+    });
+
+</script>
+
+<!--详情弹框-->
+<script type="text/html" id="detailWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventDetailForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="deviceAlias" name="deviceAlias" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label" >设备MAC:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="deviceMac" name="deviceMac" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">事件名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="eventName" name="eventName" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备状态:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="deviceType" name="deviceType" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">事件状态:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="eventState" name="eventState" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人名:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="processingUserName" name="processingUserName" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人电话:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="processingUserPhone" name="processingUserPhone" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">创建时间:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="createDate" name="createDate" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">处理详情:</label>
+                        <div class="layui-input-block">
+                          <!--  <input class="form-control" style="min-height: 60px;max-height: 60px;" id="processingDesc" name="processingDesc" type="text">-->
+                            <textarea class="form-control" rows="4" id="processingDesc" name="processingDesc" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--详情弹框结束-->
+<!--编辑弹框-->
+<script type="text/html" id="editWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="eventEditForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">事件状态:</label>
+                        <div class="layui-input-block">
+                            <!--<input class="form-control" id="e_eventState" name="eventState" type="text" readonly>-->
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="eventState" id="e_eventState" data-live-search="true">
+                                <option value="">选择事件状态</option>
+                                <option value="1">待处理</option>
+                                <option value="2">已处理</option>
+                                <option value="3">误报警</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 MarginPx">
+                        <label class="layui-form-label">处理详情:</label>
+                        <div class="layui-input-block">
+                            <textarea rows="4" class="form-control" id="e_processingDesc" name="processingDesc" type="text" placeholder="请输入处理详情" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--编辑弹框结束-->
+<!--添加弹框-->
+<script type="text/html" id="newEventWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="newDetailForm">
+                <input class="form-control" id="n_deviceId" name="deviceId" type="text" readonly style="display: none">
+                <input class="form-control" id="n_userId" name="userId" type="text" readonly style="display: none">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">选择设备:</label>
+                        <div class="layui-input-block">
+                           <!-- <input class="form-control" id="n_deviceName" name="deviceName" type="text" readonly>-->
+                           <!-- <select class="form-control selectpickers" style="max-height: 50px;" name="deviceName" id="n_deviceName" data-live-search="true">
+                                <option value="">请选择设备</option>
+                            </select>-->
+                            <button style="width: 100%;" type="button" class="btn btn-success" id="n_selectDevice"><i class="fa fa-anchor"></i> 选择设备</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备MAC:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_deviceMac" name="deviceMac" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_deviceName" name="deviceName" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备状态:</label>
+                        <div class="layui-input-block">
+                            <!--<input class="form-control" id="n_deviceType" name="deviceType" type="text" readonly>-->
+                            <select class="form-control selectpickers" style="max-height: 50px;" name="deviceType" id="n_deviceType" data-live-search="true">
+                                <option value="">请选择设备状态</option>
+                                <option value="2">离线</option>
+                                <option value="3">报警</option>
+                                <option value="4">故障</option>
+                                <option value="5">过流</option>
+                                <option value="6">过压</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">选择处理人:</label>
+                        <div class="layui-input-block">
+                            <button style="width: 100%;" type="button" class="btn btn-success" id="n_selectUser"><i class="fa fa-anchor"></i> 选择处理人</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人名:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_processingUserName" name="processingUserName" type="text" readonly>
+                            <!--<select class="form-control selectpickers" style="max-height: 50px;" name="processingUserName" id="n_processingUserName" data-live-search="true">
+                                <option value="">选择处理人</option>
+                            </select>-->
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人电话:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_processingUserPhone" name="processingUserPhone" type="text" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">事件名称:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="n_eventName" name="eventName" type="text" placeholder="请输入事件名">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</script>
+<!--添加弹框结束-->
+<!--选择设备弹框开始-->
+<script type="text/html" id="selectDeviceWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="selectDeviceForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备名称:</label>
+                        <div class="layui-input-block">
+                             <input class="form-control" id="select_deviceName" name="deviceName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">设备MAC:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="select_deviceMac" name="deviceMac" type="text">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <table id="select_table"></table>
+        </div>
+    </section>
+</script>
+<!--选择设备弹框结束-->
+<!--选择用户弹框开始-->
+<script type="text/html" id="selectUserWindow">
+    <section class="openDetail" style="width: 95%; margin-top: 20px;">
+        <div class="panel-body">
+            <form id="selectUserForm">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人名:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="select_userName" name="userName" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 MarginPx">
+                        <label class="layui-form-label">处理人电话:</label>
+                        <div class="layui-input-block">
+                            <input class="form-control" id="select_userPhone" name="userPhone" type="text">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <table id="select_table2"></table>
+        </div>
+    </section>
+</script>
+<!--选择用户弹框结束-->
+</html>
