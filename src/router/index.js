@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const Index = () => import('@/views/index/Index');
-const Login = () => import('@/views/login/Login');
+const Login = () => import('@/views/login/login');
+const Home = () => import('@/views/home/home');
 const Workstaion_center = () => import('@/views/workstaion_center/Index');
 const Workstaion_center_apcos_workstation = () => import('@/views/workstaion_center/apcos_workstation/apcos_workstation');
 const Workstaion_center_pubilish_center = ()=> import('@/views/workstaion_center/publish_center/publish_center');
@@ -12,23 +13,41 @@ const Workstaion_center_record_center = ()=> import('@/views/workstaion_center/r
 const Design_center = ()=>import('@/views/design_center/index')
 const View_center = ()=>import('@/views/design_center/module/centerHtml')
 const My_app_system = ()=>import('@/views/my_app_system/index')
-
+const Login_account = () => import('@/views/login/module/account')
+const Login_tel = () => import('@/views/login/module/tel')
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    redirect: "/my_app_system"
+    component: Home,
+    // redirect: "/my_app_system",
+    meta:{
+      title:'首页'
+    }
     },
   {
     path: '/index',
     name: 'Index',
-    component: Index
+    component: Index,
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    children:[
+      {
+        path:'/account',
+        name:'account',
+        component:Login_account,
+      },
+      {
+        path:'/tel',
+        name:'tel',
+        component:Login_tel,
+      }
+    ],
+    meta:{title:'登陆'}
   },
   {
     path: '/workstaion_center',
@@ -79,7 +98,7 @@ const routes = [
     path: '/my_app_system',
     name: 'my_app_system',
     component:My_app_system,
-  },
+  }
 ]
 
 const router = new VueRouter({

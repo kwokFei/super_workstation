@@ -5,17 +5,23 @@
 </template>
 
 <style>
+  *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
   [v-cloak] {
     display: none !important;
   }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  width: 1920px;
+  height: 1080px;
   text-align: center;
-  color: #2c3e50;
+  box-sizing: border-box;
 }
-
+  body::-webkit-scrollbar{
+    display: none;
+  }
 #nav {
   padding: 30px;
 }
