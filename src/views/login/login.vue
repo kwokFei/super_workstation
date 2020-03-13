@@ -3,7 +3,7 @@
     <div class="maxBox">
       <p class="title">APCOS 万物互联超级工作站</p>
       <div class="loginBox">
-        <img style="position: absolute;top:12px;right: 12px;width: 50px;height: 50px;cursor: pointer" @click="ewmShow" :src="ewmOne" alt="">
+        <img style="position: absolute;top:0.12rem;right: 0.12rem;width: 0.5rem;height: 0.5rem;cursor: pointer" @click="ewmShow" :src="ewmOne" alt="">
         <div class="navBox">
           <router-link class="routerLink" to="/account">账号登陆</router-link>  |  <router-link class="routerLink" to="/tel">手机号登陆</router-link>
         </div>
@@ -11,7 +11,7 @@
           <router-view style="position: absolute;top: 0;left: 0" />
         </div>
         <div class="ewmBox" v-show="isRwm">
-          <img style="position: absolute;top:12px;right: 12px;width: 50px;height: 50px;cursor: pointer" @click="goBlock" :src="ewmTwo" alt="">
+          <img style="position: absolute;top:0.12rem;right: 0.12rem;width: 0.5rem;height: 0.5rem;cursor: pointer" @click="goBlock" :src="ewmTwo" alt="">
           <p class="ewmTitle">微信二维码登录</p>
           <img class="ewmImg" src="../../assets/img/login/ewmImg.png" alt="">
           <p class="tipP">请使用微信扫描二维码登录</p>
@@ -67,62 +67,62 @@
   }
   .maxBox{
     position: absolute;
-    top: 200px;
-    right: 340px;
-    padding: 10px;
+    top: 2rem;
+    right: 3.4rem;
+    padding: 0.1rem;
   }
   .maxBox .title{
-    font-size:41px;
+    font-size:0.41rem;
     font-family:Microsoft YaHei;
     font-weight:400;
     color:rgba(255,255,255,1);
   }
   .loginBox{
-    width: 360px;
-    height: 380px;
-    margin-top: 60px;
-    margin-left: 80px;
+    width: 3.6rem;
+    height: 3.8rem;
+    margin-top: 0.6rem;
+    margin-left: 0.8rem;
     background-color: #ffffff;
-    padding: 10px;
+    padding: 0.1rem;
     position: relative;
   }
   .footerBox{
     width: 100%;
     position: absolute;
-    bottom: 34px;
+    bottom: 0.34rem;
     text-align: center;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 0.12rem;
   }
   .navBox{
-    margin-top: 12px;
-    padding-left: 10px;
+    margin-top: 0.12rem;
+    padding-left: 0.1rem;
     box-sizing: border-box;
     text-align: left;
     width: 85%;
-    height: 40px;
-    line-height: 40px;
+    height: 0.4rem;
+    line-height: 0.4rem;
   }
   .routerLink{
     display: inline-block;
-    font-size:14px;
+    font-size:0.14rem;
     font-family:Microsoft YaHei;
     font-weight:400;
-    line-height:49px;
+    line-height:0.49rem;
   }
   .navBox a.router-link-exact-active {
      color: #3D8CFB;
   }
   .minBox{
     width: 100%;
-    height: 290px;
-    margin-top: 16px;
+    height: 2.9rem;
+    margin-top: 0.16rem;
     position: relative;
   }
   /* 二维码*!*/
   .ewmBox{
     position: absolute;
-    padding: 10px;
+    padding: 0.1rem;
     top: 0;
     left: 0;
     width: 100%;
@@ -130,29 +130,29 @@
     background-color: white;
   }
   .ewmTitle{
-    font-size:14px;
+    font-size:0.14rem;
     width: 100%;
     text-align: left;
-    margin-top: 10px;
+    margin-top: 0.1rem;
     font-family:Microsoft YaHei;
     font-weight:400;
     color:rgba(51,51,51,1);
-    line-height:49px;
+    line-height:0.49rem;
   }
   .ewmImg{
-    width: 170px;
-    height: 170px;
-    margin-top: 30px;
+    width: 1.7rem;
+    height: 1.7rem;
+    margin-top: 0.3rem;
     text-align: center;
   }
   .tipP{
     width: 100%;
     text-align: center;
-    font-size:14px;
+    font-size:0.14rem;
     font-family:Microsoft YaHei;
     font-weight:400;
     color:rgba(102,102,102,1);
-    margin-top: 24px;
-    line-height:24px;
+    margin-top: 0.24rem;
+    line-height:0.24rem;
   }
 </style>

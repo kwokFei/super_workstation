@@ -11,15 +11,15 @@
                 <button>登陆/注册</button>
             </div>
             <div class="infoBox">
-                <p style="font-size: 48px;letter-spacing: 6px">以科技设计未来</p>
-                <p style="font-size: 36px;letter-spacing: 4px">我们是大数据可视化先行者</p>
+                <p style="font-size: 0.48rem;letter-spacing: 0.06rem">以科技设计未来</p>
+                <p style="font-size: 0.36rem;letter-spacing: 0.04rem">我们是大数据可视化先行者</p>
                 <p style="display: flex;align-items: center">
-                    <i style="display: inline-block;width: 20px;background: white;height: 2px;margin-right: 12px"></i>
-                    <span style="font-size: 26px;color: #999999">Design The Future With Technology</span>
+                    <i style="display: inline-block;width: 0.2rem;background: white;height: 0.02rem;margin-right: 0.12rem"></i>
+                    <span style="font-size: 0.26rem;color: #999999">Design The Future With Technology</span>
                 </p>
                 <p style="display: flex;align-items: center">
-                    <i style="display: inline-block;width: 40px;background: white;height: 2px;margin-right: 12px"></i>
-                    <span style="font-size: 32px;">APCOS超级工作站</span>
+                    <i style="display: inline-block;width: 0.4rem;background: white;height: 0.02rem;margin-right: 0.12rem"></i>
+                    <span style="font-size: 0.32rem;">APCOS超级工作站</span>
                 </p>
                 <span class="btnGo">立即使用</span>
             </div>
@@ -30,7 +30,7 @@
                 <router-link :to="item.path">
                     <img class="bjImg" :src="item.imgUrl" alt="">
                     <div class="minBox" :style="isStyle">
-                        <p style="margin-top: 186px">{{item.engName}}</p>
+                        <p style="margin-top: 1.86rem">{{item.engName}}</p>
                         <p>{{item.name}}</p>
                         <img src="../../assets/img/home/listGo.png" alt="" v-show="item.isShow">
                     </div>
@@ -196,9 +196,9 @@
     }
     .bannerBox{
         overflow: hidden;
-        padding-top: 54px;
+        padding-top: 0.54rem;
         width: 100%;
-        height: 1080px;
+        height: 10.8rem;
         background: url("../../assets/img/home/banner.png") no-repeat;
         background-size: 100% 100%;
     }
@@ -208,29 +208,29 @@
         /*justify-content: center;*/
     }
     .logoBox{
-        width:160px;
-        height:52px;
-        margin-left: 80px;
+        width:1.6rem;
+        height:0.52rem;
+        margin-left: 0.8rem;
     }
     .navBox p{
-        margin-left: 990px;
+        margin-left: 9.9rem;
     }
     .navBox p > span{
-        font-size:18px;
+        font-size:0.18rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(204,204,204,1);
-        margin-right: 80px;
+        margin-right: 0.8rem;
         cursor: pointer;
     }
     .navBox button{
-        width:110px;
-        height:32px;
+        width:1.1rem;
+        height:0.32rem;
         border: 1px solid #0068FA;
         background: none;
         outline: none;
         text-align: center;
-        font-size:14px;
+        font-size:0.14rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(0,104,250,1);
@@ -238,27 +238,27 @@
     }
     .infoBox{
         /*display: inline-block;*/
-        padding-left: 240px;
+        padding-left: 2.4rem;
         color: white;
-        margin-top: 248px;
+        margin-top: 2.48rem;
         text-align: left;
     }
     .infoBox p{
-        margin: 15px 0;
+        margin: 0.15rem 0;
     }
     .infoBox .btnGo{
-        margin-top: 43px;
+        margin-top: 0.43rem;
         display: inline-block;
-        width:186px;
-        height:60px;
+        width:1.86rem;
+        height:0.6rem;
         background: url("../../assets/img/home/btnBj.png") no-repeat;
         background-size: 100% 100%;
-        font-size:23px;
+        font-size:0.23rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         text-align: left;
-        padding-left: 40px;
-        padding-top: 10px;
+        padding-left: 0.4rem;
+        padding-top: 0.1rem;
         color:rgba(255,255,255,1);
         cursor: pointer;
     }
@@ -272,8 +272,8 @@
     .listBox .listItem{
         border: 1px solid white;
         position: relative;
-        width: 480px;
-        height: 540px;
+        width: 4.8rem;
+        height: 5.4rem;
     }
     .listBox .listItem .bjImg{
         position: absolute;
@@ -294,13 +294,13 @@
     .listBox .listItem .minBox p{
         text-align: center;
         color: white;
-        margin: 20px 0;
+        margin: 0.2rem 0;
     }
     .listBox .listItem .minBox p:nth-child(1){
-        font-size: 40px;
+        font-size: 0.4rem;
     }
     .listBox .listItem .minBox p:nth-child(2){
-        font-size: 36px;
+        font-size: 0.36rem;
     }
     .listBox .listItem .minBox:hover{
         cursor: pointer;
@@ -309,72 +309,72 @@
 
     .companyInfo{
         width: 100%;
-        height: 810px;
+        height: 8.1rem;
         background: url("../../assets/img/home/infoBj.png") no-repeat;
         background-size: 100% 100%;
-        padding: 0 155px;
+        padding: 0 1.55rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
     .aBox{
-        width: 1000px;
+        width: 10rem;
         display: flex;
         flex-wrap: wrap;
         /*border: 1px solid red;*/
     }
     .aBox .aItem{
         text-align: left;
-        width: 500px;
+        width: 5rem;
         color: #0C0C0C;
-        margin: 20px 0;
+        margin: 0.2rem 0;
         /*border: 1px solid red;*/
     }
     .aBox .aItem>span{
         font-size:14px;
         font-family:Microsoft YaHei;
         font-weight:400;
-        line-height:60px;
+        line-height:0.6rem;
     }
     .aBox .aItem>p{
-        font-size:70px;
+        font-size:0.7rem;
         font-family:Arial;
         font-weight:400;
-        line-height:60px;
+        line-height:0.6rem;
     }
     .aBox .aItem:hover{
         color: #0068FA;
         cursor: pointer;
     }
     .companyInfoBox{
-        width: 400px;
+        width: 4rem;
         text-align: left;
     }
     .companyInfoBox .companyName{
-        font-size:20px;
+        font-size:0.2rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(51,51,51,1);
-        line-height:40px;
+        line-height:0.4rem;
     }
     .companyInfoBox .englishName{
-        font-size:14px;
+        font-size:0.14rem;
         font-family:Arial;
         font-weight:400;
         color:rgba(51,51,51,1);
-        line-height:60px;
+        line-height:0.6rem;
     }
     .companyInfoBox .info{
-        font-size:14px;
+        font-size:0.14rem;
         font-family:Microsoft YaHei;
         font-weight:300;
         color:rgba(102,102,102,1);
-        line-height:24px;
+        line-height:0.24rem;
     }
 
     .footerBox{
-        padding: 0 80px;
-        height: 270px;
+        padding: 0 0.8rem;
+        height: 2.7rem;
         background: #0C0C0C;
         display: flex;
         justify-content: space-between;
@@ -383,36 +383,36 @@
     }
     .footerBox .footerLeftBox .aaBox{
         border-bottom: 1px solid white;
-        width: 680px;
+        width: 6.8rem;
         display: flex;
         justify-content: space-between;
-        line-height: 80px
+        line-height: 0.8rem
     }
     .footerBox .footerLeftBox .companyA{
         text-align: left;
-        font-size:12px;
+        font-size:0.12rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(153,153,153,1);
-        line-height:36px;
+        line-height:0.36rem;
     }
     .footerBox .footerLeftBox .aaBox > span{
         cursor: pointer;
-        font-size:14px;
+        font-size:0.14rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(255,255,255,1);
-        line-height:60px;
+        line-height:0.6rem;
     }
     .footerBox .footerRightBox{
         text-align: left;
     }
     .footerBox .footerRightBox p{
-        font-size:14px;
+        font-size:0.14rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(255,255,255,1);
-        line-height:60px;
+        line-height:0.6rem;
     }
 
 </style>

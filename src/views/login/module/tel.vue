@@ -103,7 +103,7 @@
 
 <style scoped>
     .telBox{
-        padding: 20px 15px;
+        padding: 0.2rem 0.15rem;
         text-align: center;
     }
     .isShow{
@@ -111,44 +111,44 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 40px;
+        height: 0.4rem;
         overflow: hidden;
     }
     .yzmClass{
-        width:150px;
-        height:36px;
+        width:1.5rem;
+        height:0.36rem;
         background:rgba(247,247,247,1);
         border:1px solid rgba(229,229,229,1);
-        border-radius:4px;
+        border-radius:0.04rem;
         outline: none;
     }
     .Goyzm{
-        width:122px;
-        height:36px;
+        width:1.22rem;
+        height:3.6rem;
         background:rgba(76,149,251,1);
-        border-radius:4px;
-        font-size:14px;
+        border-radius:0.04rem;
+        font-size:0.14rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(255,255,255,1);
-        line-height:36px;
+        line-height:0.36rem;
         border: none;
         outline: none;
-        margin-top: -2px;
-        margin-left: 25px;
+        margin-top: -0.02rem;
+        margin-left: 0.25rem;
     }
     .dlBtn{
-        margin-top: 12px;
-        width:300px;
-        height:48px;
+        margin-top: 0.12rem;
+        width:3rem;
+        height:0.48rem;
         background:rgba(0,104,250,1);
         opacity:0.3;
-        border-radius:6px;
-        font-size:16px;
+        border-radius:0.06rem;
+        font-size:0.16rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(254,254,254,1);
-        line-height:49px;
+        line-height:0.49rem;
         border: none;
         outline: none;
         cursor: pointer;
@@ -158,11 +158,11 @@
         text-align: right;
     }
     .maxBox p span{
-        font-size:12px;
+        font-size:0.12rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(102,102,102,1);
-        line-height:49px;
+        line-height:0.49rem;
         cursor: pointer;
     }
 
@@ -174,7 +174,7 @@
 
 
     .slidetounlock {
-        font-size: 12px;
+        font-size: 0.12rem;
         background: -webkit-gradient(linear,left top,right top,color-stop(0,#4d4d4d),color-stop(.4,#4d4d4d),color-stop(.5,#fff),color-stop(.6,#4d4d4d),color-stop(1,#4d4d4d));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -183,28 +183,28 @@
     }
     @-webkit-keyframes slidetounlock {
         0% {
-            background-position: -200px 0
+            background-position: -2rem 0
         }
         100% {
-            background-position: 200px 0
+            background-position: 2rem 0
         }
     }
     #drag{
         position: relative;
         background-color: #e8e8e8;
-        width: 300px;
-        height: 40px;
-        line-height: 40px;
+        width: 3rem;
+        height: 0.4rem;
+        line-height: 0.4rem;
         text-align: center;
-        margin-bottom:20px;
-        margin-top: 12px;
+        margin-bottom:0.2rem;
+        margin-top: 0.12rem;
     }
     #drag .handler{
         position: absolute;
         top: 0px;
         left: 0px;
-        width: 40px;
-        height: 40px;
+        width: 0.4rem;
+        height: 0.4rem;
         border: 1px solid #ccc;
         cursor: move;
     }
@@ -217,19 +217,19 @@
     #drag .drag_bg {
         /*background-color: #7ac23c;*/
         background: #8dcefb;
-        height: 40px;
+        height: 0.4rem;
         width: 0px;
     }
     #drag .drag_text{
         position: absolute;
         top: 0px;
-        width: 300px;
+        width: 3rem;
         color:#9c9c9c;
         -moz-user-select: none;
         -webkit-user-select: none;
         user-select: none;
         -o-user-select:none;
         -ms-user-select:none;
-        font-size: 12px;
+        font-size: 0.12rem;
     }
 </style>

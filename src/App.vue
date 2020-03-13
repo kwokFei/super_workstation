@@ -14,8 +14,8 @@
     display: none !important;
   }
 #app {
-  width: 1920px;
-  height: 1080px;
+  width: 19.2rem;
+  height: 10.80rem;
   text-align: center;
   box-sizing: border-box;
 }

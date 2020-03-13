@@ -71,51 +71,51 @@
         text-align: center;
     }
     .maxBox .inputBox{
-        width:300px;
-        height:48px;
+        width:3rem;
+        height:0.48rem;
         position: relative;
-        margin: 12px 0;
+        margin: 0.12rem 0;
     }
     .maxBox .inputBox >img{
         position: absolute;
-        top: 17px;
-        left: 10px;
+        top: 0.17rem;
+        left: 0.1rem;
         display: inline-block;
-        width: 14px;
-        height: 16px;
+        width: 0.14rem;
+        height: 0.16rem;
     }
     .maxBox .inputBox> span{
         position: absolute;
-        top: 14px;
-        left: 40px;
+        top: 0.14rem;
+        left: 0.4rem;
         width: 1px;
-        height: 20px;
+        height: 0.2rem;
         border: 1px solid #DEDEDE;
     }
     .maxBox input{
-        width:300px;
-        height:48px;
+        width:3rem;
+        height:0.48rem;
         background:rgba(247,247,247,1);
         border-radius:4px;
         border: none;
         outline: none;
-        padding-left: 50px;
+        padding-left: 0.5rem;
     }
     .maxBox input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
         color: #B1B1B1;
     }
     .maxBox .dlBtn{
-        margin-top: 12px;
-        width:300px;
-        height:48px;
+        margin-top: 0.12rem;
+        width:3rem;
+        height:0.48rem;
         background:rgba(0,104,250,1);
         opacity:0.3;
-        border-radius:6px;
-        font-size:16px;
+        border-radius:0.06rem;
+        font-size:0.16rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(254,254,254,1);
-        line-height:49px;
+        line-height:0.49rem;
         border: none;
         outline: none;
         cursor: pointer;
@@ -125,11 +125,11 @@
         text-align: right;
     }
     .maxBox p span{
-        font-size:12px;
+        font-size:0.12rem;
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(102,102,102,1);
-        line-height:49px;
+        line-height:0.49rem;
         cursor: pointer;
     }
 </style>

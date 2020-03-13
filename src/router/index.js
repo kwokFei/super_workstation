@@ -6,6 +6,7 @@ Vue.use(VueRouter)
 const Index = () => import('@/views/index/Index');
 const Login = () => import('@/views/login/login');
 const Home = () => import('@/views/home/home');
+const User = () => import('@/views/user/user');
 const Workstaion_center = () => import('@/views/workstaion_center/Index');
 const Workstaion_center_apcos_workstation = () => import('@/views/workstaion_center/apcos_workstation/apcos_workstation');
 const Workstaion_center_pubilish_center = ()=> import('@/views/workstaion_center/publish_center/publish_center');
@@ -15,6 +16,7 @@ const View_center = ()=>import('@/views/design_center/module/centerHtml')
 const My_app_system = ()=>import('@/views/my_app_system/index')
 const Login_account = () => import('@/views/login/module/account')
 const Login_tel = () => import('@/views/login/module/tel')
+// const User_all = () => import('@/views/user/module/all')
 
 const routes = [
   {
@@ -30,6 +32,26 @@ const routes = [
     path: '/index',
     name: 'Index',
     component: Index,
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: User,
+    meta:{
+      title:'个人中心'
+    },
+    children:[
+      {
+        path:'/all',
+        name:'总览',
+        component:() => import('@/views/user/module/all')
+      },
+      {
+        path:'/my_ui',
+        name:'我的UI设计',
+        component:() => import('@/views/user/module/my_ui')
+      }
+    ]
   },
   {
     path: '/login',
