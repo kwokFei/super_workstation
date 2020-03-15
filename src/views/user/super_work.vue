@@ -41,7 +41,7 @@
                 navList:[
                     {
                         name:"首页",
-                        path:''
+                        path:'/super_home'
                     },
                     {
                         name:"硬件中心",

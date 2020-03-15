@@ -35,17 +35,18 @@ const routes = [
     component: Index,
   },
   {
-    path:'/super_work',
+    path:'/super_home',
     name:"超级工作站",
     component: SuperWork,
-    children:[{
-    path: '/user',
-    name: 'User',
-    component: User,
-    meta:{
-      title:'个人中心'
-    },
     children:[
+      {
+        path: '/user',
+        name: 'User',
+        component: User,
+        meta:{
+          title:'个人中心'
+        },
+        children:[
       {
         path:'/all',
         name:'总览',
@@ -97,7 +98,16 @@ const routes = [
         component:() => import('@/views/user/module/my_mp')
       }
     ]
-  }],
+      },
+      {
+        path: '/super_home',
+        name: 'super_home',
+        component:() => import('@/views/user/module/super_home'),
+        meta:{
+          title:'首页'
+        },
+      }
+  ],
 },
   {
     path: '/login',
