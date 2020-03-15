@@ -5,10 +5,10 @@
                 <span>筛选:</span>
                  <el-select v-model="value" clearable placeholder="全部">
                      <el-option
-                         v-for="item in selectData"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
+                             v-for="item in selectData"
+                             :key="item.value"
+                             :label="item.label"
+                             :value="item.value">
                      </el-option>
                  </el-select>
             </span>
@@ -58,7 +58,7 @@
 
 <script>
     export default {
-        name: "myUI",
+        name: "my_app_template",
         data(){
             return{
                 value:'',
@@ -76,36 +76,22 @@
                 ],
                 listData:[
                     {
-                        bjUrl:require('../../../assets/img/user/listBJ001.png'),
-                        title:'UI界面-电力大数据1',
+                        bjUrl:require('../../../assets/img/user/listBj002.png'),
+                        title:'应用模块-模块1',
                         time:'2020-1-11 11:11',
                         isCheck:true,
                         isMyFB:true,
                     },
                     {
-                        bjUrl:require('../../../assets/img/user/listBJ001.png'),
-                        title:'UI界面-电力大数据2',
+                        bjUrl:require('../../../assets/img/user/listBj002.png'),
+                        title:'应用模块-模块2',
                         time:'2020-1-11 11:11',
                         isCheck:false,
                         isMyFB:false,
                     },
                     {
-                        bjUrl:require('../../../assets/img/user/listBJ001.png'),
-                        title:'UI界面-电力大数据3',
-                        time:'2020-1-11 11:11',
-                        isCheck:false,
-                        isMyFB:false,
-                    },
-                    {
-                        bjUrl:require('../../../assets/img/user/listBJ001.png'),
-                        title:'UI界面-电力大数据4',
-                        time:'2020-1-11 11:11',
-                        isCheck:false,
-                        isMyFB:false,
-                    },
-                    {
-                        bjUrl:require('../../../assets/img/user/listBJ001.png'),
-                        title:'UI界面-电力大数据5',
+                        bjUrl:require('../../../assets/img/user/listBj002.png'),
+                        title:'应用模块-模块3',
                         time:'2020-1-11 11:11',
                         isCheck:false,
                         isMyFB:false,
@@ -130,7 +116,6 @@
                 }
 
             },
-
             //个别选中
             handleCheck(id){
                 this.listData[id].isCheck = !this.listData[id].isCheck;

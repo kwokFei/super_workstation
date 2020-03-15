@@ -11,6 +11,10 @@ import $ from 'jquery'
 
 Vue.use(ElementUI);
 
+// 引入echarts
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+
 // import './permission' // permission control
 
 Vue.config.productionTip = false;
