@@ -2,7 +2,7 @@
     <div>
         <el-header>
             <el-row :gutter="24">
-                <el-col :span="4" :xs="24">
+                <el-col :span="4" :xs="24" class="left">
                     <div><img src="@/assets/img/publich_nav/logo.png" alt="" class="logo"></div>
                 </el-col>
                 <el-col :span="14" :xs="12"><div>
@@ -17,6 +17,10 @@
                         <span @click="toSeeShare">
                             <img src="@/assets/img/design_center_nav/view.png" alt="">
                             <span>预览</span>
+                        </span>
+                        <span>
+                            <img src="@/assets/img/design_center_nav/view_app.png" alt="">
+                            <span>APP预览</span>
                         </span>
                         <span>
                             <img src="@/assets/img/design_center_nav/save.png" alt="">
@@ -53,6 +57,9 @@
 </script>
 
 <style scoped>
+    .left{
+          text-align: left;
+      }
     .el-header{
         height: 0.48rem !important;
         line-height: 0.48rem;
@@ -82,6 +89,7 @@
     }
     img{
         width: 0.19rem;
+        height: 0.19rem;
         vertical-align: text-bottom;
         margin-right: 0.02rem;
     }

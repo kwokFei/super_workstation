@@ -171,11 +171,13 @@ const routes = [
     path: '/view_center',
     name: 'view_center',
     component:View_center,
+    meta:{title:'预览'}
   },
   {
     path: '/my_app_system',
     name: 'my_app_system',
     component:My_app_system,
+    meta:{title:'设计中心'}
   }
 ]
 

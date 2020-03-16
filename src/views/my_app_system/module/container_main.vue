@@ -148,7 +148,7 @@
                             name:"首页",
                             isCheck:true,
                             isReadonly:true,
-                            iframeUrl:"static/htmls/ggHome.html",
+                            iframeUrl:"/static/htmls/ggHome.html",
                             childModule:[],
                         },
                         {

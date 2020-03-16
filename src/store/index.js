@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     allCheckedModuleList :  baseModuleList,
-    indexSrc : "static/htmls/ggHome.html",
+    indexSrc : "/static/htmls/ggHome.html",
     logoUrl :"",
   },
   mutations: {

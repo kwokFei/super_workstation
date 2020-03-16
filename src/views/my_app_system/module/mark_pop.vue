@@ -41,6 +41,12 @@
                 <el-input type="textarea" v-model="form.desc"></el-input>
             </el-form-item>
 
+
+            <el-form-item label="APP应用" prop="name">
+                <el-radio v-model="form.isApp" label="1">是</el-radio>
+                <el-radio v-model="form.isApp" label="2">否</el-radio>
+            </el-form-item>
+
         </el-form>
 
         <span slot="footer" class="dialog-footer">
@@ -66,7 +72,8 @@
                     companyName: '',
                     projectImg: '',
                     color: "",
-                    desc: ''
+                    desc: '',
+                    isApp : "1"
                 },
                 rules: {
                     projectName: [
