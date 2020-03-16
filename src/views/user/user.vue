@@ -48,7 +48,7 @@
                     {
                         name:'我的应用系统',
                         isActive:false,
-                        path:'/my_app_system',
+                        path:'/my_app_sys',
                         icon:require('../../assets/img/user/icon04.png'),
                     },
                     {

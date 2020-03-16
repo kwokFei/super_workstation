@@ -63,9 +63,9 @@ const routes = [
         component:() => import('@/views/user/module/my_app_template')
       },
       {
-        path:'/my_app_system',
+        path:'/my_app_sys',
         name:'我的应用系统',
-        component:() => import('@/views/user/module/my_app_system')
+        component:() => import('@/views/user/module/my_app_sys')
       },
       {
         path:'/my_3D',
