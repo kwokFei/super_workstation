@@ -31,31 +31,31 @@
                     {
                         name:'项目总览',
                         isActive:true,
-                        path:'/all',
+                        path:'/project_center/project_project_all',
                         icon:require('../../../assets/img/user/icon01.png'),
                     },
                     {
                         name:'我的项目',
                         isActive:false,
-                        path:'/my_ui',
+                        path:'/project_center/project_my_project',
                         icon:require('../../../assets/img/user/icon02.png'),
                     },
                     {
                         name:'我的节点',
                         isActive:false,
-                        path:'/my_app_template',
+                        path:'/project_center/project_my_node',
                         icon:require('../../../assets/img/user/icon03.png'),
                     },
                     {
                         name:'创建项目',
                         isActive:false,
-                        path:'/my_app_sys',
+                        path:'/project_center/project_create_project',
                         icon:require('../../../assets/img/user/icon04.png'),
                     },
                     {
                         name:'项目日志',
                         isActive:false,
-                        path:'/my_3D',
+                        path:'/project_center/project_project_log',
                         icon:require('../../../assets/img/user/icon05.png'),
                     }
                 ]

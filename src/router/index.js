@@ -111,9 +111,32 @@ const routes = [
         path:"/project_center",
         name:'project_center',
         component:() => import('@/views/user/module/project_center'),
+        // redirect: "/project_center/project_project_all",
         meta:{
           title:'项目中心'
         },
+        children:[
+            {   path:"/",
+                component:() => import('@/views/user/module/project_project_all'),
+            },
+            {   path:"project_project_all",
+                component:() => import('@/views/user/module/project_project_all'),
+            },
+            {   path:"project_my_project",
+                component:() => import('@/views/user/module/project_my_project'),
+            },
+            {   path:"project_my_node",
+                component:() => import('@/views/user/module/project_my_node'),
+            },
+            {   path:"project_create_project",
+                component:() => import('@/views/user/module/project_create_project'),
+            },
+            {   path:"project_project_log",
+                component:() => import('@/views/user/module/project_project_log'),
+            },
+
+        ]
+
       },
       {
         path:"/release_center",
