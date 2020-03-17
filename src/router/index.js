@@ -106,9 +106,84 @@ const routes = [
         meta:{
           title:'首页'
         },
+      },
+      {
+        path:"/release_center",
+        name:'release_center',
+        component:() => import('@/views/super_release_center/index'),
+        meta:{
+          title:'发布中心'
+        },
+        children:[
+          {
+            path:'/gk',
+            name:'gk',
+            component:() => import('@/views/super_release_center/module/gk'),
+          },
+          {
+            path:'/list',
+            name:'list',
+            component:() => import('@/views/super_release_center/module/list'),
+          }
+        ]
+      },
+      {
+        path:"/operations_center",
+        name:'operations_center',
+        component:() => import('@/views/super_operations_center/index'),
+        meta:{
+          title:'发布中心'
+        },
+        children:[
+          {
+            path:'/opGk',
+            name:'opGk',
+            component:() => import('@/views/super_operations_center/module/opGk'),
+          },
+          {
+            path:'/opList',
+            name:'opList',
+            component:() => import('@/views/super_operations_center/module/opList'),
+          }
+        ]
       }
   ],
 },
+  {
+    path:'/mercenary_library',
+    name:'mercenary_library',
+    component:() => import('@/views/mercenary_library/index'),
+    meta:{
+      title:'佣兵库'
+    },
+    children:[
+      {
+        path:'/ml_home',
+        name:'ml_home',
+        component:() => import('@/views/mercenary_library/module/home'),
+      },
+      {
+        path:'/people_ku',
+        name:'people_ku',
+        component:() => import('@/views/mercenary_library/module/peopleKu'),
+      },
+      {
+        path:'/my_zm',
+        name:'my_zm',
+        component:() => import('@/views/mercenary_library/module/my_zm'),
+      },
+      {
+        path:'/my_yp',
+        name:'my_yp',
+        component:() => import('@/views/mercenary_library/module/my_yp'),
+      },
+      {
+        path:'/dzht',
+        name:'dzht',
+        component:() => import('@/views/mercenary_library/module/dzht'),
+      },
+    ]
+  },
   {
     path: '/login',
     name: 'Login',
@@ -171,14 +246,144 @@ const routes = [
     path: '/view_center',
     name: 'view_center',
     component:View_center,
-    meta:{title:'预览'}
   },
   {
     path: '/my_app_system',
     name: 'my_app_system',
     component:My_app_system,
-    meta:{title:'设计中心'}
-  }
+  },
+  {
+    path:"/hardware_center",
+    name:'hardware_center',
+    component:() => import('@/views/super_yjzx/index'),
+    meta:{
+      title:'硬件中心'
+    },
+  },
+  {
+    path:"/cockpit",
+    name:'cockpit',
+    component:() => import('@/views/cockpit/index'),
+    meta:{
+      title:'驾驶舱'
+    },
+  },
+  {
+    path:"/project_center",
+    name:'project_center',
+    component:() => import('@/views/project_center/index'),
+    meta:{
+      title:'项目中心'
+    },
+  },
+  {
+    path:"/service_training",
+    name:'service_training',
+    component:() => import('@/views/super_service_training/index'),
+    meta:{
+      title:'服务培训'
+    },
+  },
+  {
+    path:"/super_design_center",
+    name:'super_design_center',
+    component:() => import('@/views/super_design_center/index'),
+    meta:{
+      title:'设计中心'
+    },
+    children:[
+      {
+        path:'/app_system_setting',
+        name:'app_system_setting',
+        component:() => import('@/views/super_design_center/module/app_system_setting'),
+      },
+      {
+        path:'/app_template_setting',
+        name:'app_template_setting',
+        component:() => import('@/views/super_design_center/module/app_template_setting'),
+      },
+      {
+        path:'/ThreeD_setting',
+        name:'3d_setting',
+        component:() => import('@/views/super_design_center/module/ThreeD_setting'),
+      },
+      {
+        path:'/diy_setting',
+        name:'diy_setting',
+        component:() => import('@/views/super_design_center/module/diy_setting'),
+      },
+      {
+        path:'/ui_setting',
+        name:'ui_setting',
+        component:() => import('@/views/super_design_center/module/ui_setting'),
+      }
+    ]
+  },
+  {
+    path: '/super_app_system',
+    name: 'super_app_system',
+    component: () => import('@/views/super_app_system/index'),
+    meta:{
+      title:'应用系统'
+    },
+  },
+  {
+    path:'/sys_index',
+    name:'sys_index',
+    component: () => import('@/views/super_app_system/module/index'),
+  },
+  {
+    path: '/super_app_template',
+    name: 'super_app_template',
+    component: () => import('@/views/super_app_template/index'),
+    meta:{
+      title:'应用模块'
+    }
+  },
+  {
+    path:'/tem_index',
+    name:'tem_index',
+    component: () => import('@/views/super_app_template/module/index'),
+  },
+  {
+    path: '/super_3d',
+    name: 'super_3d',
+    component: () => import('@/views/super_3d/index'),
+    meta:{
+      title:'3d场景'
+    }
+  },
+  {
+    path: '/super_diy',
+    name: 'super_diy',
+    component: () => import('@/views/super_diy/index'),
+    meta:{
+      title:'diy编码'
+    }
+  },
+  {
+    path:'/diy_index',
+    name:'diy_index',
+    component: () => import('@/views/super_diy/module/index'),
+  },
+  {
+    path:'/threeD_index',
+    name:'threeD_index',
+    component: () => import('@/views/super_3d/module/index'),
+  },
+  {
+    path: '/super_ui',
+    name: 'super_ui',
+    component: () => import('@/views/super_ui/index'),
+    meta:{
+      title:'ui设计'
+    }
+  },
+  {
+    path:'/ui_index',
+    name:'ui_index',
+    component: () => import('@/views/super_ui/module/index'),
+  },
 ]
 
 const router = new VueRouter({

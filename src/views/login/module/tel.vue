@@ -13,7 +13,9 @@
             <input class="yzmClass" type="text" v-model="yzm" @blur="yzmBlur">
             <button class="Goyzm">发送验证码</button>
         </div>
-        <button class="dlBtn" :style="dlClass" :disabled="disabled">登陆</button>
+        <button class="dlBtn" :style="dlClass" :disabled="disabled">
+            <router-link to="/">登陆</router-link>
+        </button>
         <p>
             <span>忘记密码？</span>
         </p>

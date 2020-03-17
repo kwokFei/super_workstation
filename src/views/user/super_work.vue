@@ -3,7 +3,7 @@
         <div class="userNav">
             <img style="width: 1.7rem;height: 0.55rem" src="../../assets/img/user/logo.png" alt="">
             <p class="navBox">
-                <span v-for="(item,index) in navList" :key="index">
+                <span v-for="(item,index) in navList" :key="index" :class="{ addClass: num == index }" @click="addStyle(index)">
                     <router-link :to="item.path">{{item.name}}</router-link>
                 </span>
             </p>
@@ -45,45 +45,47 @@
                     },
                     {
                         name:"硬件中心",
-                        path:''
+                        path:'/hardware_center'
                     },
                     {
                         name:"驾驶舱",
-                        path:''
+                        path:'/cockpit'
                     },
                     {
                         name:"发布中心",
-                        path:''
+                        path:'/gk'
                     },
                     {
                         name:"运维中心",
-                        path:''
+                        path:'/opGk'
                     },
                     {
                         name:"设计中心",
-                        path:''
+                        path:'/app_system_setting'
                     },
                     {
                         name:"佣兵库",
-                        path:''
+                        path:'/ml_home'
                     },
-                    {
-                        name:"生态链",
-                        path:''
-                    },
+                    // {
+                    //     name:"生态链",
+                    //     path:''
+                    // },
                     {
                         name:"项目中心",
-                        path:''
+                        path:'/project_center'
                     },
                     {
                         name:"服务培训",
-                        path:''
+                        path:'/service_training'
                     }
                 ]
             }
         },
         methods:{
-
+            addStyle(index){
+                this.num = index;
+            }
         },
         mounted() {
 
@@ -125,8 +127,12 @@
         font-family:Microsoft YaHei;
         font-weight:400;
         color:rgba(102,102,102,1);
-        line-height:0.43rem;
+        line-height:0.61rem;
         margin: 0 0.2rem;
+        border: 0.04rem solid white;
+    }
+    .addClass{
+        border-bottom: 0.04rem solid #0068FF !important;
     }
     .userTip{
         display: flex;
@@ -186,5 +192,9 @@
         color:rgba(102,102,102,1);
         line-height: 0.34rem;
     }
-
+    .contentBox{
+        /*width: 100%;*/
+        height: auto;
+        /*padding: 0.18rem 3.6rem 0 3.6rem;*/
+    }
 </style>

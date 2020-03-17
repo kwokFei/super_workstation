@@ -10,7 +10,9 @@
             <img :src="pwdIcon" alt="">
             <span></span>
         </div>
-        <button class="dlBtn" :style="dlClass" :disabled="disabled" @click="dlFun">登陆</button>
+        <button class="dlBtn" :style="dlClass" :disabled="disabled" @click="dlFun">
+            <router-link style="color: white;" to="/">登陆</router-link>
+        </button>
         <p>
             <span>忘记密码？</span>
         </p>

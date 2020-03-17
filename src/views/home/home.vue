@@ -4,9 +4,9 @@
             <div class="navBox">
                 <img class="logoBox" src="../../assets/img/home/logo.png" alt="">
                 <p>
-                    <span>超级市场</span>
-                    <span>超级工作站</span>
-                    <span>开发者社区</span>
+                    <span><a  style="color:rgba(204,204,204,1);font-size: 0.18rem" href="">超级市场</a></span>
+                    <span><router-link style="color:rgba(204,204,204,1);font-size: 0.18rem" to="/super_home">超级工作站</router-link></span>
+                    <span><a style="color:rgba(204,204,204,1);font-size: 0.18rem" href="http://developer.apcos.com/home/index">开发者社区</a></span>
                 </p>
                 <button>登陆/注册</button>
             </div>
@@ -110,42 +110,42 @@
                         imgUrl:require('../../assets/img/home/listOne.png'),
                         engName:'Hardware Center',
                         name:'硬件中心',
-                        path:'',
+                        path:'/hardware_center',
                         isShow:false
                     },
                     {
                         imgUrl:require('../../assets/img/home/listTwo.png'),
                         engName:'Cockpit',
                         name:'驾驶舱',
-                        path:'',
+                        path:'/cockpit',
                         isShow:false
                     },
                     {
                         imgUrl:require('../../assets/img/home/lsitThree.png'),
                         engName:'Design Center',
                         name:'设计中心',
-                        path:'',
+                        path:'/app_system_setting',
                         isShow:false
                     },
                     {
                         imgUrl:require('../../assets/img/home/listFour.png'),
                         engName:'Operations Center',
                         name:'运维中心',
-                        path:'',
+                        path:'/opGk',
                         isShow:false
                     },
                     {
                         imgUrl:require('../../assets/img/home/listFive.png'),
                         engName:'Release Center',
                         name:'发布中心',
-                        path:'',
+                        path:'/gk',
                         isShow:false
                     },
                     {
                         imgUrl:require('../../assets/img/home/listSix.png'),
                         engName:'Project Center',
                         name:'项目中心',
-                        path:'',
+                        path:'/project_center',
                         isShow:false
                     },
                     {
@@ -213,6 +213,9 @@
         margin-left: 0.8rem;
     }
     .navBox p{
+        display: flex;
+        justify-content: left;
+        align-items: center;
         margin-left: 9.9rem;
     }
     .navBox p > span{
