@@ -108,6 +108,14 @@ const routes = [
         },
       },
       {
+        path:"/project_center",
+        name:'project_center',
+        component:() => import('@/views/user/module/project_center'),
+        meta:{
+          title:'项目中心'
+        },
+      },
+      {
         path:"/release_center",
         name:'release_center',
         component:() => import('@/views/super_release_center/index'),
@@ -268,14 +276,7 @@ const routes = [
       title:'驾驶舱'
     },
   },
-  {
-    path:"/project_center",
-    name:'project_center',
-    component:() => import('@/views/project_center/index'),
-    meta:{
-      title:'项目中心'
-    },
-  },
+
   {
     path:"/service_training",
     name:'service_training',
