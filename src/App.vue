@@ -14,7 +14,7 @@
     display: none !important;
   }
 #app {
-  width: 19.2rem;
+  /*width: 19.2rem;*/
   height: 10.80rem;
   text-align: center;
   box-sizing: border-box;

@@ -98,3 +98,8 @@ a {
 .el-cascader{
     width: 100%;
 }
+
+#my_app_system_dialog .el-dialog__body{
+    overflow: auto;
+    max-height: 50vh;
+}
