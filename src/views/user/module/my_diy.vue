@@ -198,7 +198,7 @@
         height: 1.56rem;
         position: relative;
     }
-    .itemImgBox>img{
+    .itemImgBox >img{
         width: 100%;
         height: 100%;
     }
