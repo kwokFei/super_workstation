@@ -1,10 +1,10 @@
 <template>
     <div class="userBox">
         <div class="userNav">
-            <img style="width: 1.7rem;height: 0.55rem" src="../../assets/img/user/logo.png" alt="">
+            <img @click="GoHome" style="width: 1.7rem;height: 0.55rem;cursor:pointer;" src="../../assets/img/user/logo.png" alt="">
             <p class="navBox">
                 <span v-for="(item,index) in navList" :key="index" :class="{ addClass: num == index }" @click="addStyle(index)">
-                    <router-link :to="item.path">{{item.name}}</router-link>
+                    <router-link :target="item.openUrl" :to="item.path">{{item.name}}</router-link>
                 </span>
             </p>
             <div class="userTip">
@@ -14,11 +14,11 @@
                     <img src="../../assets/img/user/info.png" alt="">
                 </span>
                 <span style="width: 1px;height: 0.2rem;background-color: #E6E6E6"></span>
-                <img style="width: 0.4rem;height: 0.4rem" src="../../assets/img/user/userIcon.png" alt="">
+                <img @click="isTem" style="width: 0.4rem;height: 0.4rem" src="../../assets/img/user/userIcon.png" alt="">
                 <span style="font-size:0.12rem;font-weight:normal;color:rgba(105,113,149,1);">Beone  APCOS</span>
             </div>
             <!--  弹框  -->
-            <div class="templateBox">
+            <div class="templateBox" v-show="isShow">
                 <p style="line-height: 0.4rem;border-bottom: 1px solid rgba(0,0,0,0.1);white-space:nowrap">Beone  APCOS</p>
                 <p style="color: #2F80ED"><router-link to="/all">个人中心</router-link></p>
                 <p><router-link to="/login">退出登录</router-link></p>
@@ -38,6 +38,7 @@
         data(){
             return{
                 num:0,
+                isShow:false,
                 navList:[
                     {
                         name:"首页",
@@ -49,7 +50,8 @@
                     },
                     {
                         name:"驾驶舱",
-                        path:'/cockpit'
+                        path:'/cockpit',
+                        openUrl:"_blank"
                     },
                     {
                         name:"发布中心",
@@ -61,11 +63,13 @@
                     },
                     {
                         name:"设计中心",
-                        path:'/app_system_setting'
+                        path:'/app_system_setting',
+                        openUrl:"_blank"
                     },
                     {
                         name:"佣兵库",
-                        path:'/ml_home'
+                        path:'/ml_home',
+                        openUrl:"_blank"
                     },
                     // {
                     //     name:"生态链",
@@ -77,7 +81,8 @@
                     },
                     {
                         name:"服务培训",
-                        path:'/service_training'
+                        path:'/service_training',
+                        openUrl:"_blank"
                     }
                 ]
             }
@@ -85,6 +90,14 @@
         methods:{
             addStyle(index){
                 this.num = index;
+            },
+            isTem(){
+                this.isShow = !this.isShow;
+            },
+            GoHome(){
+                this.$router.push({
+                    path:'/'
+                })
             }
         },
         mounted() {
@@ -177,6 +190,7 @@
         width: 0.1rem;
         position: absolute;
         top: -0.05rem;
+        z-index: 99999999;
         right: 0.4rem;
         height: 0.1rem;
         background: white;

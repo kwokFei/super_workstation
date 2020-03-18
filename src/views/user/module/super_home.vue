@@ -45,25 +45,25 @@
                 <p class="titleName">最近项目</p>
                 <ul class="zjBox">
                     <li>
-                        <router-link class="zjARouter" to="">
+                        <router-link class="zjARouter" to="/hardware_center">
                             <img src="../../../assets/img/user/yjzx.png" alt="">
                             <span>硬件中心</span>
                         </router-link>
                     </li>
+<!--                    <li>-->
+<!--                        <router-link class="zjARouter" to="">-->
+<!--                            <img src="../../../assets/img/user/stl.png" alt="">-->
+<!--                            <span>生态链</span>-->
+<!--                        </router-link>-->
+<!--                    </li>-->
                     <li>
-                        <router-link class="zjARouter" to="">
-                            <img src="../../../assets/img/user/stl.png" alt="">
-                            <span>生态链</span>
+                        <router-link class="zjARouter"  to="/app_system_setting">
+                            <img src="../../../assets/img/user/sjzx.png" alt="">
+                            <span>设计中心</span>
                         </router-link>
                     </li>
                     <li>
-                        <router-link class="zjARouter" to="">
-                            <img src="../../../assets/img/user/cjsc.png" alt="">
-                            <span>超级市场</span>
-                        </router-link>
-                    </li>
-                    <li>
-                        <router-link class="zjARouter" to="">
+                        <router-link class="zjARouter" to="/project_center">
                             <img src="../../../assets/img/user/xmzx.png" alt="">
                             <span>项目中心</span>
                         </router-link>
@@ -74,24 +74,24 @@
                 <p class="titleName">我的团队</p>
                 <div class="myTeamBox">
                     <div class="teamItem">
-                        <img src="../../../assets/img/user/teamIcon.png" alt="">
+                        <img src="../../../assets/img/user/set1.png" alt="">
                         <br>
-                        <span>BEONE</span>
+                        <span>邹大海</span>
                     </div>
                     <div class="teamItem">
-                        <img src="../../../assets/img/user/teamIcon.png" alt="">
+                        <img src="../../../assets/img/user/set2.png" alt="">
                         <br>
-                        <span>BEONE</span>
+                        <span>王浩</span>
                     </div>
                     <div class="teamItem">
-                        <img src="../../../assets/img/user/teamIcon.png" alt="">
+                        <img src="../../../assets/img/user/set3.png" alt="">
                         <br>
-                        <span>BEONE</span>
+                        <span>刘松</span>
                     </div>
                     <div class="teamItem">
-                        <img src="../../../assets/img/user/teamIcon.png" alt="">
+                        <img src="../../../assets/img/user/set4.png" alt="">
                         <br>
-                        <span>BEONE</span>
+                        <span>张千思</span>
                     </div>
                 </div>
             </div>
@@ -101,25 +101,25 @@
                 <p class="titleName">常用应用</p>
                 <div class="publicBox">
                     <div class="publicItem">
-                        <router-link to="">
+                        <router-link to="/hardware_center">
                             <img src="../../../assets/img/user/yjzx.png" alt="">
                             <p>硬件中心</p>
                         </router-link>
                     </div>
                     <div class="publicItem">
-                        <router-link to="">
-                            <img src="../../../assets/img/user/stl.png" alt="">
-                            <p>生态链</p>
+                        <router-link to="/app_system_setting">
+                            <img src="../../../assets/img/user/sjzx.png" alt="">
+                            <p>设计中心</p>
                         </router-link>
                     </div>
-                    <div class="publicItem">
+                    <div class="publicItem" @click="Go({name:'超级市场'})">
                         <router-link to="">
                             <img src="../../../assets/img/user/cjsc.png" alt="">
                             <p>超级市场</p>
                         </router-link>
                     </div>
                     <div class="publicItem">
-                        <router-link to="">
+                        <router-link to="/project_center">
                             <img src="../../../assets/img/user/xmzx.png" alt="">
                             <p>项目中心</p>
                         </router-link>
@@ -129,7 +129,7 @@
             <div class="rightTwoBox">
                 <p class="titleName">全部应用</p>
                 <div class="allBox">
-                    <div class="allItemBox" v-for="(item,index) in allListData" :key="index" >
+                    <div class="allItemBox" v-for="(item,index) in allListData" :key="index" @click="Go(item)">
                         <router-link class="allABox" :to="item.path">
                             <img :src="item.imgUrl" alt="">
                             <span>{{item.name}}</span>
@@ -148,56 +148,63 @@
             return{
                 allListData:[
                     {
-                        path:'',
+                        path:'/hardware_center',
                         imgUrl:require("../../../assets/img/user/yjzx.png"),
                         name:'硬件中心'
                     },
-                    {
-                        path:'',
-                        imgUrl:require("../../../assets/img/user/stl.png"),
-                        name:'生态链'
-                    },
+                    // {
+                    //     path:'',
+                    //     imgUrl:require("../../../assets/img/user/stl.png"),
+                    //     name:'生态链'
+                    // },
                     {
                         path:'',
                         imgUrl:require("../../../assets/img/user/cjsc.png"),
                         name:'超级市场'
                     },
                     {
-                        path:'',
+                        path:'/project_center',
                         imgUrl:require("../../../assets/img/user/xmzx.png"),
                         name:'项目中心'
                     },
                     {
-                        path:'',
+                        path:'/service_training',
                         imgUrl:require("../../../assets/img/user/fwpx.png"),
                         name:'服务培训'
                     },
+                    // {
+                    //     path:'',
+                    //     imgUrl:require("../../../assets/img/user/xxlz.png"),
+                    //     name:'信息流转'
+                    // },
                     {
-                        path:'',
-                        imgUrl:require("../../../assets/img/user/xxlz.png"),
-                        name:'信息流转'
-                    },
-                    {
-                        path:'',
+                        path:'/opGk',
                         imgUrl:require("../../../assets/img/user/ywzx.png"),
                         name:'运维中心'
                     },
                     {
-                        path:'',
+                        path:'/cockpit',
                         imgUrl:require("../../../assets/img/user/jsc.png"),
                         name:'驾驶舱'
                     },
                     {
-                        path:'',
+                        path:'/ml_home',
                         imgUrl:require("../../../assets/img/user/ybk.png"),
                         name:'佣兵库'
                     },
                     {
-                        path:'',
+                        path:'/app_system_setting',
                         imgUrl:require("../../../assets/img/user/sjzx.png"),
                         name:'设计中心'
                     }
                 ]
+            }
+        },
+        methods:{
+            Go(item){
+                if(item.name == "超级市场"){
+                    window.open("http://www.beoneeco.com/home/index.html#/",'_blank')
+                }
             }
         }
     }

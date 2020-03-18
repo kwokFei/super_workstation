@@ -1,15 +1,15 @@
 <template>
     <div class="maxBox">
-        <img src="../../../assets/img/super_design_center/app_template_img.png" alt="">
+        <img src="../../../assets/img/jsc_img.png" alt="">
         <span class="goBox">
-            <router-link class="goXia" target="_blank" to="/super_app_template"></router-link>
+            <router-link class="goXia" target="_blank"  to="/jsc_setting_2"></router-link>
         </span>
     </div>
 </template>
 
 <script>
     export default {
-        name: "app_template_setting"
+        name: "jiashicang"
     }
 </script>
 

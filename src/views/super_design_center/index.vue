@@ -3,7 +3,7 @@
         <div class="navBox">
             <img class="logoImg" src="../../assets/img/user/logo.png" alt="">
             <div class="navMinBox">
-                <span v-for="(item,index) in navList" :key="index" @click="addStyle(index)"  :class="{addClass:num === index}">
+                <span v-for="(item,index) in navList" :key="index" @click="addStyle(index)"   :class="{addClass:num === index}">
                     <router-link class="wwRouter" :to="item.path">{{item.name}}</router-link>
                 </span>
             </div>
@@ -45,6 +45,10 @@
                         name:"DIY编码设计",
                         path:'/diy_setting'
                     },
+                    {
+                        name:"驾驶舱设计",
+                        path:'/jsc_setting'
+                    }
                 ]
             }
         },
@@ -93,7 +97,7 @@
     a{
         font-size: 0.18rem;
     }
-    .addClass{
+    .addClass > a{
         color: #0C76FB !important;
     }
     .yyBox{

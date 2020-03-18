@@ -1,6 +1,6 @@
 <template>
-    <div>
-        my_project
+    <div class="maxBox">
+        <img src="../../../assets/img/project_center/my_project.png" alt="">
     </div>
 </template>
 
@@ -11,5 +11,12 @@
 </script>
 
 <style scoped>
-
+    .maxBox{
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    img{
+        width: 100%;
+    }
 </style>

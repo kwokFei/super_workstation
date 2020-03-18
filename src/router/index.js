@@ -139,6 +139,14 @@ const routes = [
 
       },
       {
+        path:"/hardware_center",
+        name:'hardware_center',
+        component:() => import('@/views/super_yjzx/index'),
+        meta:{
+          title:'硬件中心'
+        },
+      },
+      {
         path:"/release_center",
         name:'release_center',
         component:() => import('@/views/super_release_center/index'),
@@ -284,14 +292,6 @@ const routes = [
     component:My_app_system,
   },
   {
-    path:"/hardware_center",
-    name:'hardware_center',
-    component:() => import('@/views/super_yjzx/index'),
-    meta:{
-      title:'硬件中心'
-    },
-  },
-  {
     path:"/cockpit",
     name:'cockpit',
     component:() => import('@/views/cockpit/index'),
@@ -340,8 +340,24 @@ const routes = [
         path:'/ui_setting',
         name:'ui_setting',
         component:() => import('@/views/super_design_center/module/ui_setting'),
+      },
+      {
+        path:'/jsc_setting',
+        name:'jsc_setting',
+        component:() => import('@/views/super_design_center/module/jiashicang'),
       }
     ]
+  },
+
+  {
+    path:'/jsc_setting_2',
+    name:'jsc_setting_2',
+    component:() => import('@/views/super_cockpit/index'),
+  },
+  {
+    path:'/jsc_setting_3',
+    name:'jsc_setting_3',
+    component:() => import('@/views/super_cockpit/module/index'),
   },
   {
     path: '/super_app_system',
@@ -412,7 +428,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
-  base: process.env.BASE_URL,
+  base: '/super_workstation/',
   routes
 })
 

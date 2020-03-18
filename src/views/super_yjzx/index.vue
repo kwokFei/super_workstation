@@ -1,6 +1,6 @@
 <template>
     <div class="maxBox">
-        <img src="../../assets/img/yjzxIMg.jpg" alt="">
+        <img src="../../assets/img/yjzxIMg.png" alt="">
         <a href="http://developer.apcos.com/home/index" class="btnBox"></a>
     </div>
 </template>
@@ -22,8 +22,8 @@
     }
     .btnBox{
         position: absolute;
-        top: 8.3%;
-        left: 18.8%;
+        top: 3.16rem;
+        left: 3.6rem;
         width: 2.06rem;
         height: 0.52rem;
         cursor: pointer;

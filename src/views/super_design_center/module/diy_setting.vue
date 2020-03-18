@@ -2,7 +2,7 @@
     <div class="maxBox">
         <img src="../../../assets/img/super_design_center/app_diy_img.png" alt="">
         <span class="goBox">
-            <router-link class="goXia" to="/super_diy"></router-link>
+            <router-link class="goXia" target="_blank" to="/super_diy"></router-link>
         </span>
     </div>
 </template>

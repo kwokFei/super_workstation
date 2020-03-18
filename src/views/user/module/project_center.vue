@@ -130,7 +130,7 @@
     .contRight{
         width: 9.4rem;
         height: 7rem;
-        background:rgba(255,255,255,1);
+        background:#f0f2f5;
         border-radius:0.08rem;
         padding: 0.18rem 0.3rem 0 0.3rem;
     }

@@ -1,12 +1,12 @@
 <template>
     <div class="maxBox">
-        <img src="../../../assets/img/project_center/project_all.png" alt="">
+        <img src="../../../assets/img/jiashicangIMg.jpg" alt="">
     </div>
 </template>
 
 <script>
     export default {
-        name: "project_project_all"
+        name: "index"
     }
 </script>
 
@@ -18,5 +18,6 @@
     }
     img{
         width: 100%;
+        height: 100%;
     }
 </style>

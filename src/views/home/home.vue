@@ -4,9 +4,9 @@
             <div class="navBox">
                 <img class="logoBox" src="../../assets/img/home/logo.png" alt="">
                 <p>
-                    <span><a  style="color:rgba(204,204,204,1);font-size: 0.18rem" href="">超级市场</a></span>
+                    <span><a  style="color:rgba(204,204,204,1);font-size: 0.18rem" href="http://www.beoneeco.com/home/index.html#/" target="_blank">超级市场</a></span>
                     <span><router-link style="color:rgba(204,204,204,1);font-size: 0.18rem" to="/super_home">超级工作站</router-link></span>
-                    <span><a style="color:rgba(204,204,204,1);font-size: 0.18rem" href="http://developer.apcos.com/home/index">开发者社区</a></span>
+                    <span><a style="color:rgba(204,204,204,1);font-size: 0.18rem" href="http://developer.apcos.com/home/index" target="_blank">开发者社区</a></span>
                 </p>
                 <button>登陆/注册</button>
             </div>
@@ -21,7 +21,9 @@
                     <i style="display: inline-block;width: 0.4rem;background: white;height: 0.02rem;margin-right: 0.12rem"></i>
                     <span style="font-size: 0.32rem;">APCOS超级工作站</span>
                 </p>
-                <span class="btnGo">立即使用</span>
+                <span class="btnGo">
+                    <router-link to="/super_home" style="width: 100%;height: 100%;font-size: 0.23rem;color: white">立即使用</router-link>
+                </span>
             </div>
         </div>
 

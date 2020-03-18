@@ -49,6 +49,8 @@
     .maxBox{
         text-align: left;
         width: 100%;
+        height: 100%;
+        background-color: #F0F2F5;
         padding: 0.4rem 3.6rem 0 3.6rem;
     }
     .navBox{
