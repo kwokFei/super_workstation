@@ -2,19 +2,22 @@
     <div class="maxBox">
         <img src="../../assets/img/jiashicangIMg.png" alt="">
         <div class="listBox">
-            <span>
-                <router-link class="minTo" to="/jsc_setting_3"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/jsc_setting_3"></router-link>
+            <span v-for="item in 2" @click="goTo1110" :key="item">
+                <span class="minTo"></span>
             </span>
         </div>
     </div>
 </template>
 
 <script>
+    import {goTo1110} from '@/utils/public_fun'
     export default {
-        name: "index"
+        name: "index",
+        methods:{
+            goTo1110(){
+                goTo1110()
+            },
+        }
     }
 </script>
 

@@ -1,38 +1,25 @@
 <template>
     <div class="maxBox">
+
         <img src="../../assets/img/super_design_center/my_appTemplate_img.jpg" alt="">
         <div class="listBox">
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
+            <span v-for="item in 8" @click="goTo1110" :key="item">
+                <span class="minTo"></span>
             </span>
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/tem_index"></router-link>
-            </span>
+
         </div>
     </div>
 </template>
 
 <script>
+    import {goTo1110} from '@/utils/public_fun'
     export default {
-        name: "index"
+        name: "index",
+        methods:{
+            goTo1110(){
+                goTo1110()
+            },
+        }
     }
 </script>
 

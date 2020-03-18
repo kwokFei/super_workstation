@@ -634,3 +634,5 @@ export const  exampleAppData = [
 ]
 
 
+export const goto1110BaseUrl = "http://113.204.9.70:20081"
+

@@ -2,29 +2,10 @@
     <div class="maxBox">
         <img src="../../assets/img/super_design_center/my_3d_img.png" alt="">
         <div class="listBox">
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/threeD_index"></router-link>
+            <span v-for="item in 8"
+                  :key="item"
+                  @click="goTo3D">
+                <span class="minTo" to="/threeD_index"></span>
             </span>
         </div>
     </div>
@@ -32,7 +13,15 @@
 
 <script>
     export default {
-        name: "index"
+        name: "index",
+        methods:{
+            goTo3D(){
+                window.open(
+                    "http://113.204.9.70:9080/3dwebgl/otheAPI/openDesign1?user_token=20164d0dc1fc4591a6d4c38b4a47312a1584518011269",
+                    "_blank"
+                )
+            },
+        }
     }
 </script>
 

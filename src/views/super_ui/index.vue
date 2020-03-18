@@ -2,37 +2,27 @@
     <div class="maxBox">
         <img src="../../assets/img/super_design_center/my_ui_img.jpg" alt="">
         <div class="listBox">
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
+            <span v-for="item in 3"
+                  :key="item"
+                  @click="goToUI">
+                <span class="minTo" ></span>
             </span>
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
-            </span>
-            <span>
-                <router-link class="minTo" to="/ui_index"></router-link>
-            </span>
+
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "index"
+        name: "index",
+        methods:{
+            goToUI(){
+                window.open(
+                    "http://developer.apcoscheck.com:20001/device/UIEditor?productCode=00028801&account=13609036889",
+                    "_blank"
+                )
+            }
+        }
     }
 </script>
 
