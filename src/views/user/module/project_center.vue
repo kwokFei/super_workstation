@@ -47,7 +47,7 @@
                         icon:require('../../../assets/img/user/icon03.png'),
                     },
                     {
-                        name:'创建项目',
+                        name:'项目列表',
                         isActive:false,
                         path:'/project_center/project_create_project',
                         icon:require('../../../assets/img/user/icon04.png'),
@@ -132,6 +132,6 @@
         height: 7rem;
         background:#f0f2f5;
         border-radius:0.08rem;
-        padding: 0.18rem 0.3rem 0 0.3rem;
+        padding: 0 0.3rem 0 0.3rem;
     }
 </style>

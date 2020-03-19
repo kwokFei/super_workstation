@@ -71,10 +71,11 @@
                         path:'/ml_home',
                         openUrl:"_blank"
                     },
-                    // {
-                    //     name:"生态链",
-                    //     path:''
-                    // },
+                    {
+                        name:"生态链",
+                        path:'/iec_index',
+                        openUrl:"_blank"
+                    },
                     {
                         name:"项目中心",
                         path:'/project_center'
