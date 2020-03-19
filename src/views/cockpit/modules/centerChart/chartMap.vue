@@ -14,7 +14,7 @@
         mixins: [resize],
         data(){
             return{
-
+                chart:null,
             }
         },
         mounted() {
@@ -23,7 +23,7 @@
         methods:{
             chartMap(){
                 var chart = echarts.init(document.getElementById('ec_map'));
-
+                this.chart = chart;
                 var geoCoordMap = {
                     '新疆玛纳斯基地': [86.22, 44.30],
                     '九江': [116.00, 29.70],
