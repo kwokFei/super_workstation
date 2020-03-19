@@ -63,25 +63,22 @@
                     <p class="">创建UI</p>
                     <span @click="addTemplate">X</span>
                 </div>
-                <el-form v-model="form" label-width="120px">
-                    <el-form-item label="产品编号">
-                        <el-select v-model="value" placeholder="请选择">
-                            <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-<!--                        <el-input v-model="form.pro_name"></el-input>-->
-                    </el-form-item>
-                    <el-form-item label="产品名称">
-                        <el-input v-model="form.pro_name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="通讯类型">
-                        <el-input v-model="form.pro_inter"></el-input>
-                    </el-form-item>
-                </el-form>
+<!--                <el-select v-model="value" placeholder="请选择">-->
+<!--                    <el-option-->
+<!--                            v-for="item in options"-->
+<!--                            :key="item.value"-->
+<!--                            :label="item.label"-->
+<!--                            :value="item.value">-->
+<!--                    </el-option>-->
+<!--                </el-select>-->
+<!--                <el-select v-model="value1" placeholder="请选择">-->
+<!--                            <el-option-->
+<!--                                    v-for="item in options1"-->
+<!--                                    :key="item.value"-->
+<!--                                    :label="item.label"-->
+<!--                                    :value="item.value">-->
+<!--                            </el-option>-->
+<!--                        </el-select>-->
                 <div class="btns">
                     <button>123</button>
                     <button>123</button>
@@ -99,8 +96,46 @@
                 isTemplate:false,
                 title:'我的UI设计',
                 num:'',
+                value:'',
+                value1:"",
                 isMaxShow:'',
                 isMinShow:'',
+                options:[
+                  {
+                    value:"00038B01",
+                    label:'00038B01'
+                  },
+                  {
+                    value:"00038301",
+                    label:'00038301'
+                  },
+                  {
+                    value:"00028b01",
+                    label:'00028b01'
+                  },
+                  {
+                    value:"00028701",
+                    label:'00028701'
+                  },
+                ],
+                options1:[
+                {
+                  value:"无线网卡",
+                  label:'无线网卡'
+                },
+                {
+                  value:"WIFE",
+                  label:'WIFE'
+                },
+                {
+                  value:" 因特网",
+                  label:'因特网'
+                },
+                {
+                  value:"局域网",
+                  label:'局域网'
+                },
+              ],
                 navData:[
                     {
                         name:'我的UI设计',
@@ -405,6 +440,8 @@
         width: 100%;
         line-height: 0.4rem;
         padding:0 0.1rem;
+        background:#0C76FB;
+        color: white;
         border-bottom: 1px solid rgba(0,0,0,0.1);
     }
     .titleName>span{
@@ -413,6 +450,5 @@
         width: 0.2rem;
         height: 0.2rem;
         line-height: 0.2rem;
-        border: 1px solid rgba(0,0,0,0.2);
     }
 </style>

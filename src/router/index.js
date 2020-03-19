@@ -432,6 +432,11 @@ const routes = [
       title:'生态链'
     }
   },
+  {
+    path:'/diy_three',
+    name:'diy_three',
+    component: () => import('@/views/super_diy3/index')
+  }
 ];
 
 const router = new VueRouter({
