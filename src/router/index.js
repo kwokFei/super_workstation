@@ -424,13 +424,21 @@ const routes = [
     name:'ui_index',
     component: () => import('@/views/super_ui/module/index'),
   },
-]
+  {
+    path:'/iec_index',
+    name:'iec_index',
+    component: () => import('@/views/iec/index'),
+    meta:{
+      title:'生态链'
+    }
+  },
+];
 
 const router = new VueRouter({
   mode: 'hash',
   // base: '/super_workstation/',
   base: process.env.BASE_URL,
   routes
-})
+});
 
 export default router

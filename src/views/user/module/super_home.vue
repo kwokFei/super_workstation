@@ -50,12 +50,12 @@
                             <span>硬件中心</span>
                         </router-link>
                     </li>
-<!--                    <li>-->
-<!--                        <router-link class="zjARouter" to="">-->
-<!--                            <img src="../../../assets/img/user/stl.png" alt="">-->
-<!--                            <span>生态链</span>-->
-<!--                        </router-link>-->
-<!--                    </li>-->
+                    <li>
+                        <router-link class="zjARouter" target="_blank" to="/iec_index">
+                            <img src="../../../assets/img/user/stl.png" alt="">
+                            <span>生态链</span>
+                        </router-link>
+                    </li>
                     <li>
                         <router-link class="zjARouter"  to="/app_system_setting">
                             <img src="../../../assets/img/user/sjzx.png" alt="">
@@ -152,11 +152,11 @@
                         imgUrl:require("../../../assets/img/user/yjzx.png"),
                         name:'硬件中心'
                     },
-                    // {
-                    //     path:'',
-                    //     imgUrl:require("../../../assets/img/user/stl.png"),
-                    //     name:'生态链'
-                    // },
+                    {
+                        path:'/iec_index',
+                        imgUrl:require("../../../assets/img/user/stl.png"),
+                        name:'生态链'
+                    },
                     {
                         path:'',
                         imgUrl:require("../../../assets/img/user/cjsc.png"),

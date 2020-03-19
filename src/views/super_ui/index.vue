@@ -27,7 +27,7 @@
             </div>
             <div class="listBox">
                 <div class="btnBox">
-                    <button>创建UI</button>
+                    <button @click="addTemplate">创建UI</button>
                 </div>
                 <div class="dataListBox">
                     <div class="listItem" v-for="(item,index) in dataList" :key="index"
@@ -55,8 +55,40 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- 弹框 -->
+        <div class="templateBox" v-show="isTemplate">
+            <div class="mintTem">
+                <div class="titleName">
+                    <p class="">创建UI</p>
+                    <span @click="addTemplate">X</span>
+                </div>
+                <el-form v-model="form" label-width="120px">
+                    <el-form-item label="产品编号">
+                        <el-select v-model="value" placeholder="请选择">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+<!--                        <el-input v-model="form.pro_name"></el-input>-->
+                    </el-form-item>
+                    <el-form-item label="产品名称">
+                        <el-input v-model="form.pro_name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="通讯类型">
+                        <el-input v-model="form.pro_inter"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div class="btns">
+                    <button>123</button>
+                    <button>123</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -64,6 +96,7 @@
         name: "index",
         data(){
             return{
+                isTemplate:false,
                 title:'我的UI设计',
                 num:'',
                 isMaxShow:'',
@@ -100,10 +133,22 @@
                         name:'UI模块004',
                         createTime:'2020 3.12 12:00'
                     }
-                ]
+                ],
+                form:{
+                    pro_type:'',
+                    pro_name:'',
+                    pro_code:'',
+                    pro_inter:'',
+                    pro_img:'',
+                    pro_time:new Date()
+                }
             }
         },
         methods:{
+            addTemplate(){
+                this.isTemplate = !this.isTemplate;
+            },
+
             addClass(index){
                 this.num = index;
                 this.title = this.navData[index].name;
@@ -141,6 +186,7 @@
     .maxBox{
         width: 100%;
         height: 100%;
+        position: relative;
         background-color: #f0f0f8;
     }
     .navBox{
@@ -190,6 +236,7 @@
     .contentBox{
         padding: 0 3rem;
         width: 100%;
+        /*position: relative;*/
         /*height: 100%;*/
     }
     .titleBox{
@@ -326,5 +373,46 @@
     }
     .czMore li:hover{
         color:rgba(47,128,237,1);
+    }
+
+    .templateBox{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.2);
+    }
+    .mintTem{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 6rem;
+        height: 5rem;
+        background: white;
+        border-radius: 0.08rem;
+        overflow: hidden;
+        box-shadow:  0 0 10px 10px rgba(0,0,0,0.02);
+    }
+    .titleName{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family:Microsoft YaHei;
+        font-size: 0.16rem;
+        height: 0.4rem;
+        width: 100%;
+        line-height: 0.4rem;
+        padding:0 0.1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    .titleName>span{
+        cursor: pointer;
+        display: inline-block;
+        width: 0.2rem;
+        height: 0.2rem;
+        line-height: 0.2rem;
+        border: 1px solid rgba(0,0,0,0.2);
     }
 </style>
