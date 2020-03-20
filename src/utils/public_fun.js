@@ -1,6 +1,6 @@
 import {postAxios} from '@/requestAPI/common/index'
 import {goto1110BaseUrl} from './public_const'
-import {setToken} from './auth'
+import {setToken , getToken} from './auth'
 
 export const seeShare = function (theThis) {
     window.localStorage.setItem('allCheckedModuleList',JSON.stringify(theThis.$store.state.allCheckedModuleList));
@@ -42,8 +42,9 @@ export const goTo1110 = (_this)=> {
             if(data.data.list.length > 0 ){
                 appId = data.data.list[0].id
             }
+            // console.log("http://113.204.9.70:20080/#/design/design?id=" +  appId + "&&token=" + getToken());
             window.open(
-                "http://113.204.9.70:20080/#/design/design?id=" +  appId,
+                "http://113.204.9.70:20080/#/design/design?id=" +  appId + "&&token=" + getToken() ,
                 "_blank"
             )
 

@@ -5,11 +5,8 @@ var instance = axios.create({
     timeout: 1000 * 5
 });
 
-
 // request interceptor
 instance.interceptors.request.use(
-
-
     config => {
         // console.log(getToken())
         // do something before request is sent
