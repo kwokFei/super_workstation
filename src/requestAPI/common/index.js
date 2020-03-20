@@ -1,11 +1,24 @@
 import axios from 'axios'
+import { getToken } from '@/utils/auth'
 
-export var instance = axios.create({
-    timeout: 1000 * 5,
-    headers : {
-      accessToken : null,
-    }
+var instance = axios.create({
+    timeout: 1000 * 5
 });
+
+
+// request interceptor
+instance.interceptors.request.use(
+
+
+    config => {
+        // console.log(getToken())
+        // do something before request is sent
+
+        config.headers['token'] = getToken()
+
+        return config
+    }
+)
 
 
 export const getAxios  =  function (url, params,_this){
@@ -32,8 +45,7 @@ export const postAxios  = function (url,data = {},_this){
     return new Promise((resolve,reject) => {
         instance.post(url,data)
             .then(response => {
-              console.log(response);
-              if(response.data.status === 200){
+                if(response.data.status === 200){
                     resolve(response.data);
                     // resolve(response.data);
                 }else{

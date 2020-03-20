@@ -29,7 +29,6 @@
                 setInterval(function(){
                     var chartoption3 = myChart3.getOption();
                     myChart3.clear();
-                    console.log(chartoption3);
                     myChart3.setOption(chartoption3);
                 },5000);
                 var option3 = {

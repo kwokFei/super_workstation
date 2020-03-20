@@ -1,6 +1,6 @@
-import {postAxios,instance} from '@/requestAPI/common/index'
+import {postAxios} from '@/requestAPI/common/index'
 import {goto1110BaseUrl} from './public_const'
-
+import {setToken} from './auth'
 
 export const seeShare = function (theThis) {
     window.localStorage.setItem('allCheckedModuleList',JSON.stringify(theThis.$store.state.allCheckedModuleList));
@@ -27,30 +27,27 @@ export const onlyOneArr = function (arr1,arr2) {
 }
 
 export const goTo1110 = (_this)=> {
-    console.log(_this);
+    // console.log(goto1110BaseUrl);
     postAxios( goto1110BaseUrl +"/login",
         {
             account:"111",
             password:"123456"
         },_this)
         .then((data)=>{
-          // console.log(data.data.token);
-          // console.log(instance);
-          console.log(instance);
-          // return postAxios(goto1110BaseUrl +"/app/list",{},_this)
+            setToken(data.data.token)
+            return postAxios(goto1110BaseUrl +"/app/list",{},_this)
         })
-        // .then((data)=>{
-        //   console.log(data);
-        //   // let appId = 0;
-        //     // if(data.data.list.length > 0 ){
-        //     //     appId = data.data.list[0].id
-        //     // }
-        //     // window.open(
-        //     //     "http://113.204.9.70:20080/#/design/design?id=" +  appId,
-        //     //     "_blank"
-        //     // )
-        //
-        // })
+        .then((data)=>{
+            let appId = 0;
+            if(data.data.list.length > 0 ){
+                appId = data.data.list[0].id
+            }
+            window.open(
+                "http://113.204.9.70:20080/#/design/design?id=" +  appId,
+                "_blank"
+            )
+
+        })
 }
 
 
