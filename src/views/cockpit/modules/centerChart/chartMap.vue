@@ -133,7 +133,7 @@
                     '邯郸': [114.4775, 36.535],
                     '郑州': [113.4668, 34.6234],
                     '鄂尔多斯': [108.9734, 39.2487],
-                    '重庆': [107.7539, 30.1904],
+                    '万盛': [107.7539, 30.1904],
                     '金华': [120.0037, 29.1028],
                     '铜川': [109.0393, 35.1947],
                     '银川': [106.3586, 38.1775],
@@ -192,7 +192,7 @@
                     [{
                         name: '新乡'
                     }, {
-                        name: '重庆',
+                        name: '万盛',
                         value: 40
                     }],
                     [{
@@ -374,7 +374,7 @@
 
                 ];
 
-                var color = ['#3ed4ff', '#ffa022', '#a6c84c'];
+                var color = ['#4AFEA3', '#FD9D02', '#6AD7DC'];
                 var series = [];
                 [
                     ['新乡', BJData],
@@ -398,7 +398,7 @@
                             }
                         },
                         data: item[1].map(function(dataItem) {
-                            console.log(dataItem);
+                            // console.log(dataItem);
                             return {
                                 name: dataItem[1].name,
                                 value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
@@ -411,9 +411,66 @@
 
                 let option = {
                     backgroundColor: '#080a20',
-                    // tooltip: {
-                    //     trigger: 'item'
-                    // },
+                    tooltip: {
+                        trigger: 'item',
+                        enterable:true,
+                        formatter: function (params) {
+                            // console.log(params);
+                            var res=
+                                '<div id="echartPop">\n' +
+                                '        <div class="header">\n' +
+                                '            <div class="text">'+params.name+'项目</div>\n' +
+                                '            <div class="text_info">详情</div>\n' +
+                                '        </div>\n' +
+                                '        <div class="content">\n' +
+                                '            <div class="left">\n' +
+                                '\n' +
+                                '                <div class="content_item">\n' +
+                                '                    <p>项目内容</p>\n' +
+                                '                    <span>该项目总投资2亿元，' +
+                                '包含智慧园区、智慧路灯、智慧楼宇、' +
+                                '智慧社区、智慧校园等方案</span>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '                <div class="content_item">\n' +
+                                '                    <p>项目地址</p>\n' +
+                                '                    <span>重庆市   万盛经开区</span>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '                <div class="content_item">\n' +
+                                '                    <p>项目完成进度</p>\n' +
+                                '                    <span>已完成 80%   测试环节</span>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '            </div>\n' +
+                                '\n' +
+                                '            <div class="right">\n' +
+                                '\n' +
+                                '                <div class="content_item">\n' +
+                                '                    <p>项目开始时间</p>\n' +
+                                '                    <span>2019.5.10</span>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '                <div class="content_item">\n' +
+                                '                    <p>项目预计完成时间</p>\n' +
+                                '                    <span>2019.10.10</span>\n' +
+                                '                </div>\n' +
+                                '\n' +
+                                '\n' +
+                                '                <div class="content_item">\n' +
+                                '                    <p>项目供应商</p>\n' +
+                                '                    <span>海尔集团、大华科技、道尔智控、中控智慧、爱牵挂科技等10余家供应商提供相应胡智慧产品</span>\n' +
+                                '                </div>\n' +
+                                '    \n' +
+                                '            </div>\n' +
+                                '        </div>\n' +
+                                '      \n' +
+                                '\n' +
+                                '\n' +
+                                '    </div>' ;
+                            return res;
+                        },
+                    },
                     geo: {
                         map: 'china',
                         label: {
@@ -438,7 +495,7 @@
 
                 chart.setOption(option);
 
-                document.getElementById('ec_map').style.width = "9.72rem";
+                document.getElementById('ec_map').style.width = "100%";
                 document.getElementById('ec_map').style.height = "7.61rem";
                 setTimeout(function () {
                     chart.resize();
@@ -448,6 +505,70 @@
     }
 </script>
 
-<style scoped>
+<style>
+    /*#ec_map{*/
+    /*    position: absolute;*/
+    /*    left: 0;*/
+    /*}*/
 
+    #echartPop{
+        width: 4.02rem;
+        /* height: 2.8rem; */
+        background-color: #04152D;
+    }
+    #echartPop .header{
+        width: 4.02rem;
+        height: 0.42rem;
+        line-height: 0.42rem;
+        opacity: 0.5;
+        background-color: #042142;
+        position: relative;
+        border: 0.02rem solid #03356B;
+    }
+    #echartPop .text{
+        width: 1.22rem;
+        height: 0.41rem;
+        color: #017efc;
+        margin: 0 auto;
+        text-align: center;
+    }
+    #echartPop .text_info{
+        font-size: 0.12rem;
+        color: #00ffff;
+        position: absolute;
+        right: 0.2rem;
+        top:0;
+        cursor: pointer;
+    }
+
+    #echartPop .content{
+        display: flex;
+        align-items: center;
+    }
+
+
+    #echartPop .content > div{
+        width: 50%;
+        text-align: left;
+        margin: 0 0 0.2rem 0;
+        padding: 0 0.2rem;
+    }
+
+    #echartPop .left{
+        border-right: 0.02rem solid #1C2B41
+    }
+
+    #echartPop .content_item>p{
+        font-size: 0.12rem;
+        color: #017efc;
+        margin-top: 0.15rem;
+        margin-bottom: 0.08rem;
+        white-space:pre-wrap
+    }
+
+    #echartPop .content_item>span{
+        font-size: 0.12rem;
+        color: #ffffff;
+        white-space:pre-wrap
+    }
 </style>

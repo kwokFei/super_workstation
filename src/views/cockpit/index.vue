@@ -48,6 +48,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
+        z-index: 9;
     }
 
     /*左边大盒子*/
@@ -57,6 +59,8 @@
         height: 100%;
         color: white;
         padding-left: 0.26rem;
+        position: relative;
+        z-index: 9;
     }
     .contentBox .leftBox .leftOneBox{
         padding-top: 0.12rem;

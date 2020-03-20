@@ -3,17 +3,21 @@
         <!--                顶部选择按钮-->
         <div>
 
-            <div class="changeDot" show="all">全部</div>
+            <div class="changeDot" show="all">
+                <img src="@/assets/img/exhibition/green.png" alt="">
+                <span>正常</span>
+                <span style="width: 1.4rem"></span>
+            </div>
 
             <div class="changeDot" show="project" style="width: 1.4rem">
-                <img src="@/assets/img/exhibition/finish_project.png" alt="">
-                <span>已完成的项目</span>
+                <img src="@/assets/img/exhibition/yellow.png" alt="">
+                <span>离线</span>
                 <span style="width: 1.4rem"></span>
             </div>
 
             <div class="changeDot" show="room" style="width: 1.4rem">
-                <img src="@/assets/img/exhibition/build_project.png" alt="">
-                <span>建设中的项目</span>
+                <img src="@/assets/img/exhibition/blue.png" alt="">
+                <span>待发布</span>
                 <span style="width: 1.4rem"></span>
             </div>
         </div>
@@ -67,14 +71,13 @@
         position: absolute;
         left: 0;
         right: 0;
-        background: rgba(0,0,0,0.5);
     }
     .centerContent>div:first-child>div>img{
         width: 0.3rem;
     }
 
     .centerContent>.map{
-        width: 9.72rem;
+        width: 100%;
         height: 6.61rem;
         /*border: 1px solid red;*/
         margin: 0 auto;

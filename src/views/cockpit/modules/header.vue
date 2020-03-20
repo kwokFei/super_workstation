@@ -3,7 +3,7 @@
         <!--系统时间-->
         <div id="systemTime" ref="systemTime"></div>
         <!-- 名称-->
-        <div class="headerTitle">工业互联网研究院测试中心</div>
+        <div class="headerTitle">APCOS万物互联超级工作站</div>
         <!-- 图标-->
         <div>
             <ul class="navIcons">

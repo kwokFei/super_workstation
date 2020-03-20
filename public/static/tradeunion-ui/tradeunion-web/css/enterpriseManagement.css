@@ -212,7 +212,6 @@ body {
 	position: absolute;
 	left: 0;
 	right: 0;
-	background: rgba(0, 0, 0, 0.5);
 }
 
 .centerContent>div:first-child>div>img {

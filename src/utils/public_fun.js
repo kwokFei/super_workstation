@@ -42,9 +42,10 @@ export const goTo1110 = (_this)=> {
             if(data.data.list.length > 0 ){
                 appId = data.data.list[0].id
             }
-            // console.log("http://113.204.9.70:20080/#/design/design?id=" +  appId + "&&token=" + getToken());
+            // console.log("http://113.204.9.70:20080/#/design/design?id=" +  appId + "&token=" + getToken());
+            console.log(getToken());
             window.open(
-                "http://113.204.9.70:20080/#/design/design?id=" +  appId + "&&token=" + getToken() ,
+                "http://113.204.9.70:20080/#/design/design?id=" +  appId + "&token=" + getToken() ,
                 "_blank"
             )
 

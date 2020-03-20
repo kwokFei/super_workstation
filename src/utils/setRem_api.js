@@ -1,3 +1,4 @@
+
 let setFontRem = function(){
     let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
     let htmlDome = document.getElementsByTagName('html')[0];
@@ -7,6 +8,9 @@ let setFontRem = function(){
     // console.log(htmlWidth);
     htmlDome.style.fontSize = htmlWidth / 19.20 + 'px';
 }
+
+
+
 
 window.onload = function () {
     setFontRem()

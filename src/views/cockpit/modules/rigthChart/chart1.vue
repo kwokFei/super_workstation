@@ -12,6 +12,7 @@
 <script>
     import echarts from 'echarts'
     import resize from '../mixins/resize'
+    // import {htmlRem} from '@/utils/setRem_api'
 
     export default {
         name: "chart1",
@@ -23,6 +24,7 @@
         },
         mounted() {
             this.bar1Echart()
+            // console.log(htmlRem);
         },
         methods:{
             bar1Echart(){
@@ -37,6 +39,22 @@
                 this.getData(myChart1,7,dataArr1,2000,0,arr1,5000);
                 var option1 = {
                     //animation: false,
+                    title:{
+                        show : true,
+                        text:['{mothTitle|月项目}','{value| 17}'].join(''),
+                        textStyle :{
+                            rich: {
+                                mothTitle: {
+                                    fontSize: 14,
+                                    color: '#ffffff',
+                                },
+                                value: {
+                                    fontSize: 28,
+                                    color: '#00ffff',
+                                }
+                            }
+                        },
+                    },
                     grid: {
                         left: 30,
                         right: 10,
@@ -95,6 +113,8 @@
                     series: [{
                         data: dataArr1,
                         type: 'line',
+                        smooth: true,
+                        symbol:'none',
                         areaStyle: {
                             color: {
                                 type: 'linear',

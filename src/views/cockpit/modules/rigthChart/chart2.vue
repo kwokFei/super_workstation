@@ -41,6 +41,22 @@
                         top: 50,
                         bottom: 30
                     },
+                    title:{
+                        show : true,
+                        text:['{mothTitle|本月交付}','{value| 5}'].join(''),
+                        textStyle :{
+                            rich: {
+                                mothTitle: {
+                                    fontSize: 14,
+                                    color: '#ffffff',
+                                },
+                                value: {
+                                    fontSize: 28,
+                                    color: '#00ffff',
+                                }
+                            }
+                        },
+                    },
                     xAxis: [{
                         type: 'category',
                         color: '#59588D',
