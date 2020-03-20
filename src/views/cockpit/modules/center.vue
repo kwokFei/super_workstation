@@ -61,7 +61,7 @@
         justify-content: center;
         align-items: center;
         margin: 0 0.14rem;
-        width: 0.77rem;
+        /*width: 0.77rem;*/
         height: 0.3rem;
         position: relative;
     }

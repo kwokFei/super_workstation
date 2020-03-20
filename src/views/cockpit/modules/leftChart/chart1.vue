@@ -11,6 +11,7 @@
 <script>
     import echarts from 'echarts'
     import resize from '../mixins/resize'
+    import {setFontRem} from '@/utils/setRem_api'
     export default {
         name: "chart1",
         mixins: [resize],
@@ -45,14 +46,14 @@
                     },
                     yAxis: {
                         show:false,
-                        min:0,                    //坐标轴刻度最小值。可以设置成特殊值 'dataMin'，此时取数据在该轴上的最小值作为最小刻度。不设置时会自动计算最小值保证坐标轴刻度的均匀分布。在类目轴中，也可以设置为类目的序数
+                        min:1,                    //坐标轴刻度最小值。可以设置成特殊值 'dataMin'，此时取数据在该轴上的最小值作为最小刻度。不设置时会自动计算最小值保证坐标轴刻度的均匀分布。在类目轴中，也可以设置为类目的序数
                         max:10
                     },
                     label: { //饼图图形上的文本标签
                         show: true,
                         textStyle : {
                             fontWeight : 'bold',
-                            fontSize : 22,
+                            fontSize : 0.22 * setFontRem(),
                         },
                         color: '#fff',
                         distance : 20,
@@ -91,14 +92,14 @@
                                         },
                                         textStyle : {
                                             fontWeight : 'bold',
-                                            fontSize : 18,
+                                            fontSize : 0.2 * setFontRem(),
                                         },
                                         position:'inside'
                                     }
                                 }
                             },
                             data: [
-                                [8,2,160,'28%'],
+                                [8,4,160,'28%'],
                             ]
                         },
                         {
@@ -130,7 +131,7 @@
                                     label: { //饼图图形上的文本标签
                                         textStyle : {
                                             fontWeight : 'bold',
-                                            fontSize : 14,
+                                            fontSize : 0.16 * setFontRem(),
                                         },
                                         formatter: function(res){
                                             return "正常\n" +  (res.data)[2] + "个";
@@ -140,7 +141,7 @@
                                 }
                             },
                             data: [
-                                [5,5,65,'30%'],
+                                [5,7,65,'30%'],
                             ]
                         },
                         {
@@ -172,7 +173,7 @@
                                     label: { //饼图图形上的文本标签
                                         textStyle : {
                                             fontWeight : 'bold',
-                                            fontSize : 14,
+                                            fontSize : 0.16 * setFontRem(),
                                         },
                                         formatter: function(res){
                                             return "离线\n" +  (res.data)[2] + "个";
@@ -182,7 +183,7 @@
                                 }
                             },
                             data: [
-                                [3,0,55,'8%']
+                                [3,2,55,'8%']
                             ]
                         },
                         {
@@ -214,7 +215,7 @@
                                     label: { //饼图图形上的文本标签
                                         textStyle : {
                                             fontWeight : 'bold',
-                                            fontSize : 14,
+                                            fontSize : 0.16 * setFontRem(),
                                         },
                                         formatter: function(res){
                                             return "待发布\n" +  (res.data)[2] + "个";
@@ -224,7 +225,7 @@
                                 }
                             },
                             data: [
-                                [11.5,0,40,'5%'],
+                                [11.5,2,40,'5%'],
                             ]
                         }
                     ]

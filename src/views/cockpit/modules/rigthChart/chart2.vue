@@ -13,6 +13,7 @@
 <script>
     import echarts from 'echarts'
     import resize from '../mixins/resize'
+    import {setFontRem} from '@/utils/setRem_api'
     export default {
         name: "chart2",
         mixins: [resize],
@@ -38,7 +39,7 @@
                     grid: {
                         left: 40,
                         right: 10,
-                        top: 50,
+                        top: 70,
                         bottom: 30
                     },
                     title:{
@@ -47,15 +48,16 @@
                         textStyle :{
                             rich: {
                                 mothTitle: {
-                                    fontSize: 14,
+                                    fontSize: 0.14 * setFontRem() ,
                                     color: '#ffffff',
                                 },
                                 value: {
-                                    fontSize: 28,
+                                    fontSize: 0.28 * setFontRem() ,
                                     color: '#00ffff',
                                 }
                             }
                         },
+                        top : 0.2 * setFontRem(),
                     },
                     xAxis: [{
                         type: 'category',

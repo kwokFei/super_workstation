@@ -12,7 +12,7 @@
 <script>
     import echarts from 'echarts'
     import resize from '../mixins/resize'
-    // import {htmlRem} from '@/utils/setRem_api'
+    import {setFontRem} from '@/utils/setRem_api'
 
     export default {
         name: "chart1",
@@ -24,7 +24,7 @@
         },
         mounted() {
             this.bar1Echart()
-            // console.log(htmlRem);
+            // console.log(setFontRem());
         },
         methods:{
             bar1Echart(){
@@ -45,21 +45,22 @@
                         textStyle :{
                             rich: {
                                 mothTitle: {
-                                    fontSize: 14,
+                                    fontSize: 0.14 * setFontRem() ,
                                     color: '#ffffff',
                                 },
                                 value: {
-                                    fontSize: 28,
+                                    fontSize: 0.32 * setFontRem(),
                                     color: '#00ffff',
                                 }
                             }
                         },
+                        top : 0.2 * setFontRem() ,
                     },
                     grid: {
-                        left: 30,
+                        left: 40,
                         right: 10,
-                        top: 50,
-                        bottom: 20
+                        top: 70,
+                        bottom: 30
                     },
                     axisLabel :{
                         textStyle: {

@@ -410,7 +410,7 @@
                 // console.log(series);
 
                 let option = {
-                    backgroundColor: '#080a20',
+                    // backgroundColor: '#080a20',
                     tooltip: {
                         trigger: 'item',
                         enterable:true,
