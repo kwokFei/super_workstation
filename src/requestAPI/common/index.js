@@ -1,11 +1,14 @@
 import axios from 'axios'
 
-var instance = axios.create({
-    timeout: 1000 * 5
+export var instance = axios.create({
+    timeout: 1000 * 5,
+    headers : {
+      accessToken : null,
+    }
 });
 
 
-export const getAxios  =  function (url, params){
+export const getAxios  =  function (url, params,_this){
     return new Promise((resolve, reject) =>{
         instance.get(url, {
             params: params
@@ -29,7 +32,8 @@ export const postAxios  = function (url,data = {},_this){
     return new Promise((resolve,reject) => {
         instance.post(url,data)
             .then(response => {
-                if(response.data.status === 200){
+              console.log(response);
+              if(response.data.status === 200){
                     resolve(response.data);
                     // resolve(response.data);
                 }else{

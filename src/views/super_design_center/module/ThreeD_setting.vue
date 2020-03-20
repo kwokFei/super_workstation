@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        name: "3d_setting"
+        name: "threeD_setting"
     }
 </script>
 

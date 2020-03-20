@@ -63,25 +63,48 @@
                     <p class="">创建UI</p>
                     <span @click="addTemplate">X</span>
                 </div>
-<!--                <el-select v-model="value" placeholder="请选择">-->
-<!--                    <el-option-->
-<!--                            v-for="item in options"-->
-<!--                            :key="item.value"-->
-<!--                            :label="item.label"-->
-<!--                            :value="item.value">-->
-<!--                    </el-option>-->
-<!--                </el-select>-->
-<!--                <el-select v-model="value1" placeholder="请选择">-->
-<!--                            <el-option-->
-<!--                                    v-for="item in options1"-->
-<!--                                    :key="item.value"-->
-<!--                                    :label="item.label"-->
-<!--                                    :value="item.value">-->
-<!--                            </el-option>-->
-<!--                        </el-select>-->
-                <div class="btns">
-                    <button>123</button>
-                    <button>123</button>
+                <div class="listUIBox">
+                    <p>
+                        <span>产品编号:</span>
+                        <el-select v-model="value" placeholder="请选择" style="width: 3rem">
+                            <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </p>
+                    <p>
+                        <span>产品名称:</span>
+                        <el-input style="width: 3rem" v-model="proName"></el-input>
+                    </p>
+                    <p>
+                        <span>产品类型:</span>
+                        <el-select v-model="value1" placeholder="请选择" style="width: 3rem">
+                            <el-option
+                                    v-for="item in options2"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </p>
+                    <p>
+                        <span>通讯类型:</span>
+                        <el-select v-model="value2" placeholder="请选择" style="width: 3rem">
+                            <el-option
+                                    v-for="item in options1"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </p>
+                    <div class="btns">
+                        <el-button type="primary" @click="addBtn">确认</el-button>
+                        <el-button type="primary" plain @click="outBtn">取消</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,6 +121,8 @@
                 num:'',
                 value:'',
                 value1:"",
+                value2:"",
+                proName:'',
                 isMaxShow:'',
                 isMinShow:'',
                 options:[
@@ -136,6 +161,20 @@
                   label:'局域网'
                 },
               ],
+                options2:[
+                {
+                  value:"以太网",
+                  label:'以太网'
+                },
+                {
+                  value:"网关",
+                  label:'网关'
+                },
+                {
+                  value:" ZigBee",
+                  label:'ZigBee'
+                }
+              ],
                 navData:[
                     {
                         name:'我的UI设计',
@@ -169,19 +208,24 @@
                         createTime:'2020 3.12 12:00'
                     }
                 ],
-                form:{
-                    pro_type:'',
-                    pro_name:'',
-                    pro_code:'',
-                    pro_inter:'',
-                    pro_img:'',
-                    pro_time:new Date()
-                }
             }
         },
         methods:{
             addTemplate(){
                 this.isTemplate = !this.isTemplate;
+            },
+            // 添加数据
+            addBtn(){
+              this.dataList.push({
+                imgUrl:require('../../assets/img/user/listBj002.png'),
+                name:this.proName,
+                createTime:'2020-03-24 12:00'
+              })
+              this.isTemplate = false;
+            },
+            // 关闭蒙版
+            outBtn(){
+              this.isTemplate = false;
             },
 
             addClass(index){
@@ -450,5 +494,23 @@
         width: 0.2rem;
         height: 0.2rem;
         line-height: 0.2rem;
+    }
+    .listUIBox{
+        margin-top: 0.3rem;
+        width: 100%;
+    }
+    .listUIBox p{
+        width: 100%;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        padding-left: 0.5rem;
+        line-height: 0.6rem;
+    }
+    .listUIBox p span{
+        margin-right: 0.3rem;
+    }
+    .btns{
+        margin-top: 0.3rem;
     }
 </style>

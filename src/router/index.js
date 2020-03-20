@@ -328,7 +328,7 @@ const routes = [
       },
       {
         path:'/ThreeD_setting',
-        name:'3d_setting',
+        name:'ThreeD_setting',
         component:() => import('@/views/super_design_center/module/ThreeD_setting'),
       },
       {

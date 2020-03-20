@@ -63,28 +63,27 @@
                     <p class="">创建模板</p>
                     <span @click="addTemplate">X</span>
                 </div>
-                <el-form v-model="form" label-width="120px">
-                    <el-form-item label="产品编号">
-<!--                        <el-select v-model="value" placeholder="请选择">-->
-<!--                            <el-option-->
-<!--                                    v-for="item in options"-->
-<!--                                    :key="item.value"-->
-<!--                                    :label="item.label"-->
-<!--                                    :value="item.value">-->
-<!--                            </el-option>-->
-<!--                        </el-select>-->
-                        <!--                        <el-input v-model="form.pro_name"></el-input>-->
-                    </el-form-item>
-                    <el-form-item label="产品名称">
-                        <el-input v-model="form.pro_name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="通讯类型">
-                        <el-input v-model="form.pro_inter"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div class="btns">
-                    <button>123</button>
-                    <button>123</button>
+                <div class="listUIBox">
+                    <p>
+                        <span>选择行业:</span>
+                        <business-cascader style="width:3rem" @handleChangeBusiness = handleChangeBusiness></business-cascader>
+                    </p>
+                    <p>
+                        <span>模块名称:</span>
+                        <el-input style="width: 3rem" v-model="temName"></el-input>
+                    </p>
+                    <p>
+                        <span>模块高度:</span>
+                        <el-input style="width: 3rem" v-model="temHeight"></el-input>
+                    </p>
+                    <p>
+                        <span>模块宽度:</span>
+                        <el-input style="width: 3rem" v-model="temWidth"></el-input>
+                    </p>
+                    <div class="btns">
+                        <el-button type="primary" @click="addBtn">确认</el-button>
+                        <el-button type="primary" plain @click="outBtn">取消</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,13 +92,21 @@
 
 <script>
     import {goTo1110} from '@/utils/public_fun'
+    import businessCascader from '@/components/cascader/Cascader'
     export default {
         name: "index",
+        components:{
+          businessCascader
+        },
         data(){
         return{
           isTemplate:false,
           title:'我的系统模板',
           num:'',
+          temName:'',
+          temHeight:'',
+          temWidth:'',
+          business:'',
           isMaxShow:'',
           isMinShow:'',
           navData:[
@@ -135,24 +142,28 @@
               createTime:'2020 3.12 12:00'
             }
           ],
-          form:{
-            pro_type:'',
-            pro_name:'',
-            pro_code:'',
-            pro_inter:'',
-            pro_img:'',
-            pro_time:new Date()
-          }
         }
       },
         methods:{
             goTo1110(){
-                goTo1110()
+                goTo1110(this)
             },
           addTemplate(){
             this.isTemplate = !this.isTemplate;
           },
-
+          // 添加数据
+          addBtn(){
+            this.dataList.push({
+              imgUrl:require('../../assets/img/user/listBj002.png'),
+              name:this.temName,
+              createTime:'2020-03-24 16:00'
+            })
+            this.isTemplate = false;
+          },
+          // 关闭蒙版
+          outBtn(){
+            this.isTemplate = false;
+          },
           addClass(index){
             this.num = index;
             this.title = this.navData[index].name;
@@ -176,6 +187,10 @@
           handleRemoveItem(index){
             this.dataList.splice(index, 1);
           },
+          //选择行业
+          handleChangeBusiness(value){
+            this.business = value
+          }
         }
     }
 </script>
@@ -401,7 +416,9 @@
         font-size: 0.16rem;
         height: 0.4rem;
         width: 100%;
+        color: white;
         line-height: 0.4rem;
+        background: #0C76FB;
         padding:0 0.1rem;
         border-bottom: 1px solid rgba(0,0,0,0.1);
     }
@@ -411,6 +428,23 @@
         width: 0.2rem;
         height: 0.2rem;
         line-height: 0.2rem;
-        border: 1px solid rgba(0,0,0,0.2);
+    }
+    .listUIBox{
+        margin-top: 0.3rem;
+        width: 100%;
+    }
+    .listUIBox p{
+        width: 100%;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        padding-left: 0.5rem;
+        line-height: 0.6rem;
+    }
+    .listUIBox p span{
+        margin-right: 0.3rem;
+    }
+    .btns{
+        margin-top: 0.3rem;
     }
 </style>
