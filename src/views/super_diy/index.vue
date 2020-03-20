@@ -64,22 +64,16 @@
                     <span @click="addTemplate">X</span>
                 </div>
                 <div class="listUIBox">
+
                     <p>
-                        <span>选&nbsp;择&nbsp;行&nbsp;业:</span>
-                        <business-cascader style="width:3rem" @handleChangeBusiness = handleChangeBusiness></business-cascader>
+                        <span>diy名称:</span>
+                        <el-input style="width: 3rem" v-model="diyName"></el-input>
                     </p>
                     <p>
-                        <span>驾驶舱名称:</span>
-                        <el-input style="width: 3rem" v-model="jscName"></el-input>
+                        <span>版&nbsp;本&nbsp;号:</span>
+                        <el-input style="width: 3rem" v-model="diybbh"></el-input>
                     </p>
-                    <p>
-                        <span>模&nbsp;块&nbsp;高&nbsp;度:</span>
-                        <el-input style="width: 3rem" v-model="jscHeight"></el-input>
-                    </p>
-                    <p>
-                        <span>模&nbsp;块&nbsp;宽&nbsp;度:</span>
-                        <el-input style="width: 3rem" v-model="jscWidth"></el-input>
-                    </p>
+
                     <div class="btns">
                         <el-button type="primary" @click="addBtn">确认</el-button>
                         <el-button type="primary" plain @click="outBtn">取消</el-button>
@@ -91,20 +85,16 @@
 </template>
 
 <script>
-  import businessCascader from '@/components/cascader/Cascader'
     export default {
         name: "index",
-          components:{
-            businessCascader
-          },
+
         data(){
         return{
           isTemplate:false,
           title:'我的diy编码',
           num:'',
-          jscName:'',
-          jscHeight:'',
-          jscWidth:'',
+          diyName:'',
+          diybbh:'',
           isMaxShow:'',
           isMinShow:'',
           navData:[
@@ -130,14 +120,6 @@
               createTime:'2020 3.12 12:00'
             }
           ],
-          form:{
-            pro_type:'',
-            pro_name:'',
-            pro_code:'',
-            pro_inter:'',
-            pro_img:'',
-            pro_time:new Date()
-          }
         }
       },
         methods:{
@@ -147,9 +129,9 @@
           // 添加数据
           addBtn(){
             this.dataList.push({
-              imgUrl:require('../../assets/img/user/listBj004.png'),
-              name:this.jscName,
-              createTime:'2020-03-24 08:00'
+              imgUrl:require('../../assets/img/user/listBJ005.png'),
+              name:this.diyName,
+              createTime:'2020-03-24 11:00'
             })
             this.isTemplate = false;
           },
@@ -402,7 +384,7 @@
         left: 50%;
         transform: translate(-50%,-50%);
         width: 6rem;
-        height: 5rem;
+        height: 3rem;
         background: white;
         border-radius: 0.08rem;
         overflow: hidden;
