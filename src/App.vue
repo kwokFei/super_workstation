@@ -11,7 +11,7 @@
     box-sizing: border-box;
   }
   [v-cloak] {
-    display: none !important;
+        display: none !important;
   }
 #app {
   /*width: 19.2rem;*/

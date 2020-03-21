@@ -235,7 +235,7 @@
                 document.getElementById('bar3').style.height = "3.3rem";
                 setTimeout(function () {
                     myChart3.resize();
-                },100)
+                },1500)
             },
         }
     }

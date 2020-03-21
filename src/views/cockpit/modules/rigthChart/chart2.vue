@@ -119,7 +119,7 @@
                 document.getElementById('bar2').style.height = "2.5rem";
                 setTimeout(function () {
                     myChart1.resize();
-                },100)
+                },1500)
 
             },
             getData(theChart,sum,dataoption,x,y,result,time){

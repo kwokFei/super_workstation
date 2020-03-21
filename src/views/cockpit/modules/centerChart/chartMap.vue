@@ -499,7 +499,7 @@
                 document.getElementById('ec_map').style.height = "7.61rem";
                 setTimeout(function () {
                     chart.resize();
-                },100)
+                },1500)
             }
         }
     }
