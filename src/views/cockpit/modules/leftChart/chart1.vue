@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import echarts from 'echarts'
+    // import echarts from 'echarts'
     import resize from '../mixins/resize'
     export default {
         name: "chart1",
@@ -24,7 +24,7 @@
         },
         methods:{
             leftOneEchart(){
-                var myChart3 = echarts.init(document.getElementById('bar3'));
+                var myChart3 = this.$echarts.init(document.getElementById('bar3'));
                 this.chart = myChart3;
                 setInterval(function(){
                     var chartoption3 = myChart3.getOption();

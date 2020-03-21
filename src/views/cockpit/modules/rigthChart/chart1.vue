@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import echarts from 'echarts'
+    // import echarts from 'echarts'
     import resize from '../mixins/resize'
     // import {htmlRem} from '@/utils/setRem_api'
 
@@ -29,7 +29,7 @@
         methods:{
             bar1Echart(){
 
-                var myChart1 = echarts.init(document.getElementById('bar1'));
+                var myChart1 = this.$echarts.init(document.getElementById('bar1'));
                 this.chart = myChart1;
                 var dataArr1 = [];
                 for(var i=0;i<7;i++){

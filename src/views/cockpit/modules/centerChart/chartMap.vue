@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import echarts from 'echarts'
+    // import echarts from 'echarts'
     import '@/assets/js/china'
     import resize from '../mixins/resize'
     export default {
@@ -21,7 +21,7 @@
         },
         methods:{
             chartMap(){
-                var chart = echarts.init(document.getElementById('ec_map'));
+                var chart = this.$echarts.init(document.getElementById('ec_map'));
                 this.chart = chart;
                 var geoCoordMap = {
                     '新疆玛纳斯基地': [86.22, 44.30],
