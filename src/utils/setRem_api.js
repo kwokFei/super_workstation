@@ -1,5 +1,5 @@
 
-let setFontRem = function(){
+export var setFontRem = function(){
     let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
     let htmlDome = document.getElementsByTagName('html')[0];
     // if(htmlWidth < 1200){
@@ -7,6 +7,7 @@ let setFontRem = function(){
     // }
     // console.log(htmlWidth);
     htmlDome.style.fontSize = htmlWidth / 19.20 + 'px';
+    return htmlWidth / 19.20
 }
 
 

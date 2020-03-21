@@ -56,17 +56,9 @@ export default {
     },
 
     //渲染
-    echart_show(obj , time = 1000) {
+    echart_show(obj) {
       document.getElementById(obj.dom).style.width = obj.width;
       document.getElementById(obj.dom).style.height = obj.height;
-      setTimeout(function () {
-        obj.echartDom.resize();
-      }, time)
-      // document.getElementById('ec_map').style.width = "100%";
-      // document.getElementById('ec_map').style.height = "7.61rem";
-      // setTimeout(function () {
-      //     chart.resize();
-      // },1500)
     }
 
   }

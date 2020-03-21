@@ -8,6 +8,7 @@
     // import echarts from 'echarts'
     import '@/assets/js/china'
     import resize from '../mixins/resize'
+    import {setFontRem} from '@/utils/setRem_api'
     export default {
         name: "chartMap",
         mixins: [resize],
@@ -21,6 +22,11 @@
         },
         methods:{
             chartMap(){
+                this.echart_show({
+                    dom : "ec_map",
+                    width : setFontRem() * 11.02 + "px",
+                    height : setFontRem() *  7.61 + "px"
+                })
                 var chart = this.$echarts.init(document.getElementById('ec_map'));
                 this.chart = chart;
                 var geoCoordMap = {
@@ -493,15 +499,17 @@
                     series: series
                 };
 
-                chart.setOption(option);
 
+                 chart.setOption(option);
 
-                this.echart_show({
+        
+                 this.echart_show({
                     dom : "ec_map",
-                    width : "100%",
-                    height : "7.61rem",
-                    echartDom : chart,
-                },1500)
+                    width :  "11.02rem",
+                    height : "7.61rem"
+                })
+               
+
             }
         }
     }
