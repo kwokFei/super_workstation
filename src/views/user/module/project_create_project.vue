@@ -28,15 +28,41 @@
                 <span>创建时间</span>
                 <span>操作</span>
             </div>
-            <div class="headerBox" v-for="(item,index) in proListData" :key="index">
-                <span>{{index + 1}}</span>
-                <span>{{item.proName}}</span>
-                <span>{{item.proHead}}</span>
-                <span :class="addColor">{{item.proStat}}</span>
-                <span>{{item.createPeople}}</span>
-                <span>{{item.createTime}}</span>
+            <div class="headerBox">
+                <span>1</span>
+                <span>中意智慧家居</span>
+                <span>邹达海</span>
+                <span style="color: #2ea47c">已立项</span>
+                <span>易仁军</span>
+                <span>2019-09-02 15:20:17</span>
                 <span>
                     <span>-</span>
+                </span>
+            </div>
+            <div class="headerBox" style="background-color: rgba(207,288,255,0.3)">
+                <span>2</span>
+                <span>北碚智慧市政</span>
+                <span>邹达海</span>
+                <span style="color: #f35858">待立项</span>
+                <span>黄杰</span>
+                <span>2019-09-02 15:20:17</span>
+                <span class="czBox">
+                    <button style="background-color: #f35858">删除</button>
+                    <button style="background-color: #3d7aae">编辑</button>
+                    <button style="background-color: #1272fd">申请立项</button>
+                </span>
+            </div>
+            <div class="headerBox">
+                <span>3</span>
+                <span>汶山养老</span>
+                <span>罗乐</span>
+                <span style="color: #1272fd">审核中</span>
+                <span>黄杰</span>
+                <span>2019-09-02 15:20:17</span>
+                <span class="czBox">
+                    <button style="background-color: #f35858">删除</button>
+                    <button style="background-color: #3d7aae">编辑</button>
+                    <button style="background-color: #1272fd">申请立项</button>
                 </span>
             </div>
         </div>
@@ -66,25 +92,11 @@
             ],
             proListData:[
               {
-                proName:'中意智慧家居',
-                proHead:'邹达海',
-                proStat:'已立项',
-                createPeople:'易仁军',
-                createTime:'2019-09-02 15:20:17',
-              },
-              {
-                proName:'北碚智慧市政',
-                proHead:'邹达海',
-                proStat:'待立项',
-                createPeople:'黄杰',
-                createTime:'2019-09-02 15:20:17',
-              },
-              {
-                proName:'汶山养老',
-                proHead:'罗乐',
-                proStat:'审核中',
-                createPeople:'黄杰',
-                createTime:'2019-09-02 15:20:17',
+                proName:'',
+                proHead:'',
+                proStat:'',
+                createPeople:'',
+                createTime:'',
               }
             ]
           }
@@ -122,7 +134,6 @@
         width: 100%;
         height: 0.48rem;
         line-height: 0.48rem;
-        border: 1px solid red;
     }
     .proListBox .headerBox:nth-child(1){
         background-color: #d0e3ff !important;
@@ -160,6 +171,19 @@
     }
     .headerBox span:nth-child(7){
         width: 2rem;
+    }
+    .czBox{
+        display: inline-block;
+    }
+    .czBox button{
+        padding: 0.06rem 0.08rem;
+        font-size: 0.14rem;
+        margin: 0 0.04rem;
+        border-radius: 0.04rem;
+        border: none;
+        outline: none;
+        color: white;
+        cursor: pointer;
     }
 
 </style>
