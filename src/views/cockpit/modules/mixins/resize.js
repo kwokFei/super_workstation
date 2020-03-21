@@ -1,4 +1,6 @@
-import { debounce } from '@/utils/public_fun'
+import {
+  debounce
+} from '@/utils/public_fun'
 
 export default {
   data() {
@@ -9,7 +11,7 @@ export default {
   },
   mounted() {
     this.$_resizeHandler = debounce(() => {
-        if (this.chart) {
+      if (this.chart) {
         this.chart.resize()
       }
     }, 100)
@@ -51,6 +53,21 @@ export default {
     },
     $_destroySidebarResizeEvent() {
       this.$_sidebarElm && this.$_sidebarElm.removeEventListener('transitionend', this.$_sidebarResizeHandler)
+    },
+
+    //渲染
+    echart_show(obj , time = 1000) {
+      document.getElementById(obj.dom).style.width = obj.width;
+      document.getElementById(obj.dom).style.height = obj.height;
+      setTimeout(function () {
+        obj.echartDom.resize();
+      }, time)
+      // document.getElementById('ec_map').style.width = "100%";
+      // document.getElementById('ec_map').style.height = "7.61rem";
+      // setTimeout(function () {
+      //     chart.resize();
+      // },1500)
     }
+
   }
 }

@@ -231,11 +231,18 @@
                 };
                 myChart3.setOption(option3);
                 // console.log(option3);
-                document.getElementById('bar3').style.width = "100%";
-                document.getElementById('bar3').style.height = "3.3rem";
-                setTimeout(function () {
-                    myChart3.resize();
-                },1500)
+                // document.getElementById('bar3').style.width = "100%";
+                // document.getElementById('bar3').style.height = "3.3rem";
+                // setTimeout(function () {
+                //     myChart3.resize();
+                // },2000)
+
+                 this.echart_show({
+                    dom : "bar3",
+                    width : "100%",
+                    height : "3.3rem",
+                    echartDom : myChart3,
+                },2000)
             },
         }
     }

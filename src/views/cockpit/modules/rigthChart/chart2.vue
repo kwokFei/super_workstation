@@ -115,10 +115,17 @@
                     }]
                 };
                 myChart1.setOption(option1);
-                document.getElementById('bar2').style.width = "100%";
-                document.getElementById('bar2').style.height = "2.5rem";
-                setTimeout(function () {
-                    myChart1.resize();
+                // document.getElementById('bar2').style.width = "100%";
+                // document.getElementById('bar2').style.height = "2.5rem";
+                // setTimeout(function () {
+                //     myChart1.resize();
+                // },1500)
+
+                 this.echart_show({
+                    dom : "bar2",
+                    width : "100%",
+                    height : "2.6rem",
+                    echartDom : myChart1,
                 },1500)
 
             },

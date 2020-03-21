@@ -149,10 +149,17 @@
                     }]
                 };
                 myChart1.setOption(option1);
-                document.getElementById('bar1').style.width = "100%";
-                document.getElementById('bar1').style.height = "2.6rem";
-                setTimeout(function () {
-                    myChart1.resize();
+                // document.getElementById('bar1').style.width = "100%";
+                // document.getElementById('bar1').style.height = "2.6rem";
+                // setTimeout(function () {
+                //     myChart1.resize();
+                // },1500)
+
+                this.echart_show({
+                    dom : "bar1",
+                    width : "100%",
+                    height : "2.6rem",
+                    echartDom : myChart1,
                 },1500)
 
             },

@@ -495,10 +495,12 @@
 
                 chart.setOption(option);
 
-                document.getElementById('ec_map').style.width = "100%";
-                document.getElementById('ec_map').style.height = "7.61rem";
-                setTimeout(function () {
-                    chart.resize();
+
+                this.echart_show({
+                    dom : "ec_map",
+                    width : "100%",
+                    height : "7.61rem",
+                    echartDom : chart,
                 },1500)
             }
         }
