@@ -4,6 +4,7 @@
   </div>
 </template>
 
+
 <style>
   *{
     padding: 0;
