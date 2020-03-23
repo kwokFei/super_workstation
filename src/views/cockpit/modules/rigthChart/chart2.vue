@@ -53,6 +53,7 @@ export default {
         },
         title: {
           show: true,
+          top : 0.2 * setFontRem(),
           text: ["{mothTitle|本月交付}", "{value| 5}"].join(""),
           textStyle: {
             rich: {
@@ -141,16 +142,8 @@ export default {
         ]
       };
 
-      // this.echart_show({
-      //     dom : "bar2",
-      //     width : "100%",
-      //     height : "2.6rem",
-      //     echartDom : myChart1,
-      // },1500)
 
       myChart1.setOption(option1);
-      // document.getElementById('bar2').style.width = "100%";
-      // document.getElementById('bar2').style.height = "2.5rem";
       this.echart_show({
         dom: "bar2",
         width: "3.62rem",

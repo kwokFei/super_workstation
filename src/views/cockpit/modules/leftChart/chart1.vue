@@ -46,12 +46,12 @@ export default {
         },
         xAxis: {
           show: false,
-          min: 0, //坐标轴刻度最小值。可以设置成特殊值 'dataMin'，此时取数据在该轴上的最小值作为最小刻度。不设置时会自动计算最小值保证坐标轴刻度的均匀分布。在类目轴中，也可以设置为类目的序数
+          min: -5, //坐标轴刻度最小值。可以设置成特殊值 'dataMin'，此时取数据在该轴上的最小值作为最小刻度。不设置时会自动计算最小值保证坐标轴刻度的均匀分布。在类目轴中，也可以设置为类目的序数
           max: 20
         },
         yAxis: {
           show: false,
-          min: 0, //坐标轴刻度最小值。可以设置成特殊值 'dataMin'，此时取数据在该轴上的最小值作为最小刻度。不设置时会自动计算最小值保证坐标轴刻度的均匀分布。在类目轴中，也可以设置为类目的序数
+          min: -1, //坐标轴刻度最小值。可以设置成特殊值 'dataMin'，此时取数据在该轴上的最小值作为最小刻度。不设置时会自动计算最小值保证坐标轴刻度的均匀分布。在类目轴中，也可以设置为类目的序数
           max: 10
         },
         label: {
@@ -79,24 +79,11 @@ export default {
               //图形样式，normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
               normal: {
                 opacity: 1,
-                color: function(data) {
-                  var colornum = data.data[2];
-                  if (colornum >= 90) {
-                    return "#0082FC";
-                  } else if (colornum < 90 && colornum >= 70) {
-                    return "#00FDF3";
-                  } else if (colornum < 70 && colornum > 50) {
-                    return "#FE663F";
-                  } else if (colornum <= 50 && colornum >= 0) {
-                    return "#58ADFF";
-                  } else {
-                    return "#fff";
-                  }
-                },
+                color: '#0082FC',
                 label: {
                   //饼图图形上的文本标签
                   formatter: function(res) {
-                    return "总项目\n" + res.data[2] + "个";
+                    return "总项目\n" + 113 + "个";
                   },
                   textStyle: {
                     fontWeight: "bold",
@@ -106,7 +93,7 @@ export default {
                 }
               }
             },
-            data: [[8, 2, 160, "28%"]]
+            data: [[8, 2, parseInt(1.6 * setFontRem()), "28%"]]
           },
           {
             name: "正常",
@@ -121,20 +108,7 @@ export default {
               //图形样式，normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
               normal: {
                 opacity: 1,
-                color: function(data) {
-                  var colornum = data.data[2];
-                  if (colornum >= 90) {
-                    return "#0082FC";
-                  } else if (colornum < 90 && colornum >= 65) {
-                    return "#00FDF3";
-                  } else if (colornum < 65 && colornum > 50) {
-                    return "#FE663F";
-                  } else if (colornum <= 50 && colornum >= 0) {
-                    return "#58ADFF";
-                  } else {
-                    return "#fff";
-                  }
-                },
+                color: "#00FDF3",
                 label: {
                   //饼图图形上的文本标签
                   textStyle: {
@@ -142,13 +116,13 @@ export default {
                     fontSize: 0.18 * setFontRem()
                   },
                   formatter: function(res) {
-                    return "正常\n" + res.data[2] + "个";
+                    return "正常\n" + 45 + "个";
                   },
                   position: "left"
                 }
               }
             },
-            data: [[5, 5, 65, "30%"]]
+            data: [[5, 5, parseInt(0.65 * setFontRem()), "30%"]]
           },
           {
             name: "离线",
@@ -163,20 +137,7 @@ export default {
               //图形样式，normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
               normal: {
                 opacity: 1,
-                color: function(data) {
-                  var colornum = data.data[2];
-                  if (colornum >= 90) {
-                    return "#0082FC";
-                  } else if (colornum < 90 && colornum >= 65) {
-                    return "#00FDF3";
-                  } else if (colornum < 65 && colornum > 50) {
-                    return "#FE663F";
-                  } else if (colornum <= 50 && colornum >= 0) {
-                    return "#58ADFF";
-                  } else {
-                    return "#fff";
-                  }
-                },
+                color:"#FE663F",
                 label: {
                   //饼图图形上的文本标签
                   textStyle: {
@@ -184,13 +145,13 @@ export default {
                     fontSize:0.18 * setFontRem()
                   },
                   formatter: function(res) {
-                    return "离线\n" + res.data[2] + "个";
+                    return "离线\n" + 38 + "个";
                   },
                   position: "left"
                 }
               }
             },
-            data: [[3, 0, 55, "8%"]]
+            data: [[3, 0, parseInt(0.55 * setFontRem()), "8%"]]
           },
           {
             name: "待发布",
@@ -205,20 +166,7 @@ export default {
               //图形样式，normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
               normal: {
                 opacity: 1,
-                color: function(data) {
-                  var colornum = data.data[2];
-                  if (colornum >= 90) {
-                    return "#0082FC";
-                  } else if (colornum < 90 && colornum >= 70) {
-                    return "#00FDF3";
-                  } else if (colornum < 70 && colornum > 50) {
-                    return "#FE663F";
-                  } else if (colornum <= 50 && colornum >= 0) {
-                    return "#58ADFF";
-                  } else {
-                    return "#fff";
-                  }
-                },
+                color: "#58ADFF",
                 label: {
                   //饼图图形上的文本标签
                   textStyle: {
@@ -226,13 +174,13 @@ export default {
                     fontSize: 0.18 * setFontRem()
                   },
                   formatter: function(res) {
-                    return "待发布\n" + res.data[2] + "个";
+                    return "待发布\n" + 28 + "个";
                   },
                   position: "right"
                 }
               }
             },
-            data: [[11.5, 0, 40, "5%"]]
+            data: [[11.5, 0, parseInt(0.4 * setFontRem()), "5%"]]
           }
         ]
       };
@@ -244,19 +192,6 @@ export default {
         width: "3.62rem",
         height: "3.3rem"
       });
-      // console.log(option3);
-      // document.getElementById('bar3').style.width = "100%";
-      // document.getElementById('bar3').style.height = "3.3rem";
-      // setTimeout(function () {
-      //     myChart3.resize();
-      // },2000)
-
-      //  this.echart_show({
-      //     dom : "bar3",
-      //     width : "100%",
-      //     height : "3.3rem",
-      //     echartDom : myChart3,
-      // },2000)
     }
   }
 };

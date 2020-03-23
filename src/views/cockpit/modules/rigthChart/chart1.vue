@@ -48,6 +48,7 @@ export default {
         //animation: false,
         title: {
           show: true,
+          top : 0.2 * setFontRem(),
           text: ["{mothTitle|月项目}", "{value| 17}"].join(""),
           textStyle: {
             rich: {
@@ -170,18 +171,6 @@ export default {
         width: "3.62rem",
         height: "2.5rem"
       });
-      // document.getElementById('bar1').style.width = "100%";
-      // document.getElementById('bar1').style.height = "2.6rem";
-      // setTimeout(function () {
-      //     myChart1.resize();
-      // },1500)
-
-      // this.echart_show({
-      //     dom : "bar1",
-      //     width : "100%",
-      //     height : "2.6rem",
-      //     echartDom : myChart1,
-      // },1500)
     },
     getData(theChart, sum, dataoption, x, y, result, time) {
       var timer = setInterval(function() {
