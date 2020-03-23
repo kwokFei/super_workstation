@@ -60,31 +60,23 @@
         <div class="templateBox" v-show="isTemplate">
             <div class="mintTem">
                 <div class="titleName">
-                    <p class="">创建3D</p>
+                    <p class="">新建3D</p>
                     <span @click="addTemplate">X</span>
                 </div>
-                <el-form v-model="form" label-width="120px">
-                    <el-form-item label="产品编号">
-<!--                        <el-select v-model="value" placeholder="请选择">-->
-<!--                            <el-option-->
-<!--                                    v-for="item in options"-->
-<!--                                    :key="item.value"-->
-<!--                                    :label="item.label"-->
-<!--                                    :value="item.value">-->
-<!--                            </el-option>-->
-<!--                        </el-select>-->
-                        <!--                        <el-input v-model="form.pro_name"></el-input>-->
-                    </el-form-item>
-                    <el-form-item label="产品名称">
-                        <el-input v-model="form.pro_name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="通讯类型">
-                        <el-input v-model="form.pro_inter"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div class="btns">
-                    <button>123</button>
-                    <button>123</button>
+                <div class="listUIBox">
+                    <p>
+                        <span>3D名称:</span>
+                        <el-input style="width: 3rem" v-model="DDName"></el-input>
+                    </p>
+                    <p>
+                        <span>版&nbsp;本&nbsp;号:</span>
+                        <el-input style="width: 3rem" v-model="DDbbh"></el-input>
+                    </p>
+
+                    <div class="btns">
+                        <el-button type="primary" @click="addBtn">确认</el-button>
+                        <el-button type="primary" plain @click="outBtn">取消</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,6 +91,8 @@
           isTemplate:false,
           title:'我的3D设计',
           num:'',
+          DDName:'',
+          DDbbh:'',
           isMaxShow:'',
           isMinShow:'',
           navData:[
@@ -153,6 +147,19 @@
             },
           addTemplate(){
             this.isTemplate = !this.isTemplate;
+          },
+          // 添加数据
+          addBtn(){
+            this.dataList.push({
+              imgUrl:require('../../assets/img/user/listBj004.png'),
+              name:this.DDName,
+              createTime:'2020-03-24 14:00'
+            })
+            this.isTemplate = false;
+          },
+          // 关闭蒙版
+          outBtn(){
+            this.isTemplate = false;
           },
 
           addClass(index){
@@ -389,7 +396,7 @@
         left: 50%;
         transform: translate(-50%,-50%);
         width: 6rem;
-        height: 5rem;
+        height: 3rem;
         background: white;
         border-radius: 0.08rem;
         overflow: hidden;
@@ -405,6 +412,8 @@
         width: 100%;
         line-height: 0.4rem;
         padding:0 0.1rem;
+        background: #0C76FB;
+        color: white;
         border-bottom: 1px solid rgba(0,0,0,0.1);
     }
     .titleName>span{
@@ -413,6 +422,23 @@
         width: 0.2rem;
         height: 0.2rem;
         line-height: 0.2rem;
-        border: 1px solid rgba(0,0,0,0.2);
+    }
+    .listUIBox{
+        margin-top: 0.3rem;
+        width: 100%;
+    }
+    .listUIBox p{
+        width: 100%;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        padding-left: 0.5rem;
+        line-height: 0.6rem;
+    }
+    .listUIBox p span{
+        margin-right: 0.3rem;
+    }
+    .btns{
+        margin-top: 0.3rem;
     }
 </style>

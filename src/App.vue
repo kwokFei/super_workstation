@@ -4,6 +4,7 @@
   </div>
 </template>
 
+
 <style>
   *{
     padding: 0;
@@ -11,7 +12,7 @@
     box-sizing: border-box;
   }
   [v-cloak] {
-    display: none !important;
+        display: none !important;
   }
 #app {
   /*width: 19.2rem;*/

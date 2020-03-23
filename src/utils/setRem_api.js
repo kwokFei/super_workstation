@@ -7,7 +7,7 @@ export var setFontRem = function(){
     // }
     // console.log(htmlWidth);
     htmlDome.style.fontSize = htmlWidth / 19.20 + 'px';
-    return  htmlWidth / 19.20
+    return htmlWidth / 19.20
 }
 
 

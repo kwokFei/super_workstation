@@ -5,9 +5,10 @@
 </template>
 
 <script>
-    import echarts from 'echarts'
+    // import echarts from 'echarts'
     import '@/assets/js/china'
     import resize from '../mixins/resize'
+    import {setFontRem} from '@/utils/setRem_api'
     export default {
         name: "chartMap",
         mixins: [resize],
@@ -21,7 +22,12 @@
         },
         methods:{
             chartMap(){
-                var chart = echarts.init(document.getElementById('ec_map'));
+                this.echart_show({
+                    dom : "ec_map",
+                    width : setFontRem() * 11.02 + "px",
+                    height : setFontRem() *  7.61 + "px"
+                })
+                var chart = this.$echarts.init(document.getElementById('ec_map'));
                 this.chart = chart;
                 var geoCoordMap = {
                     '新疆玛纳斯基地': [86.22, 44.30],
@@ -493,13 +499,17 @@
                     series: series
                 };
 
-                chart.setOption(option);
 
-                document.getElementById('ec_map').style.width = "100%";
-                document.getElementById('ec_map').style.height = "7.61rem";
-                setTimeout(function () {
-                    chart.resize();
-                },100)
+                 chart.setOption(option);
+
+        
+                 this.echart_show({
+                    dom : "ec_map",
+                    width :  "11.02rem",
+                    height : "7.61rem"
+                })
+               
+
             }
         }
     }

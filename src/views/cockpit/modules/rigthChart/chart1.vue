@@ -10,169 +10,196 @@
 </template>
 
 <script>
-    import echarts from 'echarts'
-    import resize from '../mixins/resize'
-    import {setFontRem} from '@/utils/setRem_api'
+// import echarts from 'echarts'
+import resize from "../mixins/resize";
+ import {setFontRem} from '@/utils/setRem_api'
 
-    export default {
-        name: "chart1",
-        mixins: [resize],
-        data(){
-            return{
-                chart:null,
+export default {
+  name: "chart1",
+  mixins: [resize],
+  data() {
+    return {
+      chart: null
+    };
+  },
+  mounted() {
+    this.bar1Echart();
+    // console.log(htmlRem);
+  },
+  methods: {
+    bar1Echart() {
+      this.echart_show({
+        dom: "bar1",
+        width: setFontRem() * 3.62 + "px",
+        height: setFontRem() * 2.5 + "px"
+      });
+      var myChart1 = this.$echarts.init(document.getElementById("bar1"));
+      this.chart = myChart1;
+      var dataArr1 = [];
+      for (var i = 0; i < 7; i++) {
+        dataArr1.push(Math.random() * 2000);
+      }
+      var arr1 = [
+        { id: "titleoption1-1", r: 10, a: 12000, p: 0, t: 1 },
+        { id: "titleoption1-2", r: 10, a: 800, p: 0, t: 1 }
+      ];
+      this.getData(myChart1, 7, dataArr1, 2000, 0, arr1, 5000);
+      var option1 = {
+        //animation: false,
+        title: {
+          show: true,
+          text: ["{mothTitle|月项目}", "{value| 17}"].join(""),
+          textStyle: {
+            rich: {
+              mothTitle: {
+                fontSize: 0.14 * setFontRem(),
+                color: "#ffffff"
+              },
+              value: {
+                fontSize: 0.28 *  setFontRem(),
+                color: "#00ffff"
+              }
             }
+          }
         },
-        mounted() {
-            this.bar1Echart()
-            // console.log(setFontRem());
+        grid: {
+            left: 40,
+            right: 10,
+            top: 70,
+            bottom: 30
         },
-        methods:{
-            bar1Echart(){
-
-                var myChart1 = echarts.init(document.getElementById('bar1'));
-                this.chart = myChart1;
-                var dataArr1 = [];
-                for(var i=0;i<7;i++){
-                    dataArr1.push(Math.random()*2000);
+        axisLabel: {
+          textStyle: {
+            color: "#eee",
+            fontSize: "10"
+          }
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          axisTick: {
+            show: false
+          },
+          data: ["0:00", "4:00", "8:00", "12:00", "16:00", "20:00", "24:00"],
+          axisLine: {
+            lineStyle: {
+              color: "#2a64a2"
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: "#2a64a2",
+              type: "dotted"
+            }
+          },
+          axisLabel: {
+            fontSize: 8
+          }
+        },
+        yAxis: {
+          type: "value",
+          axisLine: {
+            lineStyle: {
+              color: "#2a64a2"
+            }
+          },
+          axisLabel: {
+            color: "#2a64a2",
+            fontSize: 8
+          },
+          splitLine: {
+            lineStyle: {
+              color: "rgba(50,50,50,0.8)",
+              type: "dotted"
+            },
+            interval: 1
+          },
+          min: 0,
+          max: 2000
+        },
+        series: [
+          {
+            data: dataArr1,
+            type: "line",
+            smooth: true,
+            symbol: "none",
+            areaStyle: {
+              color: {
+                type: "linear",
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "#0280FA" // 0% 处的颜色
+                  },
+                  {
+                    offset: 0.4,
+                    color: "#2281DD" // 100% 处的颜色
+                  },
+                  {
+                    offset: 0.8,
+                    color: "rgba(255,255,255,0.3)" // 100% 处的颜色
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(0,0,0,0)" // 100% 处的颜色
+                  }
+                ],
+                globalCoord: false // 缺省为 false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: "#0280FA",
+                lineStyle: {
+                  color: "#0280FA"
                 }
-                var arr1 = [{"id":"titleoption1-1",r:10,a:12000,p:0,t:1},{"id":"titleoption1-2",r:10,a:800,p:0,t:1}];
-                this.getData(myChart1,7,dataArr1,2000,0,arr1,5000);
-                var option1 = {
-                    //animation: false,
-                    title:{
-                        show : true,
-                        text:['{mothTitle|月项目}','{value| 17}'].join(''),
-                        textStyle :{
-                            rich: {
-                                mothTitle: {
-                                    fontSize: 0.14 * setFontRem() ,
-                                    color: '#ffffff',
-                                },
-                                value: {
-                                    fontSize: 0.32 * setFontRem(),
-                                    color: '#00ffff',
-                                }
-                            }
-                        },
-                        top : 0.2 * setFontRem() ,
-                    },
-                    grid: {
-                        left: 40,
-                        right: 10,
-                        top: 70,
-                        bottom: 30
-                    },
-                    axisLabel :{
-                        textStyle: {
-                            color: '#eee',
-                            fontSize: '10',
-                        }
-                    },
-                    xAxis: {
-                        type: 'category',
-                        boundaryGap: false,
-                        axisTick: {
-                            show: false
-                        },
-                        data: ['0:00','4:00','8:00','12:00','16:00','20:00','24:00'],
-                        axisLine: {
-                            lineStyle: {
-                                color: '#2a64a2'
-                            }
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: '#2a64a2',
-                                type: 'dotted'
-                            }
-                        },
-                        axisLabel: {
-                            fontSize:8
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                        axisLine: {
-                            lineStyle: {
-                                color: '#2a64a2'
-                            }
-                        },
-                        axisLabel: {
-                            color: '#2a64a2',
-                            fontSize:8
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: 'rgba(50,50,50,0.8)',
-                                type: 'dotted'
-                            },
-                            interval: 1
-                        },
-                        min:0,
-                        max:2000
-                    },
-                    series: [{
-                        data: dataArr1,
-                        type: 'line',
-                        smooth: true,
-                        symbol:'none',
-                        areaStyle: {
-                            color: {
-                                type: 'linear',
-                                x: 0,
-                                y: 0,
-                                x2: 0,
-                                y2: 1,
-                                colorStops: [{
-                                    offset: 0,
-                                    color: '#0280FA' // 0% 处的颜色
-                                }, {
-                                    offset: 0.4,
-                                    color: '#2281DD' // 100% 处的颜色
-                                }, {
-                                    offset: 0.8,
-                                    color: 'rgba(255,255,255,0.3)' // 100% 处的颜色
-                                }, {
-                                    offset: 1,
-                                    color: 'rgba(0,0,0,0)' // 100% 处的颜色
-                                }],
-                                globalCoord: false // 缺省为 false
-                            }
-                        },
-                        itemStyle: {
-                            normal: {
-                                color: "#0280FA",
-                                lineStyle: {
-                                    color: "#0280FA"
-                                }
-                            }
-                        }
-                    }]
-                };
-                myChart1.setOption(option1);
-                document.getElementById('bar1').style.width = "100%";
-                document.getElementById('bar1').style.height = "2.6rem";
-                setTimeout(function () {
-                    myChart1.resize();
-                },100)
+              }
+            }
+          }
+        ]
+      };
 
-            },
-            getData(theChart,sum,dataoption,x,y,result,time){
-                var timer = setInterval(function (){ //定时刷新图表
-                    dataoption = [];
-                    var chartOption = theChart.getOption();
-                    for(var i=0;i<sum;i++){
-                        dataoption.push(Math.random()*x+y);
-                        /*sum2 +=  Math.random()*1000;*/
-                    }
-                    chartOption.series[0].data = dataoption;
-                    theChart.clear();
-                    theChart.setOption(chartOption);
-                    theChart.hideLoading();
-                }, time);
-            },
+      myChart1.setOption(option1);
+
+      this.echart_show({
+        dom: "bar1",
+        width: "3.62rem",
+        height: "2.5rem"
+      });
+      // document.getElementById('bar1').style.width = "100%";
+      // document.getElementById('bar1').style.height = "2.6rem";
+      // setTimeout(function () {
+      //     myChart1.resize();
+      // },1500)
+
+      // this.echart_show({
+      //     dom : "bar1",
+      //     width : "100%",
+      //     height : "2.6rem",
+      //     echartDom : myChart1,
+      // },1500)
+    },
+    getData(theChart, sum, dataoption, x, y, result, time) {
+      var timer = setInterval(function() {
+        //定时刷新图表
+        dataoption = [];
+        var chartOption = theChart.getOption();
+        for (var i = 0; i < sum; i++) {
+          dataoption.push(Math.random() * x + y);
+          /*sum2 +=  Math.random()*1000;*/
         }
+        chartOption.series[0].data = dataoption;
+        theChart.clear();
+        theChart.setOption(chartOption);
+        theChart.hideLoading();
+      }, time);
     }
+  }
+};
 </script>
 
 <style scoped>
