@@ -2,7 +2,7 @@
     <div class="maxBox">
         <div class="navBox">
             <div class="navLeft">
-                <img src="../../assets/img/user/logo.png" alt="">
+                <img @click="goToUrl" style="cursor:pointer;" src="../../assets/img/user/logo.png" alt="">
                 <span v-for="(item,index) in navData" :key="index" :class="{isAdd:num == index}" @click="addClass(index)">
                     {{item.name}}
                 </span>
@@ -37,9 +37,7 @@
                         <div class="imgBox">
                             <img :src="item.imgUrl" alt="">
                             <div class="mbBox" v-show="isMaxShow === index">
-                                <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-                                <br>
-                                <el-button type="primary" plain size="mini" icon="el-icon-money" @click="goTo">预览</el-button>
+                                <el-button type="primary" plain size="mini" icon="el-icon-money" @click="goTo">编辑</el-button>
                                 <img @click="handleMinShow(index)" src="../../assets/img/user/more.png" alt="" class="imgBtns">
                                 <ul class="czMore" v-show="isMinShow === index">
                                     <li>分享</li>
@@ -123,6 +121,11 @@
         }
       },
         methods:{
+          // 返回上一层
+          goToUrl() {
+            console.log(111);
+            this.$router.go(-1);
+          },
         addTemplate(){
           this.isTemplate = !this.isTemplate;
         },
@@ -337,8 +340,8 @@
         height: 100%;
         background: rgba(0,0,0,0.3);
     }
-    .mbBox button:nth-child(1){
-        margin: 0.22rem 0;
+    .mbBox button{
+        margin-top: 0.6rem;
     }
     .imgBtns{
         display: inline-block;

@@ -2,7 +2,7 @@
     <div class="maxBox">
         <img src="../../../assets/img/jsc_img.png" alt="">
         <span class="goBox">
-            <router-link class="goXia" target="_blank"  to="/jsc_setting_2"></router-link>
+            <router-link class="goXia"  to="/jsc_setting_2"></router-link>
         </span>
     </div>
 </template>

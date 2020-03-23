@@ -154,14 +154,14 @@
                         imgUrl:require('../../assets/img/home/listSeven.png'),
                         engName:'Ecological Chain',
                         name:'生态链',
-                        path:'',
+                        path:'/iec_index',
                         isShow:false
                     },
                     {
                         imgUrl:require('../../assets/img/home/listRight.png'),
                         engName:'Mercenary Bank',
                         name:'拥兵库',
-                        path:'',
+                        path:'/ml_home',
                         isShow:false
                     },
                 ],

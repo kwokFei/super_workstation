@@ -441,8 +441,8 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
-  // base: '/super_workstation/',
-  base: process.env.BASE_URL,
+  base: '/super_workstation/',
+  // base: process.env.BASE_URL,
   routes
 });
 
