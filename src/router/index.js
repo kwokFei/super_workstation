@@ -119,8 +119,33 @@ const routes = [
             {   path:"/",
                 component:() => import('@/views/user/module/project_project_all'),
             },
+            //项目总览列表
+            {   path:"all_project_all_list",
+                component:() => import('@/views/user/module/project_center/all/project_all_list'),
+            },
+            //项目总览进行中的项目
+            {   path:"all_in_progress_project",
+                component:() => import('@/views/user/module/project_center/all/in_progress_project'),
+            },
+            //项目总览进行中的项目 详情
+            {   path:"all_in_progress_project/details",
+                component:() => import('@/views/user/module/project_center/all/progress/detail'),
+            },
+            //项目总览已完成的项目
+            {   path:"all_finsh_project",
+                component:() => import('@/views/user/module/project_center/all/finsh_project'),
+            },
+            //项目总览超时的项目
+            {   path:"all_overtime_project",
+                component:() => import('@/views/user/module/project_center/all/overtime_project'),
+            },
+            //项目总览待办的项目
+            {   path:"all_need_project",
+                component:() => import('@/views/user/module/project_center/all/need_project'),
+            },
             {   path:"project_project_all",
                 component:() => import('@/views/user/module/project_project_all'),
+
             },
             {   path:"project_my_project",
                 component:() => import('@/views/user/module/project_my_project'),
@@ -441,8 +466,8 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
-  base: '/super_workstation/',
-  // base: process.env.BASE_URL,
+  // base: '/super_workstation/',
+  base: process.env.BASE_URL,
   routes
 });
 

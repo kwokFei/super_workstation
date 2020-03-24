@@ -1,13 +1,16 @@
 <template>
     <div class="maxBox">
         <div class="navBox">
-            <div class="navItem" v-for="(item,index) in navData" :key="index">
+            <router-link class="navItem"
+                         v-for="(item,index) in navData"
+                         :key="index"
+                         :to="item.link">
                 <img :src="item.imgUrl" alt="">
                 <div>
                     <p :style="{color:item.color}">{{item.number}}</p>
                     <span>{{item.title}}</span>
                 </div>
-            </div>
+            </router-link>
         </div>
         <div class="twoBox">
             <div id="main" style="width: 100%;height: 100%;"></div>
@@ -25,31 +28,36 @@
                         imgUrl:require('../../../assets/img/project_center/allImg.png'),
                         number:120,
                         title:'总项目',
-                        color:'#0068ff'
+                        color:'#0068ff',
+                        link:"/project_center/all_project_all_list"
                     },
                     {
                         imgUrl:require('../../../assets/img/project_center/goImg.png'),
                         number:64,
                         title:'进行中的项目',
-                        color:'#edd14d'
+                        color:'#edd14d',
+                        link:"/project_center/all_in_progress_project"
                     },
                     {
                         imgUrl:require('../../../assets/img/project_center/sucImg.png'),
                         number:48,
                         title:'已完成的项目',
-                        color:'#56d7ab'
+                        color:'#56d7ab',
+                        link:"/project_center/all_finsh_project"
                     },
                     {
                         imgUrl:require('../../../assets/img/project_center/errImg.png'),
                         number:8,
                         title:'超时项目',
-                        color:'#e35d5d'
+                        color:'#e35d5d',
+                        link:"/project_center/all_overtime_project"
                     },
                     {
                         imgUrl:require('../../../assets/img/project_center/dbImg.png'),
                         number:3,
                         title:'待办任务',
-                        color:'#3d7aae'
+                        color:'#3d7aae',
+                        link:"/project_center/all_need_project"
                     },
                 ]
             }

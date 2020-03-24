@@ -328,6 +328,7 @@
     }
     .container-title>p{
         height: 0.28rem;
+        line-height: 0.28rem;
         border-left: 0.04rem solid #0068ff;
         margin-left: 0.1rem;
         padding-left: 0.15rem;

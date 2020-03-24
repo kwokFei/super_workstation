@@ -222,12 +222,12 @@
         border-radius: 0.04rem;
     }
     .leftBox{
-        width: 4.3rem;
+        width: 49%;
         height: 5.9rem;
         background-color: white;
     }
     .rightBox{
-        width: 4.3rem;
+        width: 49%;
         height: 5.9rem;
         background-color: white;
     }

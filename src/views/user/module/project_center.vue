@@ -83,9 +83,9 @@
 
     .contentBox{
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         width: 100%;
-        padding: 0.3rem 3.6rem 0 3.6rem;
+        padding: 0.3rem 0 0 0;
     }
     .contLeft{
         width:2.4rem;
@@ -93,6 +93,7 @@
         background:rgba(255,255,255,1);
         border-radius:0.08rem;
         overflow: hidden;
+        min-width: 150px;
     }
     .contLeft ul{
         width: 100%;
@@ -128,10 +129,11 @@
     }
 
     .contRight{
-        width: 9.4rem;
-        height: 7rem;
+        min-width: 9.4rem;
+        width: 12rem;
+        /*height: 7rem;*/
         background:#f0f2f5;
         border-radius:0.08rem;
-        padding: 0 0.3rem 0 0.3rem;
+        padding: 0 0 0 0.3rem;
     }
 </style>
