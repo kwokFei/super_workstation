@@ -131,6 +131,14 @@ const routes = [
             {   path:"all_in_progress_project/details",
                 component:() => import('@/views/user/module/project_center/all/progress/detail'),
             },
+            //项目总览进行中的项目 详情
+            {   path:"all_in_progress_project/details",
+                component:() => import('@/views/user/module/project_center/all/progress/detail'),
+            },
+            //项目总览进行中的项目 延迟
+            {   path:"all_in_progress_project/delay",
+                component:() => import('@/views/user/module/project_center/all/progress/delay'),
+            },
             //项目总览已完成的项目
             {   path:"all_finsh_project",
                 component:() => import('@/views/user/module/project_center/all/finsh_project'),

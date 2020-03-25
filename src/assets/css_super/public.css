@@ -103,3 +103,6 @@ a {
     overflow: auto;
     max-height: 50vh;
 }
+.el-table th, .el-table tr{
+    background: transparent;
+}

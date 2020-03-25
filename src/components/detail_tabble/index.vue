@@ -1,26 +1,140 @@
 <template>
     <div class="container-detail-table">
-        <table1 :table1Data="table1Data"/>
-
+        <div v-for="item in tableData">
+            <table1 :table1-data="item.table1"/>
+            <table2 :table2-data="item.table2"
+                    :is-do="item.table1[0].isDo"/>
+        </div>
     </div>
 </template>
 
 <script>
     import table1 from './module/table1'
+    import table2 from './module/table2'
+
     export default {
         name: "index",
         components:{
-            table1
+            table1,
+            table2
         },
         data() {
             return {
-                table1Data: [{
-                    node: '客户流转卡',
-                    name: '易仁军',
-                    status: '已完成',
-                    progress : "80%",
-                    file : false,
-                }]
+                tableData:[
+                    {
+                        table1:[{
+                            node: '客户流转卡',
+                            name: '易仁军',
+                            status: '已完成',
+                            progress : "80%",
+                            file : false,
+                            isDo : true,
+                        }],
+                        table2:[
+                            {
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },{
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },{
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },
+                        ]
+                    },
+                    {
+                        table1:[{
+                            node: '客户流转卡',
+                            name: '易仁军',
+                            status: '已完成',
+                            progress : "80%",
+                            file : false,
+                            isDo : true,
+                        }],
+                        table2:[
+                            {
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },{
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },{
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },
+                        ]
+                    },
+                    {
+                        table1:[{
+                            node: '客户流转卡',
+                            name: '易仁军',
+                            status: '已完成',
+                            progress : "80%",
+                            file : false,
+                            isDo : true,
+                        }],
+                        table2:[
+                            {
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },{
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },{
+                                data: '2019-09-14',
+                                logContent: '*********************',
+                                progressDay: '65%',
+                                remarks : "无",
+                            },
+                        ]
+                    },
+                    {
+                        table1:[{
+                            node: '',
+                            name: '',
+                            status: '',
+                            progress : "",
+                            file : "",
+                            isDo : false,
+                        }],
+                        table2:[
+                            {
+                                data: '',
+                                logContent: '',
+                                progressDay: '',
+                                remarks : "",
+                            },{
+                                data: '',
+                                logContent: '',
+                                progressDay: '',
+                                remarks : "",
+                            },{
+                                data: '',
+                                logContent: '',
+                                progressDay: '',
+                                remarks : "",
+                            },
+                        ]
+                    },
+                ],
+
             }
         },
 

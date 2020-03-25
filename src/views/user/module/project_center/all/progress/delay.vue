@@ -1,24 +1,21 @@
 <template>
-    <div >
+    <div>
         <breadcrumb :breadcrumb="breadcrumb"></breadcrumb>
-        <project-nav @handletoDelay = "handletoDelay"/>
-        <steps/>
-        <detail-tabble/>
+        <project-nav/>
+        <delay-content/>
     </div>
 </template>
 
 <script>
     import Breadcrumb from '@/components/breadcrumb/Breadcrumb'
     import projectNav from '@/components/project_nav/index'
-    import steps from '@/components/steps/index'
-    import detailTabble from "@/components/detail_tabble/index"
+    import delayContent from '@/components/delay/index'
     export default {
-        name: "detail",
+        name: "delay",
         components: {
             Breadcrumb,
             projectNav,
-            steps,
-            detailTabble
+            delayContent
         },
         data() {
             return {
@@ -32,28 +29,16 @@
                         link: "/project_center/all_in_progress_project"
                     },
                     {
-                        name: "项目详情",
-                        link: "/project_center/all_in_progress_project/details"
+                        name: "延期",
+                        link: "/project_center/all_in_progress_project/delay"
                     },
                 ],
             }
         },
-        methods:{
-            handletoDelay(){
-                this.$router.push("/project_center/all_in_progress_project/delay")
-            }
-        },
+
     }
 </script>
 
 <style scoped>
-
-    .container-progress-detail{
-        width: 12rem;
-        /*height: 6.5rem;*/
-        overflow: auto;
-        background-color: #ffffff;
-        border-radius: 0.08rem;
-    }
 
 </style>

@@ -1,24 +1,128 @@
 <template>
     <div class="container-steps">
-        <el-steps :active="2" align-center>
-            <el-step title="步骤1" description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤2" description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤3" description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤4" description="这是一段很长很长很长的描述性文字"></el-step>
-        </el-steps>
+        <div class="cx-time-main" id="cxTime"></div>
     </div>
 </template>
 
 <script>
+    import '@/utils/timeAxis_new'
+    import $ from 'jquery'
+
     export default {
-        name: "index"
+        name: "index",
+        mounted() {
+            var oTimeAxiosFun = null;
+            var timeList = [
+                {
+                    name: '客户流转卡',
+                    info: {
+                        isDo : true,
+                        projectLeader:"杨娟",
+                        status : "进行中",
+                        startTime :"2019-09-02",
+                        endTime : "2019-09-06",
+                        progress:"80%",
+                        remarks : "协议翻译完毕后，即刻进行设备的接入"
+                    }
+                },
+                {
+                    name: '方案设计',
+                    info: {
+                        isDo : true,
+                        projectLeader:"杨娟",
+                        status : "进行中",
+                        startTime :"2019-09-02",
+                        endTime : "2019-09-06",
+                        progress:"80%",
+                        remarks : "协议翻译完毕后，即刻进行设备的接入"
+                    }
+                },
+                {
+                    name: '合同、资料',
+                    info: {
+                        isDo : true,
+                        projectLeader:"杨娟",
+                        status : "进行中",
+                        startTime :"2019-09-02",
+                        endTime : "2019-09-06",
+                        progress:"80%",
+                        remarks : "协议翻译完毕后，即刻进行设备的接入"
+                    }
+                },
+                {
+                    name: '合同、资料',
+                    info: {
+                        isDo : true,
+                        projectLeader:"杨娟",
+                        status : "进行中",
+                        startTime :"2019-09-02",
+                        endTime : "2019-09-06",
+                        progress:"80%",
+                        remarks : "协议翻译完毕后，即刻进行设备的接入"
+                    }
+                },
+                {
+                    name: '合同、资料',
+                    info: {
+                        isDo : true,
+                        projectLeader:"杨娟",
+                        status : "进行中",
+                        startTime :"2019-09-02",
+                        endTime : "2019-09-06",
+                        progress:"80%",
+                        remarks : "协议翻译完毕后，即刻进行设备的接入"
+                    }
+                },
+                {
+                    name: '合同、资料',
+                    info: {
+                        isDo : true,
+                        projectLeader:"杨娟",
+                        status : "进行中",
+                        startTime :"2019-09-02",
+                        endTime : "2019-09-06",
+                        progress:"80%",
+                        remarks : "协议翻译完毕后，即刻进行设备的接入"
+                    }
+                },{
+                    name: '合同、资料',
+                    info: {
+                        isDo : true,
+                        projectLeader:"杨娟",
+                        status : "进行中",
+                        startTime :"2019-09-02",
+                        endTime : "2019-09-06",
+                        progress:"80%",
+                        remarks : "协议翻译完毕后，即刻进行设备的接入"
+                    }
+                },
+
+
+            ];//参数列表
+            var param = {
+                data: timeList,
+                id: 'cxTime',
+                width: '150px',
+                index: 0,
+                then: function (index) {
+                    $(".cx-time-bottom").hide();
+                    console.log(index);
+                    if(timeList[index].info.isDo){
+                        $("div,[data-index="+index+"]").show()
+                    }
+                }
+            }
+            oTimeAxiosFun = new oTimeAxios(param);
+        }
     }
 </script>
 
 <style scoped>
-    .container-steps{
+    @import '../../assets/css_super/timeAxis.css';
+
+    .container-steps {
         width: 12rem;
-        height: 6.2rem;
+        height: 400px;
         background-color: #ffffff;
         border-radius: 0.08rem;
         border: solid 0.01rem #ebebeb;
@@ -26,5 +130,4 @@
         align-items: center;
         justify-items: center;
     }
-
 </style>

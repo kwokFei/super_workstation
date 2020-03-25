@@ -193,7 +193,7 @@
     }
 </script>
 <style>
-    .el-table--border th,
+    .table-all .el-table--border th,
     .el-table td{
         text-align: center;
     }

@@ -1,47 +1,39 @@
 <template>
     <el-table
-        :data="table1Data"
+        :data="table2Data"
         border
         :header-row-class-name ="handlSetColor"
-        style="width: 100%"
-        class="talbe1">
+        style="width: 100%">
         <el-table-column
-            prop="node"
-            label="节点名"
-            width="180">
+            prop="data"
+            label="日期"
+            width="100">
         </el-table-column>
         <el-table-column
-            prop="name"
-            label="负责人"
-            width="180">
+            prop="logContent"
+            label="每日项目日志"
+            width="310">
         </el-table-column>
         <el-table-column
-            prop="status"
-            label="当前状态">
+            prop="progressDay"
+            label="每日进度"
+            width="100">
         </el-table-column>
         <el-table-column
-            prop="progress"
-            label="当前进度">
-        </el-table-column>
-        <el-table-column
-            prop="address"
-            label="文件柜">
-            <template slot-scope="{row}">
-                <el-button type="primary"
-                           size = "mini"
-                           :disabled="row.file">下载</el-button>
-            </template>
+            prop="remarks"
+            label="备注">
         </el-table-column>
     </el-table>
 </template>
 
 <script>
     export default {
-        name: "table1",
-        props:["table1Data"],
+        name: "table2",
+        props:["table2Data","isDo"],
         methods:{
             handlSetColor({row, rowIndex}){
-                if (!this.table1Data[0].isDo) {
+                // console.log(this.isDo);
+                if (!this.isDo) {
                     return 'notdo-row';
                 } else{
                     return 'isdo-row';
@@ -50,6 +42,7 @@
         }
     }
 </script>
+
 <style>
     .container-detail-table .el-table--border th,
     .container-detail-table .el-table td{
@@ -64,16 +57,8 @@
     .container-detail-table .el-table .notdo-row {
         background: #EFEFEF;
     }
-
 </style>
 
 <style scoped>
-
-
-
-
-    .el-table--border{
-        margin-top: 0.4rem;
-    }
 
 </style>

@@ -1,7 +1,9 @@
 <template>
     <div class="container-nav">
-       <item v-for="item in itemOption"
-             :item="item"></item>
+       <item v-for="(item,index) in itemOption"
+             :key="index"
+             :item="item"
+             @handleGotoDetail="handleGotoDetail"></item>
     </div>
 </template>
 
@@ -44,7 +46,12 @@
                     }
                 ]
             }
-        }
+        },
+        methods:{
+            handleGotoDetail(){
+                this.$emit("handletoDelay")
+            }
+        },
     }
 </script>
 

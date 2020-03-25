@@ -2,7 +2,10 @@
     <div class="item">
         <span>{{item.title}}</span>
         <div :style="{color:item.color}">{{item.value}}
-            <img v-for="i in item.img" :src="i" alt="">
+            <img v-for="(i,index) in item.img"
+                 :key="index"
+                 :src="i" alt=""
+                 @click="handleGotoDelay(index)">
         </div>
     </div>
 </template>
@@ -11,6 +14,13 @@
     export default {
         name: "item",
         props:["item"],
+        methods:{
+            handleGotoDelay(index){
+                if(index === 0){
+                    this.$emit("handleGotoDetail")
+                }
+            }
+        },
     }
 </script>
 
