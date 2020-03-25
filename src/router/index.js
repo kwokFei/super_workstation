@@ -332,6 +332,20 @@ const routes = [
     meta:{
       title:'服务培训'
     },
+    children:[
+      {
+        path:'/',
+        component:() => import('@/views/super_service_training/module/home')
+      },
+      {
+        path:'/service_home',
+        component:() => import('@/views/super_service_training/module/home')
+      },
+      {
+        path:'/service_course',
+        component:() => import('@/views/super_service_training/module/course')
+      }
+    ]
   },
   {
     path:"/super_design_center",

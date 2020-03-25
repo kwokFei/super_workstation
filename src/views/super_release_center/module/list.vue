@@ -27,9 +27,9 @@
                     </el-select>
                 </div>
                 <div>
-                    <el-button type="danger">删除</el-button>
-                    <el-button type="warning">撤回</el-button>
-                    <el-button type="primary">发布</el-button>
+<!--                    <el-button type="danger">删除</el-button>-->
+<!--                    <el-button type="warning">撤回</el-button>-->
+                    <el-button type="primary" @click="fbBtn">发布</el-button>
                 </div>
             </div>
             <div class="fbList">
@@ -55,8 +55,8 @@
                     <span>{{item.proStatus}}</span>
                     <span>{{item.createTime}}</span>
                     <span>
-                        <el-button size="mini" type="warning">撤回</el-button>
-                        <el-button size="mini" type="danger">删除</el-button>
+                        <el-button size="mini" type="primary" plain>撤回</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(index)">删除</el-button>
                         <el-button size="mini" type="primary">编辑</el-button>
                         <el-button size="mini" type="info">预览</el-button>
                     </span>
@@ -65,15 +65,43 @@
                 </div>
             <div class="pageBox">
                 <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage2"
                         :page-sizes="[10, 20, 50, 100]"
                         :page-size="10"
                         background
                         layout="sizes, prev, pager, next"
                         :total="1000">
                 </el-pagination>
+            </div>
+        </div>
+        <div class="tempBox" v-show="isShow">
+            <div class="minBox">
+                <div class="titleBox">
+                    <span>发布</span>
+                    <span style="cursor:pointer;" @click="outTem">X</span>
+                </div>
+                <div class="smileBox">
+                    <p>
+                    <span>项目名称:</span>
+                    项目A
+                </p>
+                    <p>
+                        <span>发布方式:</span>
+                        <el-radio v-model="radio" label="1">立即发布</el-radio>
+                        <el-radio v-model="radio" label="2">定时发布</el-radio>
+                    </p>
+                    <p v-show="radio == 2">
+                        <span>发布时间:</span>
+                        <el-date-picker
+                            v-model="value1"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                        </el-date-picker>
+                    </p>
+                    <div class="sureBox">
+                        <el-button type="primary" size="mini" @click="sureBtn">确定</el-button>
+                        <el-button type="info" size="mini" plain @click="outTem">取消</el-button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -84,6 +112,9 @@
     name: "list",
     data() {
       return {
+        radio:'2',
+        value1:'',
+        isShow:false,
         name: '',
         isCheckedALL: false,  //是否全选
         timer: '1月',
@@ -239,6 +270,33 @@
           }
         }
       },
+
+      // 删除
+      handleDelete(Index){
+        console.log(Index);
+        console.log(this.fbData[Index]);
+        for (let i = 0; i < this.fbData.length; i++){
+          if(this.fbData[i].proName === this.fbData[Index].proName){
+            this.fbData.splice(i, 1);
+            return
+          }
+        }
+      },
+
+      // 发布
+      fbBtn(){
+        this.isShow = !this.isShow;
+      },
+
+      //outTem
+      outTem(){
+        this.isShow = !this.isShow;
+      },
+
+      // 确定
+      sureBtn(){
+        this.isShow = !this.isShow;
+      }
     }
   }
 </script>
@@ -334,5 +392,69 @@
     }
     .listwwBox::-webkit-scrollbar {
         display: none;
+    }
+
+    .tempBox{
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.2);
+    }
+
+    .minBox {
+        width: 4.2rem;
+        height: 3.2rem;
+        margin-top: 50%;
+        margin-left: 50%;
+        transform: translate(-50%,-120%);
+        background-color: #ffffff;
+        border-radius: 0.08rem;
+        overflow: hidden;
+    }
+
+    .titleBox {
+        width: 100%;
+        height: 0.4rem;
+        line-height: 0.4rem;
+        padding: 0 0.1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #2f80ed;
+        color: white;
+    }
+    .titleBox span{
+        font-size: 0.18rem;
+        font-weight: bold;
+        letter-spacing: 0.02rem;
+    }
+
+    .smileBox{
+        width: 100%;
+        padding: 0.3rem;
+    }
+    .smileBox p{
+        line-height: 0.4rem;
+    }
+
+    .smileBox p > span{
+        font-family: MicrosoftYaHei;
+        font-size: 0.16rem;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0rem;
+        color: #333333;
+        margin-right: 0.2rem;
+    }
+    .sureBox{
+        margin-top: 0.2rem;
+        text-align: center;
+    }
+    .sureBox button{
+        width: 1rem;
+        margin: 0 0.2rem;
     }
 </style>
