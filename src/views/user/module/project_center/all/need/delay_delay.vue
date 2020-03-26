@@ -13,7 +13,7 @@
     import projectNav from '@/components/project_nav/index'
     import delayContent from '@/components/delay/index'
     export default {
-        name: "delay",
+        name: "delay_delay",
         components: {
             Breadcrumb,
             projectNav,
@@ -27,12 +27,12 @@
                         link: "/project_center"
                     },
                     {
-                        name: "进行中的项目",
-                        link: "/project_center/all_in_progress_project"
+                        name: "待办项目",
+                        link: "/project_center/all_need_project"
                     },
                     {
-                        name: "延期",
-                        link: "/project_center/all_in_progress_project/delay"
+                        name: "延期处理",
+                        link: "/project_center/all_need_project/delay_delay"
                     },
                 ],
                 itemOption:[
@@ -58,7 +58,7 @@
                     },
                     {
                         title:"状态",
-                        value:"进行中",
+                        value:"超时",
                         color:"#e35d5d",
                     }
                 ],
@@ -68,12 +68,16 @@
                         title:"因不可抗因素，特申请将计划完成时间从2019.11.11延期到2019.11.20",
                         applyLoder : "邹达海",
                         applyTime:"2019-11-09   20:22:18",
+                    },
+                    {
+                        title:"程序bug太多，再次申请延期，希望将计划完成时间从2019.11.11延期到2019.11.20",
+                        applyLoder : "罗乐",
+                        applyTime:"2019-11-09   20:22:18",
                     }
                 ],
-                form2Titlle:"延期申请日志"
+                form2Titlle:"延期操作"
             }
         },
-
     }
 </script>
 

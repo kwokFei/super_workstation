@@ -53,7 +53,9 @@
                 <template slot-scope="{row}">
                     <el-button type="success"
                                size = "mini"
-                              :disabled="row.detail">查看</el-button>
+                              :disabled="row.detail"
+                                @click="handelgoToDetail(row)">
+                        查看</el-button>
                 </template>
 
             </el-table-column>
@@ -73,121 +75,17 @@
 <script>
     export default {
         name: "FromTabble",
-        data() {
-            return {
-                tableData: [
-                {
-                    startdate: '2019-09-09',
-                    enddata : "2019-10-11",
-                    projectLoder : "邹达海",
-                    projectName: '中意智慧家居',
-                    status : "进行中",
-                    file : false,
-                    detail : false,
-                    overTimeRecoder : false,
-                },
-                {
-                    startdate: '2019-09-09',
-                    enddata : "2019-10-11",
-                    projectLoder : "邹达海",
-                    projectName: '中意智慧家居',
-                    status : "进行中",
-                    file : false,
-                    detail : true,
-                    overTimeRecoder : false,
-                },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "邹达海",
-                        projectName: '中意智慧家居',
-                        status : "进行中",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "邹达海",
-                        projectName: '中意智慧家居',
-                        status : "进行中",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "进行中",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },{
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-
-
-                ]
+        props:["tableData"],
+        methods:{
+            handelgoToDetail(row){
+                if(row.status === "进行中"){
+                    this.$router.push({path:"/project_center/all_in_progress_project/details"})
+                }else if(row.status === "已完成"){
+                    // console.log('跳转已完成');
+                    this.$router.push({path:'/project_center/all_finsh_project/details'})
+                }else if(this.statu === "超时"){
+                    this.$router.push({path:'/project_center/all_overtime_project/details'})
+                }
             }
         }
     }

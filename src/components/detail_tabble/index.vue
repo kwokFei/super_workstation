@@ -1,6 +1,8 @@
 <template>
     <div class="container-detail-table">
-        <div v-for="item in tableData">
+        <div v-for="(item,index) in tableData"
+                    :key = "index"
+                    :ref = "'table'+index">
             <table1 :table1-data="item.table1"/>
             <table2 :table2-data="item.table2"
                     :is-do="item.table1[0].isDo"/>
@@ -18,126 +20,14 @@
             table1,
             table2
         },
-        data() {
-            return {
-                tableData:[
-                    {
-                        table1:[{
-                            node: '客户流转卡',
-                            name: '易仁军',
-                            status: '已完成',
-                            progress : "80%",
-                            file : false,
-                            isDo : true,
-                        }],
-                        table2:[
-                            {
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },{
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },{
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },
-                        ]
-                    },
-                    {
-                        table1:[{
-                            node: '客户流转卡',
-                            name: '易仁军',
-                            status: '已完成',
-                            progress : "80%",
-                            file : false,
-                            isDo : true,
-                        }],
-                        table2:[
-                            {
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },{
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },{
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },
-                        ]
-                    },
-                    {
-                        table1:[{
-                            node: '客户流转卡',
-                            name: '易仁军',
-                            status: '已完成',
-                            progress : "80%",
-                            file : false,
-                            isDo : true,
-                        }],
-                        table2:[
-                            {
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },{
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },{
-                                data: '2019-09-14',
-                                logContent: '*********************',
-                                progressDay: '65%',
-                                remarks : "无",
-                            },
-                        ]
-                    },
-                    {
-                        table1:[{
-                            node: '',
-                            name: '',
-                            status: '',
-                            progress : "",
-                            file : "",
-                            isDo : false,
-                        }],
-                        table2:[
-                            {
-                                data: '',
-                                logContent: '',
-                                progressDay: '',
-                                remarks : "",
-                            },{
-                                data: '',
-                                logContent: '',
-                                progressDay: '',
-                                remarks : "",
-                            },{
-                                data: '',
-                                logContent: '',
-                                progressDay: '',
-                                remarks : "",
-                            },
-                        ]
-                    },
-                ],
-
+        props:["talbeIndex","tableData"],
+        watch:{
+            talbeIndex(){
+                if(this.$refs['table'+this.talbeIndex]){
+                    window.scrollTo(0,this.$refs['table'+this.talbeIndex][0]['offsetTop']);
+                }
             }
-        },
-
+        }
     }
 </script>
 

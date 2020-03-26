@@ -22,11 +22,6 @@
                 width="100">
             </el-table-column>
             <el-table-column
-                prop="status"
-                label="当前状态"
-                width="100">
-            </el-table-column>
-            <el-table-column
                 prop="startdate"
                 label="开始时间"
                 width="100">
@@ -58,6 +53,16 @@
                 </template>
 
             </el-table-column>
+
+            <el-table-column
+                label="延期记录"
+                width="90">
+                <template slot-scope="{row}">
+                    <el-button type="danger"
+                               size = "mini"
+                               :disabled="row.overTimeRecoder">明细</el-button>
+                </template>
+            </el-table-column>
         </el-table>
     </div>
 </template>
@@ -65,124 +70,19 @@
 <script>
     export default {
         name: "FormTabble",
-        data() {
-            return {
-                tableData: [
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "邹达海",
-                        projectName: '中意智慧家居',
-                        status : "进行中",
-                        file : false,
-                        detail : false,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "邹达海",
-                        projectName: '中意智慧家居',
-                        status : "进行中",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "邹达海",
-                        projectName: '中意智慧家居',
-                        status : "进行中",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "邹达海",
-                        projectName: '中意智慧家居',
-                        status : "进行中",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "进行中",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                    {
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },{
-                        startdate: '2019-09-09',
-                        enddata : "2019-10-11",
-                        projectLoder : "罗乐",
-                        projectName: '智慧银行',
-                        status : "已完成",
-                        file : false,
-                        detail : true,
-                        overTimeRecoder : false,
-                    },
-                ]
-            }
-        },
+        props:["tableData","statu"],
         methods:{
             handlGotoDtail(){
-                this.$router.push('/project_center/all_in_progress_project/details')
+                if(this.statu === "进行中"){
+                    this.$router.push({path:'/project_center/all_in_progress_project/details'})
+                }else if(this.statu === "已完成"){
+                    // console.log('跳转已完成');
+                    this.$router.push({path:'/project_center/all_finsh_project/details'})
+                }else if(this.statu === "超时"){
+                    this.$router.push({path:'/project_center/all_overtime_project/details'})
+                }
+
+
             },
         }
     }

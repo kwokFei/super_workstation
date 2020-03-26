@@ -1,8 +1,8 @@
 <template>
-    <div >
+    <div>
         <breadcrumb :breadcrumb="breadcrumb"></breadcrumb>
         <project-nav @handletoDelay = "handletoDelay"
-                    :itemOption = "itemOption"/>
+                     :itemOption = "itemOption"/>
         <steps @toRoll="handleToRoll" :timeList="timeList"/>
         <detail-tabble :talbe-index="talbeIndex" :tableData="tableData"/>
     </div>
@@ -29,12 +29,12 @@
                         link: "/project_center"
                     },
                     {
-                        name: "进行中的项目",
-                        link: "/project_center/all_in_progress_project"
+                        name: "已完成项目",
+                        link: "/project_center/all_finsh_project"
                     },
                     {
                         name: "项目详情",
-                        link: "/project_center/all_in_progress_project/details"
+                        link: "/project_center/all_finsh_project/details"
                     },
                 ],
                 talbeIndex:null,
@@ -260,13 +260,16 @@
                     },
                     {
                         title:"状态",
-                        value:"进行中",
-                        color:"#e35d5d",
-                        img:[
-                            require("@/assets/img/project_center/all/time.png")
-                        ]
+                        value:"已完成",
+                        color:"#56d7ab",
+                        otherremark:{
+                            value:"超时",
+                            color:"#e35d5d"
+                        },
                     }
                 ]
+
+
             }
         },
         methods:{
@@ -283,13 +286,5 @@
 </script>
 
 <style scoped>
-
-    .container-progress-detail{
-        width: 12rem;
-        /*height: 6.5rem;*/
-        overflow: auto;
-        background-color: #ffffff;
-        border-radius: 0.08rem;
-    }
 
 </style>

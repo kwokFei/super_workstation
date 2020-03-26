@@ -1,16 +1,7 @@
 <template>
     <div class="form-all">
-        <span>项目负责人：</span>
+        <span></span>
         <el-select v-model="projectLeader" clearable placeholder="请选择">
-            <el-option
-                v-for="item in projectLeaderOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
-        </el-select>
-        <span class="status">当前状态：</span>
-        <el-select v-model="projectStatu" clearable placeholder="请选择">
             <el-option
                 v-for="item in projectStatuOptions"
                 :key="item.value"
@@ -18,6 +9,7 @@
                 :value="item.value">
             </el-option>
         </el-select>
+        <span class="status"></span>
         <el-input
             placeholder="输入项目名称"
             suffix-icon="el-icon-search"
@@ -31,8 +23,8 @@
 
 <script>
     export default {
-        name: "form_all",
-        props:["projectLeaderOptions","projectStatuOptions"],
+        name: "index",
+        props:["projectStatuOptions"],
         data() {
             return {
                 projectLeader: '0',
@@ -59,7 +51,6 @@
         font-size: 0.16rem;
         color: #666666;
         padding-left: 0.2rem;
-        min-width: 98px;
         display: inline-block
     }
 

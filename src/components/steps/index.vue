@@ -10,109 +10,26 @@
 
     export default {
         name: "index",
+        props:["timeList"],
         mounted() {
             var oTimeAxiosFun = null;
-            var timeList = [
-                {
-                    name: '客户流转卡',
-                    info: {
-                        isDo : true,
-                        projectLeader:"杨娟",
-                        status : "进行中",
-                        startTime :"2019-09-02",
-                        endTime : "2019-09-06",
-                        progress:"80%",
-                        remarks : "协议翻译完毕后，即刻进行设备的接入"
-                    }
-                },
-                {
-                    name: '方案设计',
-                    info: {
-                        isDo : true,
-                        projectLeader:"杨娟",
-                        status : "进行中",
-                        startTime :"2019-09-02",
-                        endTime : "2019-09-06",
-                        progress:"80%",
-                        remarks : "协议翻译完毕后，即刻进行设备的接入"
-                    }
-                },
-                {
-                    name: '合同、资料',
-                    info: {
-                        isDo : true,
-                        projectLeader:"杨娟",
-                        status : "进行中",
-                        startTime :"2019-09-02",
-                        endTime : "2019-09-06",
-                        progress:"80%",
-                        remarks : "协议翻译完毕后，即刻进行设备的接入"
-                    }
-                },
-                {
-                    name: '合同、资料',
-                    info: {
-                        isDo : true,
-                        projectLeader:"杨娟",
-                        status : "进行中",
-                        startTime :"2019-09-02",
-                        endTime : "2019-09-06",
-                        progress:"80%",
-                        remarks : "协议翻译完毕后，即刻进行设备的接入"
-                    }
-                },
-                {
-                    name: '合同、资料',
-                    info: {
-                        isDo : true,
-                        projectLeader:"杨娟",
-                        status : "进行中",
-                        startTime :"2019-09-02",
-                        endTime : "2019-09-06",
-                        progress:"80%",
-                        remarks : "协议翻译完毕后，即刻进行设备的接入"
-                    }
-                },
-                {
-                    name: '合同、资料',
-                    info: {
-                        isDo : true,
-                        projectLeader:"杨娟",
-                        status : "进行中",
-                        startTime :"2019-09-02",
-                        endTime : "2019-09-06",
-                        progress:"80%",
-                        remarks : "协议翻译完毕后，即刻进行设备的接入"
-                    }
-                },{
-                    name: '合同、资料',
-                    info: {
-                        isDo : true,
-                        projectLeader:"杨娟",
-                        status : "进行中",
-                        startTime :"2019-09-02",
-                        endTime : "2019-09-06",
-                        progress:"80%",
-                        remarks : "协议翻译完毕后，即刻进行设备的接入"
-                    }
-                },
-
-
-            ];//参数列表
+            var timeList = this.timeList
             var param = {
                 data: timeList,
                 id: 'cxTime',
                 width: '150px',
                 index: 0,
-                then: function (index) {
-                    $(".cx-time-bottom").hide();
-                    console.log(index);
-                    if(timeList[index].info.isDo){
-                        $("div,[data-index="+index+"]").show()
-                    }
+                then: (index) => {
+                   this.toRoll(index)
                 }
             }
             oTimeAxiosFun = new oTimeAxios(param);
+            $(".cx-time-bottom[data-index="+0+"]").show()
+        },
+        methods:{
+            toRoll(index){
+                this.$emit("toRoll",index)
+            }
         }
     }
 </script>
@@ -122,7 +39,7 @@
 
     .container-steps {
         width: 12rem;
-        height: 400px;
+        height: 246px;
         background-color: #ffffff;
         border-radius: 0.08rem;
         border: solid 0.01rem #ebebeb;

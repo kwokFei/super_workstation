@@ -2,6 +2,11 @@
     <div class="item">
         <span>{{item.title}}</span>
         <div :style="{color:item.color}">{{item.value}}
+            <span v-if="item.otherremark"
+                  style="font-size: 0.3rem;"
+                  :style="{color:item.otherremark.color}">
+                ({{item.otherremark.value}})
+            </span>
             <img v-for="(i,index) in item.img"
                  :key="index"
                  :src="i" alt=""

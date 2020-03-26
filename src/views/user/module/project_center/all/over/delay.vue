@@ -58,7 +58,7 @@
                     },
                     {
                         title:"状态",
-                        value:"进行中",
+                        value:"超时",
                         color:"#e35d5d",
                     }
                 ],
@@ -73,7 +73,6 @@
                 form2Titlle:"延期申请日志"
             }
         },
-
     }
 </script>
 

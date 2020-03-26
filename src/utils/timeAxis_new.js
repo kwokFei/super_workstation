@@ -43,12 +43,12 @@ import jQuery from 'jquery'
 
             // 向左移动
             $(id + '>span:first').on('click', function () {
-                self.timeAxisMove(-1);
+                self.timeAxisMove(-1,'move');
             });
 
             //向右移动
             $(id + '>span:last').on('click', function () {
-                self.timeAxisMove(1);
+                self.timeAxisMove(1,'move');
             })
         },
 
@@ -93,7 +93,8 @@ import jQuery from 'jquery'
                         '</div>'
                     html += '</div>';
                     html += '</div>';
-                }else {
+                }
+                else {
                     html += '<li class="isnotDo cx-round-box cx-round-box'+index+'">';
                     html += '<div class="cx-time-top">'+item[self.props.name]+'</div>';
                     html += '<div class="cx-time-round" data-index="'+index+'"></div>';
@@ -103,7 +104,7 @@ import jQuery from 'jquery'
 
                 if(index != list.length - 1){
                     if(item.info.isDo){
-                        html += '<li class="cx-time-line" style="width: '+ self.width +'"></li>';
+                        html += '<li class="cx-time-line"  style="width: '+ self.width +'"></li>';
                     }else {
                         html += '<li class="isnotDo cx-time-line" style="width: '+ self.width +'"></li>';
                     }
@@ -113,15 +114,27 @@ import jQuery from 'jquery'
             var cls = "#" + this.id + ' ul';
             $(cls).empty().append(html);
             $(cls + ' .cx-time-round').on('click', function () {
+                $(".cx-time-bottom").hide()
+                let index = $(this).data('index')
+                if(self.options.data[index].info.isDo)  $(".cx-time-bottom[data-index="+index+"]").show(500);
                 self.options.index = $(this).data('index');
                 self.timeAxisMove(0); //点击某一点
             })
+
+            $(cls + ' .cx-time-round').on('mouseenter', function () {
+                $(".cx-time-bottom").hide()
+                let index = $(this).data('index')
+                if(self.options.data[index].info.isDo)  $(".cx-time-bottom[data-index="+index+"]").show(500);
+            })
+
+
+
             this.firstLoad = true;
             this.timeAxisMove(0);//初始选中
         },
 
         //点击连边移动选中时间节点
-        timeAxisMove: function (num){
+        timeAxisMove: function (num,move){
             var list = this.options.data || [];
             this.options.index += num;
             if(this.options.index < 0){
@@ -131,7 +144,7 @@ import jQuery from 'jquery'
                 this.options.index = 0;
             }
             this.timeAxisRoll();
-            this.timeAxisActive(this.options.index);
+            this.timeAxisActive(this.options.index,move);
         },
 
         //选中节点左右滚动
@@ -159,8 +172,8 @@ import jQuery from 'jquery'
         },
 
         // 前后滑动点击事件
-        timeAxisActive: function (num) {
-            if(!this.firstLoad){
+        timeAxisActive: function (num,move) {
+            if(!this.firstLoad && !move){
                 var list = this.options.data || [];
                 // var data = list[this.options.index];
                 // this.options.then(this.options.index,data);
@@ -168,6 +181,9 @@ import jQuery from 'jquery'
             } // 首次加载不执行回调
             $('.cx-round-box').removeClass('cx-time-active');
             $('.cx-round-box' + this.options.index).addClass('cx-time-active');
+            $(".cx-time-bottom").hide()
+            let index = this.options.index
+            if(this.options.data[index].info.isDo)  $(".cx-time-bottom[data-index="+index+"]").show(500);
             this.firstLoad = false;
         }
     };

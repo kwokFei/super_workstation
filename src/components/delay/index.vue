@@ -1,7 +1,8 @@
 <template>
     <div class="container-delay">
-        <form1/>
-        <form2/>
+        <form1 :form1-option="form1Option"
+                :form1-titlle="form1Titlle"/>
+        <form2 :form2-titlle="form2Titlle"/>
     </div>
 </template>
 
@@ -10,10 +11,12 @@
     import form2 from './module/form2'
     export default {
         name: "index",
+        props:["form1Titlle","form1Option","form2Titlle"],
         components:{
             form1,
             form2
-        }
+        },
+
     }
 </script>
 

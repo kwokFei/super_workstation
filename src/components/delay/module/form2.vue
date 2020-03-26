@@ -2,7 +2,7 @@
     <div class="container-form2">
         <div class="title">
             <img src="@/assets/img/project_center/all/operation.png" alt="">
-            <span class="form-text">延期申请日志</span>
+            <span class="form-text">{{form2Titlle}}</span>
         </div>
         <div class="form2-radio">
             <el-radio v-model="radio" label="1">同意</el-radio>
@@ -25,6 +25,7 @@
 <script>
     export default {
         name: "form2",
+        props:["form2Titlle"],
         data () {
             return {
                 radio: '1',

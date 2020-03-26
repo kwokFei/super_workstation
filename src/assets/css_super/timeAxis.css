@@ -1,16 +1,17 @@
-ul{
+#cxTime ul{
     white-space:nowrap;
     margin: 0;
     height: 80px;
     padding: 0 2px;
     position: relative;
 }
-ul li{
+#cxTime ul li{
     outline: none;
     display: inline-block;
     list-style-type: none;
     margin: 0px;
 }
+
 .cx-time-main{
     width: 90%;
     height: 100%;
@@ -54,17 +55,22 @@ ul li{
 .cx-time-top{
     position: absolute;
     bottom: 50%;
-    left: -15px;
+    left: -81px;
     width: 120px;
     min-height: 20px;
     height: auto;
     font-size: 14px;
     margin-bottom: 12px;
 }
+
+#cxTime ul>li:first-child>.cx-time-top{
+    left: -28px;
+}
+
 .cx-time-bottom{
     position: absolute;
     top: 50%;
-    left: 201px;
+    left: 50%;
     height: auto;
     font-size: 14px;
     margin-top: 12px;
@@ -125,3 +131,4 @@ ul li{
 .info-item-info{
     width: 100%;
 }
+

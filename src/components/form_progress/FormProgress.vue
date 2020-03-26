@@ -24,43 +24,10 @@
 <script>
     export default {
         name: "FormProgress",
+        props:["projectLeaderOptions","projectStatuOptions"],
         data() {
             return {
-                projectLeaderOptions: [
-                    {
-                        value: '0',
-                        label: '所有负责人'
-                    },
-                    {
-                        value: '1',
-                        label: '邹达海'
-                    },
-                    {
-                        value: '2',
-                        label: '罗乐'
-                    },
-                    {
-                        value: '3',
-                        label: '张千思'
-                    }],
                 projectLeader: '0',
-                projectStatuOptions: [
-                    {
-                        value: '0',
-                        label: '全部状态'
-                    },
-                    {
-                        value: '1',
-                        label: '进行中'
-                    },
-                    {
-                        value: '2',
-                        label: '已完成'
-                    },
-                    {
-                        value: '3',
-                        label: '超时'
-                    }],
                 projectStatu :  "0",
                 projectName : null,
             }

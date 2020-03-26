@@ -131,10 +131,6 @@ const routes = [
             {   path:"all_in_progress_project/details",
                 component:() => import('@/views/user/module/project_center/all/progress/detail'),
             },
-            //项目总览进行中的项目 详情
-            {   path:"all_in_progress_project/details",
-                component:() => import('@/views/user/module/project_center/all/progress/detail'),
-            },
             //项目总览进行中的项目 延迟
             {   path:"all_in_progress_project/delay",
                 component:() => import('@/views/user/module/project_center/all/progress/delay'),
@@ -143,13 +139,42 @@ const routes = [
             {   path:"all_finsh_project",
                 component:() => import('@/views/user/module/project_center/all/finsh_project'),
             },
+
+            //项目总览已完成的项目 详情
+            {   path:"all_finsh_project/details",
+                component:() => import('@/views/user/module/project_center/all/finsh/detail'),
+            },
+
             //项目总览超时的项目
             {   path:"all_overtime_project",
                 component:() => import('@/views/user/module/project_center/all/overtime_project'),
             },
+
+            //项目总览超时的项目 详情
+            {   path:"all_overtime_project/details",
+                component:() => import('@/views/user/module/project_center/all/over/detail'),
+            },
+
+            //项目总览超时的项目 延期
+            {   path:"all_overtime_project/delay",
+                component:() => import('@/views/user/module/project_center/all/over/delay'),
+            },
+
             //项目总览待办的项目
             {   path:"all_need_project",
                 component:() => import('@/views/user/module/project_center/all/need_project'),
+            },
+            //项目总览待办的项目 延期处理
+            {   path:"all_need_project/delay_delay",
+                component:() => import('@/views/user/module/project_center/all/need/delay_delay'),
+            },
+            //项目总览待办的项目 变更申请
+            {   path:"all_need_project/delay_change",
+                component:() => import('@/views/user/module/project_center/all/need/delay_change'),
+            },
+            //项目总览待办的项目 立项申请
+            {   path:"all_need_project/delay_project",
+                component:() => import('@/views/user/module/project_center/all/need/delay_project'),
             },
             {   path:"project_project_all",
                 component:() => import('@/views/user/module/project_project_all'),

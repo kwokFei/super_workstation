@@ -2,13 +2,14 @@
     <div class="container-form1">
         <div class="title">
             <img src="@/assets/img/project_center/all/log.png" alt="">
-            <span class="form-text">延期申请日志</span>
+            <span class="form-text">{{form1Titlle}}</span>
         </div>
-        <div class="content">
-            <p>因不可抗因素，特申请将计划完成时间从2019.11.11延期到2019.11.20</p>
-            <p><span>申请人：</span>邹达海</p>
-            <p><span>时  间：</span>2019-11-09   20:22:18</p>
+        <div class="content" v-for="item in form1Option">
+            <p>{{item.title}}</p>
+            <p><span>{{item.applyLoder | spanName('申请人')}}:</span>{{item.applyLoder}}</p>
+            <p><span>{{item.applyTime | spanName('时间')}}:</span>{{item.applyTime}}</p>
         </div>
+
         <el-divider></el-divider>
 
     </div>
@@ -17,6 +18,12 @@
 <script>
     export default {
         name: "form1",
+        filters:{
+          spanName(value,data){
+              return data;
+          }
+        },
+        props:["form1Titlle","form1Option"],
 
     }
 </script>

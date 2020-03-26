@@ -1,14 +1,15 @@
 <template>
-    <div >
+    <div>
         <breadcrumb :breadcrumb="breadcrumb"></breadcrumb>
         <project-nav @handletoDelay = "handletoDelay"
-                    :itemOption = "itemOption"/>
+                     :itemOption = "itemOption"/>
         <steps @toRoll="handleToRoll" :timeList="timeList"/>
         <detail-tabble :talbe-index="talbeIndex" :tableData="tableData"/>
     </div>
 </template>
 
 <script>
+
     import Breadcrumb from '@/components/breadcrumb/Breadcrumb'
     import projectNav from '@/components/project_nav/index'
     import steps from '@/components/steps/index'
@@ -29,12 +30,12 @@
                         link: "/project_center"
                     },
                     {
-                        name: "进行中的项目",
-                        link: "/project_center/all_in_progress_project"
+                        name: "超时项目",
+                        link: "/project_center/all_overtime_project"
                     },
                     {
                         name: "项目详情",
-                        link: "/project_center/all_in_progress_project/details"
+                        link: "/project_center/all_overtime_project/details"
                     },
                 ],
                 talbeIndex:null,
@@ -260,18 +261,20 @@
                     },
                     {
                         title:"状态",
-                        value:"进行中",
+                        value:"超时",
                         color:"#e35d5d",
                         img:[
                             require("@/assets/img/project_center/all/time.png")
                         ]
                     }
                 ]
+
+
             }
         },
         methods:{
             handletoDelay(){
-                this.$router.push("/project_center/all_in_progress_project/delay")
+                this.$router.push("/project_center/all_overtime_project/delay")
             },
             //获取点击的第几个点
             handleToRoll(index){
@@ -283,13 +286,5 @@
 </script>
 
 <style scoped>
-
-    .container-progress-detail{
-        width: 12rem;
-        /*height: 6.5rem;*/
-        overflow: auto;
-        background-color: #ffffff;
-        border-radius: 0.08rem;
-    }
 
 </style>
