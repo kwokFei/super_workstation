@@ -16,7 +16,7 @@
                         <img style="width: 0.28rem;height: 0.26rem;" src="../../../assets/img/project_center/msgImg.png" alt="">
                         <span class="titleName">消息提醒</span>
                     </span>
-                    <span>更多 》</span>
+                    <span @click="goTo('myproject/message')">更多 》</span>
                 </div>
                 <div class="msgListBox">
                     <div class="msgListItem" v-for="(item,index) in msgData" :key="index">
@@ -37,7 +37,7 @@
                         <img style="width: 0.24rem;height: 0.28rem;" src="../../../assets/img/project_center/fileImg.png" alt="">
                         <span class="titleName">文件</span>
                     </span>
-                    <span>更多 》</span>
+                    <span @click="goTo('myproject/file')">更多 》</span>
                 </div>
                 <div class="fileListBox">
                     <div class="fileListItem" v-for="(item,index) in fileData" :key="index">
@@ -169,6 +169,12 @@
                         fileAuthor:'杨娟'
                     }
                 ]
+            }
+        },
+        methods:{
+            goTo(path){
+                path = "/project_center/" + path
+                this.$router.push({path})
             }
         }
     }

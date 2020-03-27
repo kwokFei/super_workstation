@@ -6,8 +6,10 @@
         </div>
         <div class="content" v-for="item in form1Option">
             <p>{{item.title}}</p>
-            <p><span>{{item.applyLoder | spanName('申请人')}}:</span>{{item.applyLoder}}</p>
-            <p><span>{{item.applyTime | spanName('时间')}}:</span>{{item.applyTime}}</p>
+            <p v-if="item.projectLoder"><span>{{item.projectLoder | spanName('项目经理')}}:</span>{{item.projectLoder}}</p>
+            <p v-if="item.taskNode"><span>{{item.taskNode | spanName('任务节点')}}:</span>{{item.taskNode}}</p>
+            <p v-if="item.applyLoder"><span>{{item.applyLoder | spanName('申请人')}}:</span>{{item.applyLoder}}</p>
+            <p v-if="item.applyTime"><span>{{item.applyTime | spanName('时间')}}:</span>{{item.applyTime}}</p>
         </div>
 
         <el-divider></el-divider>
@@ -58,8 +60,7 @@
         border-radius: 50%;
         color: #666666;
     }
-    .content>p:nth-child(2),
-    .content>p:nth-child(3){
+    .content>p:not(:first-child){
         margin-left: 0.21rem;
         margin-top: 0.2rem;
         color: #666666;
@@ -68,6 +69,10 @@
     .content>p>span{
         font-size: 0.16rem;
         color: #333333;
+        min-width: 52px;
+        display: inline-block;
+        text-align: left;
+        margin-right: 0.2rem;
     }
 
 </style>

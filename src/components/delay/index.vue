@@ -23,7 +23,7 @@
 <style scoped>
     .container-delay{
         width: 12rem;
-        height: 6.82rem;
+        /*height: 6.82rem;*/
         background-color: #ffffff;
         border-radius: 0.08rem;
         border: solid 0.01rem #ebebeb;

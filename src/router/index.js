@@ -176,6 +176,20 @@ const routes = [
             {   path:"all_need_project/delay_project",
                 component:() => import('@/views/user/module/project_center/all/need/delay_project'),
             },
+
+            //我的项目 消息
+            {   path:"myproject/message",
+                component:() => import('@/views/user/module/project_center/myproject/message/index'),
+            },
+            //我的项目 文件
+            {   path:"myproject/file",
+                component:() => import('@/views/user/module/project_center/myproject/file/index'),
+            },
+            //
+            {   path:"all_need_project/delay_project",
+                component:() => import('@/views/user/module/project_center/all/need/delay_project'),
+            },
+
             {   path:"project_project_all",
                 component:() => import('@/views/user/module/project_project_all'),
 
@@ -192,9 +206,7 @@ const routes = [
             {   path:"project_project_log",
                 component:() => import('@/views/user/module/project_project_log'),
             },
-
         ]
-
       },
       {
         path:"/hardware_center",
@@ -465,6 +477,13 @@ const routes = [
       title:'3d场景'
     }
   },
+    {
+        path: '/super_3d/3d_set',
+        component: () => import('@/views/super_3d/module/3d_set'),
+        meta:{
+            title:'3d设计'
+        }
+    },
   {
     path: '/super_diy',
     name: 'super_diy',

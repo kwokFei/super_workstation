@@ -142,14 +142,14 @@
     methods: {
       // 返回上一层
       goToUrl() {
-        console.log(111);
+        // console.log(111);
         this.$router.go(-1);
       },
       goTo3D() {
-        window.open(
-          "http://113.204.9.70:9080/3dwebgl/otheAPI/openDesign1?user_token=20164d0dc1fc4591a6d4c38b4a47312a1584518011269",
-          "_blank"
-        )
+          let routeUrl = this.$router.resolve({
+              path: "super_3d/3d_set",
+          });
+          window.open(routeUrl.href, '_blank');
       },
       addTemplate() {
         this.isTemplate = !this.isTemplate;

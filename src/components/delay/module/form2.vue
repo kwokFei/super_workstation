@@ -8,14 +8,7 @@
             <el-radio v-model="radio" label="1">同意</el-radio>
             <el-radio v-model="radio" label="2">拒绝</el-radio>
         </div>
-        <div class="form2-radio">
-            <span>计划完成时间设置：</span>
-            <el-date-picker
-                v-model="time"
-                type="date"
-                placeholder="选择日期">
-            </el-date-picker>
-        </div>
+        <component :is="showComponent"></component>
         <div class="form2-radio">
             <el-button type="primary">保存</el-button>
         </div>
@@ -23,14 +16,41 @@
 </template>
 
 <script>
+    import contentTime from './contentTime'
+    import contentBody from './contentBody'
+    import contentProject from './contentProject'
     export default {
         name: "form2",
         props:["form2Titlle"],
         data () {
             return {
                 radio: '1',
-                time : "",
+                showComponent: null,
             };
+        },
+        watch:{
+            form2Titlle(){
+                this.showWhat()
+            }
+        },
+        created(){
+            this.showWhat()
+        },
+        methods:{
+            showWhat(){
+                if(this.form2Titlle === "延期操作"){
+                    this.showComponent = "contentTime"
+                }else if(this.form2Titlle === "变更操作"){
+                    this.showComponent = "contentBody"
+                }else if(this.form2Titlle === "操作"){
+                    this.showComponent = "contentProject"
+                }
+            },
+        },
+        components:{
+            contentTime,
+            contentBody,
+            contentProject
         }
     }
 </script>
