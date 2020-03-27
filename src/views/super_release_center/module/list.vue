@@ -57,7 +57,7 @@
                     <span>
                         <el-button size="mini" type="primary" plain>撤回</el-button>
                         <el-button size="mini" type="danger" @click="handleDelete(index)">删除</el-button>
-                        <el-button size="mini" type="primary">编辑</el-button>
+                        <el-button size="mini" type="primary" @click="detailBtn(item)">编辑</el-button>
                         <el-button size="mini" type="info">预览</el-button>
                     </span>
                 </div>
@@ -73,6 +73,7 @@
                 </el-pagination>
             </div>
         </div>
+        <!-- 发布弹框 -->
         <div class="tempBox" v-show="isShow">
             <div class="minBox">
                 <div class="titleBox">
@@ -104,6 +105,51 @@
                 </div>
             </div>
         </div>
+        <!-- 编辑弹框 -->
+        <div class="tempBox" v-show="isShow1">
+            <div class="minBox">
+                <div class="titleBox">
+                    <span>编辑</span>
+                    <span style="cursor:pointer;" @click="outTem">X</span>
+                </div>
+                <div class="smileBox">
+                    <p>
+                        <span>项目名称:</span>
+                        <el-input style="width: 2.2rem" v-model="fbName"></el-input>
+                    </p>
+                    <p>
+                        <span>发布状态:</span>
+                        <span>{{fbStatus}}</span>
+                    </p>
+                    <p v-show="isLook">
+                        <span>发布时间:</span>
+                        <span>{{fbTime}}</span>
+                    </p>
+                    <p v-show="isLook">
+                        <span>是否撤回:</span>
+                        <el-radio v-model="radio1" label="1">是</el-radio>
+                        <el-radio v-model="radio1" label="2">否</el-radio>
+                    </p>
+                    <p v-show="isFB">
+                        <span>发布方式:</span>
+                        <el-radio v-model="radio" label="1">立即发布</el-radio>
+                        <el-radio v-model="radio" label="2">定时发布</el-radio>
+                    </p>
+                    <p v-show="radio == 2 && isFB">
+                        <span>发布时间:</span>
+                        <el-date-picker
+                            v-model="value1"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                        </el-date-picker>
+                    </p>
+                    <div class="sureBox">
+                        <el-button type="primary" size="mini" @click="sureBtn">确定</el-button>
+                        <el-button type="info" size="mini" plain @click="outTem">取消</el-button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -112,9 +158,16 @@
     name: "list",
     data() {
       return {
+        isLook:'',
         radio:'2',
+        radio1:'2',
         value1:'',
         isShow:false,
+        isShow1:false,
+        isFB:false,
+        fbStatus:'',
+        fbTime:'',
+        fbName:'',
         name: '',
         isCheckedALL: false,  //是否全选
         timer: '1月',
@@ -290,12 +343,30 @@
 
       //outTem
       outTem(){
-        this.isShow = !this.isShow;
+        this.isShow = false;
+        this.isShow1 = false;
       },
 
       // 确定
       sureBtn(){
-        this.isShow = !this.isShow;
+        this.isShow = false;
+        this.isShow1 = false;
+      },
+
+      //编辑按钮
+      detailBtn(obj){
+        this.isShow1 = true;
+        this.fbStatus = obj.proStatus;
+        this.fbName = obj.proName;
+        this.fbTime = obj.createTime;
+
+        if(obj.proStatus == "已发布"){
+            this.isLook = true;
+            this.isFB = false;
+        }else if(obj.proStatus == "未发布"){
+          this.isLook = false;
+          this.isFB = true;
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div class="maxBox">
         <img class="bannerImg" src="../../../assets/img/service_training/bannerImg.png" alt="">
         <div class="contentBox">
@@ -49,7 +49,7 @@
                 <div class="courseBox">
                     <div class="courseVideo">
                         <!--  暂时是图片 -->
-                        <img src="../../../assets/img/service_training/courseSrc.png" alt="">
+                        <img style="width: 100%" src="../../../assets/img/service_training/courseSrc.png" alt="">
                         <img class="videoImg" src="../../../assets/img/service_training/icon_video.png" alt="">
                     </div>
                     <div class="courseList">
@@ -155,7 +155,7 @@
                                 v-model="item.value"
                                 disabled
                                 show-score
-                                :colors="colors"
+                                :colors="['#4385f4']"
                                 text-color="#4385f4"
                                 score-template="{value}">
                             </el-rate>
@@ -163,10 +163,24 @@
                     </div>
                     <div class="knowRight">
                         <div class="knowRightItem">
-                            <img src="" alt="">
-                            <div>
-                                <p></p>
-                                <span></span>
+                            <img src="../../../assets/img/service_training/knowItem_1.png" alt="">
+                            <div class="testBox">
+                                <p>云原生应用平台解析</p>
+                                <span>这几年来，云计算、继而大数据成了整个社会的热点，不...</span>
+                            </div>
+                        </div>
+                        <div class="knowRightItem">
+                            <img src="../../../assets/img/service_training/knowItem_2.png" alt="">
+                            <div class="testBox">
+                                <p>云原生应用平台解析</p>
+                                <span>这几年来，云计算、继而大数据成了整个社会的热点，不...</span>
+                            </div>
+                        </div>
+                        <div class="knowRightItem">
+                            <img src="../../../assets/img/service_training/knowItem_3.png" alt="">
+                            <div class="testBox">
+                                <p>云原生应用平台解析</p>
+                                <span>这几年来，云计算、继而大数据成了整个社会的热点，不...</span>
                             </div>
                         </div>
                     </div>
@@ -182,7 +196,6 @@
     name: "home",
     data(){
       return{
-        value:3,
         colors:['#4385f4'],
         knowData:[
           {
@@ -519,9 +532,10 @@
         width: 100%;
     }
     .knowBox {
-        border: 1px solid red;
         width: 100%;
-
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin: 0.5rem 0;
     }
     .knowLeft{
@@ -567,5 +581,47 @@
         letter-spacing: 0rem;
         text-align: left;
         color: #777777;
+    }
+
+    .knowRight{
+        height: 100%;
+        width: 2.8rem;
+    }
+    .knowRight .knowRightItem{
+        height: 1.13rem;
+        background-color: white;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .knowRight .knowRightItem:nth-child(2){
+        margin: 0.06rem 0;
+    }
+    .knowRight .knowRightItem img{
+        width: 0.85rem;
+        height: 0.85rem;
+        margin-left: 0.15rem;
+    }
+    .testBox{
+        margin-left: 0.1rem;
+        text-align: left;
+    }
+    .testBox p{
+        font-size: 0.14rem;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 0.24rem;
+        letter-spacing: 0rem;
+        color: #4385f4;
+    }
+
+    .testBox span {
+        width: 100%;
+        padding: 0 0.05rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 </style>

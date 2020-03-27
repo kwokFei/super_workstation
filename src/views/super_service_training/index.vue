@@ -36,7 +36,7 @@
             name: 'OA'
           },
           {
-            path: '/service_course',
+            path: '',
             name: '课程'
           },
           {
