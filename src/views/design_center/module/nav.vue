@@ -82,6 +82,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        min-width: 69px;
     }
     h2{
         font-size: 0.2rem;
