@@ -454,7 +454,7 @@ export const allList = [
 export const  exampleAppData = [
     {
         appId : 0,         //项目ID号
-        projectName:"应用系统1", //项目名称
+        projectName:"智慧养老", //项目名称
         ischecked : false,//是否被选中
         business: '',    //行业
         companyName: '', //公司名称
@@ -532,7 +532,7 @@ export const  exampleAppData = [
     },
     {
         appId : 1,
-        projectName:"应用系统2", //项目名称
+        projectName:"智慧办公", //项目名称
         business: '',    //行业
         companyName: '', //公司名称
         projectImg: '', //项目图片

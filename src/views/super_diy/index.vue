@@ -110,12 +110,12 @@
             {
               imgUrl:require('../../assets/img/user/listBJ005.png'),
               name:'智慧超市',
-              createTime:'2020 3.12 12:00'
+              createTime:'2020-03-12'
             },
             {
               imgUrl:require('../../assets/img/user/listBJ005.png'),
               name:'商场',
-              createTime:'2020 3.12 12:00'
+              createTime:'2020-03-07'
             }
           ],
         }
@@ -134,7 +134,7 @@
             this.dataList.push({
               imgUrl:require('../../assets/img/user/listBJ005.png'),
               name:this.diyName,
-              createTime:'2020-03-24 11:00'
+              createTime:'2020-03-24'
             })
             this.isTemplate = false;
           },

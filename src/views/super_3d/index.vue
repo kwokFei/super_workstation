@@ -65,14 +65,14 @@
                     <span @click="addTemplate">X</span>
                 </div>
                 <div class="listUIBox">
-                    <p>
-                        <span>3D名称:</span>
+                    <p style="margin-top: 0.3rem">
+                        <span>方案名称:</span>
                         <el-input style="width: 3rem" v-model="DDName"></el-input>
                     </p>
-                    <p>
-                        <span>版&nbsp;本&nbsp;号:</span>
-                        <el-input style="width: 3rem" v-model="DDbbh"></el-input>
-                    </p>
+<!--                    <p>-->
+<!--                        <span>版本号:</span>-->
+<!--                        <el-input style="width: 3rem" v-model="DDbbh"></el-input>-->
+<!--                    </p>-->
 
                     <div class="btns">
                         <el-button type="primary" @click="addBtn">确认</el-button>
@@ -110,23 +110,18 @@
         dataList: [
           {
             imgUrl: require('../../assets/img/user/listBj004.png'),
-            name: '硬件市场001',
-            createTime: '2020 3.12 12:00'
+            name: '智慧楼宇',
+            createTime: '2020-03-17'
           },
           {
             imgUrl: require('../../assets/img/user/listBj004.png'),
-            name: '硬件市场002',
-            createTime: '2020 3.12 12:00'
+            name: '智慧社区',
+            createTime: '2020-03-15'
           },
           {
             imgUrl: require('../../assets/img/user/listBj004.png'),
-            name: '硬件市场003',
-            createTime: '2020 3.12 12:00'
-          },
-          {
-            imgUrl: require('../../assets/img/user/listBj004.png'),
-            name: '硬件市场004',
-            createTime: '2020 3.12 12:00'
+            name: '智慧万盛',
+            createTime: '2020-03-05'
           }
         ],
         form: {
@@ -147,7 +142,7 @@
       },
       goTo3D() {
           let routeUrl = this.$router.resolve({
-              path: "super_3d/3d_set",
+              path: "super_3d/threed_set",
           });
           window.open(routeUrl.href, '_blank');
       },
@@ -159,7 +154,7 @@
         this.dataList.push({
           imgUrl: require('../../assets/img/user/listBj004.png'),
           name: this.DDName,
-          createTime: '2020-03-24 14:00'
+          createTime: '2020-03-24'
         })
         this.isTemplate = false;
       },
@@ -461,7 +456,7 @@
     }
 
     .listUIBox {
-        margin-top: 0.3rem;
+        margin-top: 0.5rem;
         width: 100%;
     }
 

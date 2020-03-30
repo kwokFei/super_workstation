@@ -30,6 +30,7 @@
 
 <script>
   import echarts from 'echarts'
+  import { setFontRem } from '@/utils/setRem_api.js'
     export default {
       name: "gk",
       mounted() {
@@ -104,6 +105,10 @@
             ]
           });
           window.onresize = myChartOne.resize;
+          window.onload = function (e) {
+            setFontRem();
+            myChartOne.resize;
+          }
         }
       }
     }

@@ -104,7 +104,7 @@
     .isClass> a,.isClass{
         background-color: #1272fd;
         color: white !important;
-        border: solid 0.01rem #1272fd;
+        /*border: solid 0.01rem #1272fd;*/
     }
 
     .contentBox{

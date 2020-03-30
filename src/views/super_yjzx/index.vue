@@ -8,7 +8,7 @@
                 <span>1秒融入BCCA 家族，让数据变得价值连城!</span>
                 <div class="oneBtn">
                     <a target="_blank" href="http://developer.apcos.com/home/index">立即使用</a>
-                    <a href="">帮助文档 ></a>
+<!--                    <a href="">帮助文档 ></a>-->
                 </div>
             </div>
             <img src="../../assets/img/hardware_center/oneImg.png" alt="">
@@ -64,80 +64,80 @@
             <span>用户仅需在接入平台上填入需接入设备HTTP协议，即可实现阶梯式接入，与其他APCOS接入设备进行互动。用户设备只需进行一次接入操作，后续此种设备在任何地点都可自动识别并接入系统，无需人工干涉。</span>
             <img style="width: 11.39rem;height: 4.86rem;" src="../../assets/img/hardware_center/fiveImg.png" alt="">
         </div>
-        <div class="sixBox">
-            <p class="sixTitle">客户案例</p>
-            <div class="sixList">
-                <div class="sixListItem">
-                    <img src="../../assets/img/hardware_center/sixLogo.png" alt="">
-                    <div class="itemText">
-                        <p>道尔 智控</p>
-                        <span>
-                            致力于利用物联网、大数据技术在设备运维服务领域发挥指引作用，帮助设备制造商、设备...
-                        </span>
-                        <a href="">查看详情></a>
-                    </div>
-                </div>
-                <div class="sixListItem">
-                    <img src="../../assets/img/hardware_center/sixLogo.png" alt="">
-                    <div class="itemText">
-                        <p>道尔 智控</p>
-                        <span>
-                            致力于利用物联网、大数据技术在设撒旦撒旦阿斯顿撒旦阿斯顿撒旦备运维服务领域发挥指引作用，帮助设备制造商、设备...
-                        </span>
-                        <a href="">查看详情></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="sevenBox">
-            <p class="sevenTitle">使用指南</p>
-            <div class="sevenList">
-                <div class="sevenListItem">
-                    <p>产品文档</p>
-                    <a href="#">产品概述</a>
-                    <a href="#">快速入门</a>
-                    <a href="#">操作指南</a>
-                    <a href="#">BCCA协议介绍</a>
-                </div>
-                <div class="sevenListItem">
-                    <p>开发者资源</p>
-                    <a href="#">S-API文档(设备型)</a>
-                    <a href="#">S-API文档(应用型)</a>
-                </div>
-            </div>
-        </div>
-        <div class="footerBox">
-            <div class="footerList">
-                <div class="footerListItem">
-                    <p>关于我们</p>
-                    <a href="">公司介绍</a>
-                </div>
-                <div class="footerListItem">
-                    <p>用户指南</p>
-                    <a href="">购买指引</a>
-                    <a href="">商品使用指南</a>
-                    <a href="">投诉与退款</a>
-                </div>
-                <div class="footerListItem">
-                    <p>接入使用</p>
-                    <a href="">接入指引</a>
-                    <a href="">接入规范</a>
-                    <a href="">开发者社区</a>
-                </div>
-                <div class="footerListItem">
-                    <p>常见问题</p>
-                    <a href="">用户问题</a>
-                    <a href="">服务商问题</a>
-                </div>
-                <div class="footerListItem" style="text-align: left">
-                    <p>咨询热线</p>
-                    <span style="font-size: 0.36rem">400-000-0000</span>
-                </div>
-            </div>
-            <div class="btmBox">
-                <span>重庆金鑫科技产业发展有限公司©2016-2019版权所有    渝ICP备19014349号-1</span>
-            </div>
-        </div>
+<!--        <div class="sixBox">-->
+<!--            <p class="sixTitle">客户案例</p>-->
+<!--            <div class="sixList">-->
+<!--                <div class="sixListItem">-->
+<!--                    <img src="../../assets/img/hardware_center/sixLogo.png" alt="">-->
+<!--                    <div class="itemText">-->
+<!--                        <p>道尔 智控</p>-->
+<!--                        <span>-->
+<!--                            致力于利用物联网、大数据技术在设备运维服务领域发挥指引作用，帮助设备制造商、设备...-->
+<!--                        </span>-->
+<!--                        <a href="">查看详情></a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="sixListItem">-->
+<!--                    <img src="../../assets/img/hardware_center/sixLogo.png" alt="">-->
+<!--                    <div class="itemText">-->
+<!--                        <p>道尔 智控</p>-->
+<!--                        <span>-->
+<!--                            致力于利用物联网、大数据技术在设撒旦撒旦阿斯顿撒旦阿斯顿撒旦备运维服务领域发挥指引作用，帮助设备制造商、设备...-->
+<!--                        </span>-->
+<!--                        <a href="">查看详情></a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="sevenBox">-->
+<!--            <p class="sevenTitle">使用指南</p>-->
+<!--            <div class="sevenList">-->
+<!--                <div class="sevenListItem">-->
+<!--                    <p>产品文档</p>-->
+<!--                    <a href="#">产品概述</a>-->
+<!--                    <a href="#">快速入门</a>-->
+<!--                    <a href="#">操作指南</a>-->
+<!--                    <a href="#">BCCA协议介绍</a>-->
+<!--                </div>-->
+<!--                <div class="sevenListItem">-->
+<!--                    <p>开发者资源</p>-->
+<!--                    <a href="#">S-API文档(设备型)</a>-->
+<!--                    <a href="#">S-API文档(应用型)</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="footerBox">-->
+<!--            <div class="footerList">-->
+<!--                <div class="footerListItem">-->
+<!--                    <p>关于我们</p>-->
+<!--                    <a href="">公司介绍</a>-->
+<!--                </div>-->
+<!--                <div class="footerListItem">-->
+<!--                    <p>用户指南</p>-->
+<!--                    <a href="">购买指引</a>-->
+<!--                    <a href="">商品使用指南</a>-->
+<!--                    <a href="">投诉与退款</a>-->
+<!--                </div>-->
+<!--                <div class="footerListItem">-->
+<!--                    <p>接入使用</p>-->
+<!--                    <a href="">接入指引</a>-->
+<!--                    <a href="">接入规范</a>-->
+<!--                    <a href="">开发者社区</a>-->
+<!--                </div>-->
+<!--                <div class="footerListItem">-->
+<!--                    <p>常见问题</p>-->
+<!--                    <a href="">用户问题</a>-->
+<!--                    <a href="">服务商问题</a>-->
+<!--                </div>-->
+<!--                <div class="footerListItem" style="text-align: left">-->
+<!--                    <p>咨询热线</p>-->
+<!--                    <span style="font-size: 0.36rem">400-000-0000</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="btmBox">-->
+<!--                <span>重庆金鑫科技产业发展有限公司©2016-2019版权所有    渝ICP备19014349号-1</span>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </template>
 

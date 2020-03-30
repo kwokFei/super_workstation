@@ -126,23 +126,23 @@
         dataList: [
           {
             imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: '系统模块001',
-            createTime: '2020 3.12 12:00'
+            name: '报警模块',
+            createTime: '2020-03-15'
           },
           {
             imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: '系统模块002',
-            createTime: '2020 3.12 12:00'
+            name: '信息发布',
+            createTime: '2020-03-12'
           },
           {
             imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: '系统模块003',
-            createTime: '2020 3.12 12:00'
+            name: '访客模块',
+            createTime: '2020-03-09'
           },
           {
             imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: '系统模块004',
-            createTime: '2020 3.12 12:00'
+            name: '考勤模块',
+            createTime: '2020-03-05'
           }
         ],
       }
@@ -164,7 +164,7 @@
         this.dataList.push({
           imgUrl: require('../../assets/img/user/listBj002.png'),
           name: this.temName,
-          createTime: '2020-03-24 16:00'
+          createTime: '2020-03-24'
         })
         this.isTemplate = false;
       },

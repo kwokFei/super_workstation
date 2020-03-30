@@ -203,23 +203,18 @@
         dataList: [
           {
             imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: 'UI模块001',
-            createTime: '2020 3.12 12:00'
+            name: '人脸识别',
+            createTime: '2020-03-15'
           },
           {
             imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: 'UI模块002',
-            createTime: '2020 3.12 12:00'
+            name: '单元门口机',
+            createTime: '2020-03-12'
           },
           {
             imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: 'UI模块003',
-            createTime: '2020 3.12 12:00'
-          },
-          {
-            imgUrl: require('../../assets/img/user/listBj002.png'),
-            name: 'UI模块004',
-            createTime: '2020 3.12 12:00'
+            name: '智能插座',
+            createTime: '2020-03-01'
           }
         ],
       }
@@ -248,7 +243,7 @@
         this.dataList.push({
           imgUrl: require('../../assets/img/user/listBj002.png'),
           name: this.proName,
-          createTime: '2020-03-24 12:00'
+          createTime: '2020-03-24'
         })
         this.isTemplate = false;
       },

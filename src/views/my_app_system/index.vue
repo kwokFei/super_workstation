@@ -4,7 +4,7 @@
         <public-nav>
             <div slot="header">
                 <span class="header-item">
-                    <img src="@/assets/img/publich_nav/logo.png" alt="">
+                    <img @click="goToUrl" src="@/assets/img/publich_nav/logo.png" alt="">
                 </span>
                 <span class="header-item"
                         v-for="(item,index) in headerList"
@@ -46,6 +46,11 @@
           }
         },
         methods:{
+          // 返回上一层
+          goToUrl() {
+            console.log(111);
+            this.$router.go(-1);
+          },
             handleischeckIndex(index){
                 this.ischeckIndex = index;
             },

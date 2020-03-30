@@ -3,12 +3,7 @@
         <div class="fbListBox">
             <div class="btns">
                 <div>
-                    <el-input
-                            style="width: 2rem;"
-                            placeholder="名称"
-                            suffix-icon="el-icon-search"
-                            v-model="name">
-                    </el-input>
+
                     <el-select v-model="timer" placeholder="1月" style="width: 1.2rem;margin: 0 0.2rem">
                         <el-option
                                 v-for="item in dayData"
@@ -25,6 +20,13 @@
                                 :value="item.value">
                         </el-option>
                     </el-select>
+                    <el-input
+                        style="width: 2rem;margin-left: 0.2rem"
+                        placeholder="名称"
+                        suffix-icon="el-icon-search"
+                        v-model="name">
+                    </el-input>
+                    <el-button style="margin-left: 0.2rem" type="primary" plain>搜索</el-button>
                 </div>
                 <div>
 <!--                    <el-button type="danger">删除</el-button>-->
@@ -55,7 +57,7 @@
                     <span>{{item.proStatus}}</span>
                     <span>{{item.createTime}}</span>
                     <span>
-                        <el-button size="mini" type="primary" plain>撤回</el-button>
+<!--                        <el-button size="mini" type="primary" plain>撤回</el-button>-->
                         <el-button size="mini" type="danger" @click="handleDelete(index)">删除</el-button>
                         <el-button size="mini" type="primary" @click="detailBtn(item)">编辑</el-button>
                         <el-button size="mini" type="info">预览</el-button>
@@ -81,11 +83,11 @@
                     <span style="cursor:pointer;" @click="outTem">X</span>
                 </div>
                 <div class="smileBox">
-                    <p>
-                    <span>项目名称:</span>
-                    项目A
-                </p>
-                    <p>
+<!--                    <p>-->
+<!--                    <span>项目名称:</span>-->
+<!--                    项目A-->
+<!--                    </p>-->
+                    <p style="margin: 0.2rem 0">
                         <span>发布方式:</span>
                         <el-radio v-model="radio" label="1">立即发布</el-radio>
                         <el-radio v-model="radio" label="2">定时发布</el-radio>

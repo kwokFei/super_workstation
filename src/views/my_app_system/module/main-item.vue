@@ -7,7 +7,7 @@
         <div class="footer">
             <div class="name-time">
                 <p @click="changName(item)">{{item.projectName}}</p>
-                <span>2020-1-11    11:11</span>
+                <span>2020-03-12   </span>
             </div>
             <div>
                 <el-checkbox v-model="item.ischecked" @change="handleCheck(item.ischecked)"></el-checkbox>

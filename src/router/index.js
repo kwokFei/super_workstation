@@ -478,7 +478,7 @@ const routes = [
     }
   },
     {
-        path: '/super_3d/3d_set',
+        path: '/super_3d/threed_set',
         component: () => import('@/views/super_3d/module/3d_set'),
         meta:{
             title:'3d设计'
@@ -532,8 +532,8 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'hash',
-  // base: '/super_workstation/',
-  base: process.env.BASE_URL,
+  base: '/super_workstation/',
+  // base: process.env.BASE_URL,
   routes
 });
 

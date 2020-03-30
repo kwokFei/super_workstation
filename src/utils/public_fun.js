@@ -31,7 +31,7 @@ export const goTo1110 = (_this)=> {
     postAxios( goto1110BaseUrl +"/login",
         {
             account:"111",
-            password:"123456"
+            password:"111111"
         },_this)
         .then((data)=>{
             setToken(data.data.token)
